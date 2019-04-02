@@ -2,7 +2,15 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Set;
 
-public class Servis extends Poslovnica{
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+
+@MappedSuperclass
+public abstract class Servis extends Poslovnica{
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "servis" )
 	protected Set<Usluga> dodatneUsluge;
 
 	public Servis() {

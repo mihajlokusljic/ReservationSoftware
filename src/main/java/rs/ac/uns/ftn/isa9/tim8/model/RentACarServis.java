@@ -2,12 +2,22 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "rentACarServis")
 public class RentACarServis extends Servis {
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Vozilo> vozila;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Filijala> filijale;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "rentACar")
 	protected Set<RezervacijaVozila> rezervisanaVozila;
-	protected Set<AdministratorRentACar> administratoriSistema;
 	
 	public RentACarServis() {
 		super();
@@ -36,15 +46,5 @@ public class RentACarServis extends Servis {
 	public void setRezervisanaVozila(Set<RezervacijaVozila> rezervisanaVozila) {
 		this.rezervisanaVozila = rezervisanaVozila;
 	}
-
-	public Set<AdministratorRentACar> getAdministratoriSistema() {
-		return administratoriSistema;
-	}
-
-	public void setAdministratoriSistema(Set<AdministratorRentACar> administratoriSistema) {
-		this.administratoriSistema = administratoriSistema;
-	}
-	
-	
 	
 }

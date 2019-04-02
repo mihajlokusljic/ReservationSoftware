@@ -2,11 +2,25 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "putovanje")
 public class Putovanje {
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaSjedista rezervacijaSjedista;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
 	protected Set<Pozivnica> pozivnice;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaSoba rezervacijaSoba;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaVozila rezervacijaVozila;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik inicijatorPutovanja;
 
 	public Putovanje() {

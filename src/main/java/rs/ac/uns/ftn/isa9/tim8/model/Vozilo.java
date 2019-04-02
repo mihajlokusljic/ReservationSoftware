@@ -1,16 +1,38 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "vozilo")
 public class Vozilo extends Ocjenjivo{
+	@Column(name = "naziv", nullable = false)
 	protected String naziv;
+	@Column(name = "marka", nullable = false)
 	protected String marka;
+	@Column(name = "model", nullable = false)
 	protected String model;
+	@Column(name = "godina_proizvodnje", nullable = false)
 	protected int godina_proizvodnje;
+	@Column(name = "broj_sjedista", nullable = false)
 	protected int broj_sjedista;
+	@Column(name = "tip_vozila", nullable = false)
     protected String tip_vozila;
+	@Column(name = "broj_vrata", nullable = false)
     protected int broj_vrata;
+	@Column(name = "kilovati", nullable = false)
     protected int kilovati;
+	@Column(name = "cijena_po_danu", nullable = false)
     protected int cijena_po_danu;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     protected Filijala filijala;
+	@ManyToOne
+	protected RentACarServis rentACar;
     
 	public Vozilo(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
 			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Filijala filijala) {

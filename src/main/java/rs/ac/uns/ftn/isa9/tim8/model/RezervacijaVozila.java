@@ -1,9 +1,23 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
-public class RezervacijaVozila {
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "rezervacija_vozila")
+public class RezervacijaVozila extends Rezervacija{
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Vozilo rezervisanoVozilo;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Filijala mjestoPreuzimanjaVozila;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Filijala mjestoVracanjaVozila;
+	@ManyToOne
+	protected RentACarServis rentACar;
 	
 	public RezervacijaVozila() {
 		super();
