@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "RezervacijaSoba")
 public class RezervacijaSoba extends Rezervacija{
 	
-	@OneToMany(mappedBy = "rezervacijasoba", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "rezervacije", fetch = FetchType.LAZY)
 	protected Set<HotelskaSoba> rezervisaneSobe;
 
 	public RezervacijaSoba() {
