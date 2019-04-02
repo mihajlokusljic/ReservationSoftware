@@ -2,9 +2,24 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Avion")
 public class Avion {
+	
+	@Column(name = "nazivAviona", unique = true, nullable = false)
 	protected String naziv;
+	
+	@OneToMany(mappedBy = "segmenti", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Segment> segment;
+	
+	@OneToMany(mappedBy = "sjedista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Sjediste> sjedista;
 
 	public Avion() {

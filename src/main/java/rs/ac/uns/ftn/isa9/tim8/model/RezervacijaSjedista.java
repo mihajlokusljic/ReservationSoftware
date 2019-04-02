@@ -1,10 +1,29 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "RezervacijaSjedista")
 public class RezervacijaSjedista extends Rezervacija {
+
+	@Column(name = "imePutnika", unique = false, nullable = false)
 	protected String imePutnika;
+	
+	@Column(name = "prezimePutnika", unique = false, nullable = false)
 	protected String prezimePutnika;
+	
+	@Column(name = "brojPasosaPutnika", unique = true, nullable = false)
 	protected String brojPasosaPutnika;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Sjediste sjediste;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik putnik;
 
 	public RezervacijaSjedista() {

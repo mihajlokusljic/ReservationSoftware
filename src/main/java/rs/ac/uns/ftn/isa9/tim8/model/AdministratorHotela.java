@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Set;
 
 public class AdministratorHotela extends Osoba {
+	
 	protected Hotel hotel;
 	
 	public AdministratorHotela() {
