@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Administracija sistema</title>
+<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="js/sistemAdmin.js"></script>
+</head>
+<body>
+	
+	<h2>Dodavanje aviokompanije</h2>
+	<form id="unosAviokompanijeForm">
+		<table>
+			<tr>
+				<td>Naziv:</td>
+				<td><input type="text" id="nazivAviokompanije"/></td>
+			</tr>
+			<tr>
+				<td>Adresa:</td>
+				<td><input type="text" id="adresaAviokompanije"/></td>
+			</tr>
+			<tr>
+				<td>Promotivni opis:</td>
+				<td><input type="text" id="opisAviokompanije"/></td>
+			</tr>
+			<tr>
+				<td> </td>
+				<td><input type="submit" value="Dodaj"/></td>
+			</tr>
+		</table>
+	</form>
+	
+	<h2>Aviokompanije:</h2>
+	<table border="1">
+		<thead>
+			<th>Naziv</th>
+			<th>Adresa</th>
+			<th>Promotivni opis</th>
+		</thead>
+		
+		<tbody id="aviokompanijePrikaz"></tbody>
+	</table>
+	
+	<h2>Dodavanje hotela</h2>
+	<form id="unosHotelaForm">
+		<table>
+			<tr>
+				<td>Naziv:</td>
+				<td><input type="text" id="nazivHotela"/></td>
+			</tr>
+			<tr>
+				<td>Adresa:</td>
+				<td><input type="text" id="adresaHotela"/></td>
+			</tr>
+			<tr>
+				<td>Promotivni opis:</td>
+				<td><input type="text" id="opisHotela"/></td>
+			</tr>
+			<tr>
+				<td> </td>
+				<td><input type="submit" value="Dodaj"/></td>
+			</tr>
+		</table>
+	</form>
+	
+	<h2>Hoteli:</h2>
+	<table border="1">
+		<thead>
+			<th>Naziv</th>
+			<th>Adresa</th>
+			<th>Promotivni opis</th>
+		</thead>
+		
+		<tbody id="hoteliPrikaz"></tbody>
+	</table>
+	
+	<h2>Dodavanje rent-a-car servisa</h2>
+	<form id="unosRacServisaForm">
+		<table>
+			<tr>
+				<td>Naziv:</td>
+				<td><input type="text" id="nazivRacServisa"/></td>
+			</tr>
+			<tr>
+				<td>Adresa:</td>
+				<td><input type="text" id="adresaRacServisa"/></td>
+			</tr>
+			<tr>
+				<td>Promotivni opis:</td>
+				<td><input type="text" id="opisRacServisa"/></td>
+			</tr>
+			<tr>
+				<td> </td>
+				<td><input type="submit" value="Dodaj"/></td>
+			</tr>
+		</table>
+	</form>
+	
+	<h2>Rent-a-car servisi:</h2>
+	<table border="1">
+		<thead>
+			<th>Naziv</th>
+			<th>Adresa</th>
+			<th>Promotivni opis</th>
+		</thead>
+		
+		<tbody id="racServisiPrikaz"></tbody>
+	</table>
+	
+</body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<title>Dodavanje vozila</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/rentACar.js"></script>
+	</head>
+	<body>
+		<h1>Dodavanje novog vozila</h1>
+		<form id = "forma_dodaj_vozilo">
+			<table id = "tabela_vozila">
+				<tr>
+					<td>Naziv servisa:</td>
+					<td><input type = "text" id = "naziv_servisa"/></td>
+				</tr>
+				<tr>
+					<td>Naziv:</td>
+					<td><input type = "text" id = "naziv"/></td>
+				</tr>
+				<tr>
+					<td>Marka:</td>
+					<td><input type = "text" id = "marka"/></td>
+				</tr>
+				<tr>
+					<td>Model:</td>
+					<td><input type = "text" id = "model"/></td>
+				</tr>
+				<tr>
+					<td>Tip vozila:</td>
+					<td><select name = "tip_vozila" id = "tip_vozila">
+							<option value = "automobil">Automobil</option>
+							<option value = "kombi">Kombi</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Godina proizvodje:</td>
+					<td><input type = "text" id = "godina"/></td>
+				</tr>
+				<tr>
+					<td>Broj sjedista:</td>
+					<td><input type = "text" id = "broj_sjedista"/></td>
+				</tr>
+				<tr>
+					<td>Broj vrata:</td>
+					<td><input type = "text" id = "broj_vrata"/></td>
+				</tr>
+				<tr>
+					<td>Kilovati:</td>
+					<td><input type = "text" id = "kilovati"/></td>
+				</tr>
+				<tr>
+					<td>Cijena po danu:</td>
+					<td><input type = "text" id = "cijena"/></td>
+				</tr>
+			</table>
+			<td><input type="submit" value="Dodaj"/></td>
+		</form>
+		<br>
+		<h2>Sva vozila servisa:</h2>
+		<table border="2" id = "vozilaPrikaz">
+			
+		</table>
+	</body>
+</html>

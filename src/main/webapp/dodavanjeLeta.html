@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Dodavanje leta</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/letovi.js"></script>
+	</head>
+	<body>
+		<h1>Dodavanje novog leta</h1>
+		<form id = "dodavanjeLetaForm">
+			<table>
+				<tr>
+					<td>Broj leta:</td>
+					<td><input type = "text" id = "brojLeta"/></td>
+				</tr>
+				<tr>
+					<td>Polaziste:</td>
+					<td><input type = "text" id = "polaziste"/></td>
+				</tr>
+				<tr>
+					<td>Odrediste:</td>
+					<td><input type = "text" id = "odrediste"/></td>
+				</tr>
+				<tr>
+					<td>Datum poletanja:</td>
+					<td><input type = "date" id = "datumPoletanja"/></td>
+				</tr>
+				<tr>
+					<td>Datum sletanja:</td>
+					<td><input type = "date" id = "datumSletanja"/></td>
+				</tr>
+				<tr>
+					<td>Duzina putovanja (datum povratka):</td>
+					<td><input type = "date" id = "duzinaPutovanja"/></td>
+				</tr>
+				<tr>
+					<td>Broj presjedanja:</td>
+					<td><input type = "number" id = "brojPresjedanja" min="0"/></td>
+				</tr>
+				<tr>
+					<td>Kapacitet (prva): </td>
+					<td><input type = "number" id = "kapacitetPrvaKlasa"/></td>
+				</tr>
+				<tr>
+					<td>Kapacitet (biznis):</td>
+					<td><input type = "number" id = "kapacitetBiznis"/></td>
+				</tr>
+				<tr>
+					<td>Kapacitet (ekonomska):</td>
+					<td><input type = "number" id = "kapacitetEkonomska"/></td>
+				</tr>
+				<tr>
+					<td>Cijena karte:</td>
+					<td><input type = "number" id = "cijena" min="1"/></td>
+				</tr>
+			<tr>
+			<td></td>
+			<td><input type="submit" value="Dodaj"/></td>
+			</tr>
+
+			</table>
+		</form>
+		<br>
+		<h2>Dodati letovi:</h2>
+		<table border="2" id = "letoviPrikaz">
+			<tr>
+				<th>Broj leta</th>
+				<th>Polaziste</th>
+				<th>Odrediste</th>
+				<th>Datum poletanja</th>
+				<th>Datum sletanja</th>
+				<th>Datum povratka</th>
+				<th>Broj presjedanja</th>
+				<th>Kapacitet (prva)</th>
+				<th>Kapacitet (biznis)</th>
+				<th>Kapacitet (ekonomska)</th>
+				<th>Cijena karte</th>
+			</tr>
+		</table>
+	</body>
+</html>
