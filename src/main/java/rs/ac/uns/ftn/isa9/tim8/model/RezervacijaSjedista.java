@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-public class RezervacijaSjedista extends Rezervacija {
+public class RezervacijaSjedista {
 
 	//@Column(name = "imePutnika", unique = false, nullable = false)
 	protected String imePutnika;
@@ -18,14 +18,30 @@ public class RezervacijaSjedista extends Rezervacija {
 	//@Column(name = "brojPasosaPutnika", unique = true, nullable = false)
 	protected String brojPasosaPutnika;
 	
+	protected double cijena;
+	
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Sjediste sjediste;
 	
+	protected IzvodjenjeLeta izvodjenjeLeta;
+	
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	protected RegistrovanKorisnik putnik;
+	protected RegistrovanKorisnik putnik; //opciono, ne mora se rezervisati za registrovanog korisnika
 
 	public RezervacijaSjedista() {
 		super();
+	}
+	
+	public RezervacijaSjedista(String imePutnika, String prezimePutnika, String brojPasosaPutnika, double cijena,
+			Sjediste sjediste, IzvodjenjeLeta izvodjenjeLeta, RegistrovanKorisnik putnik) {
+		super();
+		this.imePutnika = imePutnika;
+		this.prezimePutnika = prezimePutnika;
+		this.brojPasosaPutnika = brojPasosaPutnika;
+		this.cijena = cijena;
+		this.sjediste = sjediste;
+		this.izvodjenjeLeta = izvodjenjeLeta;
+		this.putnik = putnik;
 	}
 
 	public String getImePutnika() {
@@ -66,6 +82,22 @@ public class RezervacijaSjedista extends Rezervacija {
 
 	public void setPutnik(RegistrovanKorisnik putnik) {
 		this.putnik = putnik;
+	}
+
+	public double getCijena() {
+		return cijena;
+	}
+
+	public void setCijena(double cijena) {
+		this.cijena = cijena;
+	}
+
+	public IzvodjenjeLeta getIzvodjenjeLeta() {
+		return izvodjenjeLeta;
+	}
+
+	public void setIzvodjenjeLeta(IzvodjenjeLeta izvodjenjeLeta) {
+		this.izvodjenjeLeta = izvodjenjeLeta;
 	}
 
 }

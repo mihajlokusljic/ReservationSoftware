@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-public class Let extends Ocjenjivo {
+public class Let {
 	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected String brojLeta;
 	
@@ -34,6 +34,11 @@ public class Let extends Ocjenjivo {
 	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Destinacija> presjedanja; // Zato sto ce biti potrebno cuvati i lokacije
 																// (vjerovatno kroz
+	
+	protected int sumaOcjena;
+	
+	protected int brojOcjena;
+	
 	// Yandex mape
 	protected Avion avion;
 	protected int kapacitetPrvaKlasa;
@@ -64,6 +69,8 @@ public class Let extends Ocjenjivo {
 		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
 		this.rezervacije = rezervacije;
 		this.cijenaKarte = cijenaKarte;
+		this.sumaOcjena = 0;
+		this.brojOcjena = 0;
 	}
 
 	public String getBrojLeta() {
@@ -170,6 +177,20 @@ public class Let extends Ocjenjivo {
 		this.cijenaKarte = cijenaKarte;
 	}
 
-	
+	public int getSumaOcjena() {
+		return sumaOcjena;
+	}
 
+	public void setSumaOcjena(int sumaOcjena) {
+		this.sumaOcjena = sumaOcjena;
+	}
+
+	public int getBrojOcjena() {
+		return brojOcjena;
+	}
+
+	public void setBrojOcjena(int brojOcjena) {
+		this.brojOcjena = brojOcjena;
+	}
+	
 }

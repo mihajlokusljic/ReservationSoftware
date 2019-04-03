@@ -13,7 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-public class HotelskaSoba extends Ocjenjivo {
+public class HotelskaSoba {
 	//@Id
 	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected int brojSobe;
@@ -35,17 +35,21 @@ public class HotelskaSoba extends Ocjenjivo {
 	protected double cijena;
 	
 	//@ManyToMany(fetch = FetchType.LAZY)
-	protected Set<RezervacijaSoba> rezervacije;
+	protected Set<RezervacijaSobe> rezervacije;
 	
 	//@ManyToOne(fetch = FetchType.LAZY)
 	protected Hotel hotel;
+	
+	protected int sumaOcjena;
+	
+	protected int brojOcjena;
 	
 	public HotelskaSoba() {
 		super();
 	}
 
 	public HotelskaSoba(int brojSobe, int brojKreveta, int sprat, int vrsta, int kolona, double cijena,
-			Set<RezervacijaSoba> rezervacije, Hotel hotel) {
+			Set<RezervacijaSobe> rezervacije, Hotel hotel) {
 		super();
 		this.brojSobe = brojSobe;
 		this.brojKreveta = brojKreveta;
@@ -55,6 +59,8 @@ public class HotelskaSoba extends Ocjenjivo {
 		this.cijena = cijena;
 		this.rezervacije = rezervacije;
 		this.hotel = hotel;
+		this.sumaOcjena = 0;
+		this.brojOcjena = 0;
 	}
 
 	public int getBrojSobe() {
@@ -105,11 +111,11 @@ public class HotelskaSoba extends Ocjenjivo {
 		this.cijena = cijena;
 	}
 
-	public Set<RezervacijaSoba> getRezervacije() {
+	public Set<RezervacijaSobe> getRezervacije() {
 		return rezervacije;
 	}
 
-	public void setRezervacije(Set<RezervacijaSoba> rezervacije) {
+	public void setRezervacije(Set<RezervacijaSobe> rezervacije) {
 		this.rezervacije = rezervacije;
 	}
 
@@ -121,4 +127,20 @@ public class HotelskaSoba extends Ocjenjivo {
 		this.hotel = hotel;
 	}
 
+	public int getSumaOcjena() {
+		return sumaOcjena;
+	}
+
+	public void setSumaOcjena(int sumaOcjena) {
+		this.sumaOcjena = sumaOcjena;
+	}
+
+	public int getBrojOcjena() {
+		return brojOcjena;
+	}
+
+	public void setBrojOcjena(int brojOcjena) {
+		this.brojOcjena = brojOcjena;
+	}
+	
 }

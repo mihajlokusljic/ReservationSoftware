@@ -21,7 +21,7 @@ public class Putovanje {
 	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
 	protected Set<Pozivnica> pozivnice;
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	protected RezervacijaSoba rezervacijaSoba;
+	protected RezervacijaSobe rezervacijaSoba;
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaVozila rezervacijaVozila;
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -47,11 +47,11 @@ public class Putovanje {
 		this.pozivnice = pozivnice;
 	}
 
-	public RezervacijaSoba getRezervacijaSoba() {
+	public RezervacijaSobe getRezervacijaSoba() {
 		return rezervacijaSoba;
 	}
 
-	public void setRezervacijaSoba(RezervacijaSoba rezervacijaSoba) {
+	public void setRezervacijaSoba(RezervacijaSobe rezervacijaSoba) {
 		this.rezervacijaSoba = rezervacijaSoba;
 	}
 

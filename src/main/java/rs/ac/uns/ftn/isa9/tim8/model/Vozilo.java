@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-public class Vozilo extends Ocjenjivo{
+public class Vozilo {
 	//@Column(name = "naziv", nullable = false)
 	protected String naziv;
 	//@Column(name = "marka", nullable = false)
@@ -31,6 +31,9 @@ public class Vozilo extends Ocjenjivo{
     protected Filijala filijala;
 	//@ManyToOne
 	protected RentACarServis rentACar;
+	
+	protected int brojOcjena;
+	protected int sumaOcjena;
     
 	public Vozilo(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
 			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Filijala filijala) {
@@ -45,6 +48,8 @@ public class Vozilo extends Ocjenjivo{
 		this.kilovati = kilovati;
 		this.cijena_po_danu = cijena_po_danu;
 		this.filijala = filijala;
+		this.sumaOcjena = 0;
+		this.brojOcjena = 0;
 	}
 
 	public Vozilo() {
@@ -130,9 +135,29 @@ public class Vozilo extends Ocjenjivo{
 	public void setFilijala(Filijala filijala) {
 		this.filijala = filijala;
 	}
+
+	public RentACarServis getRentACar() {
+		return rentACar;
+	}
+
+	public void setRentACar(RentACarServis rentACar) {
+		this.rentACar = rentACar;
+	}
+
+	public int getBrojOcjena() {
+		return brojOcjena;
+	}
+
+	public void setBrojOcjena(int brojOcjena) {
+		this.brojOcjena = brojOcjena;
+	}
+
+	public int getSumaOcjena() {
+		return sumaOcjena;
+	}
+
+	public void setSumaOcjena(int sumaOcjena) {
+		this.sumaOcjena = sumaOcjena;
+	}
 	
-	
-    
-	
-    
 }

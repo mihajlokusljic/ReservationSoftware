@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -8,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
-public abstract class Poslovnica extends Ocjenjivo {
+public abstract class Poslovnica {
 	
 	//@Column(unique = true, nullable = false)
 	protected String naziv;
@@ -19,6 +21,12 @@ public abstract class Poslovnica extends Ocjenjivo {
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Adresa adresa;
 	
+	protected int sumaOcjena;
+	
+	protected int brojOcjena;
+	
+	protected Set<Usluga> cjenovnikDodatnihUsluga;
+	
 	public Poslovnica() {
 		super();
 	}
@@ -28,6 +36,19 @@ public abstract class Poslovnica extends Ocjenjivo {
 		this.naziv = naziv;
 		this.promotivniOpis = promotivniOpis;
 		this.adresa = adresa;
+		this.sumaOcjena = 0;
+		this.brojOcjena = 0;
+	}
+	
+	public Poslovnica(String naziv, String promotivniOpis, Adresa adresa, int sumaOcjena, int brojOcjena,
+			Set<Usluga> cjenovnikDodatnihUsluga) {
+		super();
+		this.naziv = naziv;
+		this.promotivniOpis = promotivniOpis;
+		this.adresa = adresa;
+		this.sumaOcjena = sumaOcjena;
+		this.brojOcjena = brojOcjena;
+		this.cjenovnikDodatnihUsluga = cjenovnikDodatnihUsluga;
 	}
 
 	public String getNaziv() {
@@ -53,6 +74,29 @@ public abstract class Poslovnica extends Ocjenjivo {
 	public void setAdresa(Adresa adresa) {
 		this.adresa = adresa;
 	}
-	
+
+	public int getSumaOcjena() {
+		return sumaOcjena;
+	}
+
+	public void setSumaOcjena(int sumaOcjena) {
+		this.sumaOcjena = sumaOcjena;
+	}
+
+	public int getBrojOcjena() {
+		return brojOcjena;
+	}
+
+	public void setBrojOcjena(int brojOcjena) {
+		this.brojOcjena = brojOcjena;
+	}
+
+	public Set<Usluga> getCjenovnikDodatnihUsluga() {
+		return cjenovnikDodatnihUsluga;
+	}
+
+	public void setCjenovnikDodatnihUsluga(Set<Usluga> cjenovnikDodatnihUsluga) {
+		this.cjenovnikDodatnihUsluga = cjenovnikDodatnihUsluga;
+	}
 	
 }

@@ -1,17 +1,11 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-public class RezervacijaVozila {
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	protected Vozilo rezervisanoVozilo;
+public class BrzaRezervacijaVozila {
+	
+	protected Set<Vozilo> vozila;
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Filijala mjestoPreuzimanjaVozila;
 	
@@ -22,15 +16,15 @@ public class RezervacijaVozila {
 	protected Date datumVracanjaVozila;
 	
 	protected double cijena;
-	
-	public RezervacijaVozila() {
+
+	public BrzaRezervacijaVozila() {
 		super();
 	}
 
-	public RezervacijaVozila(Vozilo rezervisanoVozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
+	public BrzaRezervacijaVozila(Set<Vozilo> vozila, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
 			Filijala mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena) {
 		super();
-		this.rezervisanoVozilo = rezervisanoVozilo;
+		this.vozila = vozila;
 		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
 		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
 		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
@@ -38,12 +32,12 @@ public class RezervacijaVozila {
 		this.cijena = cijena;
 	}
 
-	public Vozilo getRezervisanoVozilo() {
-		return rezervisanoVozilo;
+	public Set<Vozilo> getVozila() {
+		return vozila;
 	}
 
-	public void setRezervisanoVozilo(Vozilo rezervisanoVozilo) {
-		this.rezervisanoVozilo = rezervisanoVozilo;
+	public void setVozila(Set<Vozilo> vozila) {
+		this.vozila = vozila;
 	}
 
 	public Filijala getMjestoPreuzimanjaVozila() {
@@ -85,5 +79,5 @@ public class RezervacijaVozila {
 	public void setCijena(double cijena) {
 		this.cijena = cijena;
 	}
-
+	
 }
