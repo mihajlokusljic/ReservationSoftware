@@ -20,8 +20,6 @@ public class Usluga {
 	//@Column(nullable = false)
 	protected double cijena;
 	
-	//@ManyToOne
-	protected Servis servis;
 	
 	public Usluga() {
 		super();

@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 
-public class Hotel extends Servis {
+public class Hotel extends Poslovnica {
 	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
 	protected Set<HotelskaSoba> sobe;
 	
