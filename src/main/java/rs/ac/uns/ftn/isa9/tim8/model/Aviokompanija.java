@@ -9,25 +9,23 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "Aviokompanija")
 public class Aviokompanija extends Poslovnica {
-	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Destinacija> destinacije;
 
-	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Let> letovi;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> brzeRezervacije;
 	
-	@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected double cijenaPrtljagaKomad;
 
-	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Avion> avioni;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
 
 	public Aviokompanija() {

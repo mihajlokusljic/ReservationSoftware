@@ -12,28 +12,26 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "Let")
 public class Let extends Ocjenjivo {
-	@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected String brojLeta;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Destinacija polaziste;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Destinacija odrediste;
 	
-	@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected Date datumPoletanja;
 	
-	@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
 	
-	@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Destinacija> presjedanja; // Zato sto ce biti potrebno cuvati i lokacije
 																// (vjerovatno kroz
 	// Yandex mape

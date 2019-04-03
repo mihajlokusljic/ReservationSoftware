@@ -13,32 +13,31 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-@Entity
 public class HotelskaSoba extends Ocjenjivo {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected int brojSobe;
 	
-	@Column(name = "broj_kreveta", nullable = false)
+	//@Column(name = "broj_kreveta", nullable = false)
 	protected int brojKreveta;
 	
-	@Column(name = "sprat", nullable = false)
+	//@Column(name = "sprat", nullable = false)
 	protected int sprat;
 	
-	@Column(name = "red", nullable = false)
+	//@Column(name = "red", nullable = false)
 	protected int vrsta;
 	
-	@Column(name = "kolona", nullable = false)
+	//@Column(name = "kolona", nullable = false)
 	protected int kolona;
 	
 	
-	@Column(name = "cijena", nullable = false)
+	//@Column(name = "cijena", nullable = false)
 	protected double cijena;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	//@ManyToMany(fetch = FetchType.LAZY)
 	protected Set<RezervacijaSoba> rezervacije;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.LAZY)
 	protected Hotel hotel;
 	
 	public HotelskaSoba() {

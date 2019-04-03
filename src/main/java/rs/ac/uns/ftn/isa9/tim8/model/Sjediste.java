@@ -2,18 +2,24 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 public class Sjediste {
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	Segment segment;
 	
-	@Column(name = "red", unique = false, nullable = false)
+	//@Column(name = "red", unique = false, nullable = false)
 	int red;
 	
-	@Column(name = "kolona", unique = false, nullable = false)
+	//@Column(name = "kolona", unique = false, nullable = false)
 	int kolona;
 
 	public Sjediste() {

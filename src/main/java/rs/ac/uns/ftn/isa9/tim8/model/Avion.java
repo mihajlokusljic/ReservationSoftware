@@ -6,20 +6,23 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "Avion")
 public class Avion {
-	
-	@Column(name = "nazivAviona", unique = true, nullable = false)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	//@Column(name = "nazivAviona", unique = true, nullable = false)
 	protected String naziv;
 	
-	@OneToMany(mappedBy = "segmenti", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "segmenti", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Segment> segment;
 	
-	@OneToMany(mappedBy = "sjedista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "sjedista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Sjediste> sjedista;
 
 	public Avion() {

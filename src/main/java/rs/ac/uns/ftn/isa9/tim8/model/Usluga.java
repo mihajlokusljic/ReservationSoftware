@@ -8,21 +8,19 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "usluga")
 public class Usluga {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	@Column(unique = true, nullable = false)
+	//@Column(unique = true, nullable = false)
 	protected String naziv;
 	
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	protected double cijena;
 	
-	@ManyToOne
+	//@ManyToOne
 	protected Servis servis;
 	
 	public Usluga() {

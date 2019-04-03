@@ -2,14 +2,18 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-@MappedSuperclass
 public abstract class Ocjenjivo {
-	
-	@Column(name = "suma_ocjena", nullable = true)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	//@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
-	@Column(name = "broj_ocjena", nullable = true)
+	//@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
 	
 	

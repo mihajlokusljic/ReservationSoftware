@@ -13,26 +13,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "pozivnica")
 public class Pozivnica {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	@Column(name = "prihvacena", nullable = false)
+	//@Column(name = "prihvacena", nullable = false)
 	protected boolean prihvacena;
 	
-	@Column(name = "rok_prihvatanja", nullable = false)
+	//@Column(name = "rok_prihvatanja", nullable = false)
 	protected Date rokPrihvatanja;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	//@ManyToOne(fetch = FetchType.LAZY)
 	protected Putovanje putovanje;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik posiljalac;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik primalac;
 	
 	public Pozivnica() {

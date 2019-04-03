@@ -9,20 +9,18 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "registrovani_korsnik")
 public class RegistrovanKorisnik extends Osoba {
 	
-	@Column(name = "bonus_poeni", nullable = true)
+	//@Column(name = "bonus_poeni", nullable = true)
 	protected double bonusPoeni;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RegistrovanKorisnik> prijatelji;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
 	protected Set<Pozivnica> primjenePozivnice;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
 	
 	public RegistrovanKorisnik() {

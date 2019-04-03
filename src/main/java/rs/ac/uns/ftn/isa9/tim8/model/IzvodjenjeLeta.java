@@ -7,24 +7,28 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "IzvodjenjeLeta")
 public class IzvodjenjeLeta {
-
-	@Column(name = "datumVrijemePoletanja", unique = false, nullable = false)
+	
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	//@Column(name = "datumVrijemePoletanja", unique = false, nullable = false)
 	protected Date datumVrijemePoletanja;
 	
-	@Column(name = "datumVrijemeSletanja", unique = false, nullable = false)
+	//@Column(name = "datumVrijemeSletanja", unique = false, nullable = false)
 	protected Date datumVrijemeSletanja;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Let let;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervisanaMjesta;
 
 	public IzvodjenjeLeta() {

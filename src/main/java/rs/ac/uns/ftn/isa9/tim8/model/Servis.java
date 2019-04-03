@@ -7,10 +7,9 @@ import javax.persistence.FetchType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
-@MappedSuperclass
 public abstract class Servis extends Poslovnica{
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "servis" )
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "servis" )
 	protected Set<Usluga> dodatneUsluge;
 
 	public Servis() {

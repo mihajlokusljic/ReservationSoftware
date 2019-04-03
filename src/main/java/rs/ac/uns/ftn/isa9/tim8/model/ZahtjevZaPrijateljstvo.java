@@ -11,21 +11,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "zahtjev_za_prijateljstvo")
 public class ZahtjevZaPrijateljstvo {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 
-	@Column(name = "potvrdjen")
+	//@Column(name = "potvrdjen")
 	protected boolean potvrdjen;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik posiljalac;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik primalac;
 	
 	public ZahtjevZaPrijateljstvo() {

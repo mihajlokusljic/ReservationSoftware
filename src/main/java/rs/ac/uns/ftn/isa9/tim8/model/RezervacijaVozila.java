@@ -7,16 +7,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "rezervacija_vozila")
 public class RezervacijaVozila extends Rezervacija{
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Vozilo rezervisanoVozilo;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Filijala mjestoPreuzimanjaVozila;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Filijala mjestoVracanjaVozila;
-	@ManyToOne
+	//@ManyToOne
 	protected RentACarServis rentACar;
 	
 	public RezervacijaVozila() {

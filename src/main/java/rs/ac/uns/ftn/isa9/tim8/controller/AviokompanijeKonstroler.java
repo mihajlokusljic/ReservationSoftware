@@ -17,7 +17,7 @@ import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaServisi;
 public class AviokompanijeKonstroler {
 	
 	@Autowired
-	@Qualifier("aviokompanijaServisMemSkladiste")
+	//@Qualifier("aviokompanijaServisMemSkladiste")
 	protected AviokompanijaServisi servis;
 	
 	

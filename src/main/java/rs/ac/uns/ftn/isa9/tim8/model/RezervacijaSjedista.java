@@ -7,23 +7,21 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "RezervacijaSjedista")
 public class RezervacijaSjedista extends Rezervacija {
 
-	@Column(name = "imePutnika", unique = false, nullable = false)
+	//@Column(name = "imePutnika", unique = false, nullable = false)
 	protected String imePutnika;
 	
-	@Column(name = "prezimePutnika", unique = false, nullable = false)
+	//@Column(name = "prezimePutnika", unique = false, nullable = false)
 	protected String prezimePutnika;
 	
-	@Column(name = "brojPasosaPutnika", unique = true, nullable = false)
+	//@Column(name = "brojPasosaPutnika", unique = true, nullable = false)
 	protected String brojPasosaPutnika;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Sjediste sjediste;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik putnik;
 
 	public RezervacijaSjedista() {

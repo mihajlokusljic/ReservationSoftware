@@ -5,22 +5,26 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "putovanje")
 public class Putovanje {
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected long id;
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaSjedista rezervacijaSjedista;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
 	protected Set<Pozivnica> pozivnice;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaSoba rezervacijaSoba;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaVozila rezervacijaVozila;
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RegistrovanKorisnik inicijatorPutovanja;
 
 	public Putovanje() {

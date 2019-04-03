@@ -4,9 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
-@Entity
 public class AdministratorRentACar extends Osoba {
-	@OneToOne(fetch = FetchType.LAZY)
+	//@OneToOne(fetch = FetchType.LAZY)
 	protected RentACarServis rentACarServis;
 
 	

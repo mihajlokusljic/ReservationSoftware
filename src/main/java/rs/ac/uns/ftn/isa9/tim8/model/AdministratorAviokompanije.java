@@ -6,8 +6,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "AdministratorAviokompanije")
 public class AdministratorAviokompanije extends Osoba {
 	
 	/*
@@ -16,8 +14,8 @@ public class AdministratorAviokompanije extends Osoba {
 	 * 
 	 */
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "aviokompanija")
+	//@ManyToOne(fetch = FetchType.LAZY)
+	//@JoinColumn(name = "aviokompanija")
 	protected Aviokompanija aviokompanija;
 
 	public AdministratorAviokompanije() {

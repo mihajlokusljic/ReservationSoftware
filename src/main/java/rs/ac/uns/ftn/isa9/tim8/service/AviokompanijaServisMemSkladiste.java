@@ -39,4 +39,5 @@ public class AviokompanijaServisMemSkladiste implements AviokompanijaServisi {
 		return bpMenadzer.pronadjiAviokompaniju(nazivAviokompanije);
 	}
 
+
 }

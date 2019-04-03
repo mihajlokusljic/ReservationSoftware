@@ -10,11 +10,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "RezervacijaSoba")
 public class RezervacijaSoba extends Rezervacija{
 	
-	@ManyToMany(mappedBy = "rezervacije", fetch = FetchType.LAZY)
+	//@ManyToMany(mappedBy = "rezervacije", fetch = FetchType.LAZY)
 	protected Set<HotelskaSoba> rezervisaneSobe;
 
 	public RezervacijaSoba() {

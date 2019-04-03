@@ -8,16 +8,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
-@MappedSuperclass
 public abstract class Poslovnica extends Ocjenjivo {
 	
-	@Column(unique = true, nullable = false)
+	//@Column(unique = true, nullable = false)
 	protected String naziv;
 	
-	@Column(name = "promotivni_opis")
+	//@Column(name = "promotivni_opis")
 	protected String promotivniOpis;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Adresa adresa;
 	
 	public Poslovnica() {
