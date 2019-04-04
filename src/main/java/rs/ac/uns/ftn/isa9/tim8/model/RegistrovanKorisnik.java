@@ -6,21 +6,27 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Entity
+@Table(name = "registovani_korisnik")
 public class RegistrovanKorisnik extends Osoba {
 	
-	//@Column(name = "bonus_poeni", nullable = true)
+	@Column(name = "bonus_poeni", nullable = true)
 	protected double bonusPoeni;
 	
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "prijatelji", joinColumns = @JoinColumn(name = "korisnik", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "prijatelj", referencedColumnName = "id"))
 	protected Set<RegistrovanKorisnik> prijatelji;
 	
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
-	protected Set<Pozivnica> primjenePozivnice;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	protected Set<Pozivnica> primljenePozivnice;
 	
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
 	
 	public RegistrovanKorisnik() {
@@ -33,7 +39,7 @@ public class RegistrovanKorisnik extends Osoba {
 		super(id, korisnickoIme, lozinka, ime, prezime, email, brojTelefona, putanjaSlike, false);
 		this.bonusPoeni = bonusPoeni;
 		this.prijatelji = prijatelji;
-		this.primjenePozivnice = primjenePozivnice;
+		this.primljenePozivnice = primjenePozivnice;
 	}
 
 
@@ -53,12 +59,12 @@ public class RegistrovanKorisnik extends Osoba {
 		this.prijatelji = prijatelji;
 	}
 
-	public Set<Pozivnica> getPrimjenePozivnice() {
-		return primjenePozivnice;
+	public Set<Pozivnica> getPrimljenePozivnice() {
+		return primljenePozivnice;
 	}
 
-	public void setPrimjenePozivnice(Set<Pozivnica> primjenePozivnice) {
-		this.primjenePozivnice = primjenePozivnice;
+	public void setPrimjenePozivnice(Set<Pozivnica> primljenePozivnice) {
+		this.primljenePozivnice = primljenePozivnice;
 	}
 	
 	

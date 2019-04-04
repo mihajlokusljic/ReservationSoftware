@@ -5,29 +5,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name = "osobe")
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Osoba {
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
-	//@Column(name = "korisnicko_ime", nullable = false, unique = true)
+	
+	@Column(name = "korisnicko_ime", nullable = false)
 	protected String korisnickoIme;
-	//@Column(name = "loznika", nullable = false)
+	
+	@Column(name = "loznika", nullable = false)
 	protected String lozinka;
-	//@Column(name = "ime", nullable = false)
+	
+	@Column(name = "ime", nullable = false)
 	protected String ime;
-	//@Column(name = "prezime", nullable = false)
+	
+	@Column(name = "prezime", nullable = false)
 	protected String prezime;
-	//@Column(name = "email", nullable = false)
+	
+	@Column(name = "email", nullable = false)
 	protected String email;
-	//@Column(name = "broj_telefona", nullable = true)
+	
+	@Column(name = "broj_telefona", nullable = true)
 	protected String brojTelefona;
-	//@Column(name = "putanja_slike", nullable = true)
+	
+	@Column(name = "putanja_slike", nullable = true)
 	protected String putanjaSlike;
-	//@Column(name = "sistem_admin", nullable = false)
+	
+	@Column(name = "sistem_admin", nullable = false)
 	protected boolean sistemAdmin = false;
 	
 	public Osoba() {

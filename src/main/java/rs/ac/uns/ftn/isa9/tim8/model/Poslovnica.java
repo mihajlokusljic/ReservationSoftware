@@ -4,27 +4,42 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Poslovnica {
 	
-	//@Column(unique = true, nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	protected Long id;
+	
+	@Column(name = "naziv", nullable = false)
 	protected String naziv;
 	
-	//@Column(name = "promotivni_opis")
+	@Column(name = "promotivni_opis", nullable = true)
 	protected String promotivniOpis;
 	
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "adresa_id", unique = true, referencedColumnName = "id")
 	protected Adresa adresa;
 	
+	@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
 	
+	@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
 	
+	@OneToMany(mappedBy = "poslovnica",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<Usluga> cjenovnikDodatnihUsluga;
 	
 	public Poslovnica() {
@@ -98,5 +113,14 @@ public abstract class Poslovnica {
 	public void setCjenovnikDodatnihUsluga(Set<Usluga> cjenovnikDodatnihUsluga) {
 		this.cjenovnikDodatnihUsluga = cjenovnikDodatnihUsluga;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 }
