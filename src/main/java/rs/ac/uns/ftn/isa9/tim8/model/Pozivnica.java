@@ -9,28 +9,33 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+@Entity
+@Table(name = "pozivnica")
 public class Pozivnica {
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	//@Column(name = "prihvacena", nullable = false)
+	@Column(name = "prihvacena", nullable = false)
 	protected boolean prihvacena;
 	
-	//@Column(name = "rok_prihvatanja", nullable = false)
+	@Column(name = "rok_prihvatanja", nullable = false)
 	protected Date rokPrihvatanja;
 	
 	//@ManyToOne(fetch = FetchType.LAZY)
-	protected Putovanje putovanje;
+	//protected Putovanje putovanje;
 	
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
-	//@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "primalac_id")
 	protected RegistrovanKorisnik primalac;
 	
 	public Pozivnica() {
@@ -43,7 +48,7 @@ public class Pozivnica {
 		this.id = id;
 		this.prihvacena = prihvacena;
 		this.rokPrihvatanja = rokPrihvatanja;
-		this.putovanje = putovanje;
+		//this.putovanje = putovanje;
 		this.posiljalac = posiljalac;
 	}
 
@@ -63,13 +68,13 @@ public class Pozivnica {
 		this.rokPrihvatanja = rokPrihvatanja;
 	}
 
-	public Putovanje getPutovanje() {
-		return putovanje;
-	}
-
-	public void setPutovanje(Putovanje putovanje) {
-		this.putovanje = putovanje;
-	}
+//	public Putovanje getPutovanje() {
+//		return putovanje;
+//	}
+//
+//	public void setPutovanje(Putovanje putovanje) {
+//		this.putovanje = putovanje;
+//	}
 
 	public Long getId() {
 		return id;

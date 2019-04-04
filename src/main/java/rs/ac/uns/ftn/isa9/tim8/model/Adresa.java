@@ -12,13 +12,15 @@ import javax.persistence.Table;
  * Klasa koja cuva potrebne informacije o adresi radi
  * njenog prikaza na mapi.
  * Napomena: u tekucoj verziji aplikacije cuva samo punu adresu kao String.*/
+@Entity
+@Table(name = "adresa")
 public class Adresa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	//@Column(name = "puna_adresa", nullable = false, unique = true)
-	String punaAdresa;
+	@Column(name = "puna_adresa", nullable = false)
+	protected String punaAdresa;
 	
 	public Adresa() {
 		super();
@@ -36,5 +38,14 @@ public class Adresa {
 	public void setPunaAdresa(String punaAdresa) {
 		this.punaAdresa = punaAdresa;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 }

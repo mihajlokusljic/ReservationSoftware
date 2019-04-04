@@ -3,18 +3,48 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "brza_rezervacija_vozila")
 public class BrzaRezervacijaVozila {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<Vozilo> vozila;
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "mjesto_preuzimanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoPreuzimanjaVozila;
 	
+	@Column(name = "datum_preuzimanja_vozila", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumPreuzimanjaVozila;
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "mjesto_vracanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoVracanjaVozila;
 	
+	@Column(name = "datum_vracanja_vozila", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumVracanjaVozila;
 	
+	@Column(name = "cijena", nullable = false)
 	protected double cijena;
 
 	public BrzaRezervacijaVozila() {
@@ -79,5 +109,14 @@ public class BrzaRezervacijaVozila {
 	public void setCijena(double cijena) {
 		this.cijena = cijena;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 }

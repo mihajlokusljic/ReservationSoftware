@@ -3,26 +3,54 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity
+@Table(name = "rezervacija_vozila")
 public class RezervacijaVozila {
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "rezervisano_vozilo_id", referencedColumnName = "id")
 	protected Vozilo rezervisanoVozilo;
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "mjesto_preuzimanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoPreuzimanjaVozila;
 	
+	@Column(name = "datum_preuzimanja_vozila", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumPreuzimanjaVozila;
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "mjesto_vracanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoVracanjaVozila;
 	
+	@Column(name = "datum_vracanja_vozila", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumVracanjaVozila;
 	
+	@Column(name = "cijena", nullable = false)
 	protected double cijena;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "rent_a_car_servis_id")
+	protected RentACarServis rentACarServis;
+
 	public RezervacijaVozila() {
 		super();
 	}
@@ -86,4 +114,13 @@ public class RezervacijaVozila {
 		this.cijena = cijena;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 }

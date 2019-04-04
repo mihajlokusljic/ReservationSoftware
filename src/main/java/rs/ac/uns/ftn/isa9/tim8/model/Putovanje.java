@@ -12,9 +12,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+//@Entity
+//@Table(name = "putovanje")
 public class Putovanje {
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
 	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected RezervacijaSjedista rezervacijaSjedista;
@@ -71,4 +73,13 @@ public class Putovanje {
 		this.inicijatorPutovanja = inicijatorPutovanja;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	
 }

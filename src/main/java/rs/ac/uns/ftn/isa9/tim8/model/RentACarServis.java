@@ -8,13 +8,17 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Entity
+@Table(name = "rent_a_car_servis")
 public class RentACarServis extends Poslovnica {
 	
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Vozilo> vozila;
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Filijala> filijale;
-	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "rentACar")
+	
+	@OneToMany(mappedBy = "rentACarServis",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<RezervacijaVozila> rezervisanaVozila;
 	
 	public RentACarServis() {
