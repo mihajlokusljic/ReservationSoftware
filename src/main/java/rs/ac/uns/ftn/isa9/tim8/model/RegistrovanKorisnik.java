@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -28,6 +29,9 @@ public class RegistrovanKorisnik extends Osoba {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL, mappedBy= "inicijatorPutovanja")
+	protected Putovanje putovanje;
 	
 	public RegistrovanKorisnik() {
 		super();

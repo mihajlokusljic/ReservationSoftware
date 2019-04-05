@@ -14,8 +14,8 @@ public class AdministratorAviokompanije extends Osoba {
 	 * 
 	 */
 	
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "aviokompanija")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="aviokompanija_id")
 	protected Aviokompanija aviokompanija;
 
 	public AdministratorAviokompanije() {
@@ -26,5 +26,15 @@ public class AdministratorAviokompanije extends Osoba {
 		super();
 		this.aviokompanija = aviokompanija;
 	}
+
+	public Aviokompanija getAviokompanija() {
+		return aviokompanija;
+	}
+
+	public void setAviokompanija(Aviokompanija aviokompanija) {
+		this.aviokompanija = aviokompanija;
+	}
+	
+	
 
 }

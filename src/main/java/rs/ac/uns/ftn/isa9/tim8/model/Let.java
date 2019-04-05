@@ -8,44 +8,80 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity
+@Table(name = "let")
 public class Let {
-	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	
+	@Id
+	@GeneratedValue
+	protected Long id;
+	
+	@Column(name = "broj_leta", nullable = false)
 	protected String brojLeta;
 	
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "polaziste_id", referencedColumnName = "id")
 	protected Destinacija polaziste;
 
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "odrediste_id", referencedColumnName = "id")
 	protected Destinacija odrediste;
 	
-	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	@Column(name = "datum_poletanja", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumPoletanja;
 	
-	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	@Column(name = "datum_sletanja", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
 	
-	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	@Column(name = "duzina_putovanja", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name="let_presjedanje", joinColumns=@JoinColumn(name="let_id"), inverseJoinColumns=@JoinColumn(name="presjedanje_id"))
 	protected Set<Destinacija> presjedanja; // Zato sto ce biti potrebno cuvati i lokacije
 																// (vjerovatno kroz
-	
+	@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
 	
+	@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
 	
 	// Yandex mape
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "avion_id")
 	protected Avion avion;
+	
+	@Column(name = "kapacitet_prva_klasa", nullable = true)
 	protected int kapacitetPrvaKlasa;
+	
+	@Column(name = "kapacitet_biznis_klasa", nullable = true)
 	protected int kapacitetBiznisKlasa;
+	
+	@Column(name = "kapacitet_ekonomska_klasa", nullable = true)
 	protected int kapacitetEkonomskaKlasa;
-	protected ArrayList<RezervacijaSjedista> rezervacije;
-	double cijenaKarte;
+	
+	@OneToMany(mappedBy = "let", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<RezervacijaSjedista> rezervacije;
+	
+	@Column(name = "cijena_karte", nullable = true)
+	protected double cijenaKarte;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "let")
+	protected CjenovnikLeta cjenovnikLeta;
 
 	public Let() {
 		super();
@@ -67,7 +103,7 @@ public class Let {
 		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
 		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
 		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
-		this.rezervacije = rezervacije;
+		//this.rezervacije = rezervacije;
 		this.cijenaKarte = cijenaKarte;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
@@ -161,13 +197,13 @@ public class Let {
 		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
 	}
 
-	public ArrayList<RezervacijaSjedista> getRezervacije() {
-		return rezervacije;
-	}
-
-	public void setRezervacije(ArrayList<RezervacijaSjedista> rezervacije) {
-		this.rezervacije = rezervacije;
-	}
+//	public ArrayList<RezervacijaSjedista> getRezervacije() {
+//		return rezervacije;
+//	}
+//
+//	public void setRezervacije(ArrayList<RezervacijaSjedista> rezervacije) {
+//		this.rezervacije = rezervacije;
+//	}
 
 	public double getCijenaKarte() {
 		return cijenaKarte;

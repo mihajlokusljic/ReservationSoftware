@@ -7,21 +7,26 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+@Entity
+@Table(name = "cjenovnik_leta")
 public class CjenovnikLeta {
-	//@Id
-	//(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "let_id", referencedColumnName = "id")
 	protected Let let;
 	
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "segment_id", referencedColumnName = "id")
 	protected Segment segment;
 	
-	@Column(name = "cijenaLeta", unique = false, nullable = false)
+	@Column(name = "cijena_leta", nullable = false)
 	protected double cijena;
 
 	public CjenovnikLeta() {
