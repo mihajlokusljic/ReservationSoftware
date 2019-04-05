@@ -27,8 +27,9 @@ public class Pozivnica {
 	@Column(name = "rok_prihvatanja", nullable = false)
 	protected Date rokPrihvatanja;
 	
-	//@ManyToOne(fetch = FetchType.LAZY)
-	//protected Putovanje putovanje;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "putovanje_id")
+	protected Putovanje putovanje;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
@@ -68,13 +69,13 @@ public class Pozivnica {
 		this.rokPrihvatanja = rokPrihvatanja;
 	}
 
-//	public Putovanje getPutovanje() {
-//		return putovanje;
-//	}
-//
-//	public void setPutovanje(Putovanje putovanje) {
-//		this.putovanje = putovanje;
-//	}
+	public Putovanje getPutovanje() {
+		return putovanje;
+	}
+
+	public void setPutovanje(Putovanje putovanje) {
+		this.putovanje = putovanje;
+	}
 
 	public Long getId() {
 		return id;

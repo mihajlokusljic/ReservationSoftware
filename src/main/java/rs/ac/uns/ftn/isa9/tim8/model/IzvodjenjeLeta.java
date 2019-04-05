@@ -10,26 +10,38 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity
+@Table(name = "izvodjenje_leta")
 public class IzvodjenjeLeta {
 	
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
-	//@Column(name = "datumVrijemePoletanja", unique = false, nullable = false)
+	
+	@Column(name = "datum_vrijeme_poletanja", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumVrijemePoletanja;
 	
-	//@Column(name = "datumVrijemeSletanja", unique = false, nullable = false)
+	@Column(name = "datum_vrijeme_sletanja", nullable = false)
+	@Temporal(TemporalType.DATE)
 	protected Date datumVrijemeSletanja;
 
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "let_id")
 	protected Let let;
 
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "izvodjenjeLeta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervisanaMjesta;
+	
+	@OneToMany(mappedBy = "izvodjenjeLeta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<BrzaRezervacijaSjedista> brzeRezervacije;
 
 	public IzvodjenjeLeta() {
 		super();

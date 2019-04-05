@@ -6,33 +6,44 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Entity
+@Table(name = "aviokompanija")
 public class Aviokompanija extends Poslovnica {
-	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name="aviokompanija_destinacija", joinColumns=@JoinColumn(name="aviokompanija_id"), inverseJoinColumns=@JoinColumn(name="destinacija_id"))
 	protected Set<Destinacija> destinacije;
 
-	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name="aviokompanija_let", joinColumns=@JoinColumn(name="aviokompanija_id"), inverseJoinColumns=@JoinColumn(name="let_id"))
 	protected Set<Let> letovi;
 
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	protected Set<RezervacijaSjedista> brzeRezervacije;
+	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<BrzaRezervacijaSjedista> brzeRezervacije;
 	
-	//@Column(name = "cijenaPrtljagaKomad", unique = false, nullable = false)
+	@Column(name = "cijena_prtljaga_komad", nullable = false)
 	protected double cijenaPrtljagaKomad;
 
-	//@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Avion> avioni;
 
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
+	
+	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<AdministratorAviokompanije> admini;
 
 	public Aviokompanija() {
 		super();
 	}
 
-	public Aviokompanija(Set<Destinacija> destinacije, Set<Let> letovi, Set<RezervacijaSjedista> brzeRezervacije,
+	public Aviokompanija(Set<Destinacija> destinacije, Set<Let> letovi, Set<BrzaRezervacijaSjedista> brzeRezervacije,
 			double cijenaPrtljagaKomad, Set<Avion> avioni, Set<RezervacijaSjedista> rezervacije) {
 		super();
 		this.destinacije = destinacije;
@@ -59,13 +70,6 @@ public class Aviokompanija extends Poslovnica {
 		this.letovi = letovi;
 	}
 
-	public Set<RezervacijaSjedista> getBrzeRezervacije() {
-		return brzeRezervacije;
-	}
-
-	public void setBrzeRezervacije(Set<RezervacijaSjedista> brzeRezervacije) {
-		this.brzeRezervacije = brzeRezervacije;
-	}
 
 	public double getCijenaPrtljagaKomad() {
 		return cijenaPrtljagaKomad;
@@ -83,6 +87,14 @@ public class Aviokompanija extends Poslovnica {
 		this.avioni = avioni;
 	}
 
+	public Set<BrzaRezervacijaSjedista> getBrzeRezervacije() {
+		return brzeRezervacije;
+	}
+
+	public void setBrzeRezervacije(Set<BrzaRezervacijaSjedista> brzeRezervacije) {
+		this.brzeRezervacije = brzeRezervacije;
+	}
+
 	public Set<RezervacijaSjedista> getRezervacije() {
 		return rezervacije;
 	}
@@ -90,5 +102,15 @@ public class Aviokompanija extends Poslovnica {
 	public void setRezervacije(Set<RezervacijaSjedista> rezervacije) {
 		this.rezervacije = rezervacije;
 	}
+
+	public Set<AdministratorAviokompanije> getAdmini() {
+		return admini;
+	}
+
+	public void setAdmini(Set<AdministratorAviokompanije> admini) {
+		this.admini = admini;
+	}
+
+	
 
 }

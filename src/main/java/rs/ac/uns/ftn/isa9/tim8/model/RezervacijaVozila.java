@@ -50,6 +50,10 @@ public class RezervacijaVozila {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rent_a_car_servis_id")
 	protected RentACarServis rentACarServis;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "putovanje_id")	
+	protected Putovanje putovanje;
 
 	public RezervacijaVozila() {
 		super();

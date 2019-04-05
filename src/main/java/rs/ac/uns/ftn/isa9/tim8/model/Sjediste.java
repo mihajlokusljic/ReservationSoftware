@@ -7,20 +7,31 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "sjediste")
 public class Sjediste {
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	Segment segment;
 	
-	//@Column(name = "red", unique = false, nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Long id;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="segment_id")
+	protected Segment segment;
+	
+	@Column(name = "red", nullable = false)
 	int red;
 	
-	//@Column(name = "kolona", unique = false, nullable = false)
+	@Column(name = "kolona", nullable = false)
 	int kolona;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "avion_id")
+	protected Avion avion;
 
 	public Sjediste() {
 		super();
@@ -50,4 +61,13 @@ public class Sjediste {
 		this.kolona = kolona;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 }
