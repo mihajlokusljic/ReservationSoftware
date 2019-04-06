@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -11,8 +12,8 @@ import javax.persistence.Table;
 @Table(name = "administrator_rent_a_car")
 public class AdministratorRentACar extends Osoba {
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "rent_a_car_servis_id", referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="rentACar_id")
 	protected RentACarServis rentACarServis;
 	
 	

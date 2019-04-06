@@ -3,13 +3,20 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-
+@Entity
+@Table(name = "hotel")
 public class Hotel extends Poslovnica {
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
 	protected Set<HotelskaSoba> sobe;
+	
+	@OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<AdministratorHotela> admini;
 	
 	public Hotel() {
 		super();

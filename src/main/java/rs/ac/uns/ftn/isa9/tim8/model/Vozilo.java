@@ -47,18 +47,18 @@ public class Vozilo {
 	@Column(name = "cijena_po_danu", nullable = false)
     protected int cijena_po_danu;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "filijala_id", referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="filijala_id")
 	protected Filijala filijala;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "rent_a_car_servis_id")
 	protected RentACarServis rentACar;
 	
-	//@ManyToOne
-	//protected RentACarServis rentACar;
-	
+	@Column(name = "broj_ocjena", nullable = false)
 	protected int brojOcjena;
+	
+	@Column(name = "suma_ocjena", nullable = false)
 	protected int sumaOcjena;
     
 	public Vozilo(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
@@ -184,6 +184,14 @@ public class Vozilo {
 
 	public void setSumaOcjena(int sumaOcjena) {
 		this.sumaOcjena = sumaOcjena;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

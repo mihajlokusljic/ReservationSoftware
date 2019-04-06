@@ -25,8 +25,9 @@ public class Usluga {
 	protected double cijena;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "poslovnica")
+	@JoinColumn(name = "poslovnica_id")
 	protected Poslovnica poslovnica;
+	
 	public Usluga() {
 		super();
 	}
@@ -35,6 +36,13 @@ public class Usluga {
 		super();
 		this.naziv = naziv;
 		this.cijena = cijena;
+	}
+	
+	public Usluga(String naziv, double cijena, Poslovnica poslovnica) {
+		super();
+		this.naziv = naziv;
+		this.cijena = cijena;
+		this.poslovnica = poslovnica;
 	}
 
 	public String getNaziv() {

@@ -52,6 +52,10 @@ public class RezervacijaSjedista {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "izvodjenje_leta_id")
 	protected IzvodjenjeLeta izvodjenjeLeta;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "putovanje_id")	
+	protected Putovanje putovanje;
 
 	public RezervacijaSjedista() {
 		super();
@@ -117,12 +121,45 @@ public class RezervacijaSjedista {
 		this.cijena = cijena;
 	}
 
-	/*public IzvodjenjeLeta getIzvodjenjeLeta() {
+	public IzvodjenjeLeta getIzvodjenjeLeta() {
 		return izvodjenjeLeta;
 	}
 
 	public void setIzvodjenjeLeta(IzvodjenjeLeta izvodjenjeLeta) {
 		this.izvodjenjeLeta = izvodjenjeLeta;
-	}*/
+	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Aviokompanija getAviokompanija() {
+		return aviokompanija;
+	}
+
+	public void setAviokompanija(Aviokompanija aviokompanija) {
+		this.aviokompanija = aviokompanija;
+	}
+
+	public Let getLet() {
+		return let;
+	}
+
+	public void setLet(Let let) {
+		this.let = let;
+	}
+
+	public Putovanje getPutovanje() {
+		return putovanje;
+	}
+
+	public void setPutovanje(Putovanje putovanje) {
+		this.putovanje = putovanje;
+	}
+	
+	
 }

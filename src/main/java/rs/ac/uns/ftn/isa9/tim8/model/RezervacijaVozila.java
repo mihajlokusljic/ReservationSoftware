@@ -51,6 +51,10 @@ public class RezervacijaVozila {
 	@JoinColumn(name = "rent_a_car_servis_id")
 	protected RentACarServis rentACarServis;
 	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name="putnik_id")
+	protected RegistrovanKorisnik putnik; //opciono, ne mora se rezervisati za registrovanog korisnika
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "putovanje_id")	
 	protected Putovanje putovanje;
@@ -124,6 +128,30 @@ public class RezervacijaVozila {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public RentACarServis getRentACarServis() {
+		return rentACarServis;
+	}
+
+	public void setRentACarServis(RentACarServis rentACarServis) {
+		this.rentACarServis = rentACarServis;
+	}
+
+	public RegistrovanKorisnik getPutnik() {
+		return putnik;
+	}
+
+	public void setPutnik(RegistrovanKorisnik putnik) {
+		this.putnik = putnik;
+	}
+
+	public Putovanje getPutovanje() {
+		return putovanje;
+	}
+
+	public void setPutovanje(Putovanje putovanje) {
+		this.putovanje = putovanje;
 	}
 
 	
