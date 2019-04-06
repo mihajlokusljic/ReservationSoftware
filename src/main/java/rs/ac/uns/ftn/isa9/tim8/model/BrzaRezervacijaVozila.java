@@ -25,8 +25,9 @@ public class BrzaRezervacijaVozila {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	protected Set<Vozilo> vozila;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "rezervisano_vozilo_id", referencedColumnName = "id")
+	protected Vozilo rezervisanoVozilo;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "mjesto_preuzimanja_vozila", referencedColumnName = "id")
@@ -51,10 +52,10 @@ public class BrzaRezervacijaVozila {
 		super();
 	}
 
-	public BrzaRezervacijaVozila(Set<Vozilo> vozila, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
+	public BrzaRezervacijaVozila(Vozilo vozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
 			Filijala mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena) {
 		super();
-		this.vozila = vozila;
+		this.rezervisanoVozilo = vozilo;
 		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
 		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
 		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
@@ -62,12 +63,14 @@ public class BrzaRezervacijaVozila {
 		this.cijena = cijena;
 	}
 
-	public Set<Vozilo> getVozila() {
-		return vozila;
+	
+
+	public Vozilo getRezervisanoVozilo() {
+		return rezervisanoVozilo;
 	}
 
-	public void setVozila(Set<Vozilo> vozila) {
-		this.vozila = vozila;
+	public void setRezervisanoVozilo(Vozilo rezervisanoVozilo) {
+		this.rezervisanoVozilo = rezervisanoVozilo;
 	}
 
 	public Filijala getMjestoPreuzimanjaVozila() {

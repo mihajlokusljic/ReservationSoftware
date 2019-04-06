@@ -21,6 +21,9 @@ public class RentACarServis extends Poslovnica {
 	@OneToMany(mappedBy = "rentACarServis",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<RezervacijaVozila> rezervisanaVozila;
 	
+	@OneToMany(mappedBy = "rentACarServis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<AdministratorRentACar> admini;
+	
 	public RentACarServis() {
 		super();
 	}
@@ -48,5 +51,14 @@ public class RentACarServis extends Poslovnica {
 	public void setRezervisanaVozila(Set<RezervacijaVozila> rezervisanaVozila) {
 		this.rezervisanaVozila = rezervisanaVozila;
 	}
+
+	public Set<AdministratorRentACar> getAdmini() {
+		return admini;
+	}
+
+	public void setAdmini(Set<AdministratorRentACar> admini) {
+		this.admini = admini;
+	}
+	
 	
 }

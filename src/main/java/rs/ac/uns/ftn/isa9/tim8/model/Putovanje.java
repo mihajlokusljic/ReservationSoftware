@@ -23,14 +23,14 @@ public class Putovanje {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id;
 	
-//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	protected RezervacijaSjedista rezervacijaSjedista;
+	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<RezervacijaSjedista> rezervacijeSjedista;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
 	protected Set<Pozivnica> pozivnice;
 	
-//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	protected RezervacijaSobe rezervacijaSoba;
+	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	protected Set<RezervacijaSobe> rezervacijeSoba;
 	
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaVozila> rezervacijeVozila;
@@ -47,14 +47,6 @@ public class Putovanje {
 		super();
 	}
 
-//	public RezervacijaSjedista getRezervacijaSjedista() {
-//		return rezervacijaSjedista;
-//	}
-//
-//	public void setRezervacijaSjedista(RezervacijaSjedista rezervacijaSjedista) {
-//		this.rezervacijaSjedista = rezervacijaSjedista;
-//	}
-//
 	public Set<Pozivnica> getPozivnice() {
 		return pozivnice;
 	}
@@ -62,15 +54,8 @@ public class Putovanje {
 	public void setPozivnice(Set<Pozivnica> pozivnice) {
 		this.pozivnice = pozivnice;
 	}
-//
-//	public RezervacijaSobe getRezervacijaSoba() {
-//		return rezervacijaSoba;
-//	}
-//
-//	public void setRezervacijaSoba(RezervacijaSobe rezervacijaSoba) {
-//		this.rezervacijaSoba = rezervacijaSoba;
-//	}
-//
+
+
 	public Set<RezervacijaVozila> getRezervacijeVozila() {
 		return rezervacijeVozila;
 	}
@@ -104,6 +89,24 @@ public class Putovanje {
 	public void setDodatne_usluge(Set<Usluga> dodatne_usluge) {
 		this.dodatne_usluge = dodatne_usluge;
 	}
+
+	public Set<RezervacijaSjedista> getRezervacijeSjedista() {
+		return rezervacijeSjedista;
+	}
+
+	public void setRezervacijeSjedista(Set<RezervacijaSjedista> rezervacijeSjedista) {
+		this.rezervacijeSjedista = rezervacijeSjedista;
+	}
+
+	public Set<RezervacijaSobe> getRezervacijeSoba() {
+		return rezervacijeSoba;
+	}
+
+	public void setRezervacijeSoba(Set<RezervacijaSobe> rezervacijeSoba) {
+		this.rezervacijeSoba = rezervacijeSoba;
+	}
+	
+	
 
 	
 }

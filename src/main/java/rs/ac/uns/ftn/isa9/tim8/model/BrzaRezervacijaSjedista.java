@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -28,9 +29,9 @@ public class BrzaRezervacijaSjedista {
 	@JoinColumn(name = "izvodjenje_leta_id")
 	protected IzvodjenjeLeta izvodjenjeLeta;
 		
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name="brza_rezervacija_sjediste", joinColumns=@JoinColumn(name="brza_rezervacija_id"), inverseJoinColumns=@JoinColumn(name="sjediste_id"))	
-	protected Set<Sjediste> sjedista;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "sjediste_id", referencedColumnName = "id")
+	protected Sjediste sjediste;
 	
 	@Column(name = "cijena", nullable = false)
 	protected double cijena;
@@ -42,10 +43,10 @@ public class BrzaRezervacijaSjedista {
 	public BrzaRezervacijaSjedista() {
 		super();
 	}
-	public BrzaRezervacijaSjedista(IzvodjenjeLeta izvodjenjeLeta, Set<Sjediste> sjedista, double cijena) {
+	public BrzaRezervacijaSjedista(IzvodjenjeLeta izvodjenjeLeta,Sjediste sjedista, double cijena) {
 		super();
 		this.izvodjenjeLeta = izvodjenjeLeta;
-		this.sjedista = sjedista;
+		this.sjediste = sjedista;
 		this.cijena = cijena;
 	}
 	public IzvodjenjeLeta getIzvodjenjeLeta() {
@@ -54,11 +55,24 @@ public class BrzaRezervacijaSjedista {
 	public void setIzvodjenjeLeta(IzvodjenjeLeta izvodjenjeLeta) {
 		this.izvodjenjeLeta = izvodjenjeLeta;
 	}
-	public Set<Sjediste> getSjedista() {
-		return sjedista;
+	
+	public Long getId() {
+		return id;
 	}
-	public void setSjedista(Set<Sjediste> sjedista) {
-		this.sjedista = sjedista;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Sjediste getSjediste() {
+		return sjediste;
+	}
+	public void setSjediste(Sjediste sjediste) {
+		this.sjediste = sjediste;
+	}
+	public Aviokompanija getAviokompanija() {
+		return aviokompanija;
+	}
+	public void setAviokompanija(Aviokompanija aviokompanija) {
+		this.aviokompanija = aviokompanija;
 	}
 	public double getCijena() {
 		return cijena;
