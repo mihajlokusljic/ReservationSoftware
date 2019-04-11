@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Poslovnica {
+public class Poslovnica {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +29,7 @@ public abstract class Poslovnica {
 	@Column(name = "promotivni_opis", nullable = true)
 	protected String promotivniOpis;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresa_id", unique = true, referencedColumnName = "id")
 	protected Adresa adresa;
 	

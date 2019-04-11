@@ -101,10 +101,10 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(vozilo),
 			success: function(response) {
-				if(response == true) {
+				if(response == '') {
 					dobaviSvaVozilaServisa(naziv_servisa);
 				} else {
-					alert("Unijeli ste naziv rent-a-car servisa koji nije u sistemu.");
+					alert(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -126,7 +126,7 @@ $(document).ready(function() {
 			url: "../rentACar/prikazServisa",
 			data: {"nazivServisa" : naziv_servisa},
 			success: function(response) {
-				if(response == '') {
+				if(response == null) {
 					alert("U sistemu ne postoji servis sa unijetim nazivom.");
 				} else {
 					prikazProfila(response);
@@ -148,8 +148,8 @@ function dobaviSvaVozilaServisa(naziv_servisa){
 		url: "../rentACar/svaVozilaServisa",
 		data: {"nazivServisa" : naziv_servisa},
 		success: function(response) {
-			if(response == undefined) {
-				alert("Desila se greska.");
+			if(response == null) {
+				//alert("Unijeli ste naziv servisa koji ne postoji.");
 			} else {
 				prikaziVozila(response);
 			}
@@ -222,13 +222,12 @@ function prikazProfila(servis){
 			contentType : "application/json; charset=utf-8",
 			data:JSON.stringify(racServis),
 			success:function(response){
-				if (response == null){
-					alert("Unijeli ste neodgovarajuce podatke.");
+				if (response == ''){
+					prikazProfila(racServis);
 				}
 				else{
-					alert("Izmjena je uspjela.");
+					alert(response);
 
-					prikazProfila(response);
 				}
 				
 			}

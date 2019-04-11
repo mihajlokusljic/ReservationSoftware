@@ -30,7 +30,7 @@ $(document).ready(function() {
 		
 		let flight = {
 				brojLeta : brojLeta,
-				brojLokacijePresjedanja: {brojPresjedanja: brojPresjedanja},
+				brojPresjedanja: brojPresjedanja,
 				cijenaKarte : cijenaKarte,
 				datumPoletanja: datumPoletanja,
 				datumSletanja: datumSletanja,
@@ -40,7 +40,6 @@ $(document).ready(function() {
 				kapacitetPrvaKlasa: kapacitetPrva,
 				polaziste: {nazivDestinacije: polaziste},
 				odrediste: {nazivDestinacije: odrediste},
-				rezervacije: []
 		};
 		
 		$.ajax({
@@ -49,11 +48,11 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(flight),
 			success: function(response) {
-				if(response == true) {
+				if(response == '') {
 					let tabelaLetova = $("#letoviPrikaz");
 					prikazi(flight, tabelaLetova);
 				} else {
-					alert("Već postoji let sa zadatim brojem leta. Pokušajte ponovo.");
+					alert(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -89,7 +88,7 @@ function prikazi(podatak, tabelaZaPrikaz) {
 	noviRed.append("<td>" + podatak.datumPoletanja + "</td>");
 	noviRed.append("<td>" + podatak.datumSletanja + "</td>");
 	noviRed.append("<td>" + podatak.duzinaPutovanja + "</td>");
-	noviRed.append("<td>" + podatak.brojLokacijePresjedanja.brojPresjedanja + "</td>");
+	noviRed.append("<td>" + podatak.brojPresjedanja + "</td>");
 	noviRed.append("<td>" + podatak.kapacitetPrvaKlasa + "</td>");
 	noviRed.append("<td>" + podatak.kapacitetBiznisKlasa + "</td>");
 	noviRed.append("<td>" + podatak.kapacitetEkonomskaKlasa + "</td>");

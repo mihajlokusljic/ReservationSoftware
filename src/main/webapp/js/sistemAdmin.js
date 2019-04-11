@@ -38,11 +38,12 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(aviokompanija),
 			success: function(response) {
-				if(response == true) {
+				if(response == '') {
 					let tabelaAviokompanija = $("#aviokompanijePrikaz");
 					prikazi(aviokompanija, tabelaAviokompanija);
+					//alert("Proslo");
 				} else {
-					alert("Vec postoji aviokompanija sa zadatim nazivom. Pokusajte ponovo.");
+					alert(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -78,11 +79,11 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(hotel),
 			success: function(response) {
-				if(response == true) {
+				if(response == '') {
 					let tabelaHotela = $("#hoteliPrikaz");
 					prikazi(hotel, tabelaHotela);
 				} else {
-					alert("Vec postoji hotel sa zadatim nazivom. Pokusajte ponovo.");
+					alert(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -120,11 +121,11 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(racServis),
 			success: function(response) {
-				if(response == true) {
+				if(response == '') {
 					//alert("Rent-a-car servis je uspesno dodat.");
 					prikaziRacServis(racServis);
 				} else {
-					alert("Vec postoji rent-a-car servis sa zadatim nazivom. Pokusajte ponovo.");
+					alert(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {

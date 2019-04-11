@@ -22,7 +22,7 @@ public class Destinacija {
 	@Column(name = "nazivDestinacije", nullable = false)
 	protected String nazivDestinacije;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresa", unique = true, referencedColumnName  = "id")
 	protected Adresa adresa;
 

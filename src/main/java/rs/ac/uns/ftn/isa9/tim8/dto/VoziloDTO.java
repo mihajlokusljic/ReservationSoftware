@@ -1,68 +1,32 @@
-package rs.ac.uns.ftn.isa9.tim8.model;
+package rs.ac.uns.ftn.isa9.tim8.dto;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "vozilo")
-public class Vozilo {
+public class VoziloDTO {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
-	
-	@Column(name = "naziv", nullable = false)
 	protected String naziv;
 	
-	@Column(name = "marka", nullable = false)
 	protected String marka;
 	
-	@Column(name = "model", nullable = false)
 	protected String model;
 	
-	@Column(name = "godina_proizvodnje", nullable = false)
 	protected int godina_proizvodnje;
 	
-	@Column(name = "broj_sjedista", nullable = false)
 	protected int broj_sjedista;
 	
-	@Column(name = "tip_vozila", nullable = false)
     protected String tip_vozila;
 	
-	@Column(name = "broj_vrata", nullable = false)
     protected int broj_vrata;
 	
-	@Column(name = "kilovati", nullable = false)
     protected int kilovati;
 	
-	@Column(name = "cijena_po_danu", nullable = false)
     protected int cijena_po_danu;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name="filijala_id")
-	protected Filijala filijala;
-	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "rent_a_car_servis_id")
-	protected RentACarServis rentACar;
-	
-	@Column(name = "broj_ocjena", nullable = false)
 	protected int brojOcjena;
 	
-	@Column(name = "suma_ocjena", nullable = false)
 	protected int sumaOcjena;
-    
-	public Vozilo(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
-			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Filijala filijala) {
+
+	public VoziloDTO(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
+			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu) {
 		super();
 		this.naziv = naziv;
 		this.marka = marka;
@@ -73,12 +37,9 @@ public class Vozilo {
 		this.broj_vrata = broj_vrata;
 		this.kilovati = kilovati;
 		this.cijena_po_danu = cijena_po_danu;
-		this.filijala = filijala;
-		this.sumaOcjena = 0;
-		this.brojOcjena = 0;
 	}
 
-	public Vozilo() {
+	public VoziloDTO() {
 		super();
 	}
 
@@ -154,22 +115,6 @@ public class Vozilo {
 		this.cijena_po_danu = cijena_po_danu;
 	}
 
-	public Filijala getFilijala() {
-		return filijala;
-	}
-
-	public void setFilijala(Filijala filijala) {
-		this.filijala = filijala;
-	}
-
-	public RentACarServis getRentACar() {
-		return rentACar;
-	}
-
-	public void setRentACar(RentACarServis rentACar) {
-		this.rentACar = rentACar;
-	}
-
 	public int getBrojOcjena() {
 		return brojOcjena;
 	}
@@ -185,13 +130,6 @@ public class Vozilo {
 	public void setSumaOcjena(int sumaOcjena) {
 		this.sumaOcjena = sumaOcjena;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 	
 }
