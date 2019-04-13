@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 
 @Service
@@ -42,6 +43,29 @@ public class CustomUserDetailsService implements UserDetailsService{
 		}
 	}
 	
+	public boolean korisnickoImeZauzeto(String korIme) {
+		Osoba korisnik = korisnikRepository.findOneByKorisnickoIme(korIme);
+		if (korisnik != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean emailZauzet(String email) {
+		Osoba korisnik = korisnikRepository.findOneByEmail(email);
+		if (korisnik != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public String dodajRegistrovanogKorisnika(RegistrovanKorisnik korisnik) {
+
+		korisnikRepository.save(korisnik);
+		return null;
+	}
+	
+	
 	// Funkcija pomocu koje korisnik menja svoju lozinku
 		public void changePassword(String oldPassword, String newPassword) {
 
@@ -67,6 +91,10 @@ public class CustomUserDetailsService implements UserDetailsService{
 			user.setKorisnickoIme(passwordEncoder.encode(newPassword));
 			korisnikRepository.save(user);
 
+		}
+		
+		public String encodePassword(String password) {
+			return this.passwordEncoder.encode(password);
 		}
 		
 

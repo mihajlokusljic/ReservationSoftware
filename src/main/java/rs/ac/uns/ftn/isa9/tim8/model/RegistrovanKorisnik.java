@@ -14,9 +14,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "registovani_korisnik")
 public class RegistrovanKorisnik extends Osoba {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4317984380302878520L;
+
 	@Column(name = "bonus_poeni", nullable = true)
 	protected double bonusPoeni;
 	
@@ -68,6 +72,36 @@ public class RegistrovanKorisnik extends Osoba {
 	}
 
 	public void setPrimjenePozivnice(Set<Pozivnica> primljenePozivnice) {
+		this.primljenePozivnice = primljenePozivnice;
+	}
+
+
+	public Set<ZahtjevZaPrijateljstvo> getPrimljeniZahtjevi() {
+		return primljeniZahtjevi;
+	}
+
+
+	public void setPrimljeniZahtjevi(Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi) {
+		this.primljeniZahtjevi = primljeniZahtjevi;
+	}
+
+
+	public Putovanje getPutovanje() {
+		return putovanje;
+	}
+
+
+	public void setPutovanje(Putovanje putovanje) {
+		this.putovanje = putovanje;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+	public void setPrimljenePozivnice(Set<Pozivnica> primljenePozivnice) {
 		this.primljenePozivnice = primljenePozivnice;
 	}
 	

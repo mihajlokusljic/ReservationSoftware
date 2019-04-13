@@ -9,10 +9,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "administrator_rent_a_car")
 public class AdministratorRentACar extends Osoba {
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6987577935608408308L;
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="rentACar_id")
 	protected RentACarServis rentACarServis;
 	
