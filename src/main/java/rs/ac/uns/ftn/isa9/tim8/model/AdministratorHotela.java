@@ -9,10 +9,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "administrator_hotela")
 public class AdministratorHotela extends Osoba {
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3294064177720081642L;
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="hotel_id")
 	protected Hotel hotel;
 	

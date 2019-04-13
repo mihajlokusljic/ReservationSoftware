@@ -7,7 +7,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "administrator_aviokompanije")
 public class AdministratorAviokompanije extends Osoba {
 	
 	/*
@@ -16,7 +15,11 @@ public class AdministratorAviokompanije extends Osoba {
 	 * 
 	 */
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2173872186530239645L;
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="aviokompanija_id")
 	protected Aviokompanija aviokompanija;
 
