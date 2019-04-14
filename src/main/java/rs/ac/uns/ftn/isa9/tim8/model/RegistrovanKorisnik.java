@@ -44,7 +44,7 @@ public class RegistrovanKorisnik extends Osoba {
 	
 	public RegistrovanKorisnik(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
 			String brojTelefona, String putanjaSlike, double bonusPoeni, Set<RegistrovanKorisnik> prijatelji, Set<Pozivnica> primjenePozivnice ) {
-		super(id, korisnickoIme, lozinka, ime, prezime, email, brojTelefona, putanjaSlike, false);
+		super(id, lozinka, ime, prezime, email, brojTelefona, putanjaSlike, false);
 		this.bonusPoeni = bonusPoeni;
 		this.prijatelji = prijatelji;
 		this.primljenePozivnice = primjenePozivnice;
