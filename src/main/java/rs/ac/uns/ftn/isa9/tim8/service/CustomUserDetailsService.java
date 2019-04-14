@@ -35,20 +35,12 @@ public class CustomUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Osoba user = korisnikRepository.findOneByKorisnickoIme(username);
+		Osoba user = korisnikRepository.findOneByEmail(username);
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
 		} else {
 			return user;
 		}
-	}
-	
-	public boolean korisnickoImeZauzeto(String korIme) {
-		Osoba korisnik = korisnikRepository.findOneByKorisnickoIme(korIme);
-		if (korisnik != null) {
-			return true;
-		}
-		return false;
 	}
 	
 	public boolean emailZauzet(String email) {
@@ -88,7 +80,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 
 			// pre nego sto u bazu upisemo novu lozinku, potrebno ju je hesirati
 			// ne zelimo da u bazi cuvamo lozinke u plain text formatu
-			user.setKorisnickoIme(passwordEncoder.encode(newPassword));
+			user.setEmail(passwordEncoder.encode(newPassword));
 			korisnikRepository.save(user);
 
 		}

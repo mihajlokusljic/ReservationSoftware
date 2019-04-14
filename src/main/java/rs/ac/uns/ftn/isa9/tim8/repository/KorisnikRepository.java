@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 
 public interface KorisnikRepository extends JpaRepository<Osoba, Long>{
-    Osoba findOneByKorisnickoIme( String korisnickoIme);
     Osoba findOneByEmail(String email);
 
 }

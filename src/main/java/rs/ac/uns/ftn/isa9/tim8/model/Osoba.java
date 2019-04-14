@@ -36,9 +36,6 @@ public class Osoba implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 	
-	@Column(name = "korisnicko_ime", nullable = false)
-	protected String korisnickoIme;
-	
 	@Column(name = "loznika", nullable = false)
 	protected String lozinka;
 	
@@ -75,11 +72,10 @@ public class Osoba implements UserDetails{
 		authorities = new HashSet<Authority>();
 	}
 
-	public Osoba(Long id, String korisnickoIme, String lozinka, String ime, String prezime, String email,
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
 			String brojTelefona, String putanjaSlike, boolean sistemAdmin) {
 		super();
 		this.id = id;
-		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
 		this.prezime = prezime;
@@ -95,14 +91,6 @@ public class Osoba implements UserDetails{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getKorisnickoIme() {
-		return korisnickoIme;
-	}
-
-	public void setKorisnickoIme(String korisnickoIme) {
-		this.korisnickoIme = korisnickoIme;
 	}
 
 	public String getLozinka() {
@@ -177,7 +165,7 @@ public class Osoba implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		return korisnickoIme;
+		return email;
 	}
 
 	@Override

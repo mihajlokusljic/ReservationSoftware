@@ -17,11 +17,6 @@ $(document).ready(function() {
 			alert("Niste unijeli email");
 			return;
 		}
-		var korisnickoIme = $("#korIme").val();
-		if (korisnickoIme == ""){
-			alert("Niste unijeli korisnicko ime");
-			return;
-		}
 		var brojTelefona = $("#brojTelefona").val();
 		if (brojTelefona == ""){
 			alert("Niste unijeli broj telefona");
@@ -32,12 +27,16 @@ $(document).ready(function() {
 			alert("Niste unijeli lozinku");
 			return;
 		}
+		var lozinka2 = $("#lozinka2").val();
+		if (lozinka2 != lozinka){
+			alert("Ne poklapaju se lozinke");
+			return;
+		}
 
 		let korisnik = {
 				ime:ime,
 				prezime:prezime,
 				email:email,
-				korisnickoIme:korisnickoIme,
 				brojTelefona:brojTelefona,
 				lozinka:lozinka,
 		};
