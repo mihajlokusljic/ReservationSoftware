@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.RegistracijaAdminaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
@@ -74,6 +75,14 @@ public class AuthenticationController {
 		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
 		
 		return new ResponseEntity<String> (userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> registrujAdministratoraAviokompanije(RegistracijaAdminaDTO adminReg) {
+		if (this.userDetailsService.dodajAdminaAviokompanije(adminReg)) {
+			return new ResponseEntity<String>("Administrator aviokompanije je uspesno dodat.", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Greska. Zadati email vec postoji ili ne postoji zadata aviokompanija.", HttpStatus.BAD_REQUEST);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
