@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.apache.commons.logging.Log;
@@ -17,9 +19,11 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.RegistracijaAdminaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
+import rs.ac.uns.ftn.isa9.tim8.model.Authority;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.TipKorisnika;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 
@@ -107,9 +111,22 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 
 		Aviokompanija aviokompanija = aviokompanijaSearch.get();
-		AdministratorAviokompanije noviAdmin = new AdministratorAviokompanije(null,
-				this.encodePassword(adminReg.getLozinka()), adminReg.getIme(), adminReg.getPrezime(),
-				adminReg.getEmail(), adminReg.getBrojTelefona(), "", false, aviokompanija);
+		AdministratorAviokompanije noviAdmin = new AdministratorAviokompanije();
+		noviAdmin.setEmail(adminReg.getEmail());
+		noviAdmin.setLozinka(this.encodePassword(adminReg.getLozinka()));
+		noviAdmin.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+		noviAdmin.setIme(adminReg.getIme());
+		noviAdmin.setPrezime(adminReg.getPrezime());
+		noviAdmin.setBrojTelefona(adminReg.getBrojTelefona());
+		noviAdmin.setEnabled(true);
+		noviAdmin.setPutanjaSlike("");
+		noviAdmin.setSistemAdmin(false);
+		Authority a = new Authority();
+		a.setTipKorisnika(TipKorisnika.AdministratorAviokompanije);
+		HashSet<Authority> authorities = new HashSet<Authority>();
+		authorities.add(a);
+		noviAdmin.setAuthorities(authorities);
+		noviAdmin.setAviokompanija(aviokompanija);
 		aviokompanija.getAdmini().add(noviAdmin);
 		this.aviokompanijaRepository.save(aviokompanija);
 		return true;

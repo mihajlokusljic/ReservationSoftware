@@ -78,7 +78,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
-	public ResponseEntity<?> registrujAdministratoraAviokompanije(RegistracijaAdminaDTO adminReg) {
+	public ResponseEntity<?> registrujAdministratoraAviokompanije(@RequestBody RegistracijaAdminaDTO adminReg) {
 		if (this.userDetailsService.dodajAdminaAviokompanije(adminReg)) {
 			return new ResponseEntity<String>("Administrator aviokompanije je uspesno dodat.", HttpStatus.OK);
 		}

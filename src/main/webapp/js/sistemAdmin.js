@@ -2,13 +2,13 @@ $(document).ready(function() {
 	
 	
 	//ucitavanje aviokompanija
-	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz");
+	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz", "aviokompanijeSelect");
 	
 	//ucitavanje hotela
-	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz");
+	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz", "");
 	
 	//ucitavanje rent-a-car servisa
-	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz");
+	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz", "");
 	
 	//dodavanje aviokompanije
 	$("#unosAviokompanijeForm").submit(function(e) {
@@ -40,7 +40,8 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response == '') {
 					let tabelaAviokompanija = $("#aviokompanijePrikaz");
-					prikazi(aviokompanija, tabelaAviokompanija);
+					let selekcioniMeni = $("#aviokompanijeSelect");
+					prikazi(aviokompanija, tabelaAviokompanija, selekcioniMeni);
 					//alert("Proslo");
 				} else {
 					alert(response);
@@ -133,16 +134,66 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	//dodavanje admina aviokompanije
+	$("#unosAdminaAviokompanijeForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idAviokompanije = $("#aviokompanijeSelect").val();
+		if(idAviokompanije == undefined || idAviokompanije === "") {
+			alert("Greska. Aviokompanija mora biti zadata.");
+			return;
+		}
+		let _email = $("#emailAdminaAviokompanije").val();
+		let _lozinka = $("#lozinkaAdminaAviokompanije").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeAdminaAviokompanije").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeAdminaAviokompanije").val();
+		let _prezime = $("#prezimeAdminaAviokompanije").val();
+		let _brojTelefona = $("#brTelefonaAdminaAviokompanije").val();
+		
+		let noviAdmin = {
+				adresaGrada: { punaAdresa: "Nije podrzano" },
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idAviokompanije,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerAvioAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	
+	
 });
 
-function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz) {
+function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, idSelekcionogMenija) {
 	let tabela = $("#" + idTabeleZaPrikaz);
+	if(idSelekcionogMenija == "") {
+		return;
+	}
+	let selekcioniMeni = $("#" + idSelekcionogMenija);
 	$.ajax({
 		type: "GET",
 		url: putanjaControlera,
 		success: function(response) {
 			$.each(response, function(i, podatak) {
-				prikazi(podatak, tabela);
+				prikazi(podatak, tabela, selekcioniMeni);
 			});
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -151,12 +202,15 @@ function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz) {
 	});
 }
 
-function prikazi(podatak, tabelaZaPrikaz) {
+function prikazi(podatak, tabelaZaPrikaz, selekcioniMeni) {
 	let noviRed = $("<tr></tr>");
 	noviRed.append("<td>" + podatak.naziv + "</td>");
 	noviRed.append("<td>" + podatak.adresa.punaAdresa + "</td>");
 	noviRed.append("<td>" + podatak.promotivniOpis + "</td>");
 	tabelaZaPrikaz.append(noviRed);
+	if(selekcioniMeni != undefined) {
+		selekcioniMeni.append('<option value="' + podatak.id + '">' + podatak.naziv + '</option>');
+	}
 }
 
 function prikaziRacServis(racServis) {
