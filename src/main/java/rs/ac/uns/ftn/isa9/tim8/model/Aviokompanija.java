@@ -36,8 +36,6 @@ public class Aviokompanija extends Poslovnica {
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
 	
-	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	protected Set<AdministratorAviokompanije> admini;
 
 	public Aviokompanija() {
 		super();
@@ -102,15 +100,5 @@ public class Aviokompanija extends Poslovnica {
 	public void setRezervacije(Set<RezervacijaSjedista> rezervacije) {
 		this.rezervacije = rezervacije;
 	}
-
-	public Set<AdministratorAviokompanije> getAdmini() {
-		return admini;
-	}
-
-	public void setAdmini(Set<AdministratorAviokompanije> admini) {
-		this.admini = admini;
-	}
-
-	
 
 }

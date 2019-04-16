@@ -9,7 +9,7 @@ public class RegistracijaAdminaDTO {
 	protected String ime;
 	protected String prezime;
 	protected String brojTelefona;
-	protected Adresa adresaGrada;
+	protected String punaAdresa;
 	protected Long idPoslovnice;
 	
 	public RegistracijaAdminaDTO() {
@@ -45,17 +45,17 @@ public class RegistracijaAdminaDTO {
 	public void setBrojTelefona(String brojTelefona) {
 		this.brojTelefona = brojTelefona;
 	}
-	public Adresa getAdresaGrada() {
-		return adresaGrada;
-	}
-	public void setAdresaGrada(Adresa adresaGrada) {
-		this.adresaGrada = adresaGrada;
-	}
 	public Long getIdPoslovnice() {
 		return idPoslovnice;
 	}
 	public void setIdPoslovnice(Long idPoslovnice) {
 		this.idPoslovnice = idPoslovnice;
+	}
+	public String getPunaAdresa() {
+		return punaAdresa;
+	}
+	public void setPunaAdresa(String punaAdresa) {
+		this.punaAdresa = punaAdresa;
 	}
 	
 }

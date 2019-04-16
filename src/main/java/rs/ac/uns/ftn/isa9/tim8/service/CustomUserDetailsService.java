@@ -19,12 +19,18 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.RegistracijaAdminaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
+import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Authority;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
+import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.TipKorisnika;
+import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 
 @Service
@@ -37,12 +43,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	protected AviokompanijaRepository aviokompanijaRepository;
+	
+	@Autowired
+	protected HotelRepository hotelRepository;
 
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
 
 	@Autowired
 	protected AuthenticationManager authenticationManager;
+	
+	@Autowired
+	protected AdresaRepository adresaRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -98,28 +110,49 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public String encodePassword(String password) {
 		return this.passwordEncoder.encode(password);
 	}
+	
+	private void podesiOsnovnePodatkeAdmina(Osoba noviAdmin, RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
+		if(adminReg.getEmail() == null || adminReg.getEmail().equals("")) {
+			throw new NevalidniPodaciException("E-mail mora biti zadat.");
+		}
+		noviAdmin.setEmail(adminReg.getEmail());
+		if(adminReg.getLozinka() == null || adminReg.getLozinka().equals("")) {
+			throw new NevalidniPodaciException("Lozinka mora biti zadata.");
+		}
+		noviAdmin.setLozinka(this.encodePassword(adminReg.getLozinka()));
+		noviAdmin.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
+		if(adminReg.getIme() == null || adminReg.getIme().equals("")) {
+			throw new NevalidniPodaciException("Ime mora biti zadato.");
+		}
+		noviAdmin.setIme(adminReg.getIme());
+		if(adminReg.getPrezime() == null || adminReg.getPrezime().equals("")) {
+			throw new NevalidniPodaciException("Prezime mora biti zadato.");
+		}
+		noviAdmin.setPrezime(adminReg.getPrezime());
+		noviAdmin.setBrojTelefona(adminReg.getBrojTelefona());
+		Adresa a = this.adresaRepository.findOneByPunaAdresa(adminReg.getPunaAdresa());
+		if(a == null) {
+			a = new Adresa(adminReg.getPunaAdresa());
+		}
+		noviAdmin.setAdresa(a);
+		noviAdmin.setEnabled(true);
+		noviAdmin.setPutanjaSlike("");
+	}
 
-	public boolean dodajAdminaAviokompanije(RegistracijaAdminaDTO adminReg) {
+	public void dodajAdminaAviokompanije(RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
 		if (this.emailZauzet(adminReg.getEmail())) {
-			return false;
+			throw new NevalidniPodaciException("Zadati email vec postoji.");
 		}
 
 		Optional<Aviokompanija> aviokompanijaSearch = this.aviokompanijaRepository.findById(adminReg.getIdPoslovnice());
 		if (!aviokompanijaSearch.isPresent()) {
-			return false;
+			throw new NevalidniPodaciException("Zadata aviokompanija ne postoji.");
 		}
 
 		Aviokompanija aviokompanija = aviokompanijaSearch.get();
 		AdministratorAviokompanije noviAdmin = new AdministratorAviokompanije();
-		noviAdmin.setEmail(adminReg.getEmail());
-		noviAdmin.setLozinka(this.encodePassword(adminReg.getLozinka()));
-		noviAdmin.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
-		noviAdmin.setIme(adminReg.getIme());
-		noviAdmin.setPrezime(adminReg.getPrezime());
-		noviAdmin.setBrojTelefona(adminReg.getBrojTelefona());
-		noviAdmin.setEnabled(true);
-		noviAdmin.setPutanjaSlike("");
+		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
 		noviAdmin.setSistemAdmin(false);
 		Authority a = new Authority();
 		a.setTipKorisnika(TipKorisnika.AdministratorAviokompanije);
@@ -127,9 +160,30 @@ public class CustomUserDetailsService implements UserDetailsService {
 		authorities.add(a);
 		noviAdmin.setAuthorities(authorities);
 		noviAdmin.setAviokompanija(aviokompanija);
-		aviokompanija.getAdmini().add(noviAdmin);
-		this.aviokompanijaRepository.save(aviokompanija);
-		return true;
+		this.korisnikRepository.save(noviAdmin);
+	}
+	
+	public void dodajAdminaHotela(RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
+		if (this.emailZauzet(adminReg.getEmail())) {
+			throw new NevalidniPodaciException("Zadati email vec postoji.");
+		}
+		
+		Optional<Hotel> hotelSearch = this.hotelRepository.findById(adminReg.getIdPoslovnice());
+		if(!hotelSearch.isPresent()) {
+			throw new NevalidniPodaciException("Zadati hotel ne postoji.");
+		}
+		
+		Hotel hotel = hotelSearch.get();
+		AdministratorHotela noviAdmin = new AdministratorHotela();
+		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
+		noviAdmin.setSistemAdmin(false);
+		Authority a = new Authority();
+		a.setTipKorisnika(TipKorisnika.AdministratorHotela);
+		HashSet<Authority> authorities = new HashSet<Authority>();
+		authorities.add(a);
+		noviAdmin.setAuthorities(authorities);
+		noviAdmin.setHotel(hotel);
+		this.korisnikRepository.save(noviAdmin);
 	}
 
 }

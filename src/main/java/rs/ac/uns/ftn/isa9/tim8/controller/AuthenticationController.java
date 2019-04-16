@@ -35,6 +35,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.UserTokenState;
 import rs.ac.uns.ftn.isa9.tim8.security.TokenUtils;
 import rs.ac.uns.ftn.isa9.tim8.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.isa9.tim8.service.CustomUserDetailsService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -79,10 +80,22 @@ public class AuthenticationController {
 	
 	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
 	public ResponseEntity<?> registrujAdministratoraAviokompanije(@RequestBody RegistracijaAdminaDTO adminReg) {
-		if (this.userDetailsService.dodajAdminaAviokompanije(adminReg)) {
-			return new ResponseEntity<String>("Administrator aviokompanije je uspesno dodat.", HttpStatus.OK);
+		try {
+			this.userDetailsService.dodajAdminaAviokompanije(adminReg);
+			return new ResponseEntity<String>("Administrator je uspesno dodat.", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Greska. Zadati email vec postoji ili ne postoji zadata aviokompanija.", HttpStatus.BAD_REQUEST);
+	}
+	
+	@RequestMapping(value = "/registerHotelAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajAdminaHotela(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajAdminaHotela(adminReg);
+			return new ResponseEntity<String>("Administrator je uspesno dodat", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

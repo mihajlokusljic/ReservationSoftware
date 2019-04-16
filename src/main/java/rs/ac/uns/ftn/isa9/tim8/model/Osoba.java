@@ -17,6 +17,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -51,6 +52,10 @@ public class Osoba implements UserDetails{
 	@Column(name = "broj_telefona", nullable = true)
 	protected String brojTelefona;
 	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "adresa_id")
+	protected Adresa adresa;
+	
 	@Column(name = "putanja_slike", nullable = true)
 	protected String putanjaSlike;
 	
@@ -71,9 +76,17 @@ public class Osoba implements UserDetails{
 		super();
 		authorities = new HashSet<Authority>();
 	}
+	
+	public Adresa getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
+	}
 
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
-			String brojTelefona, String putanjaSlike, boolean sistemAdmin) {
+			String brojTelefona, Adresa adresa, String putanjaSlike, boolean sistemAdmin) {
 		super();
 		this.id = id;
 		this.lozinka = lozinka;
@@ -81,6 +94,7 @@ public class Osoba implements UserDetails{
 		this.prezime = prezime;
 		this.email = email;
 		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
 		this.putanjaSlike = putanjaSlike;
 		this.sistemAdmin = sistemAdmin;
 	}

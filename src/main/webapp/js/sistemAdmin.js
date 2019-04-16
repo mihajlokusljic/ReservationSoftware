@@ -5,7 +5,7 @@ $(document).ready(function() {
 	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz", "aviokompanijeSelect");
 	
 	//ucitavanje hotela
-	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz", "");
+	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz", "hoteliSelect");
 	
 	//ucitavanje rent-a-car servisa
 	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz", "");
@@ -82,7 +82,8 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response == '') {
 					let tabelaHotela = $("#hoteliPrikaz");
-					prikazi(hotel, tabelaHotela);
+					let selekcioniMeni = $("#hoteliSelect");
+					prikazi(hotel, tabelaHotela, selekcioniMeni);
 				} else {
 					alert(response);
 				}
@@ -140,7 +141,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		
 		let idAviokompanije = $("#aviokompanijeSelect").val();
-		if(idAviokompanije == undefined || idAviokompanije === "") {
+		if(idAviokompanije == "undefined" || idAviokompanije === "") {
 			alert("Greska. Aviokompanija mora biti zadata.");
 			return;
 		}
@@ -154,9 +155,10 @@ $(document).ready(function() {
 		let _ime = $("#imeAdminaAviokompanije").val();
 		let _prezime = $("#prezimeAdminaAviokompanije").val();
 		let _brojTelefona = $("#brTelefonaAdminaAviokompanije").val();
+		let _adresa = $("#adresaAdminaAviokompanije").val();
 		
 		let noviAdmin = {
-				adresaGrada: { punaAdresa: "Nije podrzano" },
+				punaAdresa: _adresa,
 				brojTelefona: _brojTelefona,
 				email: _email,
 				idPoslovnice: idAviokompanije,
@@ -178,7 +180,52 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
+
+	//dodavanje admina hotela
+	$("#unosAdminaHotelaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idHotela = $("#hoteliSelect").val();
+		if(idHotela == "undefined" || idHotela === null || idHotela === "") {
+			alert("Greska. Hotel mora biti zadat.");
+			return;
+		}
+		let _email = $("#emailAdminaHotela").val();
+		let _lozinka = $("#lozinkaAdminaHotela").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeAdminaHotela").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeAdminaHotela").val();
+		let _prezime = $("#prezimeAdminaHotela").val();
+		let _brojTelefona = $("#brTelefonaAdminaHotela").val();
+		let _adresa = $("#adresaAdminaHotela").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idHotela,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerHotelAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
 	
 });
 

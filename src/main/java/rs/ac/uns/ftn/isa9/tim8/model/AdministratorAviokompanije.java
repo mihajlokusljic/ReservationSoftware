@@ -35,8 +35,8 @@ public class AdministratorAviokompanije extends Osoba {
 	
 
 	public AdministratorAviokompanije(Long id, String lozinka, String ime, String prezime, String email,
-			String brojTelefona, String putanjaSlike, boolean sistemAdmin, Aviokompanija aviokompanija) {
-		super(id, lozinka, ime, prezime, email, brojTelefona, putanjaSlike, sistemAdmin);
+			String brojTelefona, Adresa adresa, String putanjaSlike, boolean sistemAdmin, Aviokompanija aviokompanija) {
+		super(id, lozinka, ime, prezime, email, brojTelefona, adresa, putanjaSlike, sistemAdmin);
 		this.aviokompanija = aviokompanija;
 	}
 
