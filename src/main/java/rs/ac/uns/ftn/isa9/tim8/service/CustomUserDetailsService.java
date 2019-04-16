@@ -29,6 +29,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.TipKorisnika;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.AuthorityRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
@@ -52,6 +53,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	protected AuthenticationManager authenticationManager;
+	
+	@Autowired
+	protected AuthorityRepository authorityRepository;
 	
 	@Autowired
 	protected AdresaRepository adresaRepository;
@@ -138,6 +142,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 		noviAdmin.setEnabled(true);
 		noviAdmin.setPutanjaSlike("");
 	}
+	
+	public void podesiPrivilegije(Osoba noviKorisnik, TipKorisnika tipKorisnika) {
+		Authority a = this.authorityRepository.findOneByTipKorisnika(tipKorisnika);
+		if(a == null) {
+			a = new Authority();
+			a.setTipKorisnika(tipKorisnika);
+		}
+		HashSet<Authority> privilegije = new HashSet<Authority>();
+		privilegije.add(a);
+		noviKorisnik.setAuthorities(privilegije);
+	}
 
 	public void dodajAdminaAviokompanije(RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
@@ -153,12 +168,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Aviokompanija aviokompanija = aviokompanijaSearch.get();
 		AdministratorAviokompanije noviAdmin = new AdministratorAviokompanije();
 		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
-		noviAdmin.setSistemAdmin(false);
-		Authority a = new Authority();
-		a.setTipKorisnika(TipKorisnika.AdministratorAviokompanije);
-		HashSet<Authority> authorities = new HashSet<Authority>();
-		authorities.add(a);
-		noviAdmin.setAuthorities(authorities);
+		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorAviokompanije);
 		noviAdmin.setAviokompanija(aviokompanija);
 		this.korisnikRepository.save(noviAdmin);
 	}
@@ -176,12 +186,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Hotel hotel = hotelSearch.get();
 		AdministratorHotela noviAdmin = new AdministratorHotela();
 		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
-		noviAdmin.setSistemAdmin(false);
-		Authority a = new Authority();
-		a.setTipKorisnika(TipKorisnika.AdministratorHotela);
-		HashSet<Authority> authorities = new HashSet<Authority>();
-		authorities.add(a);
-		noviAdmin.setAuthorities(authorities);
+		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorHotela);
 		noviAdmin.setHotel(hotel);
 		this.korisnikRepository.save(noviAdmin);
 	}

@@ -63,11 +63,7 @@ public class AuthenticationController {
 		registrovaniKorisnik.setEmail(korisnik.getEmail());
 		registrovaniKorisnik.setIme(korisnik.getIme());
 		registrovaniKorisnik.setLozinka(userDetailsService.encodePassword(korisnik.getLozinka()));
-		Set<Authority> autoriteti = new HashSet<Authority>();
-		Authority a = new Authority();
-		a.setTipKorisnika(TipKorisnika.RegistrovanKorisnik);
-		autoriteti.add(a);
-		registrovaniKorisnik.setAuthorities(autoriteti);
+		this.userDetailsService.podesiPrivilegije(registrovaniKorisnik, TipKorisnika.RegistrovanKorisnik);
 		registrovaniKorisnik.setBonusPoeni(0);
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
 		registrovaniKorisnik.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
