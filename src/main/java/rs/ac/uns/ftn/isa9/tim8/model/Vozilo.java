@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "vozilo")
 public class Vozilo {
@@ -185,7 +187,8 @@ public class Vozilo {
 	public void setSumaOcjena(int sumaOcjena) {
 		this.sumaOcjena = sumaOcjena;
 	}
-
+	
+	@JsonIgnore
 	public Long getId() {
 		return id;
 	}
