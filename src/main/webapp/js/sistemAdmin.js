@@ -273,6 +273,47 @@ $(document).ready(function() {
 	});
 
 	
+	//dodavanje sistemskog admina
+	$("#unosSysAdminaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let _email = $("#emaiSysAdmina").val();
+		let _lozinka = $("#lozinkaSysAdmina").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeSysAdmina").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeSysAdmina").val();
+		let _prezime = $("#prezimeSysAdmina").val();
+		let _brojTelefona = $("#brTelefonaSysAdmina").val();
+		let _adresa = $("#adresaSysAdmina").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: -1,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerSysAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
+	
 });
 
 function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, idSelekcionogMenija) {

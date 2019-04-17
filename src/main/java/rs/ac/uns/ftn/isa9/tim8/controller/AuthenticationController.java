@@ -104,6 +104,16 @@ public class AuthenticationController {
 		}
 	}
 	
+	@RequestMapping(value = "/registerSysAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajSistemskogAdmina(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajSistemAdmina(adminReg);
+			return new ResponseEntity<String>("Administrtor je uspesno dodat.", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) throws AuthenticationException, IOException {

@@ -213,5 +213,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 		noviAdmin.setRentACarServis(racServis);
 		this.korisnikRepository.save(noviAdmin);
 	}
+	
+	public void dodajSistemAdmina(RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
+		if (this.emailZauzet(adminReg.getEmail())) {
+			throw new NevalidniPodaciException("Zadati email vec postoji.");
+		}
+		
+		Osoba noviAdmin = new Osoba();
+		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
+		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorSistema);
+		this.korisnikRepository.save(noviAdmin);
+	}
 
 }
