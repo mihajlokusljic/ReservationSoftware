@@ -46,6 +46,23 @@ public class Adresa {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (obj == null) { 
+			return false; 
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof Adresa) {
+			Adresa other = (Adresa) obj;
+			return this.getPunaAdresa().equals(other.getPunaAdresa());
+		} else {
+			return false;
+		}
+	}
 	
 	
 }

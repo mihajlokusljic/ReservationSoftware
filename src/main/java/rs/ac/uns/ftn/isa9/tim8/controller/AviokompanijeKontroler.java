@@ -16,7 +16,7 @@ import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;;
 
 @RestController
 @RequestMapping(value = "/aviokompanije")
-public class AviokompanijeKonstroler {
+public class AviokompanijeKontroler {
 //	
 //	@Autowired
 //	//@Qualifier("aviokompanijaServisMemSkladiste")
