@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.RegistracijaAdminaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
@@ -34,6 +35,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.UserTokenState;
 import rs.ac.uns.ftn.isa9.tim8.security.TokenUtils;
 import rs.ac.uns.ftn.isa9.tim8.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.isa9.tim8.service.CustomUserDetailsService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/auth")
@@ -61,11 +63,7 @@ public class AuthenticationController {
 		registrovaniKorisnik.setEmail(korisnik.getEmail());
 		registrovaniKorisnik.setIme(korisnik.getIme());
 		registrovaniKorisnik.setLozinka(userDetailsService.encodePassword(korisnik.getLozinka()));
-		Set<Authority> autoriteti = new HashSet<Authority>();
-		Authority a = new Authority();
-		a.setTipKorisnika(TipKorisnika.RegistrovanKorisnik);
-		autoriteti.add(a);
-		registrovaniKorisnik.setAuthorities(autoriteti);
+		this.userDetailsService.podesiPrivilegije(registrovaniKorisnik, TipKorisnika.RegistrovanKorisnik);
 		registrovaniKorisnik.setBonusPoeni(0);
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
 		registrovaniKorisnik.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
@@ -74,6 +72,51 @@ public class AuthenticationController {
 		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
 		
 		return new ResponseEntity<String> (userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> registrujAdministratoraAviokompanije(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajAdminaAviokompanije(adminReg);
+			return new ResponseEntity<String>("Administrator je uspesno dodat.", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/registerHotelAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajAdminaHotela(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajAdminaHotela(adminReg);
+			return new ResponseEntity<String>("Administrator je uspesno dodat", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/registerRacAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajAdminaRacServisa(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajAdminaRacServisa(adminReg);
+			return new ResponseEntity<String>("Administrtor je uspesno dodat.", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	/*
+	 * Napomena: postoji default-ni sistemski administrator:
+	 * email - root@root.com
+	 * lozinka: IsaMrs2019
+	 * */
+	@RequestMapping(value = "/registerSysAdmin", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajSistemskogAdmina(@RequestBody RegistracijaAdminaDTO adminReg) {
+		try {
+			this.userDetailsService.dodajSistemAdmina(adminReg);
+			return new ResponseEntity<String>("Administrtor je uspesno dodat.", HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

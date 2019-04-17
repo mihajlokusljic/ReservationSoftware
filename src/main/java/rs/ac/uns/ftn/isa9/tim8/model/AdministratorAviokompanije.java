@@ -1,5 +1,8 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.sql.Timestamp;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -29,6 +32,14 @@ public class AdministratorAviokompanije extends Osoba {
 
 	public AdministratorAviokompanije(Aviokompanija aviokompanija) {
 		super();
+		this.aviokompanija = aviokompanija;
+	}
+
+	public AdministratorAviokompanije(Long id, String lozinka, String ime, String prezime, String email,
+			String brojTelefona, Adresa adresa, String putanjaSlike, boolean enabled, Timestamp lastPasswordResetDate,
+			Set<Authority> authorities, Aviokompanija aviokompanija) {
+		super(id, lozinka, ime, prezime, email, brojTelefona, adresa, putanjaSlike, enabled, lastPasswordResetDate,
+				authorities);
 		this.aviokompanija = aviokompanija;
 	}
 

@@ -2,13 +2,13 @@ $(document).ready(function() {
 	
 	
 	//ucitavanje aviokompanija
-	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz");
+	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz", "aviokompanijeSelect");
 	
 	//ucitavanje hotela
-	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz");
+	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz", "hoteliSelect");
 	
 	//ucitavanje rent-a-car servisa
-	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz");
+	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz", "racServisiSelect");
 	
 	//dodavanje aviokompanije
 	$("#unosAviokompanijeForm").submit(function(e) {
@@ -40,7 +40,8 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response == '') {
 					let tabelaAviokompanija = $("#aviokompanijePrikaz");
-					prikazi(aviokompanija, tabelaAviokompanija);
+					let selekcioniMeni = $("#aviokompanijeSelect");
+					prikazi(aviokompanija, tabelaAviokompanija, selekcioniMeni);
 					//alert("Proslo");
 				} else {
 					alert(response);
@@ -81,7 +82,8 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response == '') {
 					let tabelaHotela = $("#hoteliPrikaz");
-					prikazi(hotel, tabelaHotela);
+					let selekcioniMeni = $("#hoteliSelect");
+					prikazi(hotel, tabelaHotela, selekcioniMeni);
 				} else {
 					alert(response);
 				}
@@ -122,8 +124,9 @@ $(document).ready(function() {
 			data: JSON.stringify(racServis),
 			success: function(response) {
 				if(response == '') {
-					//alert("Rent-a-car servis je uspesno dodat.");
-					prikaziRacServis(racServis);
+					let tabelaRacServisa = $("#racServisiPrikaz");
+					let selekcioniMeni = $("#racServisiSelect");
+					prikaziRacServis(racServis, tabelaRacServisa, selekcioniMeni);
 				} else {
 					alert(response);
 				}
@@ -133,16 +136,198 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	//dodavanje admina aviokompanije
+	$("#unosAdminaAviokompanijeForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idAviokompanije = $("#aviokompanijeSelect").val();
+		if(idAviokompanije == "undefined" || idAviokompanije === "") {
+			alert("Greska. Aviokompanija mora biti zadata.");
+			return;
+		}
+		let _email = $("#emailAdminaAviokompanije").val();
+		let _lozinka = $("#lozinkaAdminaAviokompanije").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeAdminaAviokompanije").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeAdminaAviokompanije").val();
+		let _prezime = $("#prezimeAdminaAviokompanije").val();
+		let _brojTelefona = $("#brTelefonaAdminaAviokompanije").val();
+		let _adresa = $("#adresaAdminaAviokompanije").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idAviokompanije,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerAvioAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
+	//dodavanje admina hotela
+	$("#unosAdminaHotelaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idHotela = $("#hoteliSelect").val();
+		if(idHotela == "undefined" || idHotela === null || idHotela === "") {
+			alert("Greska. Hotel mora biti zadat.");
+			return;
+		}
+		let _email = $("#emailAdminaHotela").val();
+		let _lozinka = $("#lozinkaAdminaHotela").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeAdminaHotela").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeAdminaHotela").val();
+		let _prezime = $("#prezimeAdminaHotela").val();
+		let _brojTelefona = $("#brTelefonaAdminaHotela").val();
+		let _adresa = $("#adresaAdminaHotela").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idHotela,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerHotelAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	
+	//dodavanje admina rent-a-car servisa
+	$("#unosRacAdminaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idRacServisa = $("#racServisiSelect").val();
+		if(idRacServisa == "undefined" || idRacServisa === null || idRacServisa === "") {
+			alert("Greska. Rent-a-car servis mora biti zadat.");
+			return;
+		}
+		let _email = $("#emaiRaclAdmina").val();
+		let _lozinka = $("#lozinkaRacAdmina").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeRacAdmina").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeRacAdmina").val();
+		let _prezime = $("#prezimeRacAdmina").val();
+		let _brojTelefona = $("#brTelefonaRacAdmina").val();
+		let _adresa = $("#adresaRacAdmina").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idRacServisa,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerRacAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
+	
+	//dodavanje sistemskog admina
+	$("#unosSysAdminaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let _email = $("#emaiSysAdmina").val();
+		let _lozinka = $("#lozinkaSysAdmina").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeSysAdmina").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeSysAdmina").val();
+		let _prezime = $("#prezimeSysAdmina").val();
+		let _brojTelefona = $("#brTelefonaSysAdmina").val();
+		let _adresa = $("#adresaSysAdmina").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: -1,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerSysAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
+	
 });
 
-function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz) {
+function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, idSelekcionogMenija) {
 	let tabela = $("#" + idTabeleZaPrikaz);
+	if(idSelekcionogMenija == "") {
+		return;
+	}
+	let selekcioniMeni = $("#" + idSelekcionogMenija);
 	$.ajax({
 		type: "GET",
 		url: putanjaControlera,
 		success: function(response) {
 			$.each(response, function(i, podatak) {
-				prikazi(podatak, tabela);
+				prikazi(podatak, tabela, selekcioniMeni);
 			});
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -151,12 +336,15 @@ function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz) {
 	});
 }
 
-function prikazi(podatak, tabelaZaPrikaz) {
+function prikazi(podatak, tabelaZaPrikaz, selekcioniMeni) {
 	let noviRed = $("<tr></tr>");
 	noviRed.append("<td>" + podatak.naziv + "</td>");
 	noviRed.append("<td>" + podatak.adresa.punaAdresa + "</td>");
 	noviRed.append("<td>" + podatak.promotivniOpis + "</td>");
 	tabelaZaPrikaz.append(noviRed);
+	if(selekcioniMeni != undefined) {
+		selekcioniMeni.append('<option value="' + podatak.id + '">' + podatak.naziv + '</option>');
+	}
 }
 
 function prikaziRacServis(racServis) {

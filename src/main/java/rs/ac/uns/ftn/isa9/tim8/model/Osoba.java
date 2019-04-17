@@ -17,6 +17,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -51,11 +52,12 @@ public class Osoba implements UserDetails{
 	@Column(name = "broj_telefona", nullable = true)
 	protected String brojTelefona;
 	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "adresa_id")
+	protected Adresa adresa;
+	
 	@Column(name = "putanja_slike", nullable = true)
 	protected String putanjaSlike;
-	
-	@Column(name = "sistem_admin", nullable = false)
-	protected boolean sistemAdmin = false;
 	
 	@Column(name = "enabled")
     protected boolean enabled;
@@ -73,7 +75,7 @@ public class Osoba implements UserDetails{
 	}
 
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
-			String brojTelefona, String putanjaSlike, boolean sistemAdmin) {
+			String brojTelefona, Adresa adresa, String putanjaSlike) {
 		super();
 		this.id = id;
 		this.lozinka = lozinka;
@@ -81,8 +83,24 @@ public class Osoba implements UserDetails{
 		this.prezime = prezime;
 		this.email = email;
 		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
 		this.putanjaSlike = putanjaSlike;
-		this.sistemAdmin = sistemAdmin;
+	}
+	
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
+			String putanjaSlike, boolean enabled, Timestamp lastPasswordResetDate, Set<Authority> authorities) {
+		super();
+		this.id = id;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.putanjaSlike = putanjaSlike;
+		this.enabled = enabled;
+		this.lastPasswordResetDate = lastPasswordResetDate;
+		this.authorities = authorities;
 	}
 
 	public Long getId() {
@@ -141,15 +159,6 @@ public class Osoba implements UserDetails{
 		this.putanjaSlike = putanjaSlike;
 	}
 
-	public boolean isSistemAdmin() {
-		return sistemAdmin;
-	}
-
-	public void setSistemAdmin(boolean sistemAdmin) {
-		this.sistemAdmin = sistemAdmin;
-	}
-	
-	
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
 	}
@@ -206,6 +215,13 @@ public class Osoba implements UserDetails{
 	}
 	
 	
+	public Adresa getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
+	}
 
 	
 }
