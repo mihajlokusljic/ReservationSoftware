@@ -27,12 +27,14 @@ import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.TipKorisnika;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AuthorityRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -47,6 +49,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Autowired
 	protected HotelRepository hotelRepository;
+	
+	@Autowired
+	protected RentACarRepository racRepository;
 
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
@@ -188,6 +193,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
 		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorHotela);
 		noviAdmin.setHotel(hotel);
+		this.korisnikRepository.save(noviAdmin);
+	}
+	
+	public void dodajAdminaRacServisa(RegistracijaAdminaDTO adminReg) throws NevalidniPodaciException {
+		if (this.emailZauzet(adminReg.getEmail())) {
+			throw new NevalidniPodaciException("Zadati email vec postoji.");
+		}
+		
+		Optional<RentACarServis> racSearch = this.racRepository.findById(adminReg.getIdPoslovnice());
+		if(!racSearch.isPresent()) {
+			throw new NevalidniPodaciException("Zadati rent-a-car servis ne postoji.");
+		}
+		
+		RentACarServis racServis = racSearch.get();
+		AdministratorRentACar noviAdmin = new AdministratorRentACar();
+		this.podesiOsnovnePodatkeAdmina(noviAdmin, adminReg);
+		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorRentACar);
+		noviAdmin.setRentACarServis(racServis);
 		this.korisnikRepository.save(noviAdmin);
 	}
 

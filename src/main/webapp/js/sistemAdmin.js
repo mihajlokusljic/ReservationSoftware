@@ -8,7 +8,7 @@ $(document).ready(function() {
 	ucitajPodatke("../hoteli/dobaviSve", "hoteliPrikaz", "hoteliSelect");
 	
 	//ucitavanje rent-a-car servisa
-	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz", "");
+	ucitajPodatke("../rentACar/sviServisi", "racServisiPrikaz", "racServisiSelect");
 	
 	//dodavanje aviokompanije
 	$("#unosAviokompanijeForm").submit(function(e) {
@@ -124,8 +124,9 @@ $(document).ready(function() {
 			data: JSON.stringify(racServis),
 			success: function(response) {
 				if(response == '') {
-					//alert("Rent-a-car servis je uspesno dodat.");
-					prikaziRacServis(racServis);
+					let tabelaRacServisa = $("#racServisiPrikaz");
+					let selekcioniMeni = $("#racServisiSelect");
+					prikaziRacServis(racServis, tabelaRacServisa, selekcioniMeni);
 				} else {
 					alert(response);
 				}
@@ -215,6 +216,51 @@ $(document).ready(function() {
 		$.ajax({
 			type: "POST",
 			url: "../auth/registerHotelAdmin",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviAdmin),
+			success: function(response) {
+				alert(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	
+	//dodavanje admina rent-a-car servisa
+	$("#unosRacAdminaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let idRacServisa = $("#racServisiSelect").val();
+		if(idRacServisa == "undefined" || idRacServisa === null || idRacServisa === "") {
+			alert("Greska. Rent-a-car servis mora biti zadat.");
+			return;
+		}
+		let _email = $("#emaiRaclAdmina").val();
+		let _lozinka = $("#lozinkaRacAdmina").val();
+		let lozinkaPotvrda = $("#potvrdaLozinkeRacAdmina").val();
+		if (_lozinka != lozinkaPotvrda){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		let _ime = $("#imeRacAdmina").val();
+		let _prezime = $("#prezimeRacAdmina").val();
+		let _brojTelefona = $("#brTelefonaRacAdmina").val();
+		let _adresa = $("#adresaRacAdmina").val();
+		
+		let noviAdmin = {
+				punaAdresa: _adresa,
+				brojTelefona: _brojTelefona,
+				email: _email,
+				idPoslovnice: idRacServisa,
+				ime: _ime,
+				prezime: _prezime,
+				lozinka: _lozinka
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../auth/registerRacAdmin",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(noviAdmin),
 			success: function(response) {
