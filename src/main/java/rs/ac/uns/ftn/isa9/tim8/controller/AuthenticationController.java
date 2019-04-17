@@ -104,6 +104,11 @@ public class AuthenticationController {
 		}
 	}
 	
+	/*
+	 * Napomena: postoji default-ni sistemski administrator:
+	 * email - root@root.com
+	 * lozinka: IsaMrs2019
+	 * */
 	@RequestMapping(value = "/registerSysAdmin", method = RequestMethod.POST)
 	public ResponseEntity<?> dodajSistemskogAdmina(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
