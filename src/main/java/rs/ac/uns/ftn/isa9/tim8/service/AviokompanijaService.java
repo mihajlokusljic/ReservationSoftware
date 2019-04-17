@@ -92,6 +92,8 @@ public class AviokompanijaService {
 		let.setPolaziste(letDTO.getPolaziste());
 		let.setOdrediste(letDTO.getOdrediste());
 		
+		// pocetna i krajnja destinacija, kojoj aviokompaniji pripada let (jer vezujemo letove za aviokompanije),
+		// destinacije presjedanja, avion
 		
 		letoviRepository.save(let);
 		return let;
