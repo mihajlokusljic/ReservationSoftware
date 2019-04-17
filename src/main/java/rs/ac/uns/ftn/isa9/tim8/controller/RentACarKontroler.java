@@ -46,7 +46,10 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/svaVozilaServisa", method = RequestMethod.POST)
-	public ResponseEntity<Collection<VoziloDTO>> svaVozila(@RequestParam("nazivServisa") String nazivServisa){
+	public ResponseEntity<?> svaVozila(@RequestParam("nazivServisa") String nazivServisa){
+		if (servis.servisPostoji(nazivServisa) == false) {
+			return new ResponseEntity<String>("Servis koji ste unijeli ne postoji.",HttpStatus.OK);
+		}
 		return new ResponseEntity<Collection<VoziloDTO>>(servis.vratiVozilaOsnovno(servis.vratiVozilaServisa(nazivServisa)),HttpStatus.OK);
 		
 	}
@@ -70,5 +73,13 @@ public class RentACarKontroler {
 	public ResponseEntity<String> izmjeniServis(@RequestBody RentACarServis rServis) {
 		return new ResponseEntity<String>(servis.izmjeniRentACarServis(rServis),HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/ukloniVozilo", method = RequestMethod.POST)
+	public ResponseEntity<String> ukloniVozilo(@RequestBody Vozilo vozilo ) {
+
+		
+		return new ResponseEntity<String>(servis.ukloniVozilo(vozilo),HttpStatus.OK);
+	}
+	
 
 }

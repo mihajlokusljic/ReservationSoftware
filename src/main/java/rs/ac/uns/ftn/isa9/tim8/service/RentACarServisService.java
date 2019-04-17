@@ -2,8 +2,6 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.VoziloRepository;
 
 @Service
 public class RentACarServisService {
@@ -24,6 +23,9 @@ public class RentACarServisService {
 	@Autowired
 	protected AdresaRepository adresaRepository;
 	
+	@Autowired
+	protected VoziloRepository voziloRepository;
+		
 	public Collection<RentACarServis> dobaviRentACarServise() {
 		return rentACarRepository.findAll();
 	}
@@ -55,6 +57,9 @@ public class RentACarServisService {
 	
 	public Collection<VoziloDTO> vratiVozilaOsnovno(Collection<Vozilo> vozila){
 		Collection<VoziloDTO> vozilaDTO = new ArrayList<VoziloDTO>();
+		if (vozila == null) {
+			return null;
+		}
 		for (Vozilo vozilo : vozila) {
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
 					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu());
@@ -98,6 +103,24 @@ public class RentACarServisService {
 			return rentACar;
 		}
 
+	}
+	
+	public boolean servisPostoji(String nazivServisa) {
+		RentACarServis racS = rentACarRepository.findOneByNaziv(nazivServisa);
+		if (racS == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public String ukloniVozilo(Vozilo vozilo) {				
+		Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
+		//Vozilo voz = voziloRepository.findOneById(vozilo.getId());
+		if (voz!= null) {
+			voziloRepository.delete(voz);
+			return null;
+		}
+		return "Nevalidan id";
 	}
 	
 }

@@ -1,118 +1,155 @@
 $(document).ready(function() {
 	
-	$("#forma_dodaj_vozilo").submit(function(e) {
+	$("#forma_prikazi_vozilo").submit(function(e) {
 		e.preventDefault();
-		
+		let div_forma = $("#formaDodavanjeIzmjena");
+		div_forma.empty();
 		let naziv_servisa = $("#naziv_servisa").val();
 		if (naziv_servisa == ''){
 			alert("Niste unijeli naziv servisa");
 			return;
 		}
-		let naziv_v = $("#naziv").val();
-		if (naziv_v == ''){
-			alert("Niste unijeli naziv vozila");
-			return;
-		}
-		let marka_v = $("#marka").val();
-		if (marka_v == ''){
-			alert("Niste unijeli marku vozila");
-			return;
-		}
-		let model_v = $("#model").val();
-		if (model_v == ''){
-			alert("Niste unijeli model_v vozila");
-			return;
-		}
-		let tip_vozila_ = $("#tip_vozila").val();
-		let godina_s = $("#godina").val();
-		if (godina_s == ''){
-			alert("Niste unijeli godinu proizvodnje vozila");
-			return;
-		}
-		var dt = new Date();
-        var trenutna_godina = dt.getFullYear();
-		var godina = parseInt(godina_s);
-		if (isNaN(godina) || godina<0){
-			alert("Niste unijeli validnu godinu proizvodnje.");
-			return;
-		}
-		if (godina>trenutna_godina) {
-			alert("Godina proizvodnje mora biti manja od trenutne godine.");
+		
+		dobaviSvaVozilaServisa(naziv_servisa);
+		
+	});
+	
+	$('#dodajVozilo').click(function(){
+		let naziv_servisa = $("#naziv_servisa").val();
+		if (naziv_servisa == ''){
+			alert("Niste unijeli naziv servisa");
 			return;
 		}
 		
-		let broj_sjedista_s = $("#broj_sjedista").val();
-		if (broj_sjedista_s == ''){
-			alert("Niste unijeli broj sjedista vozila");
-			return;
-		}
-		var broj_sjedista_v = parseInt(broj_sjedista_s);
-		if (isNaN(broj_sjedista_v) || broj_sjedista_v<0){
-			alert("Broj sjedista mora biti broj veći od 0.");
-			return;
-		}
-		let broj_vrata_s = $("#broj_vrata").val();
-		if (broj_vrata_s == ''){
-			alert("Niste unijeli broj vrata vozila");
-			return;
-		}
-		var broj_vrata_v = parseInt(broj_vrata_s);
-		if (isNaN(broj_vrata_v) || broj_vrata_v<0){
-			alert("Broj vrata mora biti broj veći od 0.");
-			return;
-		}
-		let kilovati_s = $("#kilovati").val();
-		if (kilovati_s == ''){
-			alert("Niste unijeli broj vrata vozila");
-			return;
-		}
-		var kilovati_v = parseInt(kilovati_s);
-		if (isNaN(kilovati_v) || kilovati_v<0){
-			alert("Kilovati moraju biti broj veći od 0.");
-			return;
-		}
-		let cijena_s = $("#cijena").val();
-		if (cijena_s == ''){
-			alert("Niste unijeli cijenu usluga vozila po danu.");
-			return;
-		}
-		var cijena_v = parseInt(cijena_s);
-		if (isNaN(cijena_v) || cijena_v<0){
-			alert("Cijena usluge po danu mora biti decimalan broj veci od 0.");
-			return;
-		}
+		dobaviSvaVozilaServisa(naziv_servisa);
 		
+		let div_forma = $("#formaDodavanjeIzmjena");
+		div_forma.empty();
+		div_forma.append('<h1>Dodavanje novog vozila</h1>' + 
+				'<form id = "forma_dodaj_vozilo"><table id = "tabela_vozila"><tr>' +
+					'<tr><td>Naziv:</td><td><input type = "text" id = "naziv"/></td></tr>' +
+					'<tr><td>Marka:</td><td><input type = "text" id = "marka"/></td></tr>'+
+					'<tr><td>Model:</td><td><input type = "text" id = "model"/></td></tr>' +
+					'<tr><td>Tip vozila:</td><td><select name = "tip_vozila" id = "tip_vozila"><option value = "automobil">Automobil</option><option value = "kombi">Kombi</option>'+
+							'</select></td></tr>' +
+					'<tr>	<td>Godina proizvodje:</td><td><input type = "text" id = "godina"/></td></tr>' + 
+					'<tr><td>Broj sjedista:</td><td><input type = "text" id = "broj_sjedista"/></td></tr>' +
+					'<tr><td>Broj vrata:</td><td><input type = "text" id = "broj_vrata"/></td></tr>' +
+					'<tr><td>Kilovati:</td><td><input type = "text" id = "kilovati"/></td></tr>' +
+					'<tr><td>Cijena po danu:</td><td><input type = "text" id = "cijena"/></td></tr></table>' + 
+				'<td><input type="submit" value="Dodaj"/></td></form>');
 		
-		let vozilo = {
-				naziv:naziv_v,
-				marka:marka_v,
-				model:model_v,
-				godina_proizvodnje:godina,
-				broj_sjedista:broj_sjedista_v,
-				tip_vozila:tip_vozila_,
-				broj_vrata:broj_vrata_v,
-				kilovati:kilovati_v,
-				cijena_po_danu:cijena_v
-		};
-		
-		$.ajax({
-			type: "POST",
-			url: "../rentACar/dodajVozilo/" + naziv_servisa,
-			contentType : "application/json; charset=utf-8",
-			data: JSON.stringify(vozilo),
-			success: function(response) {
-				if(response == '') {
-					dobaviSvaVozilaServisa(naziv_servisa);
-				} else {
-					alert(response);
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
+		$("#forma_dodaj_vozilo").submit(function(e) {
+			e.preventDefault();
+			let naziv_servisa = $("#naziv_servisa").val();
+			let naziv_v = $("#naziv").val();
+			if (naziv_v == ''){
+				alert("Niste unijeli naziv vozila");
+				return;
 			}
+			let marka_v = $("#marka").val();
+			if (marka_v == ''){
+				alert("Niste unijeli marku vozila");
+				return;
+			}
+			let model_v = $("#model").val();
+			if (model_v == ''){
+				alert("Niste unijeli model_v vozila");
+				return;
+			}
+			let tip_vozila_ = $("#tip_vozila").val();
+			let godina_s = $("#godina").val();
+			if (godina_s == ''){
+				alert("Niste unijeli godinu proizvodnje vozila");
+				return;
+			}
+			var dt = new Date();
+	        var trenutna_godina = dt.getFullYear();
+			var godina = parseInt(godina_s);
+			if (isNaN(godina) || godina<0){
+				alert("Niste unijeli validnu godinu proizvodnje.");
+				return;
+			}
+			if (godina>trenutna_godina) {
+				alert("Godina proizvodnje mora biti manja od trenutne godine.");
+				return;
+			}
+			
+			let broj_sjedista_s = $("#broj_sjedista").val();
+			if (broj_sjedista_s == ''){
+				alert("Niste unijeli broj sjedista vozila");
+				return;
+			}
+			var broj_sjedista_v = parseInt(broj_sjedista_s);
+			if (isNaN(broj_sjedista_v) || broj_sjedista_v<0){
+				alert("Broj sjedista mora biti broj veći od 0.");
+				return;
+			}
+			let broj_vrata_s = $("#broj_vrata").val();
+			if (broj_vrata_s == ''){
+				alert("Niste unijeli broj vrata vozila");
+				return;
+			}
+			var broj_vrata_v = parseInt(broj_vrata_s);
+			if (isNaN(broj_vrata_v) || broj_vrata_v<0){
+				alert("Broj vrata mora biti broj veći od 0.");
+				return;
+			}
+			let kilovati_s = $("#kilovati").val();
+			if (kilovati_s == ''){
+				alert("Niste unijeli broj vrata vozila");
+				return;
+			}
+			var kilovati_v = parseInt(kilovati_s);
+			if (isNaN(kilovati_v) || kilovati_v<0){
+				alert("Kilovati moraju biti broj veći od 0.");
+				return;
+			}
+			let cijena_s = $("#cijena").val();
+			if (cijena_s == ''){
+				alert("Niste unijeli cijenu usluga vozila po danu.");
+				return;
+			}
+			var cijena_v = parseInt(cijena_s);
+			if (isNaN(cijena_v) || cijena_v<0){
+				alert("Cijena usluge po danu mora biti decimalan broj veci od 0.");
+				return;
+			}
+			
+			let vozilo = {
+					naziv:naziv_v,
+					marka:marka_v,
+					model:model_v,
+					godina_proizvodnje:godina,
+					broj_sjedista:broj_sjedista_v,
+					tip_vozila:tip_vozila_,
+					broj_vrata:broj_vrata_v,
+					kilovati:kilovati_v,
+					cijena_po_danu:cijena_v
+			};
+			
+			$.ajax({
+				type: "POST",
+				url: "../rentACar/dodajVozilo/" + naziv_servisa,
+				contentType : "application/json; charset=utf-8",
+				data: JSON.stringify(vozilo),
+				success: function(response) {
+					if(response == '') {
+						dobaviSvaVozilaServisa(naziv_servisa);
+					} else {
+						alert(response);
+					}
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					alert("AJAX error: " + errorThrown);
+				}
+			});
+			
 		});
 		
 	});
+	
+	
 	
 	$("#forma_za_izmjenu_servisa").submit(function(e) {
 		e.preventDefault();		
@@ -148,8 +185,8 @@ function dobaviSvaVozilaServisa(naziv_servisa){
 		url: "../rentACar/svaVozilaServisa",
 		data: {"nazivServisa" : naziv_servisa},
 		success: function(response) {
-			if(response == null) {
-				//alert("Unijeli ste naziv servisa koji ne postoji.");
+			if(response == "Servis koji ste unijeli ne postoji.") {
+				alert(response);
 			} else {
 				prikaziVozila(response);
 			}
@@ -173,12 +210,32 @@ function prikaziVozila(vozila){
 				"<th>Broj vrata</th>"+
 				"<th>Kilovati</th>"+
 				"<th>Cijena po danu</th>"+
+				"<th></th>" +
 			"</tr>");
 	$.each(vozila, function(i,vozilo){
 		tabela.append("<tr><td>" + vozilo["naziv"] + "</td><td>" + vozilo["marka"] + "</td><td>" + vozilo["model"]
 		 + "</td><td>" + vozilo["tip_vozila"]  + "</td><td>" + vozilo["godina_proizvodnje"] + "</td><td>" + vozilo["broj_sjedista"] +
-		 "</td><td>" + vozilo["broj_vrata"] + "</td><td>" + vozilo["kilovati"] + "</td><td>" + vozilo["cijena_po_danu"] + "</td></tr>" )
+		 "</td><td>" + vozilo["broj_vrata"] + "</td><td>" + vozilo["kilovati"] + "</td><td>" + vozilo["cijena_po_danu"] + "</td>+" +
+		'<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +   		
+		"</tr>" )
 	});
+	let naziv_servisa = $("#naziv_servisa").val();
+	$(".ukloni").click(function(e){
+		let vozilo = vozila[e.target.id];
+		$.ajax({
+			type : "POST",
+			url : "../rentACar/ukloniVozilo",
+			contentType: "application/json; charset=utf-8",
+			data : JSON.stringify(vozilo),	
+			success : function(response){
+				dobaviSvaVozilaServisa(naziv_servisa)			
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+
 }
 
 function prikazProfila(servis){

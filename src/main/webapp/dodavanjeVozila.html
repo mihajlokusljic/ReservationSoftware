@@ -5,62 +5,37 @@
 		<title>Dodavanje vozila</title>
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/rentACar.js"></script>
+		<style>
+			.column {
+			  float: left;
+			  width: 50%;
+			  padding: 60px;
+			  height: 300px; /* Should be removed. Only for demonstration */
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Dodavanje novog vozila</h1>
-		<form id = "forma_dodaj_vozilo">
+		<div class = "column">
+		<h1>Vozila servisa</h1>
+		<form id = "forma_prikazi_vozilo">
 			<table id = "tabela_vozila">
 				<tr>
 					<td>Naziv servisa:</td>
 					<td><input type = "text" id = "naziv_servisa"/></td>
 				</tr>
-				<tr>
-					<td>Naziv:</td>
-					<td><input type = "text" id = "naziv"/></td>
-				</tr>
-				<tr>
-					<td>Marka:</td>
-					<td><input type = "text" id = "marka"/></td>
-				</tr>
-				<tr>
-					<td>Model:</td>
-					<td><input type = "text" id = "model"/></td>
-				</tr>
-				<tr>
-					<td>Tip vozila:</td>
-					<td><select name = "tip_vozila" id = "tip_vozila">
-							<option value = "automobil">Automobil</option>
-							<option value = "kombi">Kombi</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>Godina proizvodje:</td>
-					<td><input type = "text" id = "godina"/></td>
-				</tr>
-				<tr>
-					<td>Broj sjedista:</td>
-					<td><input type = "text" id = "broj_sjedista"/></td>
-				</tr>
-				<tr>
-					<td>Broj vrata:</td>
-					<td><input type = "text" id = "broj_vrata"/></td>
-				</tr>
-				<tr>
-					<td>Kilovati:</td>
-					<td><input type = "text" id = "kilovati"/></td>
-				</tr>
-				<tr>
-					<td>Cijena po danu:</td>
-					<td><input type = "text" id = "cijena"/></td>
-				</tr>
+							
 			</table>
-			<td><input type="submit" value="Dodaj"/></td>
+			<input type="submit" value="Prikazi"/><br>
 		</form>
+		<a href = "javascript:void(0)" id = "dodajVozilo">Dodaj novo vozilo</a>
+		
 		<br>
 		<h2>Sva vozila servisa:</h2>
 		<table border="2" id = "vozilaPrikaz">
 			
 		</table>
+		</div>
+		<div class = "column" id = "formaDodavanjeIzmjena">
+		</div>
 	</body>
 </html>
