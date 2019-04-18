@@ -14,16 +14,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "destinacija")
 public class Destinacija {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
-	
+
 	@Column(name = "nazivDestinacije", nullable = false)
 	protected String nazivDestinacije;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "adresa", unique = true, referencedColumnName  = "id")
+
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "adresa", unique = true, referencedColumnName = "id")
 	protected Adresa adresa;
 
 	public Destinacija() {
@@ -43,5 +43,20 @@ public class Destinacija {
 		this.nazivDestinacije = nazivDestinacije;
 	}
 
-	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Adresa getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
+	}
+
 }
