@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelService;
 
 @RestController
@@ -29,6 +31,7 @@ public class HoteliKontroler {
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
 	public ResponseEntity<String> dodajHotel(@RequestBody Hotel noviHotel) {
+		noviHotel.setSobe(new HashSet<HotelskaSoba>());
 		return new ResponseEntity<String>(servis.dodajHotel(noviHotel),HttpStatus.OK);
 	}
 

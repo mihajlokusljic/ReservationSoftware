@@ -20,7 +20,7 @@ public class HotelskaSoba {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long id;
+	protected Long Id;
 	
 	@Column(name = "broj_sobe", nullable = false)
 	protected int brojSobe;
@@ -58,8 +58,7 @@ public class HotelskaSoba {
 		super();
 	}
 
-	public HotelskaSoba(int brojSobe, int brojKreveta, int sprat, int vrsta, int kolona, double cijena,
-			Set<RezervacijaSobe> rezervacije, Hotel hotel) {
+	public HotelskaSoba(int brojSobe, int brojKreveta, int sprat, int vrsta, int kolona, double cijena, Hotel hotel) {
 		super();
 		this.brojSobe = brojSobe;
 		this.brojKreveta = brojKreveta;
@@ -67,7 +66,6 @@ public class HotelskaSoba {
 		this.vrsta = vrsta;
 		this.kolona = kolona;
 		this.cijena = cijena;
-		//this.rezervacije = rezervacije;
 		this.hotel = hotel;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
