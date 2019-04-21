@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelskaSobaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijeSobaRepository;
 
 @Service
 public class HotelskeSobeService {
@@ -19,6 +22,9 @@ public class HotelskeSobeService {
 
 	@Autowired
 	HotelRepository hoteliRepository;
+	
+	@Autowired
+	RezervacijeSobaRepository rezervacijeRepository;
 
 	public HotelskaSoba dodajSobuHotelu(DodavanjeSobeDTO podaci) throws NevalidniPodaciException {
 		Optional<Hotel> hotelSearch = this.hoteliRepository.findById(podaci.getIdHotela());
@@ -49,6 +55,15 @@ public class HotelskeSobeService {
 		hotel.getSobe().add(soba);
 		this.hoteliRepository.save(hotel);
 		return soba;
+	}
+	
+	public boolean sobaJeRezervisana(HotelskaSoba soba, Date pocetniDatum, Date krajnjiDatum) {
+		for(RezervacijaSobe r : this.rezervacijeRepository.findAllByRezervisanaSoba(soba)) {
+			if(!pocetniDatum.after(r.getDatumOdlaska()) && !r.getDatumDolaska().after(krajnjiDatum)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

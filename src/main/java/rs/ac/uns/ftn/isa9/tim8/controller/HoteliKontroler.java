@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaHotelaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
@@ -33,6 +34,11 @@ public class HoteliKontroler {
 	public ResponseEntity<String> dodajHotel(@RequestBody Hotel noviHotel) {
 		noviHotel.setSobe(new HashSet<HotelskaSoba>());
 		return new ResponseEntity<String>(servis.dodajHotel(noviHotel),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/pretrazi", method = RequestMethod.POST)
+	public ResponseEntity<?> pretragaHotela(@RequestBody PretragaHotelaDTO kriterijumiPretrage) {
+		return new ResponseEntity<Collection<Hotel> >(this.servis.pretraziHotele(kriterijumiPretrage), HttpStatus.OK);
 	}
 
 }

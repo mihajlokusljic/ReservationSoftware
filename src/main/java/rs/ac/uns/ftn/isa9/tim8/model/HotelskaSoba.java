@@ -69,6 +69,21 @@ public class HotelskaSoba {
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+		if(obj == this) {
+			return true;
+		}
+		if(obj instanceof HotelskaSoba) {
+			HotelskaSoba other = (HotelskaSoba) obj;
+			return this.Id.equals(other.Id);
+		}
+		return false;
+	}
 
 	public int getBrojSobe() {
 		return brojSobe;
@@ -149,12 +164,14 @@ public class HotelskaSoba {
 		this.brojOcjena = brojOcjena;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		Id = id;
 	}
+
+
 
 }
