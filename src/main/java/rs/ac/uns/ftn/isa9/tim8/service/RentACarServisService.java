@@ -41,6 +41,7 @@ public class RentACarServisService {
 			
 			return "Zauzeta adresa";
 		}
+		noviServis.setId(null);
 		rentACarRepository.save(noviServis);
 		return null;
 	}
@@ -62,7 +63,7 @@ public class RentACarServisService {
 		}
 		for (Vozilo vozilo : vozila) {
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
-					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu());
+					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), vozilo.getId());
 			vozilaDTO.add(vozDto);
 		}
 		
@@ -75,7 +76,9 @@ public class RentACarServisService {
 			return "Ne postoji servis sa unijetim nazivom.";
 		}
 		vozilo.setRentACar(rentACar);
+		vozilo.setId(null);
 		rentACar.getVozila().add(vozilo);
+	//	rentACar.setId(null);
 		rentACarRepository.save(rentACar);
 		
 		return null;
@@ -113,9 +116,9 @@ public class RentACarServisService {
 		return true;
 	}
 	
-	public String ukloniVozilo(Vozilo vozilo) {				
-		Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
-		//Vozilo voz = voziloRepository.findOneById(vozilo.getId());
+	public String ukloniVozilo(Long idVozila) {				
+		//Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
+		Vozilo voz = voziloRepository.findOneById(idVozila);
 		if (voz!= null) {
 			voziloRepository.delete(voz);
 			return null;
