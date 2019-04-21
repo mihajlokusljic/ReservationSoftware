@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "avion")
 public class Avion {
@@ -31,6 +33,7 @@ public class Avion {
 	@JoinTable(name="avion_segment", joinColumns=@JoinColumn(name="avion_id"), inverseJoinColumns=@JoinColumn(name="segment_id"))	
 	protected Set<Segment> segmenti;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "avion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Sjediste> sjedista;
 	

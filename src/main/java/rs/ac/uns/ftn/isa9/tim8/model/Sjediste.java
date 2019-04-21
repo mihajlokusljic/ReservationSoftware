@@ -14,27 +14,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sjediste")
 public class Sjediste {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="segment_id")
+	@JoinColumn(name = "segment_id")
 	protected Segment segment;
-	
+
 	@Column(name = "red", nullable = false)
 	int red;
-	
+
 	@Column(name = "kolona", nullable = false)
 	int kolona;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "avion_id")
 	protected Avion avion;
 
 	public Sjediste() {
 		super();
+	}
+
+	public Sjediste(Segment segment, int red, int kolona, Avion avion) {
+		super();
+		this.segment = segment;
+		this.red = red;
+		this.kolona = kolona;
+		this.avion = avion;
 	}
 
 	public Segment getSegment() {
@@ -68,6 +76,13 @@ public class Sjediste {
 	public void setId(Long id) {
 		this.Id = id;
 	}
-	
-	
+
+	public Avion getAvion() {
+		return avion;
+	}
+
+	public void setAvion(Avion avion) {
+		this.avion = avion;
+	}
+
 }

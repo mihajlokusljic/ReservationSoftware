@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.SegmentDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.SjedisteDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.Segment;
+import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.service.AvionService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/avioni")
@@ -42,6 +45,17 @@ public class AvionKontroler {
 	@RequestMapping(value = "/dodajSegment", method = RequestMethod.POST)
 	public ResponseEntity<Segment> dodajSegment(@RequestBody SegmentDTO segment) {
 		return new ResponseEntity<Segment>(servis.dodajSegment(segment.getIdAviona(), segment.getNaziv()), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dodajSjediste", method = RequestMethod.POST)
+	public ResponseEntity<?> dodajSjediste(@RequestBody SjedisteDTO sjediste) {
+		try {
+			return new ResponseEntity<Sjediste>(servis.dodajSjediste(sjediste), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
 }

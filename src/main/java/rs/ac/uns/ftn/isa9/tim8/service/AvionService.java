@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.SjedisteDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.Segment;
+import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.SegmentRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.SjedisteRepository;
 
 @Service
 public class AvionService {
@@ -25,6 +28,9 @@ public class AvionService {
 	
 	@Autowired
 	protected SegmentRepository segmentRepository;
+	
+	@Autowired
+	protected SjedisteRepository sjedisteRepository;
 	
 	public Collection<Avion> dobaviAvione() {
 		return avionRepository.findAll();
@@ -62,6 +68,41 @@ public class AvionService {
 			return noviSegment;
 		}
 		
+		return null;
+	}
+	
+	public Sjediste dodajSjediste(SjedisteDTO sjedisteDTO) throws NevalidniPodaciException {
+		if (sjedisteDTO.getRed() < 1 || sjedisteDTO.getKolona() < 1) {
+			throw new NevalidniPodaciException("Red i kolona moraju biti pozitivni cijeli brojevi.");
+		}
+		
+		Optional<Avion> avionSearch = avionRepository.findById(sjedisteDTO.getIdAviona());
+		Optional<Segment> segmentSearch = segmentRepository.findById(sjedisteDTO.getIdSegmenta());
+						
+		if (!avionSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji avion sa datim ID-jem.");
+		}
+		if (!segmentSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji segment sa datim ID-jem.");
+		}
+		
+		Avion a = null;
+		Segment seg = null;
+		
+		a = avionSearch.get();
+		seg = segmentSearch.get();
+		
+		for (Segment segment : a.getSegmenti()) {
+			if (segment.getId() == seg.getId()) {
+				Sjediste s = new Sjediste(seg, sjedisteDTO.getRed(), sjedisteDTO.getKolona(), a);
+				
+				sjedisteRepository.save(s);
+				a.getSjedista().add(s);
+				
+				avionRepository.save(a);
+				return s;
+			}
+		}
 		return null;
 	}
 
