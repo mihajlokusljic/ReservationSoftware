@@ -225,8 +225,7 @@ function prikaziVozila(vozila){
 		$.ajax({
 			type : "POST",
 			url : "../rentACar/ukloniVozilo",
-			contentType: "application/json; charset=utf-8",
-			data : JSON.stringify(vozilo),	
+			data: {"idVozila" : vozilo["id"]},
 			success : function(response){
 				dobaviSvaVozilaServisa(naziv_servisa)			
 			},

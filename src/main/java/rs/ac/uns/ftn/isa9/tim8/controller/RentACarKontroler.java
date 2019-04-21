@@ -75,10 +75,9 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/ukloniVozilo", method = RequestMethod.POST)
-	public ResponseEntity<String> ukloniVozilo(@RequestBody Vozilo vozilo ) {
-
-		
-		return new ResponseEntity<String>(servis.ukloniVozilo(vozilo),HttpStatus.OK);
+	public ResponseEntity<String> ukloniVozilo(@RequestParam("idVozila") String idVozila) {
+		Long idVoz = Long.parseLong(idVozila);
+		return new ResponseEntity<String>(servis.ukloniVozilo(idVoz),HttpStatus.OK);
 	}
 	
 
