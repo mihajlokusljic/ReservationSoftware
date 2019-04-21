@@ -23,6 +23,15 @@ public class Segment {
 		super();
 	}
 
+	
+	
+	public Segment(String naziv) {
+		super();
+		this.naziv = naziv;
+	}
+
+
+
 	public String getNaziv() {
 		return naziv;
 	}

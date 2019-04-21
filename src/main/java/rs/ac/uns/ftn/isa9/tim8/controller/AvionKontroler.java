@@ -2,15 +2,20 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.util.Collection;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.SegmentDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
+import rs.ac.uns.ftn.isa9.tim8.model.Segment;
 import rs.ac.uns.ftn.isa9.tim8.service.AvionService;
 
 @RestController
@@ -25,9 +30,20 @@ public class AvionKontroler {
 	}
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<Avion> dodajAvion(@RequestBody Avion noviAvion) {
+	public ResponseEntity<Avion> dodajAvion(@RequestBody AvionDTO noviAvion) {
 		return new ResponseEntity<Avion>(servis.dodajAvion(noviAvion), HttpStatus.OK);
 	}	
+	
+	@RequestMapping(value = "/dobaviSegmenteZaAvion/{idAviona}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Segment>> dobaviSegmenteZaAvion(@PathVariable("idAviona") Long idAviona) {
+		return new ResponseEntity<Collection<Segment>>(servis.dobaviSegmenteZaAvion(idAviona), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dodajSegment", method = RequestMethod.POST)
+	public ResponseEntity<Segment> dodajSegment(@RequestBody SegmentDTO segment) {
+		return new ResponseEntity<Segment>(servis.dodajSegment(segment.getIdAviona(), segment.getNaziv()), HttpStatus.OK);
+	}
+	
 }
 
 
