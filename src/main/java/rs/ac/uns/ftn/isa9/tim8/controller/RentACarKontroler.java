@@ -80,5 +80,11 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.ukloniVozilo(idVoz),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/izmjeniVozilo/{voziloId}", method = RequestMethod.POST)
+	public ResponseEntity<String> izmjeniVozilo(@PathVariable("voziloId") String voziloId, @RequestBody VoziloDTO vozilo) {
+		vozilo.setId(Long.parseLong(voziloId));
+		return new ResponseEntity<String>(servis.izmjeniVozilo(vozilo),HttpStatus.OK);
+	}
+	
 
 }
