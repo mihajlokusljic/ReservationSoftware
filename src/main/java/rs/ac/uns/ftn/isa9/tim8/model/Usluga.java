@@ -16,7 +16,7 @@ public class Usluga {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "naziv", nullable = false)
 	protected String naziv;
@@ -62,11 +62,11 @@ public class Usluga {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 		
 	

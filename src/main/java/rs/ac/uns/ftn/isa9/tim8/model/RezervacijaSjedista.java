@@ -18,7 +18,7 @@ public class RezervacijaSjedista {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 
 	@Column(name = "ime_putnika", nullable = false)
 	protected String imePutnika;
@@ -130,11 +130,11 @@ public class RezervacijaSjedista {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public Aviokompanija getAviokompanija() {
@@ -160,6 +160,7 @@ public class RezervacijaSjedista {
 	public void setPutovanje(Putovanje putovanje) {
 		this.putovanje = putovanje;
 	}
+	
 	
 	
 }

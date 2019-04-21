@@ -13,7 +13,7 @@ public class Segment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "naziv")
 	protected String naziv;
@@ -38,6 +38,15 @@ public class Segment {
 
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
+	}
+
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 	
 	

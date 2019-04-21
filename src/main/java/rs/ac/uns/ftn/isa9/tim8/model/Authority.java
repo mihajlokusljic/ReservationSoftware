@@ -24,7 +24,7 @@ public class Authority implements GrantedAuthority{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name="tip_korisnika")
 	@Enumerated(EnumType.STRING)
@@ -37,11 +37,11 @@ public class Authority implements GrantedAuthority{
 	
 	@JsonIgnore
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	
 	@JsonIgnore

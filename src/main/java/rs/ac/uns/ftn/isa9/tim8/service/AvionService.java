@@ -12,6 +12,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.Segment;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.SegmentRepository;
 
 @Service
 public class AvionService {
@@ -21,6 +22,9 @@ public class AvionService {
 	
 	@Autowired
 	protected AviokompanijaRepository aviokompanijaRepository;
+	
+	@Autowired
+	protected SegmentRepository segmentRepository;
 	
 	public Collection<Avion> dobaviAvione() {
 		return avionRepository.findAll();
@@ -53,6 +57,7 @@ public class AvionService {
 			Segment noviSegment = new Segment(nazivSegmenta);
 			a.getSegmenti().add(noviSegment);
 			
+			segmentRepository.save(noviSegment);
 			avionRepository.save(a);
 			return noviSegment;
 		}
@@ -99,6 +104,7 @@ public class AvionService {
 		
 		aviokompanija.getAvioni().add(a);
 		
+		avionRepository.save(a);
 		aviokompanijaRepository.save(aviokompanija);
 		return a;
 	}

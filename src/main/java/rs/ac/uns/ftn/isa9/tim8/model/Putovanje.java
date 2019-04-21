@@ -21,7 +21,7 @@ import javax.persistence.Table;
 public class Putovanje {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long id;
+	protected long Id;
 	
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacijeSjedista;
@@ -74,12 +74,12 @@ public class Putovanje {
 	}
 
 	public long getId() {
-		return id;
+		return Id;
 	}
 
 	
 	public void setId(long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public Set<Usluga> getDodatne_usluge() {

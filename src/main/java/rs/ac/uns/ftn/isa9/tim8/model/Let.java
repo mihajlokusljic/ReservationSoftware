@@ -22,14 +22,14 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "let")
 public class Let {
-	
+
 	@Id
 	@GeneratedValue
-	protected Long id;
-	
+	protected Long Id;
+
 	@Column(name = "broj_leta", nullable = false)
 	protected String brojLeta;
-	
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "polaziste_id", referencedColumnName = "id")
 	protected Destinacija polaziste;
@@ -37,49 +37,49 @@ public class Let {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "odrediste_id", referencedColumnName = "id")
 	protected Destinacija odrediste;
-	
+
 	@Column(name = "datum_poletanja", nullable = false)
 	@Temporal(TemporalType.DATE)
 	protected Date datumPoletanja;
-	
+
 	@Column(name = "datum_sletanja", nullable = false)
 	@Temporal(TemporalType.DATE)
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
-	
+
 	@Column(name = "duzina_putovanja", nullable = false)
 	@Temporal(TemporalType.DATE)
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name="let_presjedanje", joinColumns=@JoinColumn(name="let_id"), inverseJoinColumns=@JoinColumn(name="presjedanje_id"))
+	@JoinTable(name = "let_presjedanje", joinColumns = @JoinColumn(name = "let_id"), inverseJoinColumns = @JoinColumn(name = "presjedanje_id"))
 	protected Set<Destinacija> presjedanja; // Zato sto ce biti potrebno cuvati i lokacije
-																// (vjerovatno kroz
+											// (vjerovatno kroz
 	@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
-	
+
 	@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
-	
+
 	// Yandex mape
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "avion_id")
 	protected Avion avion;
-	
+
 	@Column(name = "kapacitet_prva_klasa", nullable = true)
 	protected int kapacitetPrvaKlasa;
-	
+
 	@Column(name = "kapacitet_biznis_klasa", nullable = true)
 	protected int kapacitetBiznisKlasa;
-	
+
 	@Column(name = "kapacitet_ekonomska_klasa", nullable = true)
 	protected int kapacitetEkonomskaKlasa;
-	
+
 	@OneToMany(mappedBy = "let", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
-	
+
 	@Column(name = "cijena_karte", nullable = true)
 	protected double cijenaKarte;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "let")
 	protected CjenovnikLeta cjenovnikLeta;
 
@@ -103,7 +103,7 @@ public class Let {
 		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
 		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
 		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
-		//this.rezervacije = rezervacije;
+		// this.rezervacije = rezervacije;
 		this.cijenaKarte = cijenaKarte;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
@@ -228,5 +228,13 @@ public class Let {
 	public void setBrojOcjena(int brojOcjena) {
 		this.brojOcjena = brojOcjena;
 	}
-	
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+
 }

@@ -17,43 +17,42 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "hotelska_soba")
 public class HotelskaSoba {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long id;
-	
+	protected long Id;
+
 	@Column(name = "broj_sobe", nullable = false)
 	protected int brojSobe;
-	
+
 	@Column(name = "broj_kreveta", nullable = false)
 	protected int brojKreveta;
-	
+
 	@Column(name = "sprat", nullable = false)
 	protected int sprat;
-	
+
 	@Column(name = "red", nullable = false)
 	protected int vrsta;
-	
+
 	@Column(name = "kolona", nullable = false)
 	protected int kolona;
-	
-	
+
 	@Column(name = "cijena", nullable = false)
 	protected double cijena;
-	
-	//@ManyToMany(fetch = FetchType.LAZY)
-	//protected Set<RezervacijaSobe> rezervacije;
-	
+
+	// @ManyToMany(fetch = FetchType.LAZY)
+	// protected Set<RezervacijaSobe> rezervacije;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "hotel_id")
 	protected Hotel hotel;
-	
+
 	@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
-	
+
 	@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
-	
+
 	public HotelskaSoba() {
 		super();
 	}
@@ -67,7 +66,7 @@ public class HotelskaSoba {
 		this.vrsta = vrsta;
 		this.kolona = kolona;
 		this.cijena = cijena;
-		//this.rezervacije = rezervacije;
+		// this.rezervacije = rezervacije;
 		this.hotel = hotel;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
@@ -121,13 +120,12 @@ public class HotelskaSoba {
 		this.cijena = cijena;
 	}
 
-	/*public Set<RezervacijaSobe> getRezervacije() {
-		return rezervacije;
-	}
-
-	public void setRezervacije(Set<RezervacijaSobe> rezervacije) {
-		this.rezervacije = rezervacije;
-	}*/
+	/*
+	 * public Set<RezervacijaSobe> getRezervacije() { return rezervacije; }
+	 * 
+	 * public void setRezervacije(Set<RezervacijaSobe> rezervacije) {
+	 * this.rezervacije = rezervacije; }
+	 */
 
 	public Hotel getHotel() {
 		return hotel;
@@ -152,5 +150,13 @@ public class HotelskaSoba {
 	public void setBrojOcjena(int brojOcjena) {
 		this.brojOcjena = brojOcjena;
 	}
-	
+
+	public long getId() {
+		return Id;
+	}
+
+	public void setId(long id) {
+		Id = id;
+	}
+
 }

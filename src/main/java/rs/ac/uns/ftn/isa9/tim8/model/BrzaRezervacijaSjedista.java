@@ -23,7 +23,7 @@ public class BrzaRezervacijaSjedista {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "izvodjenje_leta_id")
@@ -57,10 +57,10 @@ public class BrzaRezervacijaSjedista {
 	}
 	
 	public Long getId() {
-		return id;
+		return Id;
 	}
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	public Sjediste getSjediste() {
 		return sjediste;

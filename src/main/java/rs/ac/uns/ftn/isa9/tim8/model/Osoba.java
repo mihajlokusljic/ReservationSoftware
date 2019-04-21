@@ -34,7 +34,7 @@ public class Osoba implements UserDetails{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "loznika", nullable = false)
 	protected String lozinka;
@@ -75,7 +75,7 @@ public class Osoba implements UserDetails{
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
 			String brojTelefona, String putanjaSlike, boolean sistemAdmin) {
 		super();
-		this.id = id;
+		this.Id = id;
 		this.lozinka = lozinka;
 		this.ime = ime;
 		this.prezime = prezime;
@@ -86,11 +86,11 @@ public class Osoba implements UserDetails{
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public String getLozinka() {

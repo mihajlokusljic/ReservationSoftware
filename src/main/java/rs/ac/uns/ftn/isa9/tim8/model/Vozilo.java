@@ -18,7 +18,7 @@ public class Vozilo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "naziv", nullable = false)
 	protected String naziv;
@@ -187,11 +187,11 @@ public class Vozilo {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	
 }
