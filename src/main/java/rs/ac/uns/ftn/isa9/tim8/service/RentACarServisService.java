@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaVozilaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.VoziloRepository;
 
 @Service
@@ -26,6 +29,9 @@ public class RentACarServisService {
 	
 	@Autowired
 	protected VoziloRepository voziloRepository;
+	
+	@Autowired
+	protected RezervacijaVozilaRepository rezervacijaVozilaRepository;
 		
 	public Collection<RentACarServis> dobaviRentACarServise() {
 		return rentACarRepository.findAll();
@@ -124,7 +130,38 @@ public class RentACarServisService {
 		}
 		
 		Vozilo voz = pretragaVozila.get();
+		
+		List<RezervacijaVozila> rVozila = rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz);
+		if (!rVozila.isEmpty()) {
+			return "Ne mozete obrisati rezervisano vozilo";
+		}
 		voziloRepository.delete(voz);
+		return null;
+	}
+	
+	public String izmjeniVozilo(VoziloDTO vozilo) {
+		Optional<Vozilo> pretragaVozila = voziloRepository.findById(vozilo.getId());
+		
+		if (!pretragaVozila.isPresent()) {
+			return "Nevalidan id";
+		}
+		
+		Vozilo voz = pretragaVozila.get();
+		
+		voz.setNaziv(vozilo.getNaziv());
+		voz.setMarka(vozilo.getMarka());
+		voz.setModel(vozilo.getModel());
+		voz.setGodina_proizvodnje(vozilo.getGodina_proizvodnje());;
+		voz.setBroj_sjedista(vozilo.getBroj_sjedista());
+		voz.setBroj_vrata(vozilo.getBroj_vrata());
+		voz.setKilovati(vozilo.getKilovati());
+		voz.setCijena_po_danu(vozilo.getCijena_po_danu());
+		voz.setTip_vozila(vozilo.getTip_vozila());
+		List<RezervacijaVozila> rVozila = rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz);
+		if (!rVozila.isEmpty()) {
+			return "Ne mozete izmjeniti rezervisano vozilo";
+		}
+		voziloRepository.save(voz);
 		return null;
 	}
 	
