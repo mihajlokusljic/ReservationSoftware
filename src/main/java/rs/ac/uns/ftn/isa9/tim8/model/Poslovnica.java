@@ -21,7 +21,7 @@ public class Poslovnica {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "naziv", nullable = false)
 	protected String naziv;
@@ -115,11 +115,11 @@ public class Poslovnica {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	
 	

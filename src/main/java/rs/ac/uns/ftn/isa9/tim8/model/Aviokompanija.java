@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "aviokompanija")
 public class Aviokompanija extends Poslovnica {
@@ -29,7 +31,8 @@ public class Aviokompanija extends Poslovnica {
 	
 	@Column(name = "cijena_prtljaga_komad", nullable = false)
 	protected double cijenaPrtljagaKomad;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Avion> avioni;
 

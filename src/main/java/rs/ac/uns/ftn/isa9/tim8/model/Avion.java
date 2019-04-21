@@ -22,7 +22,7 @@ public class Avion {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "nazivAviona", nullable = false)
 	protected String naziv;
@@ -59,11 +59,11 @@ public class Avion {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public Set<Segment> getSegmenti() {

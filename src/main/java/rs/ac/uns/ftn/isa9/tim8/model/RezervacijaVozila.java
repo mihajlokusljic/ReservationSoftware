@@ -22,7 +22,7 @@ public class RezervacijaVozila {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rezervisano_vozilo_id", referencedColumnName = "id")
@@ -123,11 +123,11 @@ public class RezervacijaVozila {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public RentACarServis getRentACarServis() {

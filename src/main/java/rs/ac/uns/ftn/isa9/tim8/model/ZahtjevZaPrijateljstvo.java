@@ -18,7 +18,7 @@ public class ZahtjevZaPrijateljstvo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 
 	@Column(name = "potvrdjen")
 	protected boolean potvrdjen;
@@ -58,11 +58,11 @@ public class ZahtjevZaPrijateljstvo {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	
 	

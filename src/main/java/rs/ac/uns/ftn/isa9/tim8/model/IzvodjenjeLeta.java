@@ -23,7 +23,7 @@ public class IzvodjenjeLeta {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "datum_vrijeme_poletanja", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -78,5 +78,23 @@ public class IzvodjenjeLeta {
 	public void setRezervisanaMjesta(Set<RezervacijaSjedista> rezervisanaMjesta) {
 		this.rezervisanaMjesta = rezervisanaMjesta;
 	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+
+	public Set<BrzaRezervacijaSjedista> getBrzeRezervacije() {
+		return brzeRezervacije;
+	}
+
+	public void setBrzeRezervacije(Set<BrzaRezervacijaSjedista> brzeRezervacije) {
+		this.brzeRezervacije = brzeRezervacije;
+	}
+	
+	
 
 }

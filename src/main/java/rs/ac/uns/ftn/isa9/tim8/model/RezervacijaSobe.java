@@ -22,7 +22,7 @@ public class RezervacijaSobe {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "datum_dolaska", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -82,10 +82,10 @@ public class RezervacijaSobe {
 		this.rezervisanaSoba = rezervisanaSoba;
 	}
 	public Long getId() {
-		return id;
+		return Id;
 	}
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	public RegistrovanKorisnik getPutnik() {
 		return putnik;

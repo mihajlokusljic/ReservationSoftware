@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class RentACarServisService {
 			
 			return "Zauzeta adresa";
 		}
+		noviServis.setId(null);
 		rentACarRepository.save(noviServis);
 		return null;
 	}
@@ -62,7 +64,7 @@ public class RentACarServisService {
 		}
 		for (Vozilo vozilo : vozila) {
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
-					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu());
+					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), vozilo.getId());
 			vozilaDTO.add(vozDto);
 		}
 		
@@ -75,6 +77,7 @@ public class RentACarServisService {
 			return "Ne postoji servis sa unijetim nazivom.";
 		}
 		vozilo.setRentACar(rentACar);
+		vozilo.setId(null);
 		rentACar.getVozila().add(vozilo);
 		rentACarRepository.save(rentACar);
 		
@@ -113,14 +116,16 @@ public class RentACarServisService {
 		return true;
 	}
 	
-	public String ukloniVozilo(Vozilo vozilo) {				
-		Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
-		//Vozilo voz = voziloRepository.findOneById(vozilo.getId());
-		if (voz!= null) {
-			voziloRepository.delete(voz);
-			return null;
+	public String ukloniVozilo(Long idVozila) {				
+		Optional<Vozilo> pretragaVozila = voziloRepository.findById(idVozila);
+		
+		if (!pretragaVozila.isPresent()) {
+			return "Nevalidan id";
 		}
-		return "Nevalidan id";
+		
+		Vozilo voz = pretragaVozila.get();
+		voziloRepository.delete(voz);
+		return null;
 	}
 	
 }

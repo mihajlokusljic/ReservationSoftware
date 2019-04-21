@@ -16,16 +16,16 @@ import javax.persistence.Table;
 public class CjenovnikLeta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
-	
+	protected Long Id;
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "let_id", referencedColumnName = "id")
 	protected Let let;
-	
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "segment_id", referencedColumnName = "id")
 	protected Segment segment;
-	
+
 	@Column(name = "cijena_leta", nullable = false)
 	protected double cijena;
 
@@ -55,6 +55,14 @@ public class CjenovnikLeta {
 
 	public void setCijena(double cijena) {
 		this.cijena = cijena;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 }
