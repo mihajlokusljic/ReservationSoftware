@@ -79,7 +79,6 @@ public class RentACarServisService {
 		vozilo.setRentACar(rentACar);
 		vozilo.setId(null);
 		rentACar.getVozila().add(vozilo);
-	//	rentACar.setId(null);
 		rentACarRepository.save(rentACar);
 		
 		return null;
@@ -118,7 +117,6 @@ public class RentACarServisService {
 	}
 	
 	public String ukloniVozilo(Long idVozila) {				
-		//Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
 		Optional<Vozilo> pretragaVozila = voziloRepository.findById(idVozila);
 		
 		if (!pretragaVozila.isPresent()) {

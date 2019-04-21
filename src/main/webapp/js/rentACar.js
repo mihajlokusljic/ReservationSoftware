@@ -216,7 +216,7 @@ function prikaziVozila(vozila){
 		tabela.append("<tr><td>" + vozilo["naziv"] + "</td><td>" + vozilo["marka"] + "</td><td>" + vozilo["model"]
 		 + "</td><td>" + vozilo["tip_vozila"]  + "</td><td>" + vozilo["godina_proizvodnje"] + "</td><td>" + vozilo["broj_sjedista"] +
 		 "</td><td>" + vozilo["broj_vrata"] + "</td><td>" + vozilo["kilovati"] + "</td><td>" + vozilo["cijena_po_danu"] + "</td>+" +
-		'<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +   		
+		 '<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +   		
 		"</tr>" )
 	});
 	let naziv_servisa = $("#naziv_servisa").val();

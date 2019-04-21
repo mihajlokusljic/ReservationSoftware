@@ -25,10 +25,10 @@ public class VoziloDTO {
 	
 	protected int sumaOcjena;
 	
-	protected Long id;
+	protected Long Id;
 
 	public VoziloDTO(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
-			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Long id) {
+			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Long Id) {
 		super();
 		this.naziv = naziv;
 		this.marka = marka;
@@ -39,7 +39,7 @@ public class VoziloDTO {
 		this.broj_vrata = broj_vrata;
 		this.kilovati = kilovati;
 		this.cijena_po_danu = cijena_po_danu;
-		this.id = id;
+		this.Id = Id;
 	}
 
 	public VoziloDTO() {
@@ -135,11 +135,11 @@ public class VoziloDTO {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 	
 	
