@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -165,4 +166,20 @@ public class RentACarServisService {
 		return null;
 	}
 	
+	public String dodajFilijalu(String nazivServisa, String adresa) {
+		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
+		Adresa adresaPostoji = adresaRepository.findOneByPunaAdresa(adresa);
+		if (adresaPostoji != null) {
+			
+			return "Zauzeta adresa";
+		}
+		Adresa a = new Adresa();
+		a.setPunaAdresa(adresa);
+		Filijala f = new Filijala();
+		f.setAdresa(a);
+		f.setRentACar(rentACar);
+		rentACar.getFilijale().add(f);
+		rentACarRepository.save(rentACar);
+		return null;
+	}
 }

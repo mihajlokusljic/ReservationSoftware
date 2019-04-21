@@ -86,5 +86,8 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.izmjeniVozilo(vozilo),HttpStatus.OK);
 	}
 	
-
+	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> dodajFilijalu(@RequestParam("nazivServisa") String nazivServisa, @RequestParam("adresa") String adresa) {
+		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
+	}
 }

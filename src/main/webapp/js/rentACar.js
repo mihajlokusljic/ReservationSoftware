@@ -176,6 +176,40 @@ $(document).ready(function() {
 		
 	});
 	
+	ucitajRentACarServise();
+	
+	$("#dodavanje_filijale").submit(function(e) {
+		e.preventDefault();
+		let naziv_servisa = $("#servis_filijala").val();
+		if (naziv_servisa == ''){
+			alert ("Niste odabrali servis.");
+			return;
+		}
+
+		let adresa = $("#adresa_filijale").val();
+		if (adresa == ''){
+			alert ("Niste unijeli adresu.");
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dodajFilijalu",
+			data: {"nazivServisa" : naziv_servisa, "adresa" : adresa},
+			success: function(response) {
+				if(response != '') {
+					alert(response);
+				} else {
+					alert("Uspjesno dodata adresa");
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
 	
 });
 
@@ -374,6 +408,28 @@ function prikaziVozila(vozila){
 
 }
 
+function ucitajRentACarServise(){
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/sviServisi",
+		contentType:"application/json; charset=utf-8",
+		dataType : "json",
+		success : function(response){
+			dodajServiseSelect(response);
+		},
+		error: function(){
+			alert("error");
+		}
+	});
+}
+
+function dodajServiseSelect(servisi){
+	let select_tag = $("#servis_filijala");
+	select_tag.empty();
+	$.each(servisi, function(i,servis){
+		select_tag.append("<option value=\""+servis["naziv"] + "\">" +servis["naziv"]+"</option>");
+	});
+}
 function prikazProfila(servis){
 	let div_ = $(".prikaz_izmjene");
 	div_.empty();
