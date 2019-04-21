@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Pozivnica {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "prihvacena", nullable = false)
 	protected boolean prihvacena;
@@ -46,7 +46,7 @@ public class Pozivnica {
 	public Pozivnica(Long id, boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje,
 			RegistrovanKorisnik posiljalac) {
 		super();
-		this.id = id;
+		this.Id = id;
 		this.prihvacena = prihvacena;
 		this.rokPrihvatanja = rokPrihvatanja;
 		//this.putovanje = putovanje;
@@ -78,11 +78,11 @@ public class Pozivnica {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public RegistrovanKorisnik getPosiljalac() {

@@ -23,7 +23,7 @@ public class BrzaRezervacijaSoba {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "datum_dolaska", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -82,11 +82,11 @@ public class BrzaRezervacijaSoba {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public HotelskaSoba getSobaZaRezervaciju() {

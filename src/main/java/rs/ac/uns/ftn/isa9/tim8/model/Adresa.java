@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Adresa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Long id;
+	protected Long Id;
 	
 	@Column(name = "puna_adresa", nullable = false)
 	protected String punaAdresa;
@@ -40,11 +40,11 @@ public class Adresa {
 	}
 
 	public Long getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	@Override
