@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,12 +119,15 @@ public class RentACarServisService {
 	
 	public String ukloniVozilo(Long idVozila) {				
 		//Vozilo voz = voziloRepository.findOneByNaziv(vozilo.getNaziv());
-		Vozilo voz = voziloRepository.findOneById(idVozila);
-		if (voz!= null) {
-			voziloRepository.delete(voz);
-			return null;
+		Optional<Vozilo> pretragaVozila = voziloRepository.findById(idVozila);
+		
+		if (!pretragaVozila.isPresent()) {
+			return "Nevalidan id";
 		}
-		return "Nevalidan id";
+		
+		Vozilo voz = pretragaVozila.get();
+		voziloRepository.delete(voz);
+		return null;
 	}
 	
 }

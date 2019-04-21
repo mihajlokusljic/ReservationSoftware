@@ -90,7 +90,7 @@ public class Osoba implements UserDetails{
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
 			String putanjaSlike, boolean enabled, Timestamp lastPasswordResetDate, Set<Authority> authorities) {
 		super();
-		this.id = id;
+		this.Id = id;
 		this.lozinka = lozinka;
 		this.ime = ime;
 		this.prezime = prezime;
