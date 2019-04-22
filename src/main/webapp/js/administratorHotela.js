@@ -3,7 +3,10 @@ var tokenKey = "jwtToken";
 $(document).ready(function() {
 	
 	$.ajaxSetup({
-	    headers: createAuthorizationTokenHeader(tokenKey)
+	    headers: createAuthorizationTokenHeader(tokenKey),
+	    error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+		}
 	});
 	
 	$("#dodavanjeSobeForm").submit(function(e) {
@@ -35,9 +38,6 @@ $(document).ready(function() {
 			success: function(response) {
 				alert(response);
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
-			}
 		});
 		
 	});
