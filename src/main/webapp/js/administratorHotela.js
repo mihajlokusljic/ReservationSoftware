@@ -1,4 +1,10 @@
+var tokenKey = "jwtToken";
+
 $(document).ready(function() {
+	
+	$.ajaxSetup({
+	    headers: createAuthorizationTokenHeader(tokenKey)
+	});
 	
 	$("#dodavanjeSobeForm").submit(function(e) {
 		e.preventDefault();

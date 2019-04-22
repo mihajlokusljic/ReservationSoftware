@@ -1,5 +1,10 @@
+var tokenKey = "jwtToken";
+
 $(document).ready(function() {
 	
+	$.ajaxSetup({
+	    headers: createAuthorizationTokenHeader(tokenKey)
+	});
 	
 	//ucitavanje aviokompanija
 	ucitajPodatke("../aviokompanije/dobaviSve", "aviokompanijePrikaz", "aviokompanijeSelect");
