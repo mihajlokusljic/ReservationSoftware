@@ -77,6 +77,42 @@ public class AvionService {
 		return null;
 	}
 	
+	public Sjediste azurirajSjediste(Long idSjedista, SjedisteDTO sjediste) throws NevalidniPodaciException {
+		// REZERVISANO MJESTO se ne moze azurirati
+		Optional<Sjediste> sjedisteSearch = sjedisteRepository.findById(idSjedista);
+		
+		if (!sjedisteSearch.isPresent()) {
+			throw new NevalidniPodaciException("Sjediste sa datim id-jem ne postoji.");
+		}
+		
+		Sjediste s = sjedisteSearch.get();
+		
+		Collection<RezervacijaSjedista> rezervacijeSjedista = rezervacija_sjedistaRepository.findAllBySjediste(s);
+		
+		if (!rezervacijeSjedista.isEmpty()) {
+			throw new NevalidniPodaciException("Postoji rezervacija za dato sjediste.");
+		}
+		
+		if (sjediste.getRed() < 1 || sjediste.getKolona() < 1) {
+			throw new NevalidniPodaciException("Red/kolona sjedista moraju biti pozitivni cijeli brojevi.");
+		}
+		
+		Optional<Segment> segmentSearch = segmentRepository.findById(sjediste.getIdSegmenta());
+		
+		if (!segmentSearch.isPresent()) {
+			throw new NevalidniPodaciException("Segment sa datim ID-jem ne postoji.");
+		}
+		
+		Segment seg = segmentSearch.get();
+		
+		s.setRed(sjediste.getRed());
+		s.setKolona(sjediste.getKolona());
+		s.setSegment(seg);
+		
+		sjedisteRepository.save(s);
+		return s;
+	}
+	
 	public String ukloniSjediste(Long idSjedista) {
 		// REZERVISANO MJESTO se ne moze ukloniti
 		Optional<Sjediste> sjedisteSearch = sjedisteRepository.findById(idSjedista);
@@ -133,23 +169,6 @@ public class AvionService {
 		return null;
 	}
 
-/*
- 		
-		Aviokompanija avio = aviokompanijaRepository.findOneByNaziv(novaAviokompanija.getNaziv());
-		Adresa adresa = adresaRepository.findOneByPunaAdresa(novaAviokompanija.getAdresa().getPunaAdresa());
-		if (avio != null) {
-			
-			return "Zauzet naziv aviokompanije";
-		}
-		if (adresa != null) {
-			
-			return "Zauzeta adresa";
-		}
-		aviokompanijaRepository.save(novaAviokompanija);
-		return null;
-		
- */
-	
 	public Avion dodajAvion(AvionDTO noviAvion) {
 		Avion a = avionRepository.findOneByNaziv(noviAvion.getNaziv());
 		if (a != null) {
