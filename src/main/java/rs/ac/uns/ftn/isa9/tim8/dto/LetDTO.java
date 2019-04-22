@@ -1,57 +1,50 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
+import java.util.Collection;
 import java.util.Date;
-import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 
 public class LetDTO {
-	
-	protected String brojLeta;
-	
-	protected Destinacija polaziste;
 
-	protected Destinacija odrediste;
-	
+	protected String brojLeta;
+
+	protected Long idAviokompanije;
+
+	protected Long idPolaziste;
+
+	protected Long idOdrediste;
+
 	protected Date datumPoletanja;
-	
+
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
-	
+
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
-	protected int brojPresjedanja;
-	
-	protected int sumaOcjena;
-	
-	protected int brojOcjena;
-	
-	protected int kapacitetPrvaKlasa;
-	
-	protected int kapacitetBiznisKlasa;
-	
-	protected int kapacitetEkonomskaKlasa;
-	
+	protected Collection<Long> idDestinacijePresjedanja;
+
+	protected Long idAviona;
+
 	protected double cijenaKarte;
-	
+
 	public LetDTO() {
 		super();
 	}
 
-	public LetDTO(String brojLeta, Destinacija polaziste, Destinacija odrediste, Date datumPoletanja,
-			Date datumSletanja, Date duzinaPutovanja, int brojPresjedanja, int kapacitetPrvaKlasa,
-			int kapacitetBiznisKlasa, int kapacitetEkonomskaKlasa, double cijenaKarte) {
+	public LetDTO(String brojLeta, Long idAviokompanije, Long idPolaziste, Long idOdrediste, Date datumPoletanja,
+			Date datumSletanja, Date duzinaPutovanja, Collection<Long> idDestinacijePresjedanja, Long idAviona,
+			double cijenaKarte) {
 		super();
 		this.brojLeta = brojLeta;
-		this.polaziste = polaziste;
-		this.odrediste = odrediste;
+		this.idAviokompanije = idAviokompanije;
+		this.idPolaziste = idPolaziste;
+		this.idOdrediste = idOdrediste;
 		this.datumPoletanja = datumPoletanja;
 		this.datumSletanja = datumSletanja;
 		this.duzinaPutovanja = duzinaPutovanja;
-		this.brojPresjedanja = brojPresjedanja;
-		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
-		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
-		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
+		this.idDestinacijePresjedanja = idDestinacijePresjedanja;
+		this.idAviona = idAviona;
 		this.cijenaKarte = cijenaKarte;
 	}
-	
+
 	public String getBrojLeta() {
 		return brojLeta;
 	}
@@ -60,20 +53,28 @@ public class LetDTO {
 		this.brojLeta = brojLeta;
 	}
 
-	public Destinacija getPolaziste() {
-		return polaziste;
+	public Long getIdAviokompanije() {
+		return idAviokompanije;
 	}
 
-	public void setPolaziste(Destinacija polaziste) {
-		this.polaziste = polaziste;
+	public void setIdAviokompanije(Long idAviokompanije) {
+		this.idAviokompanije = idAviokompanije;
 	}
 
-	public Destinacija getOdrediste() {
-		return odrediste;
+	public Long getIdPolaziste() {
+		return idPolaziste;
 	}
 
-	public void setOdrediste(Destinacija odrediste) {
-		this.odrediste = odrediste;
+	public void setIdPolaziste(Long idPolaziste) {
+		this.idPolaziste = idPolaziste;
+	}
+
+	public Long getIdOdrediste() {
+		return idOdrediste;
+	}
+
+	public void setIdOdrediste(Long idOdrediste) {
+		this.idOdrediste = idOdrediste;
 	}
 
 	public Date getDatumPoletanja() {
@@ -100,52 +101,20 @@ public class LetDTO {
 		this.duzinaPutovanja = duzinaPutovanja;
 	}
 
-	public int getBrojPresjedanja() {
-		return brojPresjedanja;
+	public Collection<Long> getIdDestinacijePresjedanja() {
+		return idDestinacijePresjedanja;
 	}
 
-	public void setBrojPresjedanja(int brojPresjedanja) {
-		this.brojPresjedanja = brojPresjedanja;
+	public void setIdDestinacijePresjedanja(Collection<Long> idDestinacijePresjedanja) {
+		this.idDestinacijePresjedanja = idDestinacijePresjedanja;
 	}
 
-	public int getSumaOcjena() {
-		return sumaOcjena;
+	public Long getIdAviona() {
+		return idAviona;
 	}
 
-	public void setSumaOcjena(int sumaOcjena) {
-		this.sumaOcjena = sumaOcjena;
-	}
-
-	public int getBrojOcjena() {
-		return brojOcjena;
-	}
-
-	public void setBrojOcjena(int brojOcjena) {
-		this.brojOcjena = brojOcjena;
-	}
-
-	public int getKapacitetPrvaKlasa() {
-		return kapacitetPrvaKlasa;
-	}
-
-	public void setKapacitetPrvaKlasa(int kapacitetPrvaKlasa) {
-		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
-	}
-
-	public int getKapacitetBiznisKlasa() {
-		return kapacitetBiznisKlasa;
-	}
-
-	public void setKapacitetBiznisKlasa(int kapacitetBiznisKlasa) {
-		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
-	}
-
-	public int getKapacitetEkonomskaKlasa() {
-		return kapacitetEkonomskaKlasa;
-	}
-
-	public void setKapacitetEkonomskaKlasa(int kapacitetEkonomskaKlasa) {
-		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
+	public void setIdAviona(Long idAviona) {
+		this.idAviona = idAviona;
 	}
 
 	public double getCijenaKarte() {
@@ -155,6 +124,5 @@ public class LetDTO {
 	public void setCijenaKarte(double cijenaKarte) {
 		this.cijenaKarte = cijenaKarte;
 	}
-	
-	
+
 }
