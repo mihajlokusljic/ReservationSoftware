@@ -6,40 +6,58 @@
 		<title>Stranica za registraciju</title>
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/registracija.js"></script>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-   <h2>Registracija</h2>
-   <form id = "registracijaForma">
-   		<table>
-   			<tr>
-   				<td>Ime:</td>
-				<td><input type = "text" id = "ime"/></td>
-   			</tr>
-   			<tr>
-   				<td>Prezime:</td>
-				<td><input type = "text" id = "prezime"/></td>
-   			</tr>
-   			<tr>
-   				<td>Email adresa:</td>
-				<td><input type = "text" id = "email"/></td>
-   			</tr>
-   			<tr>
-   				<td>Broj telefona:</td>
-				<td><input type = "text" id = "brojTelefona"/></td>
-   			</tr>
-   			<tr>
-   				<td>Lozinka:</td>
-				<td><input type = "password" id = "lozinka"/></td>
-   			</tr>
-   			<tr>
-   				<td>Ponovljena lozinka:</td>
-				<td><input type = "password" id = "lozinka2"/></td>
-   			</tr>
-   			<tr>
-   				<td></td>
-				<td><input type="submit" value="Registruj se"/></td>
-   			</tr>
-   		</table>
-   </form>
+<!--    <h2>Registracija</h2> -->
+<!--    <form id = "registracijaForma"> -->
+<!--    		<table> -->
+<!--    			<tr> -->
+<!--    				<td>Ime:</td> -->
+<!-- 				<td><input type = "text" id = "ime"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td>Prezime:</td> -->
+<!-- 				<td><input type = "text" id = "prezime"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td>Email adresa:</td> -->
+<!-- 				<td><input type = "text" id = "email"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td>Broj telefona:</td> -->
+<!-- 				<td><input type = "text" id = "brojTelefona"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td>Lozinka:</td> -->
+<!-- 				<td><input type = "password" id = "lozinka"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td>Ponovljena lozinka:</td> -->
+<!-- 				<td><input type = "password" id = "lozinka2"/></td> -->
+<!--    			</tr> -->
+<!--    			<tr> -->
+<!--    				<td></td> -->
+<!-- 				<td><input type="submit" value="Registruj se"/></td> -->
+<!--    			</tr> -->
+<!--    		</table> -->
+<!--    </form> -->
+<div class="wrapper">
+  <div id="formContent">
+    <h1>Registracija korisnika</h1>
+    <form id = "registracijaForma">
+      <input type="text" id="ime" class="fadeIn_1" name="ime" placeholder="Ime">
+      <input type="text" id="prezime" class="fadeIn_2" name="prezime" placeholder="Prezime">
+      <input type="text" id="email" class="fadeIn_3" name="email" placeholder="Email adresa">
+      <input type="tel" id="brojTelefona" class="fadeIn_4" name="brojTelefona" placeholder="Broj telefona">
+      <input type="password" id="lozinka" class="fadeIn_5" name="lozinka" placeholder="Lozinka">
+      <input type="password" id="lozinka2" class="fadeIn_6" name="lozinka2" placeholder="Ponovi Lozinku">
+      <input type="submit" class="fadeIn_7" value="Registuj se">
+    </form>
+  </div>
+</div>
 </body>
 </html>

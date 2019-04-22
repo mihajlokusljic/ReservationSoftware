@@ -4,6 +4,8 @@ var TOKEN_KEY = 'jwtToken';
 
 $(document).ready(function() {	
 	
+	
+	
 	$("#loginForma").submit(function(e) {
 		e.preventDefault();
 		var username_email = $("#username").val();
