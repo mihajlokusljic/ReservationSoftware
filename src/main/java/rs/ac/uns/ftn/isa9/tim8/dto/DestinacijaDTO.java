@@ -3,15 +3,17 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 public class DestinacijaDTO {
 	protected String naziv;
 	protected String punaAdresa;
+	protected Long idAviokompanije;
 
 	public DestinacijaDTO() {
 		super();
 	}
 
-	public DestinacijaDTO(String naziv, String punaAdresa) {
+	public DestinacijaDTO(String naziv, String punaAdresa, Long idAviokompanije) {
 		super();
 		this.naziv = naziv;
 		this.punaAdresa = punaAdresa;
+		this.idAviokompanije = idAviokompanije;
 	}
 
 	public String getNaziv() {
@@ -28,6 +30,14 @@ public class DestinacijaDTO {
 
 	public void setPunaAdresa(String punaAdresa) {
 		this.punaAdresa = punaAdresa;
+	}
+
+	public Long getIdAviokompanije() {
+		return idAviokompanije;
+	}
+
+	public void setIdAviokompanije(Long idAviokompanije) {
+		this.idAviokompanije = idAviokompanije;
 	}
 
 }

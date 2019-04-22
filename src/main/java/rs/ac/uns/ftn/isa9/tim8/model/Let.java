@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "let")
@@ -53,27 +54,18 @@ public class Let {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "let_presjedanje", joinColumns = @JoinColumn(name = "let_id"), inverseJoinColumns = @JoinColumn(name = "presjedanje_id"))
 	protected Set<Destinacija> presjedanja; // Zato sto ce biti potrebno cuvati i lokacije
-											// (vjerovatno kroz
+											// (vjerovatno kroz Yandex mape)
 	@Column(name = "suma_ocjena", nullable = true)
 	protected int sumaOcjena;
 
 	@Column(name = "broj_ocjena", nullable = true)
 	protected int brojOcjena;
 
-	// Yandex mape
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "avion_id")
 	protected Avion avion;
 
-	@Column(name = "kapacitet_prva_klasa", nullable = true)
-	protected int kapacitetPrvaKlasa;
-
-	@Column(name = "kapacitet_biznis_klasa", nullable = true)
-	protected int kapacitetBiznisKlasa;
-
-	@Column(name = "kapacitet_ekonomska_klasa", nullable = true)
-	protected int kapacitetEkonomskaKlasa;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "let", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
 
@@ -89,7 +81,7 @@ public class Let {
 
 	public Let(String brojLeta, Destinacija polaziste, Destinacija odrediste, Date datumPoletanja, Date datumSletanja,
 			Date duzinaPutovanja, Set<Destinacija> presjedanja, Avion avion, int kapacitetPrvaKlasa,
-			int kapacitetBiznisKlasa, int kapacitetEkonomskaKlasa, ArrayList<RezervacijaSjedista> rezervacije,
+			int kapacitetBiznisKlasa, int kapacitetEkonomskaKlasa, Set<RezervacijaSjedista> rezervacije,
 			double cijenaKarte) {
 		super();
 		this.brojLeta = brojLeta;
@@ -100,10 +92,7 @@ public class Let {
 		this.duzinaPutovanja = duzinaPutovanja;
 		this.presjedanja = presjedanja;
 		this.avion = avion;
-		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
-		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
-		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
-		// this.rezervacije = rezervacije;
+		this.rezervacije = rezervacije;
 		this.cijenaKarte = cijenaKarte;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
@@ -172,38 +161,6 @@ public class Let {
 	public void setAvion(Avion avion) {
 		this.avion = avion;
 	}
-
-	public int getKapacitetPrvaKlasa() {
-		return kapacitetPrvaKlasa;
-	}
-
-	public void setKapacitetPrvaKlasa(int kapacitetPrvaKlasa) {
-		this.kapacitetPrvaKlasa = kapacitetPrvaKlasa;
-	}
-
-	public int getKapacitetBiznisKlasa() {
-		return kapacitetBiznisKlasa;
-	}
-
-	public void setKapacitetBiznisKlasa(int kapacitetBiznisKlasa) {
-		this.kapacitetBiznisKlasa = kapacitetBiznisKlasa;
-	}
-
-	public int getKapacitetEkonomskaKlasa() {
-		return kapacitetEkonomskaKlasa;
-	}
-
-	public void setKapacitetEkonomskaKlasa(int kapacitetEkonomskaKlasa) {
-		this.kapacitetEkonomskaKlasa = kapacitetEkonomskaKlasa;
-	}
-
-//	public ArrayList<RezervacijaSjedista> getRezervacije() {
-//		return rezervacije;
-//	}
-//
-//	public void setRezervacije(ArrayList<RezervacijaSjedista> rezervacije) {
-//		this.rezervacije = rezervacije;
-//	}
 
 	public double getCijenaKarte() {
 		return cijenaKarte;

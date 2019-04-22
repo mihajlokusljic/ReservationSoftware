@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/letovi")
@@ -22,13 +24,17 @@ public class LetoviKontroler {
 	protected AviokompanijaService servis;
 
 	@RequestMapping(value = "/dobaviSve", method = RequestMethod.GET)
-	public ResponseEntity<Collection<LetDTO>> dobaviLetove() {
-		return new ResponseEntity<Collection<LetDTO>>(servis.vratiLetoveOsnovno(servis.dobaviLetove()), HttpStatus.OK);
+	public ResponseEntity<Collection<Let>> dobaviLetove() {
+		return new ResponseEntity<Collection<Let>>(servis.dobaviLetove(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<String> dodajLet(@RequestBody LetDTO noviLet) {
-		return new ResponseEntity<String>(servis.dodajLet(noviLet), HttpStatus.OK);
+	public ResponseEntity<?> dodajLet(@RequestBody LetDTO noviLet) {
+		try {
+		return new ResponseEntity<Let>(servis.dodajLet(noviLet), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 
 }
