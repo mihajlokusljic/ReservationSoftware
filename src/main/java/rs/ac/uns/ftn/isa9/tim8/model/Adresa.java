@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,12 @@ import javax.persistence.Table;
  * Napomena: u tekucoj verziji aplikacije cuva samo punu adresu kao String.*/
 @Entity
 @Table(name = "adresa")
-public class Adresa {
+public class Adresa implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7232709856068011030L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;

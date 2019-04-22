@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,8 +11,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "rent_a_car_servis")
-public class RentACarServis extends Poslovnica {
+public class RentACarServis extends Poslovnica implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5971300871523033595L;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Vozilo> vozila;
 	

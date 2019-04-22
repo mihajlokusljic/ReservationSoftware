@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -89,5 +90,10 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
 	public ResponseEntity<String> dodajFilijalu(@RequestParam("nazivServisa") String nazivServisa, @RequestParam("adresa") String adresa) {
 		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dobaviFilijale", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Filijala>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
+		return new ResponseEntity<Collection<Filijala>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 }

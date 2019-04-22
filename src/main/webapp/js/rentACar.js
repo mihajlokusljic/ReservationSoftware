@@ -177,6 +177,31 @@ $(document).ready(function() {
 	});
 	
 	ucitajRentACarServise();
+	$("#prikaz_filijala").click(function(e) {
+		e.preventDefault();
+		let naziv_servisa = $("#servis_filijala").val();
+		if (naziv_servisa == ''){
+			alert ("Jos uvijek ne postoji nijedan rentACar servis.");
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dobaviFilijale",
+			data: {"nazivServisa" : naziv_servisa},
+			success: function(response) {
+				if(response != null) {
+					alert(response);
+				} else {
+					alert("prikaz");
+					//prikazFilijala(response);
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
 	
 	$("#dodavanje_filijale").submit(function(e) {
 		e.preventDefault();
@@ -428,6 +453,17 @@ function dodajServiseSelect(servisi){
 	select_tag.empty();
 	$.each(servisi, function(i,servis){
 		select_tag.append("<option value=\""+servis["naziv"] + "\">" +servis["naziv"]+"</option>");
+	});
+}
+
+function prikazFilijala(filijale){
+	let div_ = $("#div_tabela_filijala");
+	div_.empty();
+	let tabela = $('<table border = "1"></table>');
+	$.each(filijale, function(i,filijala){
+		tabela.append("<tr><td>" + filijala.adresa +  "</td>+" +
+		 '<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjeni" id="' + i + '">Izmjeni</a></td>' + 		
+		"</tr>" )
 	});
 }
 function prikazProfila(servis){
