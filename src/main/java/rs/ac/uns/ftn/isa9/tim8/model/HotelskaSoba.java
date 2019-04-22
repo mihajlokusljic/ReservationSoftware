@@ -20,8 +20,8 @@ public class HotelskaSoba {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long Id;
-
+	protected Long Id;
+	
 	@Column(name = "broj_sobe", nullable = false)
 	protected int brojSobe;
 
@@ -57,8 +57,7 @@ public class HotelskaSoba {
 		super();
 	}
 
-	public HotelskaSoba(int brojSobe, int brojKreveta, int sprat, int vrsta, int kolona, double cijena,
-			Set<RezervacijaSobe> rezervacije, Hotel hotel) {
+	public HotelskaSoba(int brojSobe, int brojKreveta, int sprat, int vrsta, int kolona, double cijena, Hotel hotel) {
 		super();
 		this.brojSobe = brojSobe;
 		this.brojKreveta = brojKreveta;
@@ -66,10 +65,24 @@ public class HotelskaSoba {
 		this.vrsta = vrsta;
 		this.kolona = kolona;
 		this.cijena = cijena;
-		// this.rezervacije = rezervacije;
 		this.hotel = hotel;
 		this.sumaOcjena = 0;
 		this.brojOcjena = 0;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+		if(obj == this) {
+			return true;
+		}
+		if(obj instanceof HotelskaSoba) {
+			HotelskaSoba other = (HotelskaSoba) obj;
+			return this.Id.equals(other.Id);
+		}
+		return false;
 	}
 
 	public int getBrojSobe() {
@@ -151,12 +164,14 @@ public class HotelskaSoba {
 		this.brojOcjena = brojOcjena;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		Id = id;
 	}
+
+
 
 }

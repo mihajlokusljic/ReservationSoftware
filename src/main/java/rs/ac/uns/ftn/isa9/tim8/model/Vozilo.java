@@ -188,7 +188,6 @@ public class Vozilo {
 		this.sumaOcjena = sumaOcjena;
 	}
 	
-	@JsonIgnore
 	public Long getId() {
 		return Id;
 	}

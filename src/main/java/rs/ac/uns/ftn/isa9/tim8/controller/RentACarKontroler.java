@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -31,8 +33,8 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/sviServisi", method = RequestMethod.GET)
-	public ResponseEntity<Collection<RentACarServis>> racServisi() {
-		return new ResponseEntity<Collection<RentACarServis>>(servis.dobaviRentACarServise(),HttpStatus.OK);
+	public ResponseEntity<Collection<Poslovnica>> racServisi() {
+		return new ResponseEntity<Collection<Poslovnica>>(servis.dobaviRentACarServise(),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/dodajServis", method = RequestMethod.POST)
@@ -80,5 +82,29 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.ukloniVozilo(idVoz),HttpStatus.OK);
 	}
 	
-
+	@RequestMapping(value = "/izmjeniVozilo/{voziloId}", method = RequestMethod.POST)
+	public ResponseEntity<String> izmjeniVozilo(@PathVariable("voziloId") String voziloId, @RequestBody VoziloDTO vozilo) {
+		vozilo.setId(Long.parseLong(voziloId));
+		return new ResponseEntity<String>(servis.izmjeniVozilo(vozilo),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> dodajFilijalu(@RequestParam("nazivServisa") String nazivServisa, @RequestParam("adresa") String adresa) {
+		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dobaviFilijale", method = RequestMethod.POST)
+	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
+		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/ukloniFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> ukloniFilijalu(@RequestParam("idFilijale") String idFilijale) {
+		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/izmjeniFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> izmjeniFilijalu(@RequestParam("idFilijale") String idFilijale, @RequestParam("novaLokacija") String novaLokacija) {
+		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	}
 }
