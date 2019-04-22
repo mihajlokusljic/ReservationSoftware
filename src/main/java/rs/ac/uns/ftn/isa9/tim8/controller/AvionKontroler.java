@@ -58,6 +58,11 @@ public class AvionKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/ukloniSjediste/{idSjedista}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> ukloniSjediste(@PathVariable("idSjedista") Long idSjedista) {
+		return new ResponseEntity<String>(servis.ukloniSjediste(idSjedista), HttpStatus.OK);
+	}
+	
 }
 
 
