@@ -97,4 +97,9 @@ public class RentACarKontroler {
 	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/ukloniFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> ukloniFilijalu(@RequestParam("idFilijale") String idFilijale) {
+		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
+	}
 }

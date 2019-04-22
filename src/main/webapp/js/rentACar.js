@@ -220,7 +220,7 @@ $(document).ready(function() {
 				if(response != '') {
 					alert(response);
 				} else {
-					prikazFilijalaOdabranogServisa(naziv_servisa);
+					prikazFilijalaOdabranogServisa();
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -459,14 +459,29 @@ function prikazFilijala(filijale){
 	let tabela = $('<table border = "1"></table>');
 	tabela.append('<tr><th>Puna adresa</th><th></th><th></th></tr>');
 	$.each(filijale, function(i,filijala){
-		tabela.append("<tr><td>" + filijala.punaAdresa +  "</td>+" +
-		 '<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjeni" id="' + i + '">Izmjeni</a></td>' + 		
+
+		tabela.append("<tr><td>" + '<input type = "text" id = "adresa_filijale" value = "' + filijala.punaAdresa +  "\"/></td>+" +
+		 '<td><a href = "javascript:void(0)" class = "uklonif" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjenif" id="' + i + '">Izmjeni lokaciju</a></td>' + 		
 		"</tr>" )
 	});
-	//div_.appned("<h3>Adrese filijala sistema</h3>");
+	div_.append("<h3>Adrese filijala sistema</h3>");
 	div_.append(tabela);
+	$(".uklonif").click(function(e){
+		let filijala = filijale[e.target.id];
+		$.ajax({
+			type : "POST",
+			url : "../rentACar/ukloniFilijalu",
+			data: {"idFilijale" : filijala.id},
+			success : function(response){
+				prikazFilijalaOdabranogServisa();			
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
 }
-function prikazFilijalaOdabranogServisa(servis){
+function prikazFilijalaOdabranogServisa(){
 		let naziv_servisa_ = $("#servis_filijala").val();
 		if (naziv_servisa_ == ''){
 			alert ("Jos uvijek ne postoji nijedan rentACar servis.");

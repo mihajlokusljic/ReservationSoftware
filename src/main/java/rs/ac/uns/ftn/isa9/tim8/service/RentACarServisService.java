@@ -219,4 +219,17 @@ public class RentACarServisService {
 	
 		return filijaleDTO;
 	}
+	
+	public String ukloniFilijalu(Long idFilijale) {
+		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
+		
+		if (!pretragaFilijale.isPresent()) {
+			return "Nevalidan id";
+		}
+		
+		Filijala f = pretragaFilijale.get();
+		
+		filijalaRepository.delete(f);
+		return null;
+	}
 }
