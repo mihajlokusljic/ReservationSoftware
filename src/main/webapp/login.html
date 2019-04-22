@@ -7,28 +7,24 @@
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="js/auth.js"></script>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="css/login.css">
 		
 </head>
 <body>
-<h2>Prijava</h2>
-   <form id = "loginForma">
-   		<table>
-   			
-   			<tr>
-   				<td>Email:</td>
-				<td><input type = "text" id = "username"/></td>
-   			</tr>
-   			
-   			<tr>
-   				<td>Lozinka:</td>
-				<td><input type = "password" id = "lozinka"/></td>
-   			</tr>
-   			
-   			<tr>
-   				<td></td>
-				<td><input type="submit" value="Prijavi se"/></td>
-   			</tr>
-   		</table>
-   </form>
+<div class="wrapper">
+  <div id="formContent">
+    <h1>Prijava korisnika</h1>
+    <form id = "loginForma">
+      <input type="text" id="username" class="fadeIn_2" name="username" placeholder="Email adresa">
+      <input type="password" id="lozinka" class="fadeIn_3" name="login" placeholder="Lozinka">
+      <input type="submit" class="fadeIn_4" value="Prijavi se">
+    </form>
+	<div id="formFooter">
+      <a href="registracija.html" id = "registracija_href">Registruj se</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>

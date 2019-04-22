@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
+import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -106,5 +110,13 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/izmjeniFilijalu", method = RequestMethod.POST)
 	public ResponseEntity<String> izmjeniFilijalu(@RequestParam("idFilijale") String idFilijale, @RequestParam("novaLokacija") String novaLokacija) {
 		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/podaciOServisu", method = RequestMethod.GET)
+	public ResponseEntity<Poslovnica> podaciOServisu() {
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Poslovnica>(
+				new Poslovnica(admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
+				HttpStatus.OK);
 	}
 }
