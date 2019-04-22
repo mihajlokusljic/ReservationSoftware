@@ -27,24 +27,20 @@ $(document).ready(function() {
 					setJwtToken(TOKEN_KEY, response.accessToken);			
 					if (response.tipKorisnika == "RegistrovanKorisnik"){
 						alert ("Prijavili ste se kao registrovani korisnik.");
-						return;
 					}
 					else if (response.tipKorisnika == "AdministratorHotela"){
 						alert ("Prijavili ste se kao administrator hotela.");
-						return;
 					}
 					else if (response.tipKorisnika == "AdministratorRentACar"){
 						alert ("Prijavili ste se kao administrator rent-a-car-a.");
-						return;
 					}
 					else if (response.tipKorisnika == "AdministratorAviokompanije"){
 						alert ("Prijavili ste se kao administrator aviokompanije.");
-						return;
 					}
 					else{
 						alert ("Prijavili ste se kao sistemski administrator.");
-						return;
 					}
+					window.location.replace(response.redirectionUrl);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
