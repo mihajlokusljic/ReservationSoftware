@@ -454,13 +454,14 @@ function dodajServiseSelect(servisi){
 }
 
 function prikazFilijala(filijale){
+	//e.preventDefault();
 	let div_ = $("#div_tabela_filijala");
 	div_.empty();
 	let tabela = $('<table border = "1"></table>');
 	tabela.append('<tr><th>Puna adresa</th><th></th><th></th></tr>');
 	$.each(filijale, function(i,filijala){
 
-		tabela.append("<tr><td>" + '<input type = "text" id = "adresa_filijale" value = "' + filijala.punaAdresa +  "\"/></td>+" +
+		tabela.append("<tr><td>" + '<input type = "text" id = "adresa_filijale_nova" value = "' + filijala.punaAdresa +  '" /></td>' +
 		 '<td><a href = "javascript:void(0)" class = "uklonif" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjenif" id="' + i + '">Izmjeni lokaciju</a></td>' + 		
 		"</tr>" )
 	});
@@ -474,6 +475,34 @@ function prikazFilijala(filijale){
 			data: {"idFilijale" : filijala.id},
 			success : function(response){
 				prikazFilijalaOdabranogServisa();			
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	$(".izmjenif").click(function(e){
+		let filijala = filijale[e.target.id];
+		let nova_lokacija = $("#adresa_filijale_nova").val();
+		if (nova_lokacija == ''){
+			alert("Ne mozete unijeti praznu lokaciju.");
+			return;
+		}
+		$.ajax({
+			type : "POST",
+			url : "../rentACar/izmjeniFilijalu",
+			data: {"idFilijale" : filijala.id, "novaLokacija" : nova_lokacija},
+			success : function(response){
+				if (response != ''){
+					alert(response);
+					prikazFilijalaOdabranogServisa();				
+
+				}
+				else{
+					alert("Uspjesno ste izmjenili adresu filijale");
+					prikazFilijalaOdabranogServisa();				
+				}
+				
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX error: " + errorThrown);

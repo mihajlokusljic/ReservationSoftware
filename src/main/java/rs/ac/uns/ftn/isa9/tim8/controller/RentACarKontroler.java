@@ -102,4 +102,9 @@ public class RentACarKontroler {
 	public ResponseEntity<String> ukloniFilijalu(@RequestParam("idFilijale") String idFilijale) {
 		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/izmjeniFilijalu", method = RequestMethod.POST)
+	public ResponseEntity<String> izmjeniFilijalu(@RequestParam("idFilijale") String idFilijale, @RequestParam("novaLokacija") String novaLokacija) {
+		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	}
 }

@@ -232,4 +232,22 @@ public class RentACarServisService {
 		filijalaRepository.delete(f);
 		return null;
 	}
+	
+	public String izmjeniFilijalu( Long idFilijale, String novLokacija) {
+		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
+		
+		if (!pretragaFilijale.isPresent()) {
+			return "Nevalidan id";
+		}
+		
+		Filijala f = pretragaFilijale.get();
+		
+		Adresa a = adresaRepository.findOneByPunaAdresa(novLokacija);
+		if (a != null) {
+			return "Zauzeta adresa";
+		}
+		f.getAdresa().setPunaAdresa(novLokacija);
+		filijalaRepository.save(f);
+		return null;
+	}
 }
