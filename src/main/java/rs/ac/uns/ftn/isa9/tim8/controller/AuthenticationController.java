@@ -141,21 +141,27 @@ public class AuthenticationController {
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 		TipKorisnika tipKorisnika = null;
+		String redirectionURL = "#";
 		
 		if (user instanceof RegistrovanKorisnik) {
 			tipKorisnika = TipKorisnika.RegistrovanKorisnik;
+			redirectionURL = "../index.html";
 		} else if (user instanceof AdministratorHotela) {
 			tipKorisnika = TipKorisnika.AdministratorHotela;
+			redirectionURL = "../AdministracijaHotela.html";
 		} else if (user instanceof AdministratorRentACar) {
 			tipKorisnika = TipKorisnika.AdministratorRentACar;
+			redirectionURL = "../profilRentACarServisa.html";
 		} else if (user instanceof AdministratorAviokompanije) {
 			tipKorisnika = TipKorisnika.AdministratorAviokompanije;
+			redirectionURL = "../administratorAviokompanije/administratorAviokompanije.html";
 		} else {
 			tipKorisnika = TipKorisnika.AdministratorSistema;
+			redirectionURL = "../administracijaSistema.html";
 		}
 
 		// Vrati token kao odgovor na uspesno autentifikaciju
-		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika), HttpStatus.OK);
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika, redirectionURL), HttpStatus.OK);
 	}
 
 
