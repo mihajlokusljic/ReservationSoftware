@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.util.Collection;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,20 +62,16 @@ public class AvionKontroler {
 		return new ResponseEntity<String>(servis.ukloniSjediste(idSjedista), HttpStatus.OK);
 	}
 	
-}
-
-
-/*	
-	@RequestMapping(value = "/dobaviSve", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Aviokompanija>> dobaviAviokompanije() {
-		return new ResponseEntity<Collection<Aviokompanija>>(servis.dobaviAviokompanije(),HttpStatus.OK);
+	
+	// azurirajSjediste(Long idSjedista, SjedisteDTO sjediste)
+	@RequestMapping(value = "/azurirajSjediste/{idSjedista}", method = RequestMethod.PUT)
+	public ResponseEntity<?> azurirajSjediste(@PathVariable("idSjedista") Long idSjedista, @RequestBody SjedisteDTO sjediste) {
+		try {
+			return new ResponseEntity<Sjediste>(servis.azurirajSjediste(idSjedista, sjediste), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
-	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<String> dodajAviokompaniju(@RequestBody Aviokompanija novaAviokompanija) {
-		return new ResponseEntity<String>(servis.dodajAviokompaniju(novaAviokompanija),HttpStatus.OK);
-	}
-
 }
-
- */
