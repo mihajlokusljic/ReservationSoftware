@@ -5,11 +5,13 @@ public class UserTokenState {
     private String accessToken;
     private Long expiresIn;
     private TipKorisnika tipKorisnika;
+    private String redirectionUrl;
 
     public UserTokenState() {
         this.accessToken = null;
         this.expiresIn = null;
         this.tipKorisnika = null;
+        this.redirectionUrl = "#";
     }
 
     public UserTokenState(String accessToken, long expiresIn, TipKorisnika tipKor) {
@@ -17,8 +19,24 @@ public class UserTokenState {
         this.expiresIn = expiresIn;
         this.tipKorisnika = tipKor;
     }
+    
+    public UserTokenState(String accessToken, long expiresIn, TipKorisnika tipKorisnika, String redirectionUrl) {
+		super();
+		this.accessToken = accessToken;
+		this.expiresIn = expiresIn;
+		this.tipKorisnika = tipKorisnika;
+		this.redirectionUrl = redirectionUrl;
+	}
 
-    public String getAccessToken() {
+	public String getRedirectionUrl() {
+		return redirectionUrl;
+	}
+
+	public void setRedirectionUrl(String redirectionUrl) {
+		this.redirectionUrl = redirectionUrl;
+	}
+
+	public String getAccessToken() {
         return accessToken;
     }
 
