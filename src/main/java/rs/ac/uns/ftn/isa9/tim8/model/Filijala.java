@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "filijala")
 public class Filijala implements Serializable {
@@ -56,7 +58,7 @@ public class Filijala implements Serializable {
 	}
 
 	public void setId(Long id) {
-		this.Id = id;
+		Id = id;
 	}
 
 	public RentACarServis getRentACar() {
@@ -65,6 +67,10 @@ public class Filijala implements Serializable {
 
 	public void setRentACar(RentACarServis rentACar) {
 		this.rentACar = rentACar;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

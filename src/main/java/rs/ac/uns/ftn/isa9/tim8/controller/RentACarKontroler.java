@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
@@ -32,8 +33,8 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/sviServisi", method = RequestMethod.GET)
-	public ResponseEntity<Collection<RentACarServis>> racServisi() {
-		return new ResponseEntity<Collection<RentACarServis>>(servis.dobaviRentACarServise(),HttpStatus.OK);
+	public ResponseEntity<Collection<Poslovnica>> racServisi() {
+		return new ResponseEntity<Collection<Poslovnica>>(servis.dobaviRentACarServise(),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/dodajServis", method = RequestMethod.POST)
@@ -92,8 +93,8 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/dobaviFilijale", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Filijala>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
-		return new ResponseEntity<Collection<Filijala>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
+	@RequestMapping(value = "/dobaviFilijale", method = RequestMethod.POST)
+	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
+		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 }

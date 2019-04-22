@@ -179,22 +179,17 @@ $(document).ready(function() {
 	ucitajRentACarServise();
 	$("#prikaz_filijala").click(function(e) {
 		e.preventDefault();
-		let naziv_servisa = $("#servis_filijala").val();
-		if (naziv_servisa == ''){
+		let naziv_servisa_ = $("#servis_filijala").val();
+		if (naziv_servisa_ == ''){
 			alert ("Jos uvijek ne postoji nijedan rentACar servis.");
 			return;
 		}
 		$.ajax({
 			type: "POST",
 			url: "../rentACar/dobaviFilijale",
-			data: {"nazivServisa" : naziv_servisa},
+			data: { "nazivServisa" : naziv_servisa_ },
 			success: function(response) {
-				if(response != null) {
-					alert(response);
-				} else {
-					alert("prikaz");
-					//prikazFilijala(response);
-				}
+				prikazFilijala(response);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX error: " + errorThrown);
@@ -225,7 +220,7 @@ $(document).ready(function() {
 				if(response != '') {
 					alert(response);
 				} else {
-					alert("Uspjesno dodata adresa");
+					prikazFilijalaOdabranogServisa(naziv_servisa);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -449,6 +444,8 @@ function ucitajRentACarServise(){
 }
 
 function dodajServiseSelect(servisi){
+	let div_ = $("#div_tabela_filijala");
+	div_.empty();
 	let select_tag = $("#servis_filijala");
 	select_tag.empty();
 	$.each(servisi, function(i,servis){
@@ -460,11 +457,34 @@ function prikazFilijala(filijale){
 	let div_ = $("#div_tabela_filijala");
 	div_.empty();
 	let tabela = $('<table border = "1"></table>');
+	tabela.append('<tr><th>Puna adresa</th><th></th><th></th></tr>');
 	$.each(filijale, function(i,filijala){
-		tabela.append("<tr><td>" + filijala.adresa +  "</td>+" +
+		tabela.append("<tr><td>" + filijala.punaAdresa +  "</td>+" +
 		 '<td><a href = "javascript:void(0)" class = "ukloni" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjeni" id="' + i + '">Izmjeni</a></td>' + 		
 		"</tr>" )
 	});
+	//div_.appned("<h3>Adrese filijala sistema</h3>");
+	div_.append(tabela);
+}
+function prikazFilijalaOdabranogServisa(servis){
+		let naziv_servisa_ = $("#servis_filijala").val();
+		if (naziv_servisa_ == ''){
+			alert ("Jos uvijek ne postoji nijedan rentACar servis.");
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dobaviFilijale",
+			data: { "nazivServisa" : naziv_servisa_ },
+			success: function(response) {
+				prikazFilijala(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	
 }
 function prikazProfila(servis){
 	let div_ = $(".prikaz_izmjene");

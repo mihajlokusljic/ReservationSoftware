@@ -10,9 +10,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
+import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -40,8 +42,19 @@ public class RentACarServisService {
 	@Autowired
 	protected FilijalaRepository filijalaRepository;
 	
-	public Collection<RentACarServis> dobaviRentACarServise() {
-		return rentACarRepository.findAll();
+	public Collection<Poslovnica> dobaviRentACarServise() {
+		Collection<RentACarServis> rentACarLista = rentACarRepository.findAll();
+		Collection<Poslovnica> servisi = new ArrayList<Poslovnica>();
+		if (rentACarLista.isEmpty()) {
+			return null;
+		}
+		for( RentACarServis r : rentACarLista) {
+			Poslovnica p = new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
+			p.setId(r.getId());
+			servisi.add(p);
+		}
+
+		return servisi;
 	}
 	
 	public String dodajRentACarServis(RentACarServis noviServis) {
@@ -191,9 +204,19 @@ public class RentACarServisService {
 		return null;
 	}
 	
-	public Collection<Filijala> vratiFilijale(String nazivServisa) {
+	public Collection<FilijalaDTO> vratiFilijale(String nazivServisa) {
 		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
-		return rentACar.getFilijale();
-		//Collection<Filijala> fililjale = filijalaRepository.findAllByRentACar(rentACar);
+
+		Collection<FilijalaDTO> filijaleDTO = new ArrayList<FilijalaDTO>();
+		Collection<Filijala> filijale = rentACar.getFilijale();
+		if (filijale.isEmpty()) {
+			return null;
+		}
+		for(Filijala f : filijale ) {
+			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId()));
+		}
+
+	
+		return filijaleDTO;
 	}
 }
