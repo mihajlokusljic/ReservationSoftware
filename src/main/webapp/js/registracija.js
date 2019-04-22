@@ -48,7 +48,8 @@ $(document).ready(function() {
 			data: JSON.stringify(korisnik),
 			success: function(response) {
 				if(response == '') {
-					alert("Uspjesno ste se registrovali")
+					alert("Uspjesno ste se registrovali");
+					window.location.replace("../login.html");
 				} else {
 					alert(response);
 				}
