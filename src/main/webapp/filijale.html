@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<title>Filijale</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/rentACar.js"></script>
+		<style>
+			.column {
+			  float: left;
+			  width: 50%;
+			  padding: 30px;
+			  height: 300px; 
+			}
+		</style>
+	</head>
+	<body>
+	<div class = "column">
+		<h1>Filijale servisa</h1>
+		<p>Rent-a-car servis:</p> <select id = "servis_filijala"></select>
+		<input id = "prikaz_filijala" type="button" value="Prikazi"/><br>
+		<br>
+		<h2>Dodavanje nove filijale</h2>
+		<form id = "dodavanje_filijale">
+			<p>Adresa:</p> <input type = "text" id = "adresa_filijale" />
+			<input type ="submit" value = "Dodaj" />
+		</form>
+	</div>
+	<div class = "column" id = "div_tabela_filijala">
+		</div>
+	</body>
+</html>

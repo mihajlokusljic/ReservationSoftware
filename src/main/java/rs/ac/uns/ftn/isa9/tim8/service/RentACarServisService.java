@@ -2,18 +2,24 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
+import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.FilijalaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaVozilaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.VoziloRepository;
@@ -32,9 +38,23 @@ public class RentACarServisService {
 	
 	@Autowired
 	protected RezervacijaVozilaRepository rezervacijaVozilaRepository;
-		
-	public Collection<RentACarServis> dobaviRentACarServise() {
-		return rentACarRepository.findAll();
+	
+	@Autowired
+	protected FilijalaRepository filijalaRepository;
+	
+	public Collection<Poslovnica> dobaviRentACarServise() {
+		Collection<RentACarServis> rentACarLista = rentACarRepository.findAll();
+		Collection<Poslovnica> servisi = new ArrayList<Poslovnica>();
+		if (rentACarLista.isEmpty()) {
+			return null;
+		}
+		for( RentACarServis r : rentACarLista) {
+			Poslovnica p = new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
+			p.setId(r.getId());
+			servisi.add(p);
+		}
+
+		return servisi;
 	}
 	
 	public String dodajRentACarServis(RentACarServis noviServis) {
@@ -48,6 +68,8 @@ public class RentACarServisService {
 			
 			return "Zauzeta adresa";
 		}
+		Set<Filijala> filijale = new HashSet<Filijala>();
+		noviServis.setFilijale(filijale);
 		noviServis.setId(null);
 		rentACarRepository.save(noviServis);
 		return null;
@@ -165,4 +187,67 @@ public class RentACarServisService {
 		return null;
 	}
 	
+	public String dodajFilijalu(String nazivServisa, String adresa) {
+		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
+		Adresa adresaPostoji = adresaRepository.findOneByPunaAdresa(adresa);
+		if (adresaPostoji != null) {
+			
+			return "Zauzeta adresa";
+		}
+		Adresa a = new Adresa();
+		a.setPunaAdresa(adresa);
+		Filijala f = new Filijala();
+		f.setAdresa(a);
+		f.setRentACar(rentACar);
+		rentACar.getFilijale().add(f);
+		rentACarRepository.save(rentACar);
+		return null;
+	}
+	
+	public Collection<FilijalaDTO> vratiFilijale(String nazivServisa) {
+		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
+
+		Collection<FilijalaDTO> filijaleDTO = new ArrayList<FilijalaDTO>();
+		Collection<Filijala> filijale = rentACar.getFilijale();
+		if (filijale.isEmpty()) {
+			return null;
+		}
+		for(Filijala f : filijale ) {
+			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId()));
+		}
+
+	
+		return filijaleDTO;
+	}
+	
+	public String ukloniFilijalu(Long idFilijale) {
+		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
+		
+		if (!pretragaFilijale.isPresent()) {
+			return "Nevalidan id";
+		}
+		
+		Filijala f = pretragaFilijale.get();
+		
+		filijalaRepository.delete(f);
+		return null;
+	}
+	
+	public String izmjeniFilijalu( Long idFilijale, String novLokacija) {
+		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
+		
+		if (!pretragaFilijale.isPresent()) {
+			return "Nevalidan id";
+		}
+		
+		Filijala f = pretragaFilijale.get();
+		
+		Adresa a = adresaRepository.findOneByPunaAdresa(novLokacija);
+		if (a != null) {
+			return "Zauzeta adresa";
+		}
+		f.getAdresa().setPunaAdresa(novLokacija);
+		filijalaRepository.save(f);
+		return null;
+	}
 }

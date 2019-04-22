@@ -176,6 +176,60 @@ $(document).ready(function() {
 		
 	});
 	
+	ucitajRentACarServise();
+	$("#prikaz_filijala").click(function(e) {
+		e.preventDefault();
+		let naziv_servisa_ = $("#servis_filijala").val();
+		if (naziv_servisa_ == ''){
+			alert ("Jos uvijek ne postoji nijedan rentACar servis.");
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dobaviFilijale",
+			data: { "nazivServisa" : naziv_servisa_ },
+			success: function(response) {
+				prikazFilijala(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
+	$("#dodavanje_filijale").submit(function(e) {
+		e.preventDefault();
+		let naziv_servisa = $("#servis_filijala").val();
+		if (naziv_servisa == ''){
+			alert ("Niste odabrali servis.");
+			return;
+		}
+
+		let adresa = $("#adresa_filijale").val();
+		if (adresa == ''){
+			alert ("Niste unijeli adresu.");
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dodajFilijalu",
+			data: {"nazivServisa" : naziv_servisa, "adresa" : adresa},
+			success: function(response) {
+				if(response != '') {
+					alert(response);
+				} else {
+					prikazFilijalaOdabranogServisa();
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
 	
 });
 
@@ -374,6 +428,108 @@ function prikaziVozila(vozila){
 
 }
 
+function ucitajRentACarServise(){
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/sviServisi",
+		contentType:"application/json; charset=utf-8",
+		dataType : "json",
+		success : function(response){
+			dodajServiseSelect(response);
+		},
+		error: function(){
+			alert("error");
+		}
+	});
+}
+
+function dodajServiseSelect(servisi){
+	let div_ = $("#div_tabela_filijala");
+	div_.empty();
+	let select_tag = $("#servis_filijala");
+	select_tag.empty();
+	$.each(servisi, function(i,servis){
+		select_tag.append("<option value=\""+servis["naziv"] + "\">" +servis["naziv"]+"</option>");
+	});
+}
+
+function prikazFilijala(filijale){
+	//e.preventDefault();
+	let div_ = $("#div_tabela_filijala");
+	div_.empty();
+	let tabela = $('<table border = "1"></table>');
+	tabela.append('<tr><th>Puna adresa</th><th></th><th></th></tr>');
+	$.each(filijale, function(i,filijala){
+
+		tabela.append("<tr><td>" + '<input type = "text" id = "adresa_filijale_nova" value = "' + filijala.punaAdresa +  '" /></td>' +
+		 '<td><a href = "javascript:void(0)" class = "uklonif" id="' + i + '">Ukloni</a></td>' +  '<td><a href = "javascript:void(0)" class = "izmjenif" id="' + i + '">Izmjeni lokaciju</a></td>' + 		
+		"</tr>" )
+	});
+	div_.append("<h3>Adrese filijala sistema</h3>");
+	div_.append(tabela);
+	$(".uklonif").click(function(e){
+		let filijala = filijale[e.target.id];
+		$.ajax({
+			type : "POST",
+			url : "../rentACar/ukloniFilijalu",
+			data: {"idFilijale" : filijala.id},
+			success : function(response){
+				prikazFilijalaOdabranogServisa();			
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	$(".izmjenif").click(function(e){
+		let filijala = filijale[e.target.id];
+		let nova_lokacija = $("#adresa_filijale_nova").val();
+		if (nova_lokacija == ''){
+			alert("Ne mozete unijeti praznu lokaciju.");
+			return;
+		}
+		$.ajax({
+			type : "POST",
+			url : "../rentACar/izmjeniFilijalu",
+			data: {"idFilijale" : filijala.id, "novaLokacija" : nova_lokacija},
+			success : function(response){
+				if (response != ''){
+					alert(response);
+					prikazFilijalaOdabranogServisa();				
+
+				}
+				else{
+					alert("Uspjesno ste izmjenili adresu filijale");
+					prikazFilijalaOdabranogServisa();				
+				}
+				
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+}
+function prikazFilijalaOdabranogServisa(){
+		let naziv_servisa_ = $("#servis_filijala").val();
+		if (naziv_servisa_ == ''){
+			alert ("Jos uvijek ne postoji nijedan rentACar servis.");
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/dobaviFilijale",
+			data: { "nazivServisa" : naziv_servisa_ },
+			success: function(response) {
+				prikazFilijala(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	
+}
 function prikazProfila(servis){
 	let div_ = $(".prikaz_izmjene");
 	div_.empty();
