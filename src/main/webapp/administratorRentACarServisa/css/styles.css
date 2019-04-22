@@ -1,0 +1,15 @@
+p.navbar-brand {
+	font-size:40px;
+}
+
+.column {
+			  float: left;
+			  padding: 40px;
+			  height: 300px; 			  
+			}
+#tab-filijala, #tab-dodajf {
+			  width: 50%;		
+			}
+td,th {
+    text-align: center;
+}
