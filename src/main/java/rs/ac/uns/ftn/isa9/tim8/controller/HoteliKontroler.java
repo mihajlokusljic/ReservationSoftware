@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +32,7 @@ public class HoteliKontroler {
 	}
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<String> dodajHotel(@RequestBody Hotel noviHotel) {
 		noviHotel.setSobe(new HashSet<HotelskaSoba>());
 		return new ResponseEntity<String>(servis.dodajHotel(noviHotel),HttpStatus.OK);
