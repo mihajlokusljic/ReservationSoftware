@@ -34,7 +34,7 @@ $(document).ready(function() {
 						alert ("Prijavili ste se kao administrator hotela.");
 					}
 					else if (response.tipKorisnika == "AdministratorRentACar"){
-						alert ("Prijavili ste se kao administrator rent-a-car-a.");
+			//			alert ("Prijavili ste se kao administrator rent-a-car-a.");
 					}
 					else if (response.tipKorisnika == "AdministratorAviokompanije"){
 						alert ("Prijavili ste se kao administrator aviokompanije.");

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa9.tim8.dto.DestinacijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.service.DestinacijaService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/destinacije")
@@ -26,7 +27,11 @@ public class DestinacijeKontroler {
 	}
 
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<Destinacija> dodajDestinaciju(@RequestBody DestinacijaDTO novaDestinacija) {
+	public ResponseEntity<?> dodajDestinaciju(@RequestBody DestinacijaDTO novaDestinacija) {
+		try {
 		return new ResponseEntity<Destinacija>(servis.dodajDestinaciju(novaDestinacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 }
