@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,12 +50,15 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/dodajVozilo/{imeRacServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> dodajNovoVozilo(@PathVariable("imeRacServisa") String nazivServisa,@RequestBody Vozilo vozilo) {
 		return new ResponseEntity<String>(servis.dodajVozilo(nazivServisa, vozilo),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/svaVozilaServisa", method = RequestMethod.POST)
-	public ResponseEntity<?> svaVozila(@RequestParam("nazivServisa") String nazivServisa){
+	@RequestMapping(value = "/svaVozilaServisa/{nazivServisa}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> svaVozila(@PathVariable("nazivServisa") String nazivServisa){
+		System.out.println(nazivServisa);
 		if (servis.servisPostoji(nazivServisa) == false) {
 			return new ResponseEntity<String>("Servis koji ste unijeli ne postoji.",HttpStatus.OK);
 		}
@@ -62,8 +66,9 @@ public class RentACarKontroler {
 		
 	}
 	
-	@RequestMapping(value = "/prikazServisa", method = RequestMethod.POST)
-	public ResponseEntity<Poslovnica> vratiServis(@RequestParam("nazivServisa") String nazivServisa) {
+	@RequestMapping(value = "/prikazServisa/{nazivServisa}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<Poslovnica> vratiServis(@PathVariable("nazivServisa") String nazivServisa) {
 		
 		RentACarServis racS = servis.pronadjiRentACarServis(nazivServisa);
 		if (racS != null) {
@@ -78,43 +83,50 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/izmjeniProfil", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> izmjeniServis(@RequestBody RentACarServis rServis) {
 		return new ResponseEntity<String>(servis.izmjeniRentACarServis(rServis),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/ukloniVozilo", method = RequestMethod.POST)
-	public ResponseEntity<String> ukloniVozilo(@RequestParam("idVozila") String idVozila) {
+	@RequestMapping(value = "/ukloniVozilo/{idVozila}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<String> ukloniVozilo(@PathVariable("idVozila") String idVozila) {
 		Long idVoz = Long.parseLong(idVozila);
 		return new ResponseEntity<String>(servis.ukloniVozilo(idVoz),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/izmjeniVozilo/{voziloId}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> izmjeniVozilo(@PathVariable("voziloId") String voziloId, @RequestBody VoziloDTO vozilo) {
 		vozilo.setId(Long.parseLong(voziloId));
 		return new ResponseEntity<String>(servis.izmjeniVozilo(vozilo),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
-	public ResponseEntity<String> dodajFilijalu(@RequestParam("nazivServisa") String nazivServisa, @RequestParam("adresa") String adresa) {
+	@RequestMapping(value = "/dodajFilijalu/{nazivServisa}/{adresa}", method = RequestMethod.GET)
+	public ResponseEntity<String> dodajFilijalu(@PathVariable("nazivServisa") String nazivServisa, @PathVariable("adresa") String adresa) {
 		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/dobaviFilijale", method = RequestMethod.POST)
-	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@RequestParam("nazivServisa") String nazivServisa) {
+	@RequestMapping(value = "/dobaviFilijale/{nazivServisa}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/ukloniFilijalu", method = RequestMethod.POST)
-	public ResponseEntity<String> ukloniFilijalu(@RequestParam("idFilijale") String idFilijale) {
+	@RequestMapping(value = "/ukloniFilijalu/{idFilijale}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<String> ukloniFilijalu(@PathVariable("idFilijale") String idFilijale) {
 		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmjeniFilijalu", method = RequestMethod.POST)
-	public ResponseEntity<String> izmjeniFilijalu(@RequestParam("idFilijale") String idFilijale, @RequestParam("novaLokacija") String novaLokacija) {
+	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, @PathVariable("novaLokacija") String novaLokacija) {
 		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/podaciOServisu", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<Poslovnica> podaciOServisu() {
 		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<Poslovnica>(
