@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -75,6 +76,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> registrujAdministratoraAviokompanije(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
 			this.userDetailsService.dodajAdminaAviokompanije(adminReg);
@@ -85,6 +87,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/registerHotelAdmin", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAdminaHotela(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
 			this.userDetailsService.dodajAdminaHotela(adminReg);
@@ -95,6 +98,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value = "/registerRacAdmin", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAdminaRacServisa(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
 			this.userDetailsService.dodajAdminaRacServisa(adminReg);
@@ -110,6 +114,7 @@ public class AuthenticationController {
 	 * lozinka: IsaMrs2019
 	 * */
 	@RequestMapping(value = "/registerSysAdmin", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajSistemskogAdmina(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
 			this.userDetailsService.dodajSistemAdmina(adminReg);

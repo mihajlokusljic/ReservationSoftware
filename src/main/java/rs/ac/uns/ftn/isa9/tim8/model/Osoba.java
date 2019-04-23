@@ -65,7 +65,7 @@ public class Osoba implements UserDetails{
     @Column(name = "last_password_reset_date")
     protected Timestamp lastPasswordResetDate;
     
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "korisnik_autoritet", joinColumns = @JoinColumn(name = "korisnik_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "autoritet_id", referencedColumnName = "id"))
 	protected Set<Authority> authorities;
 	
