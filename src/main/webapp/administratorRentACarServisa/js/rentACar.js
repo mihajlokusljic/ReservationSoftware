@@ -1,7 +1,7 @@
 var rentACarServis = null;
 
 $(document).ready(function() {
-
+	
 	korisnikInfo();
 	ucitajPodatkeSistema();
 	
@@ -30,9 +30,10 @@ $(document).ready(function() {
 		$("#tab-dodajf").hide();
 		$("#tab-profil").show();
 		$.ajax({
-			type: "POST",
-			url: "../rentACar/prikazServisa",
-			data: {"nazivServisa" : rentACarServis.naziv},
+			type: "GET",
+			url: "../rentACar/prikazServisa/" + rentACarServis.naziv,
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikazProfila(response);
 			},
@@ -46,9 +47,10 @@ $(document).ready(function() {
 
 function dobaviSvaVozilaServisa(naziv_servisa){
 	$.ajax({
-		type: "POST",
-		url: "../rentACar/svaVozilaServisa",
-		data: {"nazivServisa" : naziv_servisa},
+		type: "GET",
+		url: "../rentACar/svaVozilaServisa/" + naziv_servisa,
+		dataType : "json",
+		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
 			if(response == "Servis koji ste unijeli ne postoji.") {
 				alert(response);
@@ -57,9 +59,9 @@ function dobaviSvaVozilaServisa(naziv_servisa){
 				
 			}
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
-		}
+		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+			}
 	});
 }
 
@@ -100,9 +102,10 @@ function prikaziVozila(vozila){
 	$(".ukloni").click(function(e){
 		let vozilo = vozila[e.target.id];
 		$.ajax({
-			type : "POST",
-			url : "../rentACar/ukloniVozilo",
-			data: {"idVozila" : vozilo["id"]},
+			type : "GET",
+			url : "../rentACar/ukloniVozilo/" + vozilo["id"],
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success : function(response){
 				dobaviSvaVozilaServisa(naziv_servisa)			
 			},
@@ -235,6 +238,7 @@ function prikaziVozila(vozila){
 				url : "../rentACar/izmjeniVozilo/" + voz.Id,
 				contentType : "application/json; charset=utf-8",
 				data: JSON.stringify(voz),
+				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(response){
 					dobaviSvaVozilaServisa(naziv_servisa);			
 				},
@@ -276,9 +280,10 @@ function prikazFilijala(filijale){
 	$(".uklonif").click(function(e){
 		let filijala = filijale[e.target.id];
 		$.ajax({
-			type : "POST",
-			url : "../rentACar/ukloniFilijalu",
-			data: {"idFilijale" : filijala.id},
+			type : "GET",
+			url : "../rentACar/ukloniFilijalu/" + filijala.id,
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success : function(response){
 				prikazFilijalaOdabranogServisa();			
 			},
@@ -295,9 +300,10 @@ function prikazFilijala(filijale){
 			return;
 		}
 		$.ajax({
-			type : "POST",
-			url : "../rentACar/izmjeniFilijalu",
-			data: {"idFilijale" : filijala.id, "novaLokacija" : nova_lokacija},
+			type : "GET",
+			url : "../rentACar/izmjeniFilijalu/" + filijala.id + "/" + nova_lokacija,
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success : function(response){
 				if (response != ''){
 					alert(response);
@@ -319,9 +325,10 @@ function prikazFilijala(filijale){
 function prikazFilijalaOdabranogServisa(){
 		let naziv_servisa_ = rentACarServis.naziv;
 		$.ajax({
-			type: "POST",
-			url: "../rentACar/dobaviFilijale",
-			data: { "nazivServisa" : naziv_servisa_ },
+			type: "GET",
+			url: "../rentACar/dobaviFilijale/" + naziv_servisa_,
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikazFilijala(response);
 			},
@@ -412,6 +419,7 @@ function prikazProfila(servis){
 			url:"../rentACar/izmjeniProfil",
 			contentType : "application/json; charset=utf-8",
 			data:JSON.stringify(racServis),
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
 					prikazProfila(racServis);
@@ -539,6 +547,7 @@ function dodajVozilo(){
 				url: "../rentACar/dodajVozilo/" + naziv_servisa,
 				contentType : "application/json; charset=utf-8",
 				data: JSON.stringify(vozilo),
+				headers: createAuthorizationTokenHeader("jwtToken"),
 				success: function(response) {
 					if(response == '') {
 						dobaviSvaVozilaServisa(naziv_servisa);
@@ -559,9 +568,10 @@ function dodajVozilo(){
 function dobaviSveFilijale(){
 		let naziv_servisa_ = rentACarServis.naziv;
 		$.ajax({
-			type: "POST",
-			url: "../rentACar/dobaviFilijale",
-			data: { "nazivServisa" : naziv_servisa_ },
+			type: "GET",
+			url: "../rentACar/dobaviFilijale/" + naziv_servisa_,
+			dataType : "json",
+			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikazFilijala(response);
 			},
@@ -593,9 +603,10 @@ function dodajFilijalu(){
 			}
 			
 			$.ajax({
-				type: "POST",
-				url: "../rentACar/dodajFilijalu",
-				data: {"nazivServisa" : naziv_servisa, "adresa" : adresa},
+				type: "GET",
+				url: "../rentACar/dodajFilijalu/" + naziv_servisa + "/" + adresa,
+				dataType : "json",
+				headers: createAuthorizationTokenHeader("jwtToken"),
 				success: function(response) {
 					if(response != '') {
 						alert(response);
