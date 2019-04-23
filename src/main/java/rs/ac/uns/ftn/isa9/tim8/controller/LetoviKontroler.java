@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
@@ -35,6 +36,11 @@ public class LetoviKontroler {
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
+	}
+	
+	@RequestMapping(value = "/pretraziLetove", method = RequestMethod.POST)
+	public ResponseEntity<Collection<Let>> pretraziLetove(@RequestBody PretragaLetaDTO kriterijumiPretrage) {
+		return new ResponseEntity<Collection<Let>>(servis.pretraziLetove(kriterijumiPretrage), HttpStatus.OK);
 	}
 
 }
