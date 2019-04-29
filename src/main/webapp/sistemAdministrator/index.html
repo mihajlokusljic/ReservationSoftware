@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colrolib Templates">
+    <meta name="author" content="Colrolib">
+    <meta name="keywords" content="Colrolib Templates">
+
+    <!-- Title Page-->
+    <title>Softver za rezervacije</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+	
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+        <div class="wrapper wrapper--w1050">
+            <div class="card card-3">
+                <div class="card-body">
+                    <ul class="tab-list">
+                        <li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab" id = "aviokompanije">Aviokompanije</a>
+                        </li>
+						<li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-dodaj-vozilo" data-toggle="tab" id = "vozila"></a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-filijala" data-toggle="tab" id = "filijale">Filijale</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-profil-servisa" data-toggle="tab" id = "profil_servisa">Profil servisa</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil korisnika</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                    <!-- Ovdje imas vozilaaaaa -->
+                        <div class="tab-pane active" id="tab-aviokompanije">
+                           <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Slika</th>
+								<th class="column1">Naziv</th>
+								<th class="column1">Adresa</th>
+								<th class="column1">Promotivni opis</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="column1"><img src="https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg"/></td>
+								<td class="column1">Someones Airline</td>
+								<td class="column1">Some Address</td>
+								<td class="column1">Some awsome promotional description that will blow peoples minds and make them wanna fly with us</td>
+							</tr>
+							<tr>
+								<td class="column1"><img src="https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg"/></td>
+								<td class="column1">Someones Airline</td>
+								<td class="column1">Some Address</td>
+								<td class="column1">Some awsome promotional description that will blow peoples minds and make them wanna fly with us</td>
+							</tr>
+							
+						</tbody>
+					</table>
+						<button type="button" class="btn btn-submit" action ="#tab-dodaj-aviokompaniju">Dodaj novu aviokompaniju</button>
+                        </div>
+						<div class="tab-pane" id="tab-dodaj-aviokompaniju">
+                            <form method="POST" action="#">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Naziv:</label>
+                                            <input class="input--style-1" type="text" placeholder="naziv vozila" required="required">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Marka:</label>
+                                            <input class="input--style-1" type="text" placeholder="marka vozila" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Model:</label>
+                                            <input class="input--style-1" type="text" placeholder="model vozila" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Tip:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="tip_vozila">
+                                                    <option selected="selected">Automobil</option>
+                                                    <option>Kombi</option>
+                                                    <option>Motocikl</option>
+													<option>Minibus</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Godina proizvodnje:</label>
+                                            <input class="input--style-1" type="number" min = "1" placeholder="2010" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj sjedišta:</label>
+                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj vrata:</label>
+                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena po danu:</label>
+                                            <input class="input--style-1" type="number" min = "1" placeholder="64" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Fotografija vozila</label>
+                                            <input class="input--style-1" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
+										    <i class="zmdi zmdi-collection-image-o input-icon"></i>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Filijala:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="filijala">
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn-submit m-t-15" type="submit">Dodaj</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="tab-prikaz-vozila">
+							<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Naziv:</label>
+                                            <input class="input--style-1" type="text" value ="RENT A CAR SERVIS 1" required="required">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Marka:</label>
+                                            <input class="input--style-1" type="text" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Model:</label>
+                                            <input class="input--style-1" type="text" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Tip:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="tip_vozila">
+                                                    <option>Automobil</option>
+                                                    <option>Kombi</option>
+                                                    <option>Motocikl</option>
+													<option>Minibus</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Godina proizvodnje:</label>
+                                            <input class="input--style-1" type="number" min = "1" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj sjedišta:</label>
+                                            <input class="input--style-1" type="number" min = "1" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj vrata:</label>
+                                            <input class="input--style-1" type="number" min = "1" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena po danu:</label>
+                                            <input class="input--style-1" type="number" min = "1" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Fotografija vozila</label>
+                                            <input class="input--style-1" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
+										    <i class="zmdi zmdi-collection-image-o input-icon"></i>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Filijala:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="filijala">
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+					<button type="button" class="btn btn-submit">Potvrdi izmjene</button>
+					<button type="button" class="btn btn-submit">Ukloni vozilo</button>
+
+						</div>
+                        <div class="tab-pane" id="tab-filijala">
+                            <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Lokacija filijale</th>
+								<th class="column2">Broj vozila u filijali</th>
+								<th class = "column3"></th>
+								<th class = "column4"></th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr>
+									<td class="column1">Novi sad, Bulevar Oslobođenja 66</td>
+									<td class="column2">5</td>
+									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
+									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
+								</tr>
+								<tr>
+									<td class="column1">Beograd, Knez Mihajlova 66</td>
+									<td class="column2">10</td>
+									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
+									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
+								</tr>
+								
+						</tbody>
+					</table>
+					<button type="button" class="btn btn-submit">Dodaj novu filijalu</button>
+                        </div>
+							
+						<div class="tab-pane" id = "tab-izmjeni-filijalu">
+							<div class="input-group">
+								<label class="label">Naziv lokacije:</label>
+								<input class="input--style-1" type="text" value ="Adresa 1" required="required">
+								<i class="zmdi zmdi-pin input-group-symbol"></i>
+
+							</div>
+							<div class="input-group">
+								<label class="label">Dužina:</label>
+								<input class="input--style-1" type="number" step = "0.0001" value ="120.89" required="required">
+							</div>
+							<div class="input-group">
+								<label class="label">Širina:</label>
+								<input class="input--style-1" type="number" step = "0.0001" value ="67.88" required="required">
+							</div>
+							<button type="button" class="btn btn-submit">Izmjeni</button>
+
+						</div>
+						<div class="tab-pane" id = "tab-dodaj-filijalu">
+							<div class="input-group">
+								<label class="label">Naziv lokacije:</label>
+								<input class="input--style-1" type="text" placeholder ="Unesite naziv lokacije" required="required">
+								<i class="zmdi zmdi-pin input-group-symbol"></i>
+
+							</div>
+							<div class="input-group">
+								<label class="label">Dužina:</label>
+								<input class="input--style-1" type="number" step = "0.0001" required="required">
+							</div>
+							<div class="input-group">
+								<label class="label">Širina:</label>
+								<input class="input--style-1" type="number" step = "0.0001" required="required">
+							</div>
+							<button type="button" class="btn btn-submit">Dodaj</button>
+
+						</div>
+                        <div class="tab-pane" id="tab-profil-servisa">
+                            <div class="input-group">
+								<label class="label">Naziv servisa:</label>
+								<input class="input--style-1" type="text" value ="Rent A Car servis" readonly>
+							</div>													
+							<div class="input-group">
+								<label class="label">Naziv adrese</label>
+								<input class="input--style-1" type="text" value ="Adresa 1">
+							</div>
+							<div class="row row-space">
+
+                                    <div class="col-2">
+                                        <div class="input-group">
+											<label class="label">Dužina:</label>
+											<input class="input--style-1" type="number" step = "0.0001" value = "37.5" required="required">
+										</div>
+                                    </div>
+									<div class="col-2">
+                                        <div class="input-group">
+											<label class="label">Širina:</label>
+											<input class="input--style-1" type="number" step = "0.0001" value = "40.0" required="required">
+										</div>
+                                    </div>
+                            </div>
+							<div class="input-group">
+								<label class="label">Opis:</label>
+								<input class="input--style-1" type="text" value ="Neki opis">
+							</div>
+							<button type="button" class="btn btn-submit">Izmjeni</button>
+                        </div>
+						<div class="tab-pane" id="tab-profil-kor">
+                            Profil korisnika
+                        </div>
+						<div class="tab-pane" id="tab-izvjestaj">
+                            Izvjestaj
+                        </div>
+						<div class="tab-pane" id="tab-odjava">
+                            Odjava
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
+    <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script src="js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->
