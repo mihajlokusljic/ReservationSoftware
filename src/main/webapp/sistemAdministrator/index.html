@@ -36,19 +36,19 @@
                             <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab" id = "aviokompanije">Aviokompanije</a>
                         </li>
 						<li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab-dodaj-vozilo" data-toggle="tab" id = "vozila"></a>
+                            <a class="tab-list__link" href="#tab-dodaj-aviokompaniju" data-toggle="tab" id = "vozila"></a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-filijala" data-toggle="tab" id = "filijale">Filijale</a>
+                            <a class="tab-list__link" href="#tab-hoteli" data-toggle="tab" id = "hoteli">Hoteli</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-profil-servisa" data-toggle="tab" id = "profil_servisa">Profil servisa</a>
+                            <a class="tab-list__link" href="#tab-rac" data-toggle="tab" id = "rac">Rent-a-car servisi</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-admini" data-toggle="tab" id = "admini">Administratori</a>
                         </li>
 						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil korisnika</a>
-                        </li>
-						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
+                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil</a>
                         </li>
 						<li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
@@ -266,33 +266,39 @@
 					<button type="button" class="btn btn-submit">Ukloni vozilo</button>
 
 						</div>
-                        <div class="tab-pane" id="tab-filijala">
+                        <div class="tab-pane" id="tab-hoteli">
                             <table>
 						<thead>
 							<tr class="table100-head">
-								<th class="column1">Lokacija filijale</th>
-								<th class="column2">Broj vozila u filijali</th>
-								<th class = "column3"></th>
-								<th class = "column4"></th>
+								<th class="column1">Slika</th>
+								<th class="column1">Naziv</th>
+								<th class = "column1">Adresa</th>
+								<th class = "column1">Promotivni opis</th>
 							</tr>
 						</thead>
 						<tbody>
 								<tr>
-									<td class="column1">Novi sad, Bulevar Oslobođenja 66</td>
-									<td class="column2">5</td>
-									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
-									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
+									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
+									<td class="column1">Some hotel</td>
+									<td class="column1">Some Address</td>
+									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
 								</tr>
 								<tr>
-									<td class="column1">Beograd, Knez Mihajlova 66</td>
-									<td class="column2">10</td>
-									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
-									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
+									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
+									<td class="column1">Some hotel</td>
+									<td class="column1">Some Address</td>
+									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
+								</tr>
+								<tr>
+									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
+									<td class="column1">Some hotel</td>
+									<td class="column1">Some Address</td>
+									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
 								</tr>
 								
 						</tbody>
 					</table>
-					<button type="button" class="btn btn-submit">Dodaj novu filijalu</button>
+					<button type="button" class="btn btn-submit">Dodaj novi hotel</button>
                         </div>
 							
 						<div class="tab-pane" id = "tab-izmjeni-filijalu">
@@ -331,7 +337,7 @@
 							<button type="button" class="btn btn-submit">Dodaj</button>
 
 						</div>
-                        <div class="tab-pane" id="tab-profil-servisa">
+                        <div class="tab-pane" id="tab-admini">
                             <div class="input-group">
 								<label class="label">Naziv servisa:</label>
 								<input class="input--style-1" type="text" value ="Rent A Car servis" readonly>
@@ -361,11 +367,42 @@
 							</div>
 							<button type="button" class="btn btn-submit">Izmjeni</button>
                         </div>
+                        <div class="tab-pane" id="tab-rac">
+                        <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Slika</th>
+								<th class="column1">Naziv</th>
+								<th class = "column1">Adresa</th>
+								<th class = "column1">Promotivni opis</th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr>
+									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
+									<td class="column1">Some rent-a-car service</td>
+									<td class="column1">Some Address</td>
+									<td class="column6">Some awsome description that will make people wanna rent our cars</td>
+								</tr>
+								<tr>
+									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
+									<td class="column1">Some rent-a-car service</td>
+									<td class="column1">Some Address</td>
+									<td class="column3">Some awsome description that will make people wanna rent our cars</td>
+								</tr>
+								<tr>
+									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
+									<td class="column1">Some rent-a-car service</td>
+									<td class="column1">Some Address</td>
+									<td class="column3">Some awsome description that will make people wanna rent our cars</td>
+								</tr>
+								
+						</tbody>
+					</table>
+					<button type="button" class="btn btn-submit">Dodaj novi rent-a-car servis</button>
+                        </div>
 						<div class="tab-pane" id="tab-profil-kor">
                             Profil korisnika
-                        </div>
-						<div class="tab-pane" id="tab-izvjestaj">
-                            Izvjestaj
                         </div>
 						<div class="tab-pane" id="tab-odjava">
                             Odjava
