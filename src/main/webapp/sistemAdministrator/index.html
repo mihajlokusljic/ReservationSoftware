@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis rent-a-car servisa (opciono)" id="opisRacServisa">
+                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis rent-a-car servisa (opciono)" id="">
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj rent-a-car servis"/>
                         </form>
@@ -156,7 +156,7 @@
                         </div>
                         
                         <div class="tab-pane" id="tab-administartori">
-                            <form method="POST" action="#">
+                            <form method="POST" action="#" id="dodavanjeAdminaForm">
                             
                             	<div class="radio-row">
                                     <label class="radio-container m-r-45">Administrator aviokompanije
@@ -181,19 +181,19 @@
                                 
                                 <div class="input-group">
                                     <label class="label">E-mail:</label>
-                                    <input class="input--style-2" type="email" placeholder="Unesite email administratora" required="required">
+                                    <input class="input--style-2" type="email" placeholder="Unesite email administratora" required="required" id="emailAdmina">
                                 </div>
                                 <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Lozinka:</label>
-                                            <input class="input--style-2" type="password" placeholder="Unesite inicijalnu lozinku administratora" required="required">
+                                            <input class="input--style-2" type="password" placeholder="Unesite inicijalnu lozinku administratora" required="required" id="lozinkaAdmina">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Potvrda lozinke:</label>
-                                            <input class="input--style-2" type="password" placeholder="Ponovo unesite inicijalnu lozinku administratora" required="required">
+                                            <input class="input--style-2" type="password" placeholder="Ponovo unesite inicijalnu lozinku administratora" required="required" id="potvrdaLozinkeAdmina">
                                         </div>
                                     </div>
                                 </div>
@@ -202,20 +202,24 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Ime:</label>
-                                            <input class="input--style-2" type="text" placeholder="Unesite ime administratora" required="required">
+                                            <input class="input--style-2" type="text" placeholder="Unesite ime administratora" required="required" id="imeAdmina">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Prezime:</label>
-                                            <input class="input--style-2" type="text" placeholder="Unesite prezime administratora" required="required">
+                                            <input class="input--style-2" type="text" placeholder="Unesite prezime administratora" required="required" id="prezimeAdmina">
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="input-group">
                                     <label class="label">Broj telefona:</label>
-                                    <input class="input--style-2" type="number" placeholder="Unesite broj telefona administratora">
+                                    <input class="input--style-2" type="number" placeholder="Unesite broj telefona administratora" id="brTelefonaAdmina">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Adresa:</label>
+                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                    <input class="input--style-2" type="text" placeholder="Unesite adresu prebivalista administratora" required="required" id="adresaAdmina">
                                 </div>
                                 
 

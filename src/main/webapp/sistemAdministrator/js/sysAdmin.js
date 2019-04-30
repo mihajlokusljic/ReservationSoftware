@@ -66,6 +66,12 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		dodavanjeRacServisa();
 	});
+	
+	//dodavanjeAdministratora
+	$("#dodavanjeAdminaForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeAdmina();
+	});
 		
 	
 });
@@ -170,6 +176,55 @@ function dodavanjeRacServisa() {
 			let selekcioniMeni = $("#racServisAdminaSelect");
 			prikazi(response, tabelaRacServisa, selekcioniMeni, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
 			alert("Rent-a-car servis je uspjesno dodat.");
+		},
+	});
+}
+
+function dodavanjeAdmina() {
+	let _email = $("#emailAdmina").val();
+	let _lozinka = $("#lozinkaAdmina").val();
+	let lozinkaPotvrda = $("#potvrdaLozinkeAdmina").val();
+	if (_lozinka != lozinkaPotvrda){
+		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		return;
+	}
+	let _ime = $("#imeAdmina").val();
+	let _prezime = $("#prezimeAdmina").val();
+	let _brojTelefona = $("#brTelefonaAdmina").val();
+	let _adresa = $("#adresaAdmina").val();
+	
+	let _idPoslovnice = 0;
+	let tergetUrl = "../auth/registerSysAdmin";
+	
+	if($("#adminAviokompanijeBtn").is(":checked")) {
+		_idPoslovnice = $("#aviokompanijaAdminaSelect").val();
+		tergetUrl = "../auth/registerAvioAdmin";
+	}
+	else if($("#adminHotelaBtn").is(":checked")) {
+		_idPoslovnice = $("#hotelAdminaSelect").val();
+		tergetUrl = "../auth/registerHotelAdmin";
+	}
+	else if($("#racAdminBtn").is(":checked")) {
+		_idPoslovnice = $("#racServisAdminaSelect").val();
+		tergetUrl = "../auth/registerRacAdmin";
+	}
+	
+	let noviAdmin = {
+			punaAdresa: _adresa,
+			brojTelefona: _brojTelefona,
+			email: _email,
+			idPoslovnice: _idPoslovnice,
+			ime: _ime,
+			prezime: _prezime,
+			lozinka: _lozinka
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: tergetUrl,
+		data: JSON.stringify(noviAdmin),
+		success: function(response) {
+			alert(response);
 		},
 	});
 }
