@@ -171,10 +171,6 @@ public class AvionService {
 
 	public Avion dodajAvion(AvionDTO noviAvion) {
 		Avion a = avionRepository.findOneByNaziv(noviAvion.getNaziv());
-		if (a != null) {
-			// Ako vec postoji avion sa zadatim nazivom, onda ce kao rezultat dodavanja da se vrati NULL
-			return null;
-		}
 		
 		Optional<Aviokompanija> aviokompanijaSearchOptional = aviokompanijaRepository.findById(noviAvion.getIdAviokompanije());
 		
@@ -186,6 +182,13 @@ public class AvionService {
 		a.setNaziv(noviAvion.getNaziv());
 		
 		Aviokompanija aviokompanija = aviokompanijaSearchOptional.get();
+		
+		for (Avion Avion : aviokompanija.getAvioni()) {
+			if (Avion.getNaziv().equalsIgnoreCase(noviAvion.getNaziv())) {
+				// Ako vec postoji avion sa zadatim nazivom, onda ce kao rezultat dodavanja da se vrati NULL
+				return null;
+			}
+		}
 		
 		a.setAviokompanija(aviokompanija);
 		
