@@ -29,20 +29,25 @@ public class HotelService {
 	@Autowired
 	protected HotelskeSobeService sobeService;
 
-	public String dodajHotel(Hotel noviHotel) {
+	public Hotel dodajHotel(Hotel noviHotel) throws NevalidniPodaciException {
 
 		Hotel hotel = hotelRepository.findOneByNaziv(noviHotel.getNaziv());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(noviHotel.getAdresa().getPunaAdresa());
 		if (hotel != null) {
-
-			return "Zauzet naziv hotela";
+			throw new NevalidniPodaciException("Vec postoji hotel sa zadatim nazivom.");
 		}
 		if (adresa != null) {
-
-			return "Zauzeta adresa";
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
 		}
-		hotelRepository.save(noviHotel);
-		return null;
+		if(noviHotel.getNaziv().contentEquals("")) {
+			throw new NevalidniPodaciException("Naziv hotela mora biti zadat.");
+		}
+		if(noviHotel.getAdresa().getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa hotela mora biti zadata.");
+		}
+		Hotel h = new Hotel(noviHotel.getNaziv(), noviHotel.getPromotivniOpis(), noviHotel.getAdresa());
+		hotelRepository.save(h);
+		return h;
 	}
 
 	public Collection<Hotel> dobaviHotele() {

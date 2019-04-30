@@ -2,20 +2,6 @@ let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAd
 let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
 let podaciAdmina = null;
 
-function prikaziIzborPoslovnice(idPoslovnice) {
-	$.each(poslovnicaAdminaInputs, function(i, tekucaPoslovnicaId) {
-		if(idPoslovnice === tekucaPoslovnicaId) {
-			$("#" + tekucaPoslovnicaId).show();
-			$("#" + poslovnicaInputs[i]).attr("required", "required");
-		}
-		else
-		{
-			$("#" + tekucaPoslovnicaId).hide();
-			$("#" + poslovnicaInputs[i]).removeAttr("required");
-		}
-	})
-}
-
 $(document).ready(function(e) {
 	
 	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
@@ -69,10 +55,28 @@ $(document).ready(function(e) {
 		dodavanjeAviokompanije();
 	});
 	
-	
-	
+	//dodavanje hotela
+	$("#dodavanjeHotelaForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeHotela();
+	});
+		
 	
 });
+
+function prikaziIzborPoslovnice(idPoslovnice) {
+	$.each(poslovnicaAdminaInputs, function(i, tekucaPoslovnicaId) {
+		if(idPoslovnice === tekucaPoslovnicaId) {
+			$("#" + tekucaPoslovnicaId).show();
+			$("#" + poslovnicaInputs[i]).attr("required", "required");
+		}
+		else
+		{
+			$("#" + tekucaPoslovnicaId).hide();
+			$("#" + poslovnicaInputs[i]).removeAttr("required");
+		}
+	})
+}
 
 function dodavanjeAviokompanije() {
 	let _naziv = $("#nazivAviokompanije").val();
@@ -102,6 +106,35 @@ function dodavanjeAviokompanije() {
 			let selekcioniMeni = $("#aviokompanijaAdminaSelect");
 			prikazi(response, tabelaAviokompanija, selekcioniMeni, "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
 			alert("Aviokompanija je uspjesno dodata.");
+		},
+	});
+}
+
+function dodavanjeHotela() {
+	let _naziv = $("#nazivHotela").val();
+	let _adresa = $("#adresaHotela").val();
+	let _opis = $("#promotivniOpisHotela").val();
+	
+	if(_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	let hotel = {
+			naziv: _naziv, 
+			adresa: { punaAdresa : _adresa }, 
+			promotivniOpis: _opis
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../hoteli/dodaj",
+		data: JSON.stringify(hotel),
+		success: function(response) {
+			let tabelaHotela = $("#prikazHotela");
+			let selekcioniMeni = $("#hotelAdminaSelect");
+			prikazi(response, tabelaHotela, selekcioniMeni, "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
+			alert("Hotel je uspjesno dodat.");
 		},
 	});
 }
