@@ -18,11 +18,19 @@ function prikaziIzborPoslovnice(idPoslovnice) {
 
 $(document).ready(function(e) {
 	
-	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom
+	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
 	$.ajaxSetup({
 	    headers: createAuthorizationTokenHeader(),
 	    error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    	let statusCode = XMLHttpRequest.status;
+	    	if(statusCode == 400) {
+	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//poruka o greski koju je server poslao
+	    		alert(XMLHttpRequest.responseText);
+	    	}
+	    	else {
+	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    	}
 		}
 	});
 	
@@ -30,13 +38,13 @@ $(document).ready(function(e) {
 	korisnikInfo();
 	
 	//ucitavanje aviokompanija
-	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "aviokompanije-list", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
+	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "aviokompanijaAdminaSelect", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
 	
 	//ucitavanje hotela
-	ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "hoteli-list", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
+	ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "hotelAdminaSelect", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
 
 	//ucitavanje rent-a-car servisa
-	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "rac-list", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "racServisAdminaSelect", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
 
 	//podesavanje vidljivosti polja za poslovnicu kod dodavanja novog administratora
 	$("#adminAviokompanijeBtn").click(function() {
@@ -55,7 +63,48 @@ $(document).ready(function(e) {
 		if($("#sysAdminBtn").is(":checked")) { prikaziIzborPoslovnice(""); }
 	});
 	
+	//dodavanje aviokompanije
+	$("#dodavanjeAviokompanijeForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeAviokompanije();
+	});
+	
+	
+	
+	
 });
+
+function dodavanjeAviokompanije() {
+	let _naziv = $("#nazivAviokompanije").val();
+	let _adresa = $("#adresaAviokompanije").val();
+	let _opis = $("#opisAviokompanije").val();
+	
+	if(_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	let aviokompanija = {
+			naziv: _naziv, 
+			adresa: { punaAdresa : _adresa }, 
+			promotivniOpis: _opis,
+			destinacije: [],
+			letovi: [],
+			brzeRezervacije: [],
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../aviokompanije/dodaj",
+		data: JSON.stringify(aviokompanija),
+		success: function(response) {
+			let tabelaAviokompanija = $("#prikazAviokompanija");
+			let selekcioniMeni = $("#aviokompanijaAdminaSelect");
+			prikazi(response, tabelaAviokompanija, selekcioniMeni, "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
+			alert("Aviokompanija je uspjesno dodata.");
+		},
+	});
+}
 
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
@@ -100,6 +149,6 @@ function prikazi(podatak, tabelaZaPrikaz, selekcioniMeni, defaultSlika) {
 	noviRed.append('<td class="column6">' + podatak.promotivniOpis + '</td>');
 	tabelaZaPrikaz.append(noviRed);
 	if(selekcioniMeni != undefined) {
-		selekcioniMeni.append('<option data-value="' + podatak.id + '" value="' + podatak.naziv + ', ' + podatak.adresa.punaAdresa + '"></option>');
+		selekcioniMeni.append('<option value="' + podatak.id + '">' + podatak.naziv + ', ' + podatak.adresa.punaAdresa + '</option>');
 	}
 }

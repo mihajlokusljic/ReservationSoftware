@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
-import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;;
+import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;;
 
 @RestController
 @RequestMapping(value = "/aviokompanije")
@@ -36,8 +37,12 @@ public class AviokompanijeKontroler {
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
-	public ResponseEntity<String> dodajAviokompaniju(@RequestBody Aviokompanija novaAviokompanija) {
-		return new ResponseEntity<String>(servis.dodajAviokompaniju(novaAviokompanija),HttpStatus.OK);
+	public ResponseEntity<?> dodajAviokompaniju(@RequestBody Aviokompanija novaAviokompanija) {
+		try {
+			return new ResponseEntity<Aviokompanija>(servis.dodajAviokompaniju(novaAviokompanija),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	/*

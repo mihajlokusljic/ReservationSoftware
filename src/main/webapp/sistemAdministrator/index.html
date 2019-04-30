@@ -62,16 +62,16 @@
                         <form method="POST" action="#" id="dodavanjeAviokompanijeForm">
                                 <div class="input-group">
                                     <label class="label">Naziv:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv aviokompanije" required="required">
+                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv aviokompanije" required="required" id="nazivAviokompanije">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Adresa:</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu aviokompanije" required="required">
+                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu aviokompanije" required="required" id="adresaAviokompanije">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis aviokompanije (opciono)">
+                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis aviokompanije (opciono)" id="opisAviokompanije">
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj aviokompaniju"/>
                         </form>
@@ -218,24 +218,33 @@
                                     <input class="input--style-2" type="number" placeholder="Unesite broj telefona administratora">
                                 </div>
                                 
+
                                 <div class="input-group" id="aviokompanijaAdmina">
-                                    <label class="label">Aviokompanija:</label>
-                                    <input id="aviokompanijaAdminaInp" class="input--style-2" type="text" placeholder="Unesite administriranu aviokompaniju" autocomplete="off" list="aviokompanije-list" required="required">
-                                    <datalist id="aviokompanije-list">
-                                    </datalist>
-                                </div>
-                                <div class="input-group" id="hotelAdmina" hidden="hidden">
-                                    <label class="label">Hotel:</label>
-                                    <input id="hotelAdminaInp" class="input--style-2" type="text" placeholder="Unesite administrirani hotel" autocomplete="off" list="hoteli-list">
-                                    <datalist id="hoteli-list">
-                                    </datalist>
-                                </div>
-                                <div class="input-group" id="racServisAdmina" hidden="hidden">
-                                    <label class="label">Rent-a-car servis:</label>
-                                    <input id="racAdminaInp" class="input--style-2" type="text" placeholder="Unesite administrirani rent-a-car servis" autocomplete="off" list="rac-list">
-                                    <datalist id="rac-list">
-                                    </datalist>
-                                </div>
+	                                            <label class="label">Administrirana aviokompanija:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id = "aviokompanijaAdminaSelect">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            	</div>
+	                            </div>
+
+                                <div class="input-group" id="hotelAdmina" hidden>
+	                                            <label class="label">Administrirani hotel:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id ="hotelAdminaSelect">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            	</div>
+	                            </div>
+	                            
+                                <div class="input-group" id="racServisAdmina" hidden>
+	                                            <label class="label">Administrirani rent-a-car servis:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id ="racServisAdminaSelect">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                            </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj administratora"/>
                             </form>
                         </div>
