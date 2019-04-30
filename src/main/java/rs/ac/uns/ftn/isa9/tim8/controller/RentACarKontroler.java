@@ -114,7 +114,7 @@ public class RentACarKontroler {
 	
 	@RequestMapping(value = "/dobaviFilijale/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
-	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
+	public ResponseEntity<?> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 	

@@ -119,7 +119,15 @@ public class RentACarServisService {
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());		
 		if (adresa != null) {
 			
-			return "Zauzeta adresa";
+			RentACarServis rs = rentACarRepository.findOneByAdresa(adresa);
+			if (rs != null) {
+				if(	rs.getId() != rentACarStari.getId()) {
+					return "Zauzeta adresa";
+				}
+			}
+			else {
+				return "Zauzeta adresa";
+			}
 		}
 		rentACarStari.getAdresa().setPunaAdresa(rentACar.getAdresa().getPunaAdresa());;
 		rentACarStari.setPromotivniOpis(rentACar.getPromotivniOpis());
@@ -215,7 +223,7 @@ public class RentACarServisService {
 			return null;
 		}
 		for(Filijala f : filijale ) {
-			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId()));
+			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId(), f.getBrojVozila()));
 		}
 
 	

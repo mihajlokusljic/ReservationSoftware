@@ -1,57 +1,351 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Administrator Rent-a-car servisa</title>
-		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>    
-	<link rel="stylesheet" href="css/Navigation-Clean.css">
-    <link rel="stylesheet" href="css/styles.css">
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colrolib Templates">
+    <meta name="author" content="Colrolib">
+    <meta name="keywords" content="Colrolib Templates">    
+    
+    <title>Softver za rezervacije</title>
+    
+	<!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">  
+	<!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
 	
-	<script type="text/javascript" src="js/rentACar.js"></script>
-	<script type="text/javascript" src="js/auth.js"></script>
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
 	
 </head>
 <body>
-<div>
-        <nav class="navbar navbar-dark navbar-expand-md bg-info navigation-clean">
-            <div class="container-fluid"><p class="navbar-brand">Rent-a-car servis: </p><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-                <div
-                    class="collapse navbar-collapse" id="navcol-1">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-vozila" id="vozila">Vozila</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-filijala" id="filijale">Filijale</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#tabs-3" id="izvjestaj">Izvještaj</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#tabs-4" id="profil">Profil servisa</a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#tabs-5" id="odjava">Odjavi se</a></li>
-                    </ul>
-                    
-                   </div> 
-                    
-            </div>
-            </nav>
-    
-        
-    </div>
-            <div class = "column" id="tab-vozila">
-				
-		    </div>
-		    <div class = "column" id="tab-dodaj">
-				
-		    </div>
-		    <div class = "column" id="tab-filijala">
-				
-		    </div>
-		    
-		     <div class = "column" id="tab-dodajf">
-				
-		    </div>
-		    <div class = "column" id="tab-profil">
-				
-		    </div>
-    
-    
-    
+  <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
+    <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+	
+	    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+        	<div class="wrapper wrapper--w1050">
+            	<div class="card card-3">
+                	<div class="card-body">
+	                	<ul class="tab-list">
+	                        <li class="tab-list__item active">
+	                            <a class="tab-list__link" href="#tab-vozila" data-toggle="tab" id = "vozila">Vozila</a>
+	                        </li>
+	                        <li class="tab-list__item">
+	                            <a class="tab-list__link" href="#tab-filijala" data-toggle="tab" id = "filijale">Filijale</a>
+	                        </li>
+	                        <li class="tab-list__item">
+	                            <a class="tab-list__link" href="#tab-profil-servisa" data-toggle="tab" id = "profil_servisa">Profil servisa</a>
+	                        </li>
+							<li class="tab-list__item">
+	                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil korisnika</a>
+	                        </li>
+							<li class="tab-list__item">
+	                            <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
+	                        </li>
+							<li class="tab-list__item">
+	                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
+	                        </li>
+	                    </ul>
+	                    <div class="tab-content">
+	                    	<div class="tab-pane active" id="tab-vozila">
+                           		<table id = "table_vozila">
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Naziv</th>
+											<th class="column2">Marka</th>
+											<th class="column3">Model</th>
+											<th class="column4">Tip</th>
+											<th class="column5">Godina proizvodnje</th>
+											<th class="column6">Cijena po danu</th>
+											<th class="column7"></th>
+										</tr>
+									</thead>
+									<tbody id = "tbody_vozila">
+									</tbody>
+								</table>
+								<button type="button" class="btn btn-submit" id = "dodaj_vozilo_dugme">Dodaj novo vozilo</button>
+	                        </div>
+		                        <div class="tab-pane" id="tab-dodaj-vozilo">
+	                            <form id = "forma_dodaj_vozilo">
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Naziv:</label>
+	                                            <input class="input--style-1" type="text" placeholder="naziv vozila" required="required" id = "naziv_input">
+	
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Marka:</label>
+	                                            <input class="input--style-1" type="text" placeholder="marka vozila" required="required" id = "marka_input">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Model:</label>
+	                                            <input class="input--style-1" type="text" placeholder="model vozila" required="required" id = "model_input">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Tip:</label>
+	                                            <div class="rs-select2 js-select-simple select--no-search">
+	                                                <select name="tip_vozila" id = "tip_vozila_input">
+	                                                    <option selected="selected">Automobil</option>
+	                                                    <option>Kombi</option>
+	                                                    <option>Motocikl</option>
+														<option>Minibus</option>
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+									<div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Godina proizvodnje:</label>
+	                                            <input class="input--style-1" type="number" min = "1" placeholder="2010" required="required" id = "godina_proizvodnje_input">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Broj sjedišta:</label>
+	                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required" id = "broj_sjedista_input">
+	                                        </div>
+	                                    </div>
+	                                </div>
+									<div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Broj vrata:</label>
+	                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required" id = "broj_vrata_input">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Cijena po danu:</label>
+	                                            <input class="input--style-1" type="number" min = "1" placeholder="64" required="required" id = "cijena_input">
+	                                        </div>
+	                                    </div>
+	                                </div>
+									<div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Fotografija vozila</label>
+	                                            <input class="input--style-1" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
+											    <i class="zmdi zmdi-collection-image-o input-icon"></i>
+	
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Filijala:</label>
+	                                            <div class="rs-select2 js-select-simple select--no-search">
+	                                                <select name="filijala">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <button class="btn-submit m-t-15" type="submit">Dodaj</button>
+	                            </form>
+	                        </div>
+	                        <div class="tab-pane" id="tab-prikaz-vozila">
+							<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Naziv:</label>
+                                            <input class="input--style-1" type="text" id = "naziv_input1" required="required">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Marka:</label>
+                                            <input class="input--style-1" type="text" id = "marka_input1" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Model:</label>
+                                            <input class="input--style-1" type="text" id = "model_input1" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Tip:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="tip_vozila" id = "tip_vozila_input1">
+                                                    <option value = "Automobil">Automobil</option>
+                                                    <option value = "Kombi">Kombi</option>
+                                                    <option value = "Motocikl">Motocikl</option>
+													<option value = "Minibus">Minibus</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Godina proizvodnje:</label>
+                                            <input class="input--style-1" type="number" min = "1" id = "godina_input1" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj sjedišta:</label>
+                                            <input class="input--style-1" type="number" min = "1" id = "broj_sjedista_input1" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj vrata:</label>
+                                            <input class="input--style-1" type="number" min = "1" id = "broj_vrata_input1" required="required">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena po danu:</label>
+                                            <input class="input--style-1" type="number" min = "1" id = "cijena_input1" required="required">
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Filijala:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="filijala">
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+					<button type="button" class="btn btn-submit" id = "izmjeni_vozilo_dugme">Potvrdi izmjene</button>
+					<button type="button" class="btn btn-submit" id = "ukloni_vozilo_dugme">Ukloni vozilo</button>
+
+						</div>
+						<div class="tab-pane" id="tab-filijala">
+                            <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Lokacija filijale</th>
+										<th class="column2">Broj vozila u filijali</th>
+										<th class = "column3"></th>
+										<th class = "column4"></th>
+									</tr>
+								</thead>
+								<tbody id = "tbody_filijale">
+										
+								</tbody>
+							</table>
+							<button type="button" id= "dodaj_filijalu_dugme" class="btn btn-submit">Dodaj novu filijalu</button>
+                        </div>
+                        <div class="tab-pane" id = "tab-dodaj-filijalu">
+	                         <form id = "forma_dodaj_filijalu">
+								<div class="input-group">
+									<label class="label">Naziv lokacije:</label>
+									<input class="input--style-1" type="text" id = "adresa_filijale" placeholder ="Unesite naziv lokacije" required="required">
+									<i class="zmdi zmdi-pin input-group-symbol"></i>
+	
+								</div>
+								<div class="input-group">
+									<label class="label">Dužina:</label>
+									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+								</div>
+								<div class="input-group">
+									<label class="label">Širina:</label>
+									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+								</div>
+								<button type="submit" class="btn btn-submit">Dodaj</button>
+							</form>
+						</div>
+						<div class="tab-pane" id = "tab-izmjeni-filijalu">
+	                        <form id = "forma_izmjeni_filijalu">						
+								<div class="input-group">
+									<label class="label">Naziv lokacije:</label>
+									<input class="input--style-1" id = "adresa_filijale_nova" type="text" required="required">
+									<i class="zmdi zmdi-pin input-group-symbol"></i>
+	
+								</div>
+								<div class="input-group">
+									<label class="label">Dužina:</label>
+									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+								</div>
+								<div class="input-group">
+									<label class="label">Širina:</label>
+									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+								</div>
+								<button type="submit" class="btn btn-submit">Izmjeni</button>
+							</form>
+						</div>
+						<div class="tab-pane" id="tab-profil-servisa">
+							<form id = "profil_servisa_forma">
+		
+	                            <div class="input-group">
+									<label class="label">Naziv servisa:</label>
+									<input class="input--style-1" id = "profil_servisa_naziv" type="text" readonly>
+								</div>													
+								<div class="input-group">
+									<label class="label">Lokacija</label>
+									<input class="input--style-1" id = "profil_servisa_adresa" type="text">
+								</div>
+								<div class="row row-space">
+	
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+												<label class="label">Dužina:</label>
+												<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+											</div>
+	                                    </div>
+										<div class="col-2">
+	                                        <div class="input-group">
+												<label class="label">Širina:</label>
+												<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+											</div>
+	                                    </div>
+	                            </div>
+								<div class="input-group">
+									<label class="label">Opis:</label>
+									<input class="input--style-1" id = "profil_servisa_opis" type="text" >
+								</div>
+								<button type="submit" class="btn btn-submit">Izmjeni</button>
+							</form>
+                        </div>
+	                    </div>                    
+                	</div>
+            	</div>
+        	</div>
+        </div>    
+	
+    <!-- Main JS-->
+    <script src="js/global.js"></script>
+    <script type="text/javascript" src="js/rentACar.js"></script>
+	<script type="text/javascript" src="js/auth.js"></script>
 </body>
 </html>
