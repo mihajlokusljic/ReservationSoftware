@@ -26,6 +26,7 @@
     <link href="css/main.css" rel="stylesheet" media="all">
     
   	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+   	<script type="text/javascript" src="../js/auth.js"></script>
    	<script type="text/javascript" src="../js/administratorAviokompanije.js"></script>
     
     
@@ -67,7 +68,7 @@
                                 <div class="input-group">
                                     <label class="label">Puna adresa: </label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Unesite punu adresu destinacije" required="required">
+                                    <input class="input--style-2" type="text" id = "destinacijePunaAdresa" name="destination" placeholder="Unesite punu adresu destinacije" required="required">
                                 </div>
 						<input type="submit" value = "Dodaj novu destinaciju" class="btn btn-submit" action ="#tab-dodaj-destinaciju"> <br><br>
                             </form>
@@ -80,11 +81,7 @@
 							</tr>
 						</thead>
 						<tbody id = "administratorAviokompanijeDestinacijeTabela">
-								<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
+						
 						</tbody>
 					</table>
                         </div>

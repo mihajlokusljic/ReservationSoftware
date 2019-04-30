@@ -1,3 +1,5 @@
+let token_key = "jwtToken";
+
 function getJwtToken(token_key){
 	return localStorage.getItem(token_key);
 }
