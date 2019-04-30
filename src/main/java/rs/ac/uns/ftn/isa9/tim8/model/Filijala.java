@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,14 +36,19 @@ public class Filijala implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rent_a_car_servis_id")
 	protected RentACarServis rentACar;
+	
+	@Column(name = "brojVozila")
+	protected int brojVozila;
 
 	public Filijala() {
 		super();
+		this.brojVozila = 0;
 	}
 
 	public Filijala(Adresa adresa) {
 		super();
 		this.adresa = adresa;
+		this.brojVozila = 0;
 	}
 	
 	public Adresa getAdresa() {
@@ -71,6 +77,14 @@ public class Filijala implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public int getBrojVozila() {
+		return brojVozila;
+	}
+
+	public void setBrojVozila(int brojVozila) {
+		this.brojVozila = brojVozila;
 	}
 	
 	
