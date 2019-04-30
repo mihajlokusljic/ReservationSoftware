@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,6 +32,13 @@ public class RentACarServis extends Poslovnica implements Serializable {
 	
 	public RentACarServis() {
 		super();
+	}
+
+	public RentACarServis(String naziv, String promotivniOpis, Adresa adresa) {
+		super(naziv, promotivniOpis, adresa, 0, 0, new HashSet<Usluga>());
+		this.vozila = new HashSet<Vozilo>();
+		this.filijale = new HashSet<Filijala>();
+		this.rezervisanaVozila = new HashSet<RezervacijaVozila>();
 	}
 
 	public Set<Vozilo> getVozila() {

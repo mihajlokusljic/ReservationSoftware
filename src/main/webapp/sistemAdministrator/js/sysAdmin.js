@@ -60,6 +60,12 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		dodavanjeHotela();
 	});
+	
+	//dodavanje rent-a-car servisa
+	$("#dodavanjeRacServisaForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeRacServisa();
+	});
 		
 	
 });
@@ -135,6 +141,35 @@ function dodavanjeHotela() {
 			let selekcioniMeni = $("#hotelAdminaSelect");
 			prikazi(response, tabelaHotela, selekcioniMeni, "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
 			alert("Hotel je uspjesno dodat.");
+		},
+	});
+}
+
+function dodavanjeRacServisa() {
+	let _naziv = $("#nazivRacServisa").val();
+	let _adresa = $("#adresaRacServisa").val();
+	let _opis = $("#opisRacServisa").val();
+	
+	if(_naziv == "") {
+		alert("Naziv rent-a-car servisa mora biti zadat.");
+		return;
+	}
+	
+	let racServis = {
+			naziv: _naziv, 
+			adresa: { punaAdresa : _adresa }, 
+			promotivniOpis: _opis
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../rentACar/dodajServis",
+		data: JSON.stringify(racServis),
+		success: function(response) {
+			let tabelaRacServisa = $("#prikazRacServisa");
+			let selekcioniMeni = $("#racServisAdminaSelect");
+			prikazi(response, tabelaRacServisa, selekcioniMeni, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+			alert("Rent-a-car servis je uspjesno dodat.");
 		},
 	});
 }
