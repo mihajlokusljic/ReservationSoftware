@@ -1,6 +1,7 @@
 let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"]
 let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
 let podaciAdmina = null;
+let pocetnaStrana = "../login/login.html";
 
 $(document).ready(function(e) {
 	
@@ -71,6 +72,12 @@ $(document).ready(function(e) {
 	$("#dodavanjeAdminaForm").submit(function(e) {
 		e.preventDefault();
 		dodavanjeAdmina();
+	});
+	
+	//odjavljivanje
+	$("#odjava").click(function(e) {
+		e.preventDefault();
+		odjava();
 	});
 		
 	
@@ -274,4 +281,9 @@ function prikazi(podatak, tabelaZaPrikaz, selekcioniMeni, defaultSlika) {
 	if(selekcioniMeni != undefined) {
 		selekcioniMeni.append('<option value="' + podatak.id + '">' + podatak.naziv + ', ' + podatak.adresa.punaAdresa + '</option>');
 	}
+}
+
+function odjava() {
+	removeJwtToken();
+	window.location.replace(pocetnaStrana);
 }
