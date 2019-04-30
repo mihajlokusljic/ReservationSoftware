@@ -38,7 +38,23 @@ $(document).ready(function() {
 		dobaviSveFilijale();
 	
 	});
-	
+	$("#profil_servisa").click(function(e){
+		e.preventDefault();
+		$("#tab-profil-servisa").show();
+
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+
+		profilServisa();
+	});
+
 	$("#dodaj_vozilo_dugme").click(function(e){
 		e.preventDefault();
 		$("#tab-filijala").hide();
@@ -534,4 +550,54 @@ function prikazFilijalaOdabranogServisa(){
 	});
 	
 
+}
+
+function profilServisa(){
+	$("#profil_servisa_naziv").val(rentACarServis.naziv);
+	$("#profil_servisa_adresa").val(rentACarServis.adresa.punaAdresa);
+	$("#profil_servisa_opis").val(rentACarServis.promotivniOpis);
+	
+	$("#profil_servisa_forma").unbind().submit(function(e){
+		e.preventDefault();
+		var naziv_serv = $("#profil_servisa_naziv").val();
+		var adresa = $("#profil_servisa_adresa").val();
+		if (adresa == ''){
+			alert("Polje za unos adrese servisa ne moze biti prazno.");
+			return;
+		}
+		var opis = $("#profil_servisa_opis").val();
+		if (opis == ''){
+			alert("Polje za unos promotivnog opisa servisa ne moze biti prazno.");
+			return;
+		}
+		let racServis = {
+				naziv: naziv_serv, 
+				adresa: { punaAdresa : adresa }, 
+				promotivniOpis: opis,
+				sumaOcjena: 0,
+				brojOcjena: 0,
+				vozila: [],
+				filijale: []
+		};
+		$.ajax({
+			type:"POST",
+			url:"../rentACar/izmjeniProfil",
+			contentType : "application/json; charset=utf-8",
+			data:JSON.stringify(racServis),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success:function(response){
+				if (response == ''){
+					alert("Uspjesno ste izmjenili profil");
+					ucitajPodatkeSistema();
+					profilServisa();
+				}
+				else{
+					alert(response);
+
+				}
+				
+			},
+		});
+		
+	});
 }
