@@ -9,15 +9,36 @@ $(document).ready(function() {
 	$("#vozila").click(function(e){
 		e.preventDefault();
 		$("#tab-filijala").hide();
-		$("tab-dodaj-vozilo").hide();
+		$("#tab-dodaj-vozilo").hide();
 		$("#tab-profil-servisa").hide();
 		$("#tab-profil-kor").hide();
 		$("#tab-izvjestaj").hide();
 		$("#tab-odjava").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-vozila").show();
 		dobaviSvaVozilaServisa();
 	
 	});
+	
+	$("#filijale").click(function(e){
+		e.preventDefault();
+		$("#tab-filijala").show();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+
+		dobaviSveFilijale();
+	
+	});
+	
 	$("#dodaj_vozilo_dugme").click(function(e){
 		e.preventDefault();
 		$("#tab-filijala").hide();
@@ -26,8 +47,23 @@ $(document).ready(function() {
 		$("#tab-izvjestaj").hide();
 		$("#tab-odjava").hide();
 		$("#tab-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
 		$("#tab-dodaj-vozilo").show();
 		dodajVozilo();
+	});
+	
+	$("#dodaj_filijalu_dugme").click(function(e){
+		e.preventDefault();
+		$("#tab-filijala").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").show();
+		dodajFilijalu();
 	});
 	
 });
@@ -99,6 +135,7 @@ function prikaziVozila(vozila){
 	$("#tab-dodaj-vozilo").hide();
 	$("#tab-vozila").show();
 	$("#tab-prikaz-vozila").hide();
+	$("#tab-dodaj-filijalu").hide();
 
 
 	let tbody = $("#tbody_vozila");
@@ -336,4 +373,165 @@ function dodajVozilo(){
 			}
 		});
 	});
+}
+
+function dobaviSveFilijale(){
+	let naziv_servisa_ = rentACarServis.naziv;
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/dobaviFilijale/" + naziv_servisa_,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikazFilijala(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+}
+
+function prikazFilijala(filijale){
+	$("#tab-dodaj-filijalu").hide();
+	$("#tab-izmjeni-filijalu").hide();
+	$("#tab-filijala").show();
+
+	let tbody = $("#tbody_filijale");
+	tbody.empty();
+	$.each(filijale, function(i,filijala){
+		tbody.append('<tr><td class = "column1">' + filijala["punaAdresa"] + '</td><td class = "column2">' + filijala["brojVozila"] + '</td>'+
+		 '<td class = "column3"><a href = "javascript:void(0)" class = "izmjeni_lokaciju" id = "' + i + '">Izmjeni lokaciju</a></td>' + 
+		 '<td class = "column4"><a href = "javascript:void(0)" class = "ukloni_filijalu" id = "' + i + '">Ukloni filijalu</a></td></tr>'
+		 )
+	});
+	
+	$(".ukloni_filijalu").click(function(e){
+		let filijala = filijale[e.target.id];
+		$.ajax({
+			type : "GET",
+			url : "../rentACar/ukloniFilijalu/" + filijala.id,
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success : function(response){
+				prikazFilijalaOdabranogServisa();			
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	
+	$(".izmjeni_lokaciju").click(function(e){
+		e.preventDefault();
+		$("#tab-filijala").hide();
+		$("#tab-izmjeni-filijalu").show();
+		let filijala = filijale[e.target.id];
+
+		$("#adresa_filijale_nova").val(filijala.punaAdresa);
+		
+		$("#forma_izmjeni_filijalu").unbind().submit(function(e){
+			e.preventDefault();
+			let nova_lokacija = $("#adresa_filijale_nova").val();
+			if (nova_lokacija == ''){
+				alert("Ne mozete unijeti praznu lokaciju.");
+				return;
+			}
+			$.ajax({
+				type : "GET",
+				url : "../rentACar/izmjeniFilijalu/" + filijala.id + "/" + nova_lokacija,
+				headers: createAuthorizationTokenHeader("jwtToken"),
+				success : function(response){
+					if (response != ''){
+						alert(response);
+						prikazFilijalaOdabranogServisa();				
+
+					}
+					else{
+						alert("Uspjesno ste izmjenili adresu filijale");
+						prikazFilijalaOdabranogServisa();				
+					}
+					
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					alert("AJAX error: " + errorThrown);
+				}
+			});
+		});
+		
+	});
+	
+	
+	
+	$("#forma_izmjeni_filijalu").unbind().submit(function(e){
+		e.preventDefault();
+		let filijala = filijale[e.target.id];
+		let nova_lokacija = $("#adresa_filijale_nova").val();
+		if (nova_lokacija == ''){
+			alert("Ne mozete unijeti praznu lokaciju.");
+			return;
+		}
+		$.ajax({
+			type : "GET",
+			url : "../rentACar/izmjeniFilijalu/" + filijala.id + "/" + nova_lokacija,
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success : function(response){
+				if (response != ''){
+					alert(response);		
+				}
+				else{
+					alert("Uspjesno ste izmjenili adresu filijale");
+					prikazFilijalaOdabranogServisa();				
+				}
+				
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+}
+
+function dodajFilijalu(){
+	
+	$("#forma_dodaj_filijalu").unbind().submit(function(e) {
+		e.preventDefault();
+		let naziv_servisa = rentACarServis.naziv;
+
+		let adresa = $("#adresa_filijale").val();
+		if (adresa == ''){
+			alert ("Niste unijeli adresu.");
+			return;
+		}
+		
+		$.ajax({
+			type: "GET",
+			url: "../rentACar/dodajFilijalu/" + naziv_servisa + "/" + adresa,
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				if(response != '') {
+					alert(response);
+				} else {
+					prikazFilijalaOdabranogServisa();
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});			
+	});
+}
+
+function prikazFilijalaOdabranogServisa(){
+	let naziv_servisa_ = rentACarServis.naziv;
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/dobaviFilijale/" + naziv_servisa_,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikazFilijala(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+	
+
 }

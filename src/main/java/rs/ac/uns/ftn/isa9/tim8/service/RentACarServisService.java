@@ -213,7 +213,7 @@ public class RentACarServisService {
 			return null;
 		}
 		for(Filijala f : filijale ) {
-			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId()));
+			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId(), f.getBrojVozila()));
 		}
 
 	
