@@ -59,7 +59,7 @@
                     <!-- Ovdje imas vozilaaaaa -->
                         <div class="tab-pane active" id="tab-aviokompanije">
                         
-                        <form method="POST" action="#">
+                        <form method="POST" action="#" id="dodavanjeAviokompanijeForm">
                                 <div class="input-group">
                                     <label class="label">Naziv:</label>
                                     <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv aviokompanije" required="required">
@@ -85,20 +85,7 @@
 								<th class="column1">Promotivni opis</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td class="column1"><img src="https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg"/></td>
-								<td class="column1">Someones Airline</td>
-								<td class="column1">Some Address</td>
-								<td class="column1">Some awsome promotional description that will blow peoples minds and make them wanna fly with us</td>
-							</tr>
-							<tr>
-								<td class="column1"><img src="https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg"/></td>
-								<td class="column1">Someones Airline</td>
-								<td class="column1">Some Address</td>
-								<td class="column1">Some awsome promotional description that will blow peoples minds and make them wanna fly with us</td>
-							</tr>
-							
+						<tbody id="prikazAviokompanija">
 						</tbody>
 					</table>
                         </div>
@@ -129,26 +116,7 @@
 								<th class = "column1">Promotivni opis</th>
 							</tr>
 						</thead>
-						<tbody>
-								<tr>
-									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
-									<td class="column1">Some hotel</td>
-									<td class="column1">Some Address</td>
-									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
-								</tr>
-								<tr>
-									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
-									<td class="column1">Some hotel</td>
-									<td class="column1">Some Address</td>
-									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
-								</tr>
-								<tr>
-									<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>
-									<td class="column1">Some hotel</td>
-									<td class="column1">Some Address</td>
-									<td class="column3">Some awsome description that will make people wanna come to this hotel</td>
-								</tr>
-								
+						<tbody id="prikazHotela">
 						</tbody>
 					</table>
                         </div>
@@ -182,26 +150,7 @@
 								<th class = "column1">Promotivni opis</th>
 							</tr>
 						</thead>
-						<tbody>
-								<tr>
-									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
-									<td class="column1">Some rent-a-car service</td>
-									<td class="column1">Some Address</td>
-									<td class="column6">Some awsome description that will make people wanna rent our cars</td>
-								</tr>
-								<tr>
-									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
-									<td class="column1">Some rent-a-car service</td>
-									<td class="column1">Some Address</td>
-									<td class="column3">Some awsome description that will make people wanna rent our cars</td>
-								</tr>
-								<tr>
-									<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>
-									<td class="column1">Some rent-a-car service</td>
-									<td class="column1">Some Address</td>
-									<td class="column3">Some awsome description that will make people wanna rent our cars</td>
-								</tr>
-								
+						<tbody id="prikazRacServisa">
 						</tbody>
 					</table>
                         </div>
@@ -273,24 +222,18 @@
                                     <label class="label">Aviokompanija:</label>
                                     <input id="aviokompanijaAdminaInp" class="input--style-2" type="text" placeholder="Unesite administriranu aviokompaniju" autocomplete="off" list="aviokompanije-list" required="required">
                                     <datalist id="aviokompanije-list">
-                                    	<option>Air Serbia</option>
-                                    	<option>Fly Emirates</option>
                                     </datalist>
                                 </div>
                                 <div class="input-group" id="hotelAdmina" hidden="hidden">
                                     <label class="label">Hotel:</label>
                                     <input id="hotelAdminaInp" class="input--style-2" type="text" placeholder="Unesite administrirani hotel" autocomplete="off" list="hoteli-list">
                                     <datalist id="hoteli-list">
-                                    	<option data-value="1" value="Hotel Centar"></option>
-                                    	<option data-value="2" value="Holiday Inn"></option>
                                     </datalist>
                                 </div>
                                 <div class="input-group" id="racServisAdmina" hidden="hidden">
                                     <label class="label">Rent-a-car servis:</label>
                                     <input id="racAdminaInp" class="input--style-2" type="text" placeholder="Unesite administrirani rent-a-car servis" autocomplete="off" list="rac-list">
                                     <datalist id="rac-list">
-                                    	<option data-value="1" value="Sport Car Rentals"></option>
-                                    	<option data-value="2" value="City Rent"></option>
                                     </datalist>
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj administratora"/>
@@ -298,7 +241,7 @@
                         </div>
                         
 						<div class="tab-pane" id="tab-profil-kor">
-                            Profil korisnika
+                            <p id="podaciAdmina">Sistem administrator: </p>
                         </div>
                         
 						<div class="tab-pane" id="tab-odjava">
@@ -321,6 +264,7 @@
     <script src="vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Main JS-->
+    <script type="text/javascript" src="js/auth.js"></script>
     <script type="text/javascript" src="js/sysAdmin.js"></script>
     <script src="js/global.js"></script>
 
