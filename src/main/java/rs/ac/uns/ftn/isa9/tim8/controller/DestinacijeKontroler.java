@@ -37,7 +37,7 @@ public class DestinacijeKontroler {
 		try {
 			return new ResponseEntity<Destinacija>(servis.dodajDestinaciju(novaDestinacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
 

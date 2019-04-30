@@ -34,9 +34,15 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(novaDestinacija),
 			success: function(response) {
-				if(response == null) {
+				if(response == "Takva destinacija vec postoji.") {
 					alert("Već postoji destinacija sa takvom punom adresom.");
-				} else {
+					return;
+				}
+				else if (response == "Ne postoji aviokompanija sa datim id-jem.") {
+					alert("Ne postoji aviokompanija sa datim id-jem.");
+					return;
+				}
+				else {
 					alert("Destinacija je uspješno dodata.");
 					prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
 				}
