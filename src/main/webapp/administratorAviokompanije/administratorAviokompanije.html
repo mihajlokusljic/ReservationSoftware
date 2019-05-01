@@ -180,7 +180,7 @@
                        	<form method="POST" action="#" id= "administratorAviokompanijeLetoviForm">
                         	  	<div class="input-group">
                                     <label class="label">Broj leta: </label>
-                                    <input class="input--style-2" type="text" placeholder="Unesite broj leta" id="administratorAviokompanijeBrojLeta">
+                                    <input class="input--style-2" type="text" placeholder="Unesite broj leta" id="administratorAviokompanijeBrojLeta" required="required">
                                 </div>
                       	       	
                       	       	<div class="row row-space">
@@ -189,7 +189,7 @@
                                              	<i class="zmdi zmdi-pin input-group-symbol"></i>
 	                                            <label class="label">Polazište: </label>
 	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id = "administratorAviokompanijePolaziste">
+	                                                <select id = "administratorAviokompanijePolaziste" required="required">
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
 	                            				</div>
@@ -200,7 +200,7 @@
                                             	<i class="zmdi zmdi-pin input-group-symbol"></i>
 	                                            <label class="label">Odredište: </label>
 	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id = "administratorAviokompanijeOdrediste">
+	                                                <select id = "administratorAviokompanijeOdrediste" required="required">	                                                	
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
 	                            				</div>
@@ -212,14 +212,14 @@
                                         <div class="input-group">
                                             <label class="label">Datum poletanja: </label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2" required="required">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum sletanja: </label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -227,26 +227,29 @@
                               	<div class="input-group">
                                             <label class="label">Datum povratka: </label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="js-single-datepicker" type="text" name="check-out" placeholder="mm/dd/yyyy" id="duzinaPutovanja">
+                                            <input class="js-single-datepicker" type="text" name="check-out" placeholder="mm/dd/yyyy" id="duzinaPutovanja" required="required">
                               	</div>
-                              	
-                              	           	<div class="input-group" id="svaPresjedanja">
+                              
+                              <div class="input-group">
 	                                            <label class="label">Presjedanja: </label>
 	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id = "presjedanjaSelect">
+	                                                <select multiple name="sva_presjedanja" id = "svaPresjedanja" required="required">
+	                                                
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
-	                            				</div>
-	                       		</div>
-	                       		
+	                                            </div>
+	                       	  </div>
+                              
+                              
+                              		                       		                       	
 	                       		             	<div class="input-group" id="avionZaNekiLet">
 	                                            <label class="label">Avion:</label>
 	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id = "avionZaLetSelect">
+	                                                <select id = "avionZaLetSelect" required="required">
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
 	                            				</div>
-	                       		</div>
+	                       						</div>
                         	
 						        <div class="input-group">
                                     <label class="label">Bazna cijena karte: </label>
@@ -256,6 +259,25 @@
                		<input type="submit" value = "Dodaj novi let" class="btn btn-submit" action ="#tab-dodaj-destinaciju"> <br><br>
                        
 					</form>
+                            <!-- Tabela za prikaz letova -->
+                            <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column2">Broj leta</th>
+								<th class="column3">Naziv polazišta</th>
+								<th class="column3">Naziv odredišta</th>
+								<th class="column1">Datum poletanja</th>
+								<th class="column1">Datum sletanja</th>
+								<th class="column5">Broj presjedanja</th>
+								<th class="column6">Cijena karte</th>
+								<th class="column6">Prosječna ocjena</th>
+							</tr>
+						</thead>
+						<tbody id="letoviRows">
+								
+						</tbody>
+					</table>
+					
 				</div>
                         <div class="tab-pane" id="tab-filijala">
                             <table>
@@ -359,7 +381,7 @@
                             Izvjestaj
                         </div>
 						<div class="tab-pane" id="tab-odjava">
-                            Odjava
+                            
                         </div>
                     </div>
                 </div>

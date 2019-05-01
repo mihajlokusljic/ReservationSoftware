@@ -26,7 +26,7 @@ public class AvionKontroler {
 	@Autowired
 	protected AvionService servis;
 	
-	@RequestMapping(value = "dobaviSve", method = RequestMethod.GET)
+	@RequestMapping(value = "/dobaviSve", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Avion>> dobaviAvione() {
 		return new ResponseEntity<Collection<Avion>>(servis.dobaviAvione(), HttpStatus.OK);
 	}
