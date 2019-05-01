@@ -156,145 +156,49 @@
 								<th class = "column1">Akcije</th>
 							</tr>
 						</thead>
-						<tbody id="prikazHotela">
+						<tbody id="prikazUsluga">
 						</tbody>
 					</table>
                         </div>
 							
-                        <div class="tab-pane" id="tab-rac">
+                        <div class="tab-pane" id="tab-info-stranica">
                         
-                        <form method="POST" action="#" id="dodavanjeRacServisaForm">
+                        <form method="POST" action="#" id="izmjenaInfoStraniceForm">
                                 <div class="input-group">
-                                    <label class="label">Naziv:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv rent-a-car servisa" required="required" id="nazivRacServisa">
+                                    <label class="label">Naziv hotela:</label>
+                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Adresa:</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu rent-a-car servisa" required="required" id="adresaRacServisa">
+                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis rent-a-car servisa (opciono)" id="">
+                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="opisHotela"></textarea>
                                 </div>
-                                <input type="submit" class="btn btn-submit" value="Dodaj rent-a-car servis"/>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+                                    </div>
+                                    <div class="col-2">
+                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaStraniceHotela">Poništi izmjene</button>
+                                    </div>
+                                </div>
                         </form>
-                        <h1>&nbsp</h1>
-                        
-                        <table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column1">Slika</th>
-								<th class="column1">Naziv</th>
-								<th class = "column1">Adresa</th>
-								<th class = "column1">Promotivni opis</th>
-							</tr>
-						</thead>
-						<tbody id="prikazRacServisa">
-						</tbody>
-					</table>
+
                         </div>
                         
-                        <div class="tab-pane" id="tab-administartori">
-                            <form method="POST" action="#" id="dodavanjeAdminaForm">
-                            
-                            	<div class="radio-row">
-                                    <label class="radio-container m-r-45">Administrator aviokompanije
-                                        <input type="radio" checked="checked" name="class" id="adminAviokompanijeBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
-                                    <label class="radio-container m-r-45">Administrator hotela
-                                        <input type="radio" name="class" id="adminHotelaBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
-                                    <label class="radio-container">Administrator rent-a-car servisa
-                                        <input type="radio" name="class" id="racAdminBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
-                                    <label class="radio-container">Administrator sistema
-                                        <input type="radio" name="class" id="sysAdminBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
-                                </div>
-                                
-                                <p>&nbsp</p>
-                                
-                                <div class="input-group">
-                                    <label class="label">E-mail:</label>
-                                    <input class="input--style-2" type="email" placeholder="Unesite email administratora" required="required" id="emailAdmina">
-                                </div>
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Lozinka:</label>
-                                            <input class="input--style-2" type="password" placeholder="Unesite inicijalnu lozinku administratora" required="required" id="lozinkaAdmina">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Potvrda lozinke:</label>
-                                            <input class="input--style-2" type="password" placeholder="Ponovo unesite inicijalnu lozinku administratora" required="required" id="potvrdaLozinkeAdmina">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Ime:</label>
-                                            <input class="input--style-2" type="text" placeholder="Unesite ime administratora" required="required" id="imeAdmina">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Prezime:</label>
-                                            <input class="input--style-2" type="text" placeholder="Unesite prezime administratora" required="required" id="prezimeAdmina">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Broj telefona:</label>
-                                    <input class="input--style-2" type="number" placeholder="Unesite broj telefona administratora" id="brTelefonaAdmina">
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Adresa:</label>
-                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" placeholder="Unesite adresu prebivalista administratora" required="required" id="adresaAdmina">
-                                </div>
-                                
-
-                                <div class="input-group" id="aviokompanijaAdmina">
-	                                            <label class="label">Administrirana aviokompanija:</label>
-	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id = "aviokompanijaAdminaSelect">
-	                                                </select>
-	                                                <div class="select-dropdown"></div>
-	                                            	</div>
-	                            </div>
-
-                                <div class="input-group" id="hotelAdmina" hidden>
-	                                            <label class="label">Administrirani hotel:</label>
-	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id ="hotelAdminaSelect">
-	                                                </select>
-	                                                <div class="select-dropdown"></div>
-	                                            	</div>
-	                            </div>
-	                            
-                                <div class="input-group" id="racServisAdmina" hidden>
-	                                            <label class="label">Administrirani rent-a-car servis:</label>
-	                                            <div class="rs-select2 js-select-simple">
-	                                                <select id ="racServisAdminaSelect">
-	                                                </select>
-	                                                <div class="select-dropdown"></div>
-	                                            </div>
-	                            </div>
-                                <input type="submit" class="btn btn-submit" value="Dodaj administratora"/>
-                            </form>
+                        <div class="tab-pane" id="tab-brze-rezervacije">
+                            <p>Brze rezervacije</p>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-izvjestaji">
+                            <p>Izvjestaji</p>
                         </div>
                         
 						<div class="tab-pane" id="tab-profil-kor">
-                            <p id="podaciAdmina">Sistem administrator: </p>
+                            <p id="podaciAdmina">Hotel administrator: </p>
                         </div>
                         
 						<div class="tab-pane" id="tab-odjava">
@@ -317,7 +221,7 @@
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
-    <script type="text/javascript" src="js/sysAdmin.js"></script>
+    <script type="text/javascript" src="js/hotelAdmin.js"></script>
     <script src="js/global.js"></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
