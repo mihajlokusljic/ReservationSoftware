@@ -24,6 +24,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
+import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 import rs.ac.uns.ftn.isa9.tim8.service.RentACarServisService;
 
@@ -33,6 +34,9 @@ public class RentACarKontroler {
 	
 	@Autowired
 	protected RentACarServisService servis;
+	
+	@Autowired
+	protected KorisnikService servisKorisnik;
 	
 	@RequestMapping(value = "/ping", method = RequestMethod.GET)
 	public String ping() {
@@ -137,5 +141,10 @@ public class RentACarKontroler {
 		return new ResponseEntity<Poslovnica>(
 				new Poslovnica(admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
 				HttpStatus.OK);
+	}
+	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
+		return new ResponseEntity<KorisnikDTO>(servisKorisnik.izmjeniAdminaRentACar(korisnik), HttpStatus.OK);
 	}
 }

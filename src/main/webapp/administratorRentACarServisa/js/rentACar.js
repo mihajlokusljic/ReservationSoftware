@@ -54,6 +54,22 @@ $(document).ready(function() {
 
 		profilServisa();
 	});
+	
+	$("#izmjeni_podatke_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-profil-kor").show();
+		
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		profilKorisnika();
+	})
 
 	$("#dodaj_vozilo_dugme").click(function(e){
 		e.preventDefault();
@@ -80,6 +96,11 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").show();
 		dodajFilijalu();
+	});
+	
+	$("#odjava").click(function(e){
+		e.preventDefault();
+		odjava();
 	});
 	
 });
@@ -594,6 +615,73 @@ function profilServisa(){
 				else{
 					alert(response);
 
+				}
+				
+			},
+		});
+		
+	});
+}
+
+
+function odjava() {
+	removeJwtToken();
+	window.location.replace("../login/login.html");
+}
+
+function profilKorisnika(){
+	$("#emailAdmina").val(korisnik.email);
+	$("#imeAdmina").val(korisnik.ime);
+	$("#prezimeAdmina").val(korisnik.prezime);
+	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
+	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
+	
+	$("#forma_profil_korisnika").unbind().submit(function(e){
+		e.preventDefault();
+		var imeAdmina = $("#imeAdmina").val();
+		if (imeAdmina == ''){
+			alert("Polje za unos imena ne moze biti prazno.");
+			return;
+		}
+		var prezimeAdmina = $("#prezimeAdmina").val();
+		if (prezimeAdmina == ''){
+			alert("Polje za unos prezimena ne moze biti prazno.");
+			return;
+		}
+		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
+		if (brTelefonaAdmina == ''){
+			alert("Polje za unos broja telefona ne moze biti prazno.");
+			return;
+		}
+		var adresaAdmina = $("#adresaAdmina").val();
+		if (adresaAdmina == ''){
+			alert("Polje za unos adrese ne moze biti prazno.");
+			return;
+		}		
+
+		let admin = {
+				id: korisnik.id,
+				ime: imeAdmina,
+				prezime: korisnik.prezime,
+				email: korisnik.email,
+				lozinka: korisnik.lozinka,
+				brojTelefona: brTelefonaAdmina,
+				adresa: { punaAdresa : adresaAdmina }
+		};
+		$.ajax({
+			type:"POST",
+			url:"../rentACar/izmjeniProfilKorisnika",
+			contentType : "application/json; charset=utf-8",
+			data:JSON.stringify(admin),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success:function(response){
+				if (response == ''){
+					alert("Izmjena nije uspjela");
+				}
+				else{
+					alert("Uspjesno ste izmjenili profil.");
+					korisnik = response;
+					profilKorisnika();
 				}
 				
 			},
