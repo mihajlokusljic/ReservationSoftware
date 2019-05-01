@@ -35,20 +35,24 @@ public class AviokompanijaService {
 	@Autowired
 	protected AvionRepository avionRepository;
 
-	public String dodajAviokompaniju(Aviokompanija novaAviokompanija) {
+	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
 		Aviokompanija avio = aviokompanijaRepository.findOneByNaziv(novaAviokompanija.getNaziv());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(novaAviokompanija.getAdresa().getPunaAdresa());
 		if (avio != null) {
-
-			return "Zauzet naziv aviokompanije";
+			throw new NevalidniPodaciException("Vec postoji aviokompanija sa zadatim nazivom");
 		}
 		if (adresa != null) {
-
-			return "Zauzeta adresa";
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi.");
+		}
+		if(novaAviokompanija.getNaziv().equals("")) {
+			throw new NevalidniPodaciException("Naziv aviokompanije mora biti zadat.");
+		}
+		if(novaAviokompanija.getAdresa().getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa aviokompanije mora biti zadata.");
 		}
 		aviokompanijaRepository.save(novaAviokompanija);
-		return null;
+		return novaAviokompanija;
 	}
 
 	public Collection<Aviokompanija> dobaviAviokompanije() {

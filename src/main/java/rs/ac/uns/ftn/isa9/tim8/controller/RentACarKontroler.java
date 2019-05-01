@@ -24,6 +24,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 import rs.ac.uns.ftn.isa9.tim8.service.RentACarServisService;
 
 @RestController
@@ -45,8 +46,12 @@ public class RentACarKontroler {
 	
 	@RequestMapping(value = "/dodajServis", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
-	public ResponseEntity<String> dodajRacServis(@RequestBody RentACarServis noviRacServis) {
-		return new ResponseEntity<String>(servis.dodajRentACarServis(noviRacServis),HttpStatus.OK);
+	public ResponseEntity<?> dodajRacServis(@RequestBody RentACarServis noviRacServis) {
+		try {
+			return new ResponseEntity<RentACarServis>(servis.dodajRentACarServis(noviRacServis),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@RequestMapping(value = "/dodajVozilo/{imeRacServisa}", method = RequestMethod.POST)
@@ -109,7 +114,7 @@ public class RentACarKontroler {
 	
 	@RequestMapping(value = "/dobaviFilijale/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
-	public ResponseEntity<Collection<FilijalaDTO>> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
+	public ResponseEntity<?> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 	

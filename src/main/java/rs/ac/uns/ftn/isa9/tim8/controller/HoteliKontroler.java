@@ -18,6 +18,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelService;
+import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
 @RequestMapping(value = "/hoteli")
@@ -33,9 +34,13 @@ public class HoteliKontroler {
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
-	public ResponseEntity<String> dodajHotel(@RequestBody Hotel noviHotel) {
+	public ResponseEntity<?> dodajHotel(@RequestBody Hotel noviHotel) {
 		noviHotel.setSobe(new HashSet<HotelskaSoba>());
-		return new ResponseEntity<String>(servis.dodajHotel(noviHotel),HttpStatus.OK);
+		try {
+			return new ResponseEntity<Hotel>(servis.dodajHotel(noviHotel),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@RequestMapping(value = "/pretrazi", method = RequestMethod.POST)

@@ -57,22 +57,24 @@ public class RentACarServisService {
 		return servisi;
 	}
 	
-	public String dodajRentACarServis(RentACarServis noviServis) {
+	public RentACarServis dodajRentACarServis(RentACarServis noviServis) throws NevalidniPodaciException {
 		RentACarServis rentACar = rentACarRepository.findOneByNaziv(noviServis.getNaziv());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(noviServis.getAdresa().getPunaAdresa());
 		if (rentACar != null) {
-			
-			return "Zauzet naziv rent-a-car servisa";
+			throw new NevalidniPodaciException("Vec postoji rent-a-car servis sa zadatim nazivom.");
 		}
 		if (adresa != null) {
-			
-			return "Zauzeta adresa";
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi.");
 		}
-		Set<Filijala> filijale = new HashSet<Filijala>();
-		noviServis.setFilijale(filijale);
-		noviServis.setId(null);
-		rentACarRepository.save(noviServis);
-		return null;
+		if(noviServis.getNaziv().equals("")) {
+			throw new NevalidniPodaciException("Naziv rent-a-car servisa mora biti zadat.");
+		}
+		if(noviServis.getAdresa().getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa rent-a-car servisa mora biti zadata.");
+		}
+		RentACarServis rac = new RentACarServis(noviServis.getNaziv(), noviServis.getPromotivniOpis(), noviServis.getAdresa());
+		rentACarRepository.save(rac);
+		return rac;
 	}
 	
 	public Collection<Vozilo> vratiVozilaServisa(String nazivServisa){
@@ -117,7 +119,15 @@ public class RentACarServisService {
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());		
 		if (adresa != null) {
 			
-			return "Zauzeta adresa";
+			RentACarServis rs = rentACarRepository.findOneByAdresa(adresa);
+			if (rs != null) {
+				if(	rs.getId() != rentACarStari.getId()) {
+					return "Zauzeta adresa";
+				}
+			}
+			else {
+				return "Zauzeta adresa";
+			}
 		}
 		rentACarStari.getAdresa().setPunaAdresa(rentACar.getAdresa().getPunaAdresa());;
 		rentACarStari.setPromotivniOpis(rentACar.getPromotivniOpis());
@@ -213,7 +223,7 @@ public class RentACarServisService {
 			return null;
 		}
 		for(Filijala f : filijale ) {
-			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId()));
+			filijaleDTO.add(new FilijalaDTO(f.getAdresa().getPunaAdresa(), f.getId(), f.getBrojVozila()));
 		}
 
 	

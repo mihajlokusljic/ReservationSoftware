@@ -162,7 +162,7 @@ public class AuthenticationController {
 			redirectionURL = "../administratorAviokompanije/administratorAviokompanije.html";
 		} else {
 			tipKorisnika = TipKorisnika.AdministratorSistema;
-			redirectionURL = "../administracijaSistema.html";
+			redirectionURL = "../sistemAdministrator/index.html";
 		}
 
 		// Vrati token kao odgovor na uspesno autentifikaciju

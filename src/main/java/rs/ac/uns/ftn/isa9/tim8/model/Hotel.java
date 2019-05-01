@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -21,6 +22,13 @@ public class Hotel extends Poslovnica {
 	public Hotel() {
 		super();
 	}
+	
+	public Hotel(String naziv, String promotivniOpis, Adresa adresa) {
+		super(naziv, promotivniOpis, adresa, 0, 0, new HashSet<Usluga>());
+		this.sobe = new HashSet<HotelskaSoba>();
+	}
+
+
 
 	public Hotel(Set<HotelskaSoba> sobe) {
 		super();
