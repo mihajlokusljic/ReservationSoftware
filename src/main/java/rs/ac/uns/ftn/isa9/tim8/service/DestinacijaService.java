@@ -54,7 +54,10 @@ public class DestinacijaService {
 		Adresa a = adresaRepository.findOneByPunaAdresa(destinacijaDTO.getPunaAdresa());
 		if (a == null) {
 			a = new Adresa(destinacijaDTO.getPunaAdresa());
+		} else {
+			throw new NevalidniPodaciException("Ne mogu postojati dvije destinacije na istoj adresi.");
 		}
+		
 		Destinacija postojiLiDestinacija = destinacijeRepository.findOneByNazivDestinacije(destinacijaDTO.getNaziv());
 		if (postojiLiDestinacija != null) {
 			// Ukoliko takva destinacija vec postoji necemo je ponovo praviti

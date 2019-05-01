@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <!-- Required meta tags-->
     <meta charset="UTF-8">
@@ -29,6 +30,10 @@
    	<script type="text/javascript" src="../js/auth.js"></script>
    	<script type="text/javascript" src="../js/administratorAviokompanije.js"></script>
     
+    
+    
+    <!-- SVE STO JE POTREBNO ZA BIBLIOTEKU selectize.js -->
+	<script src="../js/selectize.js-master/dist/js/standalone/selectize.js"></script>
     
 </head>
 
@@ -97,22 +102,7 @@
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
                                     <input class="input--style-2" type="text" name="destination" placeholder="Unesite punu adresu destinacije" required="required">
                                 </div>
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Departing</label>
-                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">returning</label>
-                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="radio-row">
                                     <label class="radio-container m-r-45">First Class
                                         <input type="radio" name="class">
@@ -187,96 +177,108 @@
 					</table>
                         </div>
                         <div class="tab-pane" id="tab-letovi">
-							<div class="row row-space">
+                       	<form method="POST" action="#" id= "administratorAviokompanijeLetoviForm">
+                        	  	<div class="input-group">
+                                    <label class="label">Broj leta: </label>
+                                    <input class="input--style-2" type="text" placeholder="Unesite broj leta" id="administratorAviokompanijeBrojLeta" required="required">
+                                </div>
+                      	       	
+                      	       	<div class="row row-space">
+                                    <div class="col-2">
+                                <div class="input-group" id="aviokompanijaAdmina">
+                                             	<i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                            <label class="label">Polazište: </label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id = "administratorAviokompanijePolaziste" required="required">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                            				</div>
+	                       		</div>
+                                    </div>
+                                    <div class="col-2">
+                                <div class="input-group" id="aviokompanijaAdmina">
+                                            	<i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                            <label class="label">Odredište: </label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id = "administratorAviokompanijeOdrediste" required="required">	                                                	
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                            				</div>
+	                       		</div>
+                                    </div>
+                                </div>
+                                <div class="row row-space" id ="letoviDatumi">
                                     <div class="col-2">
                                         <div class="input-group">
-                                            <label class="label">Naziv:</label>
-                                            <input class="input--style-1" type="text" value ="RENT A CAR SERVIS 1" required="required">
-
+                                            <label class="label">Datum poletanja: </label>
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2" required="required">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
-                                            <label class="label">Marka:</label>
-                                            <input class="input--style-1" type="text" required="required">
+                                            <label class="label">Datum sletanja: </label>
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2" required="required">
                                         </div>
                                     </div>
+                                </div>
+                        	
+                              	<div class="input-group">
+                                            <label class="label">Datum povratka: </label>
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                            <input class="js-single-datepicker" type="text" name="check-out" placeholder="mm/dd/yyyy" id="duzinaPutovanja" required="required">
+                              	</div>
+                              
+                              <div class="input-group">
+	                                            <label class="label">Presjedanja: </label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select multiple name="sva_presjedanja" id = "svaPresjedanja" required="required">
+	                                                
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                       	  </div>
+                              
+                              
+                              		                       		                       	
+	                       		             	<div class="input-group" id="avionZaNekiLet">
+	                                            <label class="label">Avion:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id = "avionZaLetSelect" required="required">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                            				</div>
+	                       						</div>
+                        	
+						        <div class="input-group">
+                                    <label class="label">Bazna cijena karte: </label>
+                                    <input class="input--style-2" type="number" min="1" placeholder="Unesite baznu (početnu) cijenu karte" required="required" id="baznaCijenaKarte">
                                 </div>
 
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Model:</label>
-                                            <input class="input--style-1" type="text" required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Tip:</label>
-                                            <div class="rs-select2 js-select-simple select--no-search">
-                                                <select name="tip_vozila">
-                                                    <option>Automobil</option>
-                                                    <option>Kombi</option>
-                                                    <option>Motocikl</option>
-													<option>Minibus</option>
-                                                </select>
-                                                <div class="select-dropdown"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-								<div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Godina proizvodnje:</label>
-                                            <input class="input--style-1" type="number" min = "1" required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Broj sjedišta:</label>
-                                            <input class="input--style-1" type="number" min = "1" required="required">
-                                        </div>
-                                    </div>
-                                </div>
-								<div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Broj vrata:</label>
-                                            <input class="input--style-1" type="number" min = "1" required="required">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Cijena po danu:</label>
-                                            <input class="input--style-1" type="number" min = "1" required="required">
-                                        </div>
-                                    </div>
-                                </div>
-								<div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Fotografija vozila</label>
-                                            <input class="input--style-1" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
-										    <i class="zmdi zmdi-collection-image-o input-icon"></i>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Filijala:</label>
-                                            <div class="rs-select2 js-select-simple select--no-search">
-                                                <select name="filijala">
-                                                </select>
-                                                <div class="select-dropdown"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-					<button type="button" class="btn btn-submit">Potvrdi izmjene</button>
-					<button type="button" class="btn btn-submit">Ukloni vozilo</button>
-
-						</div>
+               		<input type="submit" value = "Dodaj novi let" class="btn btn-submit" action ="#tab-dodaj-destinaciju"> <br><br>
+                       
+					</form>
+                            <!-- Tabela za prikaz letova -->
+                            <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column2">Broj leta</th>
+								<th class="column3">Naziv polazišta</th>
+								<th class="column3">Naziv odredišta</th>
+								<th class="column1">Datum poletanja</th>
+								<th class="column1">Datum sletanja</th>
+								<th class="column5">Broj presjedanja</th>
+								<th class="column6">Cijena karte</th>
+								<th class="column6">Prosječna ocjena</th>
+							</tr>
+						</thead>
+						<tbody id="letoviRows">
+								
+						</tbody>
+					</table>
+					
+				</div>
                         <div class="tab-pane" id="tab-filijala">
                             <table>
 						<thead>
@@ -379,7 +381,7 @@
                             Izvjestaj
                         </div>
 						<div class="tab-pane" id="tab-odjava">
-                            Odjava
+                            
                         </div>
                     </div>
                 </div>
