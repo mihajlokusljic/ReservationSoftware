@@ -10,7 +10,7 @@
     <meta name="keywords" content="Colrolib Templates">
 
     <!-- Title Page-->
-    <title>Softver za rezervacije</title>
+    <title>Rezervacija putovanja</title>
 
     <!-- Icons font CSS-->
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -21,21 +21,18 @@
     <!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
-
+    
+	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
-    
-    <!-- Jquery and javaScript -->
-    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-   	<script type="text/javascript" src="js/pretragaLetova.js"></script>
-    
 </head>
 
 <body>
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
-        <div class="wrapper wrapper--w720">
+        <div class="wrapper wrapper--w1050">
             <div class="card card-3">
                 <div class="card-body">
+                
                     <ul class="tab-list">
                         <li class="tab-list__item active">
                             <a class="tab-list__link" href="#tab1" data-toggle="tab">Hoteli</a>
@@ -48,13 +45,14 @@
                         </li>
 
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab4" data-toggle="tab" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            <a class="tab-list__link" href="#tab4" data-toggle="tab" >&nbsp;&nbsp;&nbsp;&nbsp;</a>
                         </li>
 
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="login.html">Prijavi se</a>
+                            <a class="tab-list__link" href="../login/login.html">Prijavi se</a>
                         </li>
                     </ul>
+                    
                     <div class="tab-content">
                     
                     	<!-- Pretraga hotela -->
@@ -337,6 +335,7 @@
                             
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -353,7 +352,8 @@
     <script src="vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Main JS-->
-    <script type="text/javascript" src="js/pretragaHotela.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/sysAdmin.js"></script>
     <script src="js/global.js"></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
