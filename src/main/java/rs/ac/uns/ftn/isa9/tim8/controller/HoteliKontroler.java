@@ -45,7 +45,11 @@ public class HoteliKontroler {
 	
 	@RequestMapping(value = "/pretrazi", method = RequestMethod.POST)
 	public ResponseEntity<?> pretragaHotela(@RequestBody PretragaHotelaDTO kriterijumiPretrage) {
-		return new ResponseEntity<Collection<Hotel> >(this.servis.pretraziHotele(kriterijumiPretrage), HttpStatus.OK);
+		try {
+			return new ResponseEntity<Collection<Hotel> >(this.servis.pretraziHotele(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

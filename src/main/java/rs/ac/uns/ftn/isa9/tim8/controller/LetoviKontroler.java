@@ -39,8 +39,12 @@ public class LetoviKontroler {
 	}
 	
 	@RequestMapping(value = "/pretraziLetove", method = RequestMethod.POST)
-	public ResponseEntity<Collection<Let>> pretraziLetove(@RequestBody PretragaLetaDTO kriterijumiPretrage) {
-		return new ResponseEntity<Collection<Let>>(servis.pretraziLetove(kriterijumiPretrage), HttpStatus.OK);
+	public ResponseEntity<?> pretraziLetove(@RequestBody PretragaLetaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<Let>>(servis.pretraziLetove(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class PretragaHotelaDTO {
 	protected String nazivHotelaIliDestinacije;
-	protected Date datumDolaska;
-	protected Date datumOdlaska;
+	protected String datumDolaska;
+	protected String datumOdlaska;
 	protected Collection<PotrebnoSobaDTO> potrebneSobe;
 	public PretragaHotelaDTO() {
 		super();
@@ -17,16 +17,16 @@ public class PretragaHotelaDTO {
 	public void setNazivHotelaIliDestinacije(String nazivHotelaIliDestinacije) {
 		this.nazivHotelaIliDestinacije = nazivHotelaIliDestinacije;
 	}
-	public Date getDatumDolaska() {
+	public String getDatumDolaska() {
 		return datumDolaska;
 	}
-	public void setDatumDolaska(Date datumDolaska) {
+	public void setDatumDolaska(String datumDolaska) {
 		this.datumDolaska = datumDolaska;
 	}
-	public Date getDatumOdlaska() {
+	public String getDatumOdlaska() {
 		return datumOdlaska;
 	}
-	public void setDatumOdlaska(Date datumOdlaska) {
+	public void setDatumOdlaska(String datumOdlaska) {
 		this.datumOdlaska = datumOdlaska;
 	}
 	public Collection<PotrebnoSobaDTO> getPotrebneSobe() {

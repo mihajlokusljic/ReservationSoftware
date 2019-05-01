@@ -147,6 +147,7 @@
 						</tbody>
 					</table>
                         </div>
+                        <!-- Pretraga vozila -->
                         <div class="tab-pane" id="tab2">
                             <form method="POST" action="#">
                                 <div class="input-group">
@@ -239,6 +240,8 @@
                                 <button class="btn-submit m-t-15" type="submit">Pretraži</button>
                             </form>
                         </div>
+                        
+                        <!-- Pretraga letova -->
                         <div class="tab-pane" id="tab3">
                             <form method="POST" id="pretragaLetovaForm" action="#">
                              	<div class="input-group">
@@ -266,15 +269,18 @@
                                         <div class="input-group">
                                             <label class="label">Datum poletanja</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" id="datumPoletanja" name="datumPoletanja" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <input class="input--style-1 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumPoletanja">
+                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum sletanja</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" id="datumSletanja" name="datumSletanja" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <input class="input--style-1 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumSletanja">
+                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-2">
@@ -283,7 +289,8 @@
                                       	<i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                        	<input class="input--style-1" type="text" id="duzinaPutovanja"  name="duzinaPutovanja" placeholder="mm/dd/yyyy" id="input-start-2">
                                    	</div>
-                                    </div>
+                                </div>
+                                
                                 <div class="radio-row" hidden>
                                     <label class="radio-container m-r-45">First Class
                                         <input type="radio" name="class">
