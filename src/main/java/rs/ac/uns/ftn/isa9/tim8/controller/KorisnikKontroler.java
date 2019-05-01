@@ -23,7 +23,7 @@ public class KorisnikKontroler {
 	public ResponseEntity<KorisnikDTO> getUserData() {
 		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<KorisnikDTO>(
-				new KorisnikDTO(o.getIme(), o.getPrezime(), o.getEmail(), o.getLozinka(), o.getBrojTelefona(), o.getAdresa()),
+				new KorisnikDTO(o.getId(),o.getIme(), o.getPrezime(), o.getEmail(), o.getLozinka(), o.getBrojTelefona(), o.getAdresa()),
 				HttpStatus.OK);
 	}
 	
