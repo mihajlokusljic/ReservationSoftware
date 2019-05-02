@@ -17,6 +17,7 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-profil-lozinka").hide();
 		$("#tab-vozila").show();
 		dobaviSvaVozilaServisa();
 	
@@ -34,6 +35,7 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-profil-lozinka").hide();
 
 		dobaviSveFilijale();
 	
@@ -51,6 +53,7 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-profil-lozinka").hide();
 
 		profilServisa();
 	});
@@ -58,7 +61,7 @@ $(document).ready(function() {
 	$("#izmjeni_podatke_tab").click(function(e){
 		e.preventDefault();
 		$("#tab-profil-kor").show();
-		
+		$("#tab-profil-lozinka").hide();
 		$("#tab-profil-servisa").hide();
 		$("#tab-filijala").hide();
 		$("#tab-dodaj-vozilo").hide();
@@ -70,7 +73,22 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		profilKorisnika();
 	})
-
+	
+	$("#promjeni_lozinku_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-profil-lozinka").show();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		promjeniLozinku();
+	})
 	$("#dodaj_vozilo_dugme").click(function(e){
 		e.preventDefault();
 		$("#tab-filijala").hide();
@@ -688,4 +706,47 @@ function profilKorisnika(){
 		});
 		
 	});
+}
+
+function promjeniLozinku(){
+	$("#forma_lozinka").unbind().submit(function(e){
+		e.preventDefault();
+		var staraLozinka = $("#staraLozinka").val();
+		var novaLozinka = $("#novaLozinka").val();
+		var novaLozinka2 = $("#novaLozinka2").val();
+
+		if (novaLozinka == ''){
+			alert("Niste unijeli novu lozinku");
+			return;
+		}
+		
+		if (novaLozinka != novaLozinka2){
+			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		
+		
+		$.ajax({
+			type : 'PUT',
+			url : "../auth/changePassword/" + staraLozinka,
+			headers : createAuthorizationTokenHeader("jwtToken"),
+			contentType : "application/json",
+			data : novaLozinka,
+			success : function(data) {
+				if (data == ''){
+					alert("Pogresna trenutna lozinka.");
+					return;
+				}
+				else{
+					setJwtToken("jwtToken", data.accessToken);
+					alert("Uspjesno ste izmjenili lozinku");	
+				}
+				
+			}
+		});
+	});
+	
+	
+	
+	
 }

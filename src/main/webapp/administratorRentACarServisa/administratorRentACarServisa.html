@@ -51,7 +51,7 @@
 	                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="dropdown" id = "profil_korisnika">Profil korisnika</a>
 	                        	<ul class="dropdown-content">
 								  <li><a href="#" id = "izmjeni_podatke_tab">Izmjeni podatke</a></li>
-								  <li><a href="#">Promjeni lozinku</a></li>
+								  <li><a href="#" id = "promjeni_lozinku_tab">Promjeni lozinku</a></li>
 								</ul>
 	                        </li>
 							<li class="dropdown">
@@ -373,6 +373,23 @@
 	                                </div>
 	                                <button type="submit" class="btn btn-submit">Izmjeni</button>
                                 </form>
+                        	</div>
+                        	<div class="tab-pane" id="tab-profil-lozinka">
+                        		<form id = "forma_lozinka">
+                        		    <div class="input-group">
+	                                    <label class="label">Trenutna:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
+	                                </div>	                                
+	                                <div class="input-group">    
+	                                    <label class="label">Nova lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite novu lozinku" required="required" id="novaLozinka">
+	                                </div>
+	                                <div class="input-group">    
+	                                    <label class="label">Potvrdite novu lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Ponovo unesite novu lozinku" required="required" id="novaLozinka2">
+	                                </div> 
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
+                        		</form>
                         	</div>
 	                    </div>                    
                 	</div>
