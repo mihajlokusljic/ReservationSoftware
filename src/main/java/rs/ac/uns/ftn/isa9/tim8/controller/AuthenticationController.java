@@ -178,7 +178,6 @@ public class AuthenticationController {
 		
 		
 		if (!userDetailsService.poklapanjeLozinki(staraLozinka, o.getLozinka())){
-			System.out.println("ne ulazi");
 			return new ResponseEntity<String>("",HttpStatus.OK);
 		}
 		
