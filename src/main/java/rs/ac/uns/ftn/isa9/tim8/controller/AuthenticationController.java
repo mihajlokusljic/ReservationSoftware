@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -168,14 +171,22 @@ public class AuthenticationController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "auth/changePassword", method = RequestMethod.PUT)
-	public ResponseEntity<UserTokenState> changePassword(@RequestBody String newPassword) {
+	@RequestMapping(value = "/changePassword/{staraLozinka}", method = RequestMethod.PUT)
+	public ResponseEntity<?> changePassword(@PathVariable("staraLozinka") String staraLozinka, @RequestBody String novaLozinka) {
+		
 		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		userDetailsService.changePassword(o.getLozinka(), newPassword);
+		
+		
+		if (!userDetailsService.poklapanjeLozinki(staraLozinka, o.getLozinka())){
+			System.out.println("ne ulazi");
+			return new ResponseEntity<String>("",HttpStatus.OK);
+		}
+		
+		userDetailsService.changePassword(staraLozinka, novaLozinka);
 		String jwt = tokenUtils.generateToken(o.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
-		List<Authority> a = (List<Authority>) o.getAuthorities();
-		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.get(0).getTipKorisnika(), true), HttpStatus.OK);
+		Set<Authority> a = (Set<Authority>) o.getAuthorities();
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.iterator().next().getTipKorisnika(), true), HttpStatus.OK);
 	}
 
 }

@@ -91,7 +91,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	// Funkcija pomocu koje korisnik menja svoju lozinku
 	public void changePassword(String oldPassword, String newPassword) {
-
+		
+		
+		
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 		String username = currentUser.getName();
 
@@ -225,5 +227,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		this.podesiPrivilegije(noviAdmin, TipKorisnika.AdministratorSistema);
 		this.korisnikRepository.save(noviAdmin);
 	}
+	
+  public boolean poklapanjeLozinki(String rawPassword, String encodedPassword) {
+	  return passwordEncoder.matches(rawPassword, encodedPassword);
+			
+		
+  }
 
 }

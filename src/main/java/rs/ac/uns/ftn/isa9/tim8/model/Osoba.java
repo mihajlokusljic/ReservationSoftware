@@ -93,6 +93,21 @@ public class Osoba implements UserDetails{
 
 	}
 	
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
+			String brojTelefona, Adresa adresa, String putanjaSlike, boolean lozinkaPromjenjena) {
+		super();
+		this.Id = id;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.putanjaSlike = putanjaSlike;
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+
+	}
+	
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
 			String putanjaSlike, boolean enabled, Timestamp lastPasswordResetDate, Set<Authority> authorities) {
 		super();
