@@ -6,18 +6,22 @@ public class UserTokenState {
     private Long expiresIn;
     private TipKorisnika tipKorisnika;
     private String redirectionUrl;
-
+    private boolean promjenjenaLozinka;
+   
+    
     public UserTokenState() {
         this.accessToken = null;
         this.expiresIn = null;
         this.tipKorisnika = null;
         this.redirectionUrl = "#";
+        this.promjenjenaLozinka = false;
     }
 
-    public UserTokenState(String accessToken, long expiresIn, TipKorisnika tipKor) {
+    public UserTokenState(String accessToken, long expiresIn, TipKorisnika tipKor, boolean promjenjenaLozinka) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
         this.tipKorisnika = tipKor;
+        this.promjenjenaLozinka = promjenjenaLozinka;
     }
     
     public UserTokenState(String accessToken, long expiresIn, TipKorisnika tipKorisnika, String redirectionUrl) {
@@ -59,6 +63,15 @@ public class UserTokenState {
 	public void setTipKorisnika(TipKorisnika tipKorisnika) {
 		this.tipKorisnika = tipKorisnika;
 	}
+
+	public boolean isPromjenjenaLozinka() {
+		return promjenjenaLozinka;
+	}
+
+	public void setPromjenjenaLozinka(boolean promjenjenaLozinka) {
+		this.promjenjenaLozinka = promjenjenaLozinka;
+	}
     
+	
     
 }

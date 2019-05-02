@@ -3,8 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.Set;
-
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -67,7 +66,6 @@ public class AuthenticationController {
 		this.userDetailsService.podesiPrivilegije(registrovaniKorisnik, TipKorisnika.RegistrovanKorisnik);
 		registrovaniKorisnik.setBonusPoeni(0);
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
-		registrovaniKorisnik.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
 		registrovaniKorisnik.setPrijatelji(new HashSet<RegistrovanKorisnik>());
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
 		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
@@ -168,6 +166,16 @@ public class AuthenticationController {
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika, redirectionURL), HttpStatus.OK);
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "auth/changePassword", method = RequestMethod.PUT)
+	public ResponseEntity<UserTokenState> changePassword(@RequestBody String newPassword) {
+		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		userDetailsService.changePassword(o.getLozinka(), newPassword);
+		String jwt = tokenUtils.generateToken(o.getUsername());
+		int expiresIn = tokenUtils.getExpiredIn();
+		List<Authority> a = (List<Authority>) o.getAuthorities();
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.get(0).getTipKorisnika(), true), HttpStatus.OK);
+	}
 
 }
