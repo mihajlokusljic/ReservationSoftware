@@ -10,7 +10,7 @@
     <meta name="keywords" content="Colrolib Templates">
 
     <!-- Title Page-->
-    <title>Softver za rezervacije</title>
+    <title>Rezervacija putovanja</title>
 
     <!-- Icons font CSS-->
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -21,88 +21,94 @@
     <!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
-
+    
+	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
-    
-    <!-- Jquery and javaScript -->
-    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-   	<script type="text/javascript" src="js/pretragaLetova.js"></script>
-    
 </head>
 
 <body>
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
-        <div class="wrapper wrapper--w720">
+        <div class="wrapper wrapper--w1050">
             <div class="card card-3">
                 <div class="card-body">
-                    <ul class="tab-list">
-                        <li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab1" data-toggle="tab">Hoteli</a>
+                
+                <img src="images/logo.png" id="logoImage" width="100" height="100">
+                
+                <ul class="tab-list">
+                        
+                    	<li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab">Aviokompanije</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab2" data-toggle="tab">Vozila</a>
+                            <a class="tab-list__link" href="#tab-letovi" data-toggle="tab">Letovi</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab3" data-toggle="tab">Letovi</a>
+                            <a class="tab-list__link" href="#tab-hoteli" data-toggle="tab">Hoteli</a>
                         </li>
-
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab4" data-toggle="tab" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            <a class="tab-list__link" href="#tab-rac-servisi" data-toggle="tab">Rent-a-car servisi</a>
                         </li>
-
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="login.html">Prijavi se</a>
+                            <a class="tab-list__link" href="#tab-vozila" data-toggle="tab">Vozila</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="../login/login.html">Prijava</a>
                         </li>
                     </ul>
-                    <div class="tab-content">
-                    
+
+                <div class="tab-content">
+                    	
+                    	<!-- Pretraga aviokompanija -->
+                    	<div class="tab-pane active" id="tab-aviokompanije">
+                    		Aviokompanije
+                    	</div>
+                    	
                     	<!-- Pretraga hotela -->
-                        <div class="tab-pane active" id="tab1">
-                            <form method="POST" action="#" id="hotelSearchForm">
+                        <div class="tab-pane" id="tab-hoteli">
+                            <form method="POST" action="#" id="hotelSearchForm" name="pretragaHotelaForma">
                                 <div class="input-group">
                                     <label class="label">Odredište</label>
-                                    <input class="input--style-1" type="text" name="address" placeholder="Naziv hotela ili destinacije" id="hotelNaziv">
+                                    <input class="input--style-2" type="text" name="address" placeholder="Naziv hotela ili destinacije" id="hotelNaziv">
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
                                 </div>
                                 <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
-                                            <label class="label">Datum polaska</label>
-                                            <input class="input--style-1" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+                                            <label class="label">Datum dolaska</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum odlaska</label>
-                                            <input class="input--style-1" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-group">
-                                    <label class="label">travellers</label>
-                                    <i class="zmdi zmdi-account-add input-group-symbol"></i>
+                                    <label class="label">Potrebno soba</label>
                                     <div class="input-group-icon" id="js-select-special">
-                                        <input class="input--style-1" type="text" name="traveller" value="1 Adult, 0 Children, 1 Room" disabled="disabled" id="info">
+                                        <input class="input--style-2" type="text" name="traveller" value="Nema zahtjeva za sobe" disabled="disabled" id="info">
                                         <i class="zmdi zmdi-chevron-down input-icon"></i>
                                     </div>
                                     <div class="dropdown-select">
                                         <ul class="list-room">
                                             <li class="list-room__item">
-                                                <span class="list-room__name">Room 1</span>
+                                                <span class="list-room__name">Zahtjev 1</span>
                                                 <ul class="list-person">
                                                     <li class="list-person__item">
-                                                        <span class="name">Adults</span>
+                                                        <span class="name">Broj kreveta po sobi</span>
                                                         <div class="quantity quantity1">
                                                             <span class="minus">-</span>
-                                                            <input class="inputQty" type="number" min="0" value="1">
+                                                            <input class="inputQty" type="number" min="0" value="0">
                                                             <span class="plus">+</span>
                                                         </div>
                                                     </li>
                                                     <li class="list-person__item">
-                                                        <span class="name">Children</span>
+                                                        <span class="name">Broj soba</span>
                                                         <div class="quantity quantity2">
                                                             <span class="minus">-</span>
                                                             <input class="inputQty" type="number" min="0" value="0">
@@ -113,19 +119,9 @@
                                             </li>
                                         </ul>
                                         <div class="list-room__footer">
-                                            <a href="#" id="btn-add-room">Add room</a>
+                                            <a href="#" id="btn-add-room">Dodaj zahtjev</a>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="checkbox-row">
-                                    <label class="checkbox-container m-r-45">Add a flight
-                                        <input type="checkbox" checked="checked" name="add-flight">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label class="checkbox-container">Add a car
-                                        <input type="checkbox" name="add-car">
-                                        <span class="checkmark"></span>
-                                    </label>
                                 </div>
                                 <button class="btn-submit" type="submit">Pretraži</button>
                             </form>
@@ -136,10 +132,10 @@
                             <table>
 						<thead>
 							<tr class="table100-head">
-								<th class="column1">Redni broj</th>
-								<th class="column3">Naziv</th>
-								<th class="column3">Adresa</th>
-								<th class="column2">Prosječna ocjena</th>
+								<th class="column1">Slika</th>
+								<th class="column1">Naziv</th>
+								<th class="column1">Adresa</th>
+								<th class="column1">Prosječna ocjena</th>
 								<th class="column1">Info stranica</th>
 							</tr>
 						</thead>
@@ -147,11 +143,18 @@
 						</tbody>
 					</table>
                         </div>
-                        <div class="tab-pane" id="tab2">
+                        
+                        <!-- Pretraga RAC servisa -->
+                    	<div class="tab-pane" id="tab-rac-servisi">
+                    		Rent-a-car servisi
+                    	</div>
+                    	
+                        <!-- Pretraga vozila -->
+                        <div class="tab-pane" id="tab-vozila">
                             <form method="POST" action="#">
                                 <div class="input-group">
                                     <label class="label">location:</label>
-                                    <input class="input--style-1" type="text" name="location" placeholder="Destination, hotel name" required="required">
+                                    <input class="input--style-2" type="text" name="location" placeholder="Destination, hotel name" required="required">
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
                                 </div>
                                 <div class="row row-space">
@@ -191,7 +194,7 @@
                                         <div class="input-group">
                                             <label class="label">pick up:</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1">
+                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1">
                                             <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
                                     </div>
@@ -216,7 +219,7 @@
                                         <div class="input-group">
                                             <label class="label">drop off:</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1 js-single-datepicker" type="text" name="dropoff" placeholder="mm/dd/yyyy" data-drop="2">
+                                            <input class="input--style-2 js-single-datepicker" type="text" name="dropoff" placeholder="mm/dd/yyyy" data-drop="2">
                                             <div class="dropdown-datepicker" id="dropdown-datepicker2"></div>
                                         </div>
                                     </div>
@@ -239,51 +242,57 @@
                                 <button class="btn-submit m-t-15" type="submit">Pretraži</button>
                             </form>
                         </div>
-                        <div class="tab-pane" id="tab3">
+                        
+                        <!-- Pretraga letova -->
+                        <div class="tab-pane" id="tab-letovi">
                             <form method="POST" id="pretragaLetovaForm" action="#">
                              	<div class="input-group">
                                     <label class="label">Broj leta</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-1" type="text" id="brojLeta" name="brojLeta" placeholder="Unesite broj leta..." >
+                                    <input class="input--style-2" type="text" id="brojLeta" name="brojLeta" placeholder="Unesite broj leta..." >
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Naziv aviokompanije</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-1" type="text" id="nazivAviokompanije" name="nazivAviokompanije" placeholder="Unesite naziv aviokompanije...">
+                                    <input class="input--style-2" type="text" id="nazivAviokompanije" name="nazivAviokompanije" placeholder="Unesite naziv aviokompanije...">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Naziv polazišta</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-1" type="text" id="nazivPolazista" name="nazivPolazista" placeholder="...">
+                                    <input class="input--style-2" type="text" id="nazivPolazista" name="nazivPolazista" placeholder="...">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Naziv odredišta</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-1" type="text" id="nazivOdredista" name="nazivOdredista" placeholder="...">
+                                    <input class="input--style-2" type="text" id="nazivOdredista" name="nazivOdredista" placeholder="...">
                                 </div>
                                 <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum poletanja</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" id="datumPoletanja" name="datumPoletanja" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumPoletanja">
+                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum sletanja</label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-1" type="text" id="datumSletanja" name="datumSletanja" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumSletanja">
+                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-2">
                                   	<div class="input-group">
                                      	<label class="label">Duzina putovanja</label>
                                       	<i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                       	<input class="input--style-1" type="text" id="duzinaPutovanja"  name="duzinaPutovanja" placeholder="mm/dd/yyyy" id="input-start-2">
+                                       	<input class="input--style-2" type="text" id="duzinaPutovanja"  name="duzinaPutovanja" placeholder="mm/dd/yyyy" id="input-start-2">
                                    	</div>
-                                    </div>
+                                </div>
+                                
                                 <div class="radio-row" hidden>
                                     <label class="radio-container m-r-45">First Class
                                         <input type="radio" name="class">
@@ -302,7 +311,7 @@
                                 <div class="input-group">
                                     <label class="label">Cijena karte</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-1" type="text" id="cijenaKarte" name="cijenaKarte" placeholder="Unesite cijenu karte...">
+                                    <input class="input--style-2" type="text" id="cijenaKarte" name="cijenaKarte" placeholder="Unesite cijenu karte...">
                                 </div>
                                 
                                 <button class="btn-submit" type="submit">Pretraži</button>
@@ -329,7 +338,9 @@
 					</table>
                             
                         </div>
+                    
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -347,6 +358,7 @@
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/pretragaHotela.js"></script>
+    <script type="text/javascript" src="js/pretragaLetova.js"></script>
     <script src="js/global.js"></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->

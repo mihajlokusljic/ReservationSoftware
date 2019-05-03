@@ -7,9 +7,9 @@ public class PretragaLetaDTO {
 	protected String nazivAviokompanije;
 	protected String nazivPolazista;
 	protected String nazivOdredista;
-	protected Date datumPoletanja;
-	protected Date datumSletanja;
-	protected Date duzinaPutovanja;
+	protected String datumPoletanja;
+	protected String datumSletanja;
+	protected String duzinaPutovanja;
 	protected double cijenaKarte;
 	
 	public PretragaLetaDTO() {
@@ -17,7 +17,7 @@ public class PretragaLetaDTO {
 	}
 
 	public PretragaLetaDTO(String brojLeta, String nazivAviokompanije, String nazivPolazista, String nazivOdredista,
-			Date datumPoletanja, Date datumSletanja, Date duzinaPutovanja, double cijenaKarte) {
+			String datumPoletanja, String datumSletanja, String duzinaPutovanja, double cijenaKarte) {
 		super();
 		this.brojLeta = brojLeta;
 		this.nazivAviokompanije = nazivAviokompanije;
@@ -61,27 +61,27 @@ public class PretragaLetaDTO {
 		this.nazivOdredista = nazivOdredista;
 	}
 
-	public Date getDatumPoletanja() {
+	public String getDatumPoletanja() {
 		return datumPoletanja;
 	}
 
-	public void setDatumPoletanja(Date datumPoletanja) {
+	public void setDatumPoletanja(String datumPoletanja) {
 		this.datumPoletanja = datumPoletanja;
 	}
 
-	public Date getDatumSletanja() {
+	public String getDatumSletanja() {
 		return datumSletanja;
 	}
 
-	public void setDatumSletanja(Date datumSletanja) {
+	public void setDatumSletanja(String datumSletanja) {
 		this.datumSletanja = datumSletanja;
 	}
 
-	public Date getDuzinaPutovanja() {
+	public String getDuzinaPutovanja() {
 		return duzinaPutovanja;
 	}
 
-	public void setDuzinaPutovanja(Date duzinaPutovanja) {
+	public void setDuzinaPutovanja(String duzinaPutovanja) {
 		this.duzinaPutovanja = duzinaPutovanja;
 	}
 
@@ -92,7 +92,5 @@ public class PretragaLetaDTO {
 	public void setCijenaKarte(double cijenaKarte) {
 		this.cijenaKarte = cijenaKarte;
 	}
-	
-	
-	
+
 }

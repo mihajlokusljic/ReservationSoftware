@@ -1,6 +1,9 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
@@ -204,13 +207,30 @@ public class AviokompanijaService {
 
 	}
 
-	public Collection<Let> pretraziLetove(PretragaLetaDTO kriterijumiPretrage) {
+	public Collection<Let> pretraziLetove(PretragaLetaDTO kriterijumiPretrage) throws NevalidniPodaciException {
 		/*
 		 * String brojLeta; String nazivAviokompanije; String nazivPolazista; String
 		 * nazivOdredista; Date datumPoletanja; Date datumSletanja; Date
 		 * duzinaPutovanja; double cijenaKarte;
 		 */
 		Collection<Let> rezultat;
+		Date trazeniDatumPoletanja = null;
+		Date trazeniDatumSletanja = null;
+		Date trazeniDatumPovratka = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			if(!kriterijumiPretrage.getDatumPoletanja().equals("") && kriterijumiPretrage.getDatumPoletanja() != null) {
+				trazeniDatumPoletanja = df.parse(kriterijumiPretrage.getDatumPoletanja());
+			}
+			if(!kriterijumiPretrage.getDatumSletanja().equals("") && kriterijumiPretrage.getDatumSletanja() != null) {
+				trazeniDatumSletanja = df.parse(kriterijumiPretrage.getDatumSletanja());
+			}
+			if(!kriterijumiPretrage.getDuzinaPutovanja().equals("") && kriterijumiPretrage.getDuzinaPutovanja() != null) {
+				trazeniDatumPovratka = df.parse(kriterijumiPretrage.getDuzinaPutovanja());
+			}
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
 
 		if (kriterijumiPretrage.getNazivAviokompanije().length() == 0) {
 			rezultat = letoviRepository.findAll();
@@ -256,15 +276,33 @@ public class AviokompanijaService {
 		}
 
 		it = rezultat.iterator();
+		String trenutniDatumPoletanja = "";
 
 		while (it.hasNext()) {
 			trenutniLet = it.next();
 			
-			if (kriterijumiPretrage.getDatumPoletanja() == null) {
-				continue;
+			if (kriterijumiPretrage.getDatumPoletanja() == null || kriterijumiPretrage.getDatumPoletanja().equals("")) {
+				break;
 			}
 			
-			if (!trenutniLet.getDatumPoletanja().equals(kriterijumiPretrage.getDatumPoletanja())) {
+			trenutniDatumPoletanja = df.format(trenutniLet.getDatumPoletanja());
+			if (!trenutniDatumPoletanja.equals(kriterijumiPretrage.getDatumPoletanja())) {
+				it.remove();
+			}
+		}
+
+		it = rezultat.iterator();
+		String trenutniDatumSletanja = "";
+
+		while (it.hasNext()) {
+			trenutniLet = it.next();
+			
+			if (kriterijumiPretrage.getDatumSletanja() == null || kriterijumiPretrage.getDatumSletanja().equals("")) {
+				break;
+			}
+			
+			trenutniDatumSletanja = df.format(trenutniLet.getDatumSletanja());
+			if (!trenutniDatumSletanja.equals(kriterijumiPretrage.getDatumSletanja())) {
 				it.remove();
 			}
 		}
@@ -274,25 +312,12 @@ public class AviokompanijaService {
 		while (it.hasNext()) {
 			trenutniLet = it.next();
 			
-			if (kriterijumiPretrage.getDatumSletanja() == null) {
-				continue;
+			if (kriterijumiPretrage.getDuzinaPutovanja() == null || kriterijumiPretrage.getDuzinaPutovanja().equals("")) {
+				break;
 			}
 			
-			if (!trenutniLet.getDatumSletanja().equals(kriterijumiPretrage.getDatumSletanja())) {
-				it.remove();
-			}
-		}
-
-		it = rezultat.iterator();
-
-		while (it.hasNext()) {
-			trenutniLet = it.next();
-			
-			if (kriterijumiPretrage.getDuzinaPutovanja() == null) {
-				continue;
-			}
-			
-			if (!trenutniLet.getDuzinaPutovanja().equals(kriterijumiPretrage.getDuzinaPutovanja())) {
+			String trenutniDatumPovratka = df.format(trenutniLet.getDuzinaPutovanja());
+			if (!trenutniDatumPovratka.equals(kriterijumiPretrage.getDuzinaPutovanja())) {
 				it.remove();
 			}
 		}

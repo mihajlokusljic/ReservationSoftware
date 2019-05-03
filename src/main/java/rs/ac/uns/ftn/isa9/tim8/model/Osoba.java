@@ -65,6 +65,9 @@ public class Osoba implements UserDetails{
     @Column(name = "last_password_reset_date")
     protected Timestamp lastPasswordResetDate;
     
+    @Column(name = "lozinka_promjenjena")
+    protected boolean lozinkaPromjenjena;
+    
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "korisnik_autoritet", joinColumns = @JoinColumn(name = "korisnik_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "autoritet_id", referencedColumnName = "id"))
 	protected Set<Authority> authorities;
@@ -72,6 +75,7 @@ public class Osoba implements UserDetails{
 	public Osoba() {
 		super();
 		authorities = new HashSet<Authority>();
+		this.lozinkaPromjenjena = false;
 	}
 
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
@@ -85,6 +89,23 @@ public class Osoba implements UserDetails{
 		this.brojTelefona = brojTelefona;
 		this.adresa = adresa;
 		this.putanjaSlike = putanjaSlike;
+		this.lozinkaPromjenjena = false;
+
+	}
+	
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
+			String brojTelefona, Adresa adresa, String putanjaSlike, boolean lozinkaPromjenjena) {
+		super();
+		this.Id = id;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.putanjaSlike = putanjaSlike;
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+
 	}
 	
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
@@ -101,6 +122,8 @@ public class Osoba implements UserDetails{
 		this.enabled = enabled;
 		this.lastPasswordResetDate = lastPasswordResetDate;
 		this.authorities = authorities;
+		this.lozinkaPromjenjena = false;
+
 	}
 
 	public Long getId() {
@@ -223,5 +246,14 @@ public class Osoba implements UserDetails{
 		this.adresa = adresa;
 	}
 
+	public boolean isLozinkaPromjenjena() {
+		return lozinkaPromjenjena;
+	}
+
+	public void setLozinkaPromjenjena(boolean lozinkaPromjenjena) {
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+	}
+	
+	
 	
 }

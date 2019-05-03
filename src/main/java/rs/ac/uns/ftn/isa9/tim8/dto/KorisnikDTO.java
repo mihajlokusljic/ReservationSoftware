@@ -4,6 +4,8 @@ import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 
 public class KorisnikDTO {
 	
+	protected Long Id;
+	
 	protected String ime;
 	
 	protected String prezime;
@@ -20,8 +22,9 @@ public class KorisnikDTO {
 		super();
 	}
 
-	public KorisnikDTO(String ime, String prezime, String email, String lozinka, String brojTelefona, Adresa adresa) {
+	public KorisnikDTO(Long Id, String ime, String prezime, String email, String lozinka, String brojTelefona, Adresa adresa) {
 		super();
+		this.Id = Id;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
@@ -77,5 +80,14 @@ public class KorisnikDTO {
 	public void setAdresa(Adresa adresa) {
 		this.adresa = adresa;
 	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+	
 	
 }

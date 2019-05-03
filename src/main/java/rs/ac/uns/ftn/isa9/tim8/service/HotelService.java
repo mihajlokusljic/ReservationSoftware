@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,8 +89,23 @@ public class HotelService {
 	 * PretragaHotelaDTO kriterijumiPretrage - sadrzi vrijednosti kriterijuma po kojima se vrsi pretraga hotela
 	 * Rezultat:
 	 * Collection<Hotel> - lista hotela koji zadovoljavaju kriterijume pretrage
+	 * @throws NevalidniPodaciException - u slucaju nevalidnog formata datuma
 	 * */
-	public Collection<Hotel> pretraziHotele(PretragaHotelaDTO kriterijumiPretrage) {
+	public Collection<Hotel> pretraziHotele(PretragaHotelaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			if(!kriterijumiPretrage.getDatumDolaska().equals("") && kriterijumiPretrage.getDatumDolaska() != null) {
+				pocetniDatum = df.parse(kriterijumiPretrage.getDatumDolaska());
+			}
+			
+			if(!kriterijumiPretrage.getDatumOdlaska().equals("") && kriterijumiPretrage.getDatumOdlaska() != null) {
+				krajnjiDatum = df.parse(kriterijumiPretrage.getDatumOdlaska());
+			}
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
 		// inicijalno su svi hoteli u rezultatu
 		Collection<Hotel> rezultat = this.hotelRepository.findAll();
 
@@ -115,8 +132,7 @@ public class HotelService {
 		while (it.hasNext()) {
 			tekuciHotel = it.next();
 			ukloniHotel = false;
-			raspoloziveSobe = this.slobodneSobe(tekuciHotel, kriterijumiPretrage.getDatumDolaska(),
-					kriterijumiPretrage.getDatumOdlaska());
+			raspoloziveSobe = this.slobodneSobe(tekuciHotel, pocetniDatum, krajnjiDatum);
 			
 			//za svaki hotel provjeriti svaki zahtjev za bro slobodnih n-krevetnih soba
 			for(PotrebnoSobaDTO zahtjev : kriterijumiPretrage.getPotrebneSobe()) {

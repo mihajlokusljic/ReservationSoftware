@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,7 +69,6 @@ public class AuthenticationController {
 		this.userDetailsService.podesiPrivilegije(registrovaniKorisnik, TipKorisnika.RegistrovanKorisnik);
 		registrovaniKorisnik.setBonusPoeni(0);
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
-		registrovaniKorisnik.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
 		registrovaniKorisnik.setPrijatelji(new HashSet<RegistrovanKorisnik>());
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
 		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
@@ -168,6 +169,23 @@ public class AuthenticationController {
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika, redirectionURL), HttpStatus.OK);
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/changePassword/{staraLozinka}", method = RequestMethod.PUT)
+	public ResponseEntity<?> changePassword(@PathVariable("staraLozinka") String staraLozinka, @RequestBody String novaLozinka) {
+		
+		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		
+		if (!userDetailsService.poklapanjeLozinki(staraLozinka, o.getLozinka())){
+			return new ResponseEntity<String>("",HttpStatus.OK);
+		}
+		
+		userDetailsService.changePassword(staraLozinka, novaLozinka);
+		String jwt = tokenUtils.generateToken(o.getUsername());
+		int expiresIn = tokenUtils.getExpiredIn();
+		Set<Authority> a = (Set<Authority>) o.getAuthorities();
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.iterator().next().getTipKorisnika(), true), HttpStatus.OK);
+	}
 
 }

@@ -47,13 +47,17 @@
 	                        <li class="tab-list__item">
 	                            <a class="tab-list__link" href="#tab-profil-servisa" data-toggle="tab" id = "profil_servisa">Profil servisa</a>
 	                        </li>
-							<li class="tab-list__item">
-	                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil korisnika</a>
+							<li class="dropdown">
+	                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="dropdown" id = "profil_korisnika">Profil korisnika</a>
+	                        	<ul class="dropdown-content">
+								  <li><a href="#" id = "izmjeni_podatke_tab">Izmjeni podatke</a></li>
+								  <li><a href="#" id = "promjeni_lozinku_tab">Promjeni lozinku</a></li>
+								</ul>
 	                        </li>
-							<li class="tab-list__item">
+							<li class="dropdown">
 	                            <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
 	                        </li>
-							<li class="tab-list__item">
+							<li class="dropdown">
 	                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
 	                        </li>
 	                    </ul>
@@ -82,14 +86,14 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Naziv:</label>
-	                                            <input class="input--style-1" type="text" placeholder="naziv vozila" required="required" id = "naziv_input">
+	                                            <input class="input--style-2" type="text" placeholder="naziv vozila" required="required" id = "naziv_input">
 	
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Marka:</label>
-	                                            <input class="input--style-1" type="text" placeholder="marka vozila" required="required" id = "marka_input">
+	                                            <input class="input--style-2" type="text" placeholder="marka vozila" required="required" id = "marka_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -98,7 +102,7 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Model:</label>
-	                                            <input class="input--style-1" type="text" placeholder="model vozila" required="required" id = "model_input">
+	                                            <input class="input--style-2" type="text" placeholder="model vozila" required="required" id = "model_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
@@ -120,13 +124,13 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Godina proizvodnje:</label>
-	                                            <input class="input--style-1" type="number" min = "1" placeholder="2010" required="required" id = "godina_proizvodnje_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="2010" required="required" id = "godina_proizvodnje_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Broj sjedišta:</label>
-	                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required" id = "broj_sjedista_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="5" required="required" id = "broj_sjedista_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -134,13 +138,13 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Broj vrata:</label>
-	                                            <input class="input--style-1" type="number" min = "1" placeholder="5" required="required" id = "broj_vrata_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="5" required="required" id = "broj_vrata_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Cijena po danu:</label>
-	                                            <input class="input--style-1" type="number" min = "1" placeholder="64" required="required" id = "cijena_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="64" required="required" id = "cijena_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -148,7 +152,7 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Fotografija vozila</label>
-	                                            <input class="input--style-1" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
+	                                            <input class="input--style-2" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
 											    <i class="zmdi zmdi-collection-image-o input-icon"></i>
 	
 	                                        </div>
@@ -172,14 +176,14 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Naziv:</label>
-                                            <input class="input--style-1" type="text" id = "naziv_input1" required="required">
+                                            <input class="input--style-2" type="text" id = "naziv_input1" required="required">
 
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Marka:</label>
-                                            <input class="input--style-1" type="text" id = "marka_input1" required="required">
+                                            <input class="input--style-2" type="text" id = "marka_input1" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +192,7 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Model:</label>
-                                            <input class="input--style-1" type="text" id = "model_input1" required="required">
+                                            <input class="input--style-2" type="text" id = "model_input1" required="required">
                                         </div>
                                     </div>
                                     <div class="col-2">
@@ -210,13 +214,13 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Godina proizvodnje:</label>
-                                            <input class="input--style-1" type="number" min = "1" id = "godina_input1" required="required">
+                                            <input class="input--style-2" type="number" min = "1" id = "godina_input1" required="required">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Broj sjedišta:</label>
-                                            <input class="input--style-1" type="number" min = "1" id = "broj_sjedista_input1" required="required">
+                                            <input class="input--style-2" type="number" min = "1" id = "broj_sjedista_input1" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -224,13 +228,13 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Broj vrata:</label>
-                                            <input class="input--style-1" type="number" min = "1" id = "broj_vrata_input1" required="required">
+                                            <input class="input--style-2" type="number" min = "1" id = "broj_vrata_input1" required="required">
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Cijena po danu:</label>
-                                            <input class="input--style-1" type="number" min = "1" id = "cijena_input1" required="required">
+                                            <input class="input--style-2" type="number" min = "1" id = "cijena_input1" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -270,17 +274,17 @@
 	                         <form id = "forma_dodaj_filijalu">
 								<div class="input-group">
 									<label class="label">Naziv lokacije:</label>
-									<input class="input--style-1" type="text" id = "adresa_filijale" placeholder ="Unesite naziv lokacije" required="required">
+									<input class="input--style-2" type="text" id = "adresa_filijale" placeholder ="Unesite naziv lokacije" required="required">
 									<i class="zmdi zmdi-pin input-group-symbol"></i>
 	
 								</div>
 								<div class="input-group">
 									<label class="label">Dužina:</label>
-									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 								</div>
 								<div class="input-group">
 									<label class="label">Širina:</label>
-									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 								</div>
 								<button type="submit" class="btn btn-submit">Dodaj</button>
 							</form>
@@ -289,17 +293,17 @@
 	                        <form id = "forma_izmjeni_filijalu">						
 								<div class="input-group">
 									<label class="label">Naziv lokacije:</label>
-									<input class="input--style-1" id = "adresa_filijale_nova" type="text" required="required">
+									<input class="input--style-2" id = "adresa_filijale_nova" type="text" required="required">
 									<i class="zmdi zmdi-pin input-group-symbol"></i>
 	
 								</div>
 								<div class="input-group">
 									<label class="label">Dužina:</label>
-									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 								</div>
 								<div class="input-group">
 									<label class="label">Širina:</label>
-									<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 								</div>
 								<button type="submit" class="btn btn-submit">Izmjeni</button>
 							</form>
@@ -309,34 +313,84 @@
 		
 	                            <div class="input-group">
 									<label class="label">Naziv servisa:</label>
-									<input class="input--style-1" id = "profil_servisa_naziv" type="text" readonly>
+									<input class="input--style-2" id = "profil_servisa_naziv" type="text" readonly>
 								</div>													
 								<div class="input-group">
 									<label class="label">Lokacija</label>
-									<input class="input--style-1" id = "profil_servisa_adresa" type="text">
+									<input class="input--style-2" id = "profil_servisa_adresa" type="text">
 								</div>
 								<div class="row row-space">
 	
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 												<label class="label">Dužina:</label>
-												<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+												<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 											</div>
 	                                    </div>
 										<div class="col-2">
 	                                        <div class="input-group">
 												<label class="label">Širina:</label>
-												<input class="input--style-1" type="number" step = "0.0001" value = "0" required="required">
+												<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
 											</div>
 	                                    </div>
 	                            </div>
 								<div class="input-group">
 									<label class="label">Opis:</label>
-									<input class="input--style-1" id = "profil_servisa_opis" type="text" >
+									<input class="input--style-2" id = "profil_servisa_opis" type="text" >
 								</div>
 								<button type="submit" class="btn btn-submit">Izmjeni</button>
 							</form>
                         </div>
+                        <div class="tab-pane" id="tab-profil-kor">
+                        	<form id = "forma_profil_korisnika">
+	                            <div class="input-group">
+	                                    <label class="label">E-mail:</label>
+	                                    <input class="input--style-2" type="email" required="required" id="emailAdmina" readonly>
+	                                </div>
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Ime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="imeAdmina">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Prezime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="prezimeAdmina">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj telefona:</label>
+	                                    <input class="input--style-2" type="number" id="brTelefonaAdmina">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Adresa:</label>
+	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                    <input class="input--style-2" type="text" required="required" id="adresaAdmina">
+	                                </div>
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>
+                                </form>
+                        	</div>
+                        	<div class="tab-pane" id="tab-profil-lozinka">
+                        		<form id = "forma_lozinka">
+                        		    <div class="input-group">
+	                                    <label class="label">Trenutna:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
+	                                </div>	                                
+	                                <div class="input-group">    
+	                                    <label class="label">Nova lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite novu lozinku" required="required" id="novaLozinka">
+	                                </div>
+	                                <div class="input-group">    
+	                                    <label class="label">Potvrdite novu lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Ponovo unesite novu lozinku" required="required" id="novaLozinka2">
+	                                </div> 
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
+                        		</form>
+                        	</div>
 	                    </div>                    
                 	</div>
             	</div>

@@ -1,4 +1,13 @@
-
+/* ==========================================================================
+   #LOGO
+   ========================================================================== */
+#logoImage {
+	width: 100px;
+	height: 77px;
+	margin-left: 10px;
+	margin-top: 5px;
+}  
+   
 /* ==========================================================================
    #GRID
    ========================================================================== */
@@ -156,6 +165,8 @@ h6 {
 img {
   max-width: 100%;
   height: auto;
+  margin: 5px;
+  border-radius: 10px;
 }
 
 a {
@@ -187,7 +198,7 @@ a:active {
    #BACKGROUND
    ========================================================================== */
 .bg-img-1 {
-  background: url("../images/bg-img-01.jpg") center center/cover no-repeat;
+  background: url("../images/pocetna.jpg") center center/cover no-repeat;
 }
 
 /* ==========================================================================
@@ -256,6 +267,10 @@ a:active {
   max-width: 720px;
 }
 
+.wrapper--w1050 {
+  max-width: 1050px;
+}
+
 /* ==========================================================================
    #BUTTON
    ========================================================================== */
@@ -269,7 +284,6 @@ a:active {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  text-transform: capitalize;
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -970,7 +984,6 @@ input[type=number]::-webkit-outer-spin-button {
   -moz-border-radius-topleft: 10px;
   border-top-left-radius: 10px;
   padding: 0 55px;
-  padding-top: 40px;
 }
 
 .tab-list::after {
@@ -992,7 +1005,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .tab-list__link {
   display: block;
-  text-transform: capitalize;
   font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
   font-weight: 500;
   font-size: 24px;
@@ -1051,8 +1063,6 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  width: 150%;
-  
 }
 
 /*//////////////////////////////////////////////////////////////////
@@ -1154,8 +1164,8 @@ tbody tr:hover {
 }
 
 .column1 {
-  width: 260px;
-  padding-left: 40px;
+  width: 200px;
+  padding-left: 20px;
 }
 
 .column2 {
@@ -1163,25 +1173,24 @@ tbody tr:hover {
 }
 
 .column3 {
-  width: 245px;
+  width: 140px;
 }
 
 .column4 {
-  width: 110px;
-  text-align: right;
-}
+  width: 140px;
+} 	
 
 .column5 {
-  width: 170px;
-  text-align: right;
+  width: 120px;
 }
 
 .column6 {
-  width: 222px;
-  text-align: right;
+  width: 120px;
+}
+.column7 {
+  width: 120px;
   padding-right: 62px;
 }
-
 
 @media screen and (max-width: 992px) {
   table {
@@ -1251,12 +1260,5 @@ tbody tr:hover {
 
   tbody tr {
     font-size: 14px;
-  }
-}
-
-@media (max-width: 576px) {
-  .container-table100 {
-    padding-left: 15px;
-    padding-right: 15px;
   }
 }
