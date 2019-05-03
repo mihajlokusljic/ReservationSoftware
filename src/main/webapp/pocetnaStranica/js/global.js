@@ -209,6 +209,12 @@
     } catch (e) {
         console.log(e);
     }
+    
+    $("#hotelSearchForm").submit(function(e) {
+    	e.preventDefault();
+    	totalRoom = 1;
+    	
+    });
     /*[ Select 2 Config ]
         ===========================================================*/
     

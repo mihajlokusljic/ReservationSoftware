@@ -165,8 +165,7 @@ h6 {
 img {
   max-width: 100%;
   height: auto;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 5px;
   border-radius: 10px;
 }
 
@@ -1166,7 +1165,7 @@ tbody tr:hover {
 
 .column1 {
   width: 200px;
-  padding-left: 40px;
+  padding-left: 20px;
 }
 
 .column2 {

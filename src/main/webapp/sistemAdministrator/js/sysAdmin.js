@@ -1,7 +1,7 @@
 let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"]
 let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
 let podaciAdmina = null;
-let pocetnaStrana = "../login/login.html";
+let pocetnaStrana = "../pocetnaStranica/index.html";
 
 $(document).ready(function(e) {
 	

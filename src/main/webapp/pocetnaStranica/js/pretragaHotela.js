@@ -1,3 +1,5 @@
+var defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
+
 $(document).ready(function(e) {
 	
 	$.ajaxSetup({
@@ -47,6 +49,8 @@ $(document).ready(function(e) {
 				if(response.length == 0) {
 					alert("Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage");
 				}
+				$('#hotelSearchForm')[0].reset();
+				resetujZahtjeveSoba();
 			},
 		});
 		
@@ -61,17 +65,58 @@ function refreshHotels(hotels) {
 	for(i in hotels) {
 		hotel = hotels[i];
 		let noviRed = $("<tr></tr>");
-		noviRed.append("<td>" + (i + 1) + "</td>");
-		noviRed.append("<td>" + hotel.naziv + "</td>");
-		noviRed.append("<td>" + hotel.adresa.punaAdresa + "</td>");
+		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
+		noviRed.append('<td class="column1">' + hotel.naziv + "</td>");
+		noviRed.append('<td class="column1">' + hotel.adresa.punaAdresa + "</td>");
 		if(hotel.brojOcjena > 0) {
-			noviRed.append("<td>" + (hotel.sumaOcjena / hotel.brojOcjena) + "</td>");
+			noviRed.append('<td class="column1">' + (hotel.sumaOcjena / hotel.brojOcjena) + "</td>");
 		} else {
-			noviRed.append("<td>Nema ocjena</td>");
+			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
-		noviRed.append('<td><a href="#">Pogledaj</a></td>');
+		noviRed.append('<td class="column1"><a href="#">Pogledaj detalje</a></td>');
 		hotelsTableBody.append(noviRed);
 	}
+}
+
+function resetujZahtjeveSoba() {
+	var selectSpecial = $('#js-select-special');
+    var info = selectSpecial.find('#info');
+    var dropdownSelect = selectSpecial.parent().find('.dropdown-select');
+    var listRoom = dropdownSelect.find('.list-room');
+    
+    listRoom.empty();
+    listRoom.append('<li class="list-room__item">' +
+            '                                        <span class="list-room__name"> Zahtjev 1</span>' +
+            '                                        <ul class="list-person">' +
+            '                                            <li class="list-person__item">' +
+            '                                                <span class="name">' +
+            '													Broj kreveta po sobi' +
+            '                                                </span>' +
+            '                                                <div class="quantity quantity1">' +
+            '                                                    <span class="minus">' +
+            '                                                        -' +
+            '                                                    </span>' +
+            '                                                    <input type="number" min="0" value="0" class="inputQty">' +
+            '                                                    <span class="plus">' +
+            '                                                        +' +
+            '                                                    </span>' +
+            '                                                </div>' +
+            '                                            </li>' +
+            '                                            <li class="list-person__item">' +
+            '                                                <span class="name">' +
+            '                                                    Broj soba' +
+            '                                                </span>' +
+            '                                                <div class="quantity quantity2">' +
+            '                                                    <span class="minus">' +
+            '                                                        -' +
+            '                                                    </span>' +
+            '                                                    <input type="number" min="0" value="0" class="inputQty">' +
+            '                                                    <span class="plus">' +
+            '                                                        +' +
+            '                                                    </span>' +
+            '                                                </div>' +
+            '                                            </li>' +
+            '                                        </ul>');
 }
 
 function azurirajSobeZahtjev() {
