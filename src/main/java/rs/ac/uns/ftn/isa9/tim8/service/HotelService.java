@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -152,5 +153,14 @@ public class HotelService {
 		}
 
 		return rezultat;
+	}
+
+	public Collection<HotelskaSoba> sobehotela(Long idHotela) throws NevalidniPodaciException {
+		Optional<Hotel> hotelSearch = hotelRepository.findById(idHotela);
+		if(!hotelSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji hotel sa zadatim id-em");
+		}
+		Hotel h = hotelSearch.get();
+		return h.getSobe();
 	}
 }
