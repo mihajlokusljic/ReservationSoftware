@@ -33,6 +33,12 @@ $(document).ready(function(e) {
 		dodavanjeSobe();
 	});
 	
+	//dodavanje usluge hotela
+	$("#dodavanjeDodatneUslugeForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeUsluge();
+	})
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -72,6 +78,39 @@ function dodavanjeSobe() {
 	});
 }
 
+function dodavanjeUsluge() {
+	let idHotela = podaciHotela.id;
+	let nazivUsluge = $("#nazivUslugeUnos").val();
+	let cijenaUsluge = $("#cijenaUslugeUnos").val();
+	let nacinPlacanjaUslugeId = $("#nacinPlacanjaUslugeInput").val();
+	let popustUsluge = $("#popustUslugeUnos").val();
+	let opisUsluge = $("#opisUslugeUnos").val();
+	if(opisUsluge == undefined) {
+		opisUsluge = "";
+	}
+	
+	let novaUsluga = {
+		idPoslovnice: idHotela,
+		naziv: nazivUsluge,
+		cijena: cijenaUsluge,
+		procenatPopusta: popustUsluge,
+		nacinPlacanjaId: nacinPlacanjaUslugeId,
+		opis: opisUsluge
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: "../hoteli/dodajUslugu",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(novaUsluga),
+		success: function(response) {
+			podaciHotela.cjenovnikDodatnihUsluga.push(response);
+			prikaziUslugu(response);
+			 $('#dodavanjeDodatneUslugeForm')[0].reset();
+		},
+	});
+}
+
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
 	$.ajax({
@@ -98,6 +137,7 @@ function ucitajPodatkeHotela() {
 			if(response != null) {
 				podaciHotela = response;
 				ucitajSobehotela();
+				prikaziUsluge(podaciHotela.cjenovnikDodatnihUsluga);
 			}
 		},
 	});
@@ -133,6 +173,22 @@ function prikaziSobu(soba) {
 	noviRed.append('<td class="column1">' + soba.kolona + '</td>');
 	noviRed.append('<td class="column6"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
 	sobeTabela.append(noviRed);
+}
+
+function prikaziUsluge(usluge) {
+	$.each(usluge, function(i, usluga) {
+		prikaziUslugu(usluga);
+	})
+}
+
+function prikaziUslugu(usluga) {
+	let uslugeTabela = $("#prikazUsluga");
+	let noviRed = $("<tr></tr>");
+	noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+	noviRed.append('<td class="column6">' + usluga.cijena + '</td>');
+	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
+	noviRed.append('<td class="column5"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
+	uslugeTabela.append(noviRed);
 }
 
 function odjava() {

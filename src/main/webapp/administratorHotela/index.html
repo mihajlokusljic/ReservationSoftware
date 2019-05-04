@@ -130,10 +130,10 @@
 	                                            <label class="label">Način plaćanja:</label>
 	                                            <div class="rs-select2 js-select-simple select--no-search">
 	                                                <select id = "nacinPlacanjaUslugeInput">
-	                                                    <option selected="selected">Dnevno, po osobi</option>
-	                                                    <option>Dnevno</option>
-	                                                    <option>Fiksna cijena, po osobi</option>
-	                                                    <option>Fiksna cijena</option>
+	                                                    <option selected="selected" value="1" id="nacinPlacanjaUnos">Dnevno, po osobi</option>
+	                                                    <option value="2">Dnevno</option>
+	                                                    <option value="3">Fiksna cijena, po osobi</option>
+	                                                    <option value="4">Fiksna cijena</option>
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
 	                                            </div>
@@ -141,8 +141,12 @@
                                     </div>
                                 </div>
                                 <div class="input-group">
+                                    <label class="label">Procenat popusta:</label>
+                                    <input class="input--style-2" type="number" min="0" max="100" placeholder="Unesite popust na ukupnu cijenu smjestaja koji se ostvaruje izborom ove usluge" required="required" id="popustUslugeUnos">
+                                </div>
+                                <div class="input-group">
                                     <label class="label">Detaljan opis usluge:</label>
-                                    <textarea rows="10" cols="5" id="opisUslugeUnos" value="Detaljan opis usluge"></textarea>
+                                    <textarea rows="10" cols="5" id="opisUslugeUnos"></textarea>
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj uslugu"/>
                         </form>
@@ -151,9 +155,9 @@
 						<thead>
 							<tr class="table100-head">
 								<th class="column1">Naziv</th>
-								<th class="column1">Cijena</th>
+								<th class="column6">Cijena</th>
 								<th class = "column1">Način plaćanja</th>
-								<th class = "column1">Akcije</th>
+								<th class = "column5">Akcije</th>
 							</tr>
 						</thead>
 						<tbody id="prikazUsluga">

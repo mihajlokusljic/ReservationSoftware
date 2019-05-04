@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum NacinPlacanjaUsluge {
 	DNEVNO_PO_OSOBI(1) {
 		@Override
@@ -51,6 +53,11 @@ public enum NacinPlacanjaUsluge {
 			}
 		}
 		return null;
+	}
+	
+	@JsonValue
+	public String opis() {
+		return this.toString();
 	}
 	
 	
