@@ -13,18 +13,25 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaHotelaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
+import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
 public class HotelService {
 	@Autowired
 	protected HotelRepository hotelRepository;
+	
+	@Autowired
+	protected UslugeRepository uslugeRepository;
 
 	@Autowired
 	protected AdresaRepository adresaRepository;
@@ -42,10 +49,10 @@ public class HotelService {
 		if (adresa != null) {
 			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
 		}
-		if(noviHotel.getNaziv().contentEquals("")) {
+		if (noviHotel.getNaziv().contentEquals("")) {
 			throw new NevalidniPodaciException("Naziv hotela mora biti zadat.");
 		}
-		if(noviHotel.getAdresa().getPunaAdresa().equals("")) {
+		if (noviHotel.getAdresa().getPunaAdresa().equals("")) {
 			throw new NevalidniPodaciException("Adresa hotela mora biti zadata.");
 		}
 		Hotel h = new Hotel(noviHotel.getNaziv(), noviHotel.getPromotivniOpis(), noviHotel.getAdresa());
@@ -60,8 +67,7 @@ public class HotelService {
 	/**
 	 * Daje broj slobodnih n-krevetnih soba u datom hotelu za dati vremenski period.
 	 * 
-	 * Parametri: 
-	 * hotel - hotel cije se sobe pretrazuju pocetniDatum - pocetak
+	 * Parametri: hotel - hotel cije se sobe pretrazuju pocetniDatum - pocetak
 	 * vremenskog intervala u kom se provjerava dostupnost soba krajnjiDatum -
 	 * pocetak vremenskog intervala u kom se provjerava dostupnost soba Rezultat:
 	 * HashMap<Integer, Integer> - mapa koja odredjuje broj slobodnih soba za dati
@@ -82,26 +88,27 @@ public class HotelService {
 	}
 
 	/**
-	 * Metoda koja pretrazuje letove po zadatim kriterijumima: naziv hotela ili destinacije,
-	 * datumi dolaska i odlaska, vrsta i broj potrebnih soba (jednokrevetnih, dvokrevetnih...).
-	 * Funkcionise tako sto od svih hotela odstranjuje one koji ne zadovoljavaju kriterijume pretrage.
+	 * Metoda koja pretrazuje letove po zadatim kriterijumima: naziv hotela ili
+	 * destinacije, datumi dolaska i odlaska, vrsta i broj potrebnih soba
+	 * (jednokrevetnih, dvokrevetnih...). Funkcionise tako sto od svih hotela
+	 * odstranjuje one koji ne zadovoljavaju kriterijume pretrage.
 	 * 
-	 * Parametri:
-	 * PretragaHotelaDTO kriterijumiPretrage - sadrzi vrijednosti kriterijuma po kojima se vrsi pretraga hotela
-	 * Rezultat:
-	 * Collection<Hotel> - lista hotela koji zadovoljavaju kriterijume pretrage
+	 * Parametri: PretragaHotelaDTO kriterijumiPretrage - sadrzi vrijednosti
+	 * kriterijuma po kojima se vrsi pretraga hotela Rezultat: Collection<Hotel> -
+	 * lista hotela koji zadovoljavaju kriterijume pretrage
+	 * 
 	 * @throws NevalidniPodaciException - u slucaju nevalidnog formata datuma
-	 * */
+	 */
 	public Collection<Hotel> pretraziHotele(PretragaHotelaDTO kriterijumiPretrage) throws NevalidniPodaciException {
 		Date pocetniDatum = null;
 		Date krajnjiDatum = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			if(!kriterijumiPretrage.getDatumDolaska().equals("") && kriterijumiPretrage.getDatumDolaska() != null) {
+			if (!kriterijumiPretrage.getDatumDolaska().equals("") && kriterijumiPretrage.getDatumDolaska() != null) {
 				pocetniDatum = df.parse(kriterijumiPretrage.getDatumDolaska());
 			}
-			
-			if(!kriterijumiPretrage.getDatumOdlaska().equals("") && kriterijumiPretrage.getDatumOdlaska() != null) {
+
+			if (!kriterijumiPretrage.getDatumOdlaska().equals("") && kriterijumiPretrage.getDatumOdlaska() != null) {
 				krajnjiDatum = df.parse(kriterijumiPretrage.getDatumOdlaska());
 			}
 		} catch (ParseException e) {
@@ -128,26 +135,26 @@ public class HotelService {
 		HashMap<Integer, Integer> raspoloziveSobe;
 		it = rezultat.iterator();
 		boolean ukloniHotel;
-		
-		//provjeriti svaki hotel
+
+		// provjeriti svaki hotel
 		while (it.hasNext()) {
 			tekuciHotel = it.next();
 			ukloniHotel = false;
 			raspoloziveSobe = this.slobodneSobe(tekuciHotel, pocetniDatum, krajnjiDatum);
-			
-			//za svaki hotel provjeriti svaki zahtjev za bro slobodnih n-krevetnih soba
-			for(PotrebnoSobaDTO zahtjev : kriterijumiPretrage.getPotrebneSobe()) {
-				if(!raspoloziveSobe.containsKey(zahtjev.getBrKrevetaPoSobi())) {
+
+			// za svaki hotel provjeriti svaki zahtjev za bro slobodnih n-krevetnih soba
+			for (PotrebnoSobaDTO zahtjev : kriterijumiPretrage.getPotrebneSobe()) {
+				if (!raspoloziveSobe.containsKey(zahtjev.getBrKrevetaPoSobi())) {
 					ukloniHotel = true;
 					break;
 				}
-				if(zahtjev.getBrSoba() > raspoloziveSobe.get(zahtjev.getBrKrevetaPoSobi())) {
+				if (zahtjev.getBrSoba() > raspoloziveSobe.get(zahtjev.getBrKrevetaPoSobi())) {
 					ukloniHotel = true;
 					break;
 				}
 			}
-			
-			if(ukloniHotel) {
+
+			if (ukloniHotel) {
 				it.remove();
 			}
 		}
@@ -157,10 +164,47 @@ public class HotelService {
 
 	public Collection<HotelskaSoba> sobehotela(Long idHotela) throws NevalidniPodaciException {
 		Optional<Hotel> hotelSearch = hotelRepository.findById(idHotela);
-		if(!hotelSearch.isPresent()) {
+		if (!hotelSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji hotel sa zadatim id-em");
 		}
 		Hotel h = hotelSearch.get();
 		return h.getSobe();
+	}
+
+	public void validirajUslugu(UslugaDTO novaUsluga) throws NevalidniPodaciException {
+		if (novaUsluga.getNaziv() == null || novaUsluga.getNaziv().equals("")) {
+			throw new NevalidniPodaciException("Naziv usluge mora biti zadat.");
+		}
+		if (novaUsluga.getCijena() < 0) {
+			throw new NevalidniPodaciException("Cijena usluge ne smije biti negativna.");
+		}
+		if (novaUsluga.getProcenatPopusta() < 0) {
+			throw new NevalidniPodaciException("Popust koji se ostvaruje uslugom ne smije biti negativan.");
+		}
+		if (NacinPlacanjaUsluge.getValue(novaUsluga.getNacinPlacanjaId()) == null) {
+			throw new NevalidniPodaciException("Nevalidan nacin placanja usluge.");
+		}
+	}
+
+	public Usluga dodajUsluguHotela(UslugaDTO novaUsluga) throws NevalidniPodaciException {
+		validirajUslugu(novaUsluga);
+
+		Optional<Hotel> hotelSearch = this.hotelRepository.findById(novaUsluga.getIdPoslovnice());
+		if (!hotelSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji hotel sa zadatim id-em.");
+		}
+		Hotel hotel = hotelSearch.get();
+		for (Usluga usluga : hotel.getCjenovnikDodatnihUsluga()) {
+			if (usluga.getNaziv().equals(novaUsluga.getNaziv())) {
+				throw new NevalidniPodaciException("Vec postoji usluga sa zadatim nazivom");
+			}
+		}
+		NacinPlacanjaUsluge nacinPlacanja = NacinPlacanjaUsluge.getValue(novaUsluga.getNacinPlacanjaId());
+		Usluga usluga = new Usluga(novaUsluga.getNaziv(), novaUsluga.getCijena(), novaUsluga.getProcenatPopusta(),
+				nacinPlacanja, novaUsluga.getOpis(), hotel);
+		hotel.getCjenovnikDodatnihUsluga().add(usluga);
+		this.uslugeRepository.save(usluga);
+		this.hotelRepository.save(hotel);
+		return usluga;
 	}
 }

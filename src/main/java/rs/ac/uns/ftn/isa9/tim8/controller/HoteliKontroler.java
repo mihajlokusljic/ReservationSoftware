@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaHotelaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
@@ -52,6 +54,16 @@ public class HoteliKontroler {
 		noviHotel.setSobe(new HashSet<HotelskaSoba>());
 		try {
 			return new ResponseEntity<Hotel>(servis.dodajHotel(noviHotel),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/dodajUslugu", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+	public ResponseEntity<?> dodajUsluguHotela(@RequestBody UslugaDTO novaUsluga) {
+		try {
+			return new ResponseEntity<Usluga>(servis.dodajUsluguHotela(novaUsluga), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
