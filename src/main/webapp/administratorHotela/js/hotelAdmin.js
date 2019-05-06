@@ -39,6 +39,18 @@ $(document).ready(function(e) {
 		dodavanjeUsluge();
 	})
 	
+	//izmjena podataka info stranice
+	$("#izmjenaInfoStraniceForm").submit(function(e) {
+		e.preventDefault();
+		izmjenaInfoStranice();
+	})
+	
+	//ponistavanje unijetih uzmjena
+	$("#ponistavanjeIzmjenaStraniceHotela").click(function(e) {
+		e.preventDefault();
+		prikaziPodatkeHotela();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -111,6 +123,38 @@ function dodavanjeUsluge() {
 	});
 }
 
+function izmjenaInfoStranice() {
+	let _naziv = $("#nazivHotela").val();
+	let _adresa = $("#adresaHotela").val();
+	let _opis = $("#opisHotela").val();
+	
+	if(_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	if(_adresa == "") {
+		alert("Adresa aviokompanije mora biti zadata.");
+		return;
+	}
+	
+	let hotel = {
+			naziv: _naziv, 
+			adresa: { punaAdresa : _adresa }, 
+			promotivniOpis: _opis
+	};
+	
+	$.ajax({
+		type: "PUT",
+		url: "../hoteli/izmjeni",
+		data: JSON.stringify(hotel),
+		success: function(response) {
+			podaciHotela = response;
+			alert("Informacije hiotela su uspjesno izmjenjene.");
+		},
+	});
+}
+
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
 	$.ajax({
@@ -138,6 +182,7 @@ function ucitajPodatkeHotela() {
 				podaciHotela = response;
 				ucitajSobehotela();
 				prikaziUsluge(podaciHotela.cjenovnikDodatnihUsluga);
+				prikaziPodatkeHotela();
 			}
 		},
 	});
@@ -189,6 +234,12 @@ function prikaziUslugu(usluga) {
 	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
 	noviRed.append('<td class="column5"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
 	uslugeTabela.append(noviRed);
+}
+
+function prikaziPodatkeHotela() {
+	$("#nazivHotela").val(podaciHotela.naziv);
+	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
+	$("#opisHotela").val(podaciHotela.promotivniOpis);
 }
 
 function odjava() {
