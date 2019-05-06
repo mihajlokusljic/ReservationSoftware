@@ -59,6 +59,16 @@ public class HoteliKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/izmjeni", method = RequestMethod.PUT)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+	public ResponseEntity<?> izmjeniHotel(@RequestBody Hotel noviPodaciHotela) {
+		try {
+			return new ResponseEntity<Hotel>(servis.izmjeniHotel(noviPodaciHotela), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/dodajUslugu", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorHotela')")
 	public ResponseEntity<?> dodajUsluguHotela(@RequestBody UslugaDTO novaUsluga) {
