@@ -1,6 +1,7 @@
 let podaciAdmina = null;
 let podaciHotela = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 
 $(document).ready(function(e) {
 	
@@ -48,6 +49,7 @@ $(document).ready(function(e) {
 	//ponistavanje unijetih uzmjena
 	$("#ponistavanjeIzmjenaStraniceHotela").click(function(e) {
 		e.preventDefault();
+		$("#izmjenaInfoStraniceForm")[0].reset();
 		prikaziPodatkeHotela();
 	});
 	
@@ -240,6 +242,7 @@ function prikaziPodatkeHotela() {
 	$("#nazivHotela").val(podaciHotela.naziv);
 	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
 	$("#opisHotela").val(podaciHotela.promotivniOpis);
+	$("#slikaHotela").attr("src", defaultSlika);
 }
 
 function odjava() {

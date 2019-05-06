@@ -168,15 +168,28 @@
                         <div class="tab-pane" id="tab-info-stranica">
                         
                         <form method="POST" action="#" id="izmjenaInfoStraniceForm">
-                                <div class="input-group">
-                                    <label class="label">Naziv hotela:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
+                        		<div class="row row-space">
+                        			<div class="col-2">
+                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaHotela">
+                        				<div class="input-group">
+		                                    <label class="label">Izmjena profilne slike hotela (u izradi):</label>
+		                                    <input class="input--style-2" type="file" id="novaSlikaUpload">
+		                                </div>
+                        			</div>
+                        			<div class="col-2">
+                        				<h3>&nbsp;</h3>
+		                                <div class="input-group">
+		                                    <label class="label">Naziv hotela:</label>
+		                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
+		                                </div>
+		                                <div class="input-group">
+		                                    <label class="label">Adresa:</label>
+		                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+		                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
+		                                </div>
+	                                </div>
                                 </div>
-                                <div class="input-group">
-                                    <label class="label">Adresa:</label>
-                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
-                                </div>
+                                <h2>&nbsp;</h2>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
                                     <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="opisHotela"></textarea>
