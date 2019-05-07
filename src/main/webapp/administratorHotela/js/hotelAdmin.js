@@ -1,6 +1,7 @@
 let podaciAdmina = null;
 let podaciHotela = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 
 $(document).ready(function(e) {
 	
@@ -38,6 +39,19 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		dodavanjeUsluge();
 	})
+	
+	//izmjena podataka info stranice
+	$("#izmjenaInfoStraniceForm").submit(function(e) {
+		e.preventDefault();
+		izmjenaInfoStranice();
+	})
+	
+	//ponistavanje unijetih uzmjena
+	$("#ponistavanjeIzmjenaStraniceHotela").click(function(e) {
+		e.preventDefault();
+		$("#izmjenaInfoStraniceForm")[0].reset();
+		prikaziPodatkeHotela();
+	});
 	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
@@ -111,6 +125,38 @@ function dodavanjeUsluge() {
 	});
 }
 
+function izmjenaInfoStranice() {
+	let _naziv = $("#nazivHotela").val();
+	let _adresa = $("#adresaHotela").val();
+	let _opis = $("#opisHotela").val();
+	
+	if(_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	if(_adresa == "") {
+		alert("Adresa aviokompanije mora biti zadata.");
+		return;
+	}
+	
+	let hotel = {
+			naziv: _naziv, 
+			adresa: { punaAdresa : _adresa }, 
+			promotivniOpis: _opis
+	};
+	
+	$.ajax({
+		type: "PUT",
+		url: "../hoteli/izmjeni",
+		data: JSON.stringify(hotel),
+		success: function(response) {
+			podaciHotela = response;
+			alert("Informacije hotela su uspjesno izmjenjene.");
+		},
+	});
+}
+
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
 	$.ajax({
@@ -138,6 +184,7 @@ function ucitajPodatkeHotela() {
 				podaciHotela = response;
 				ucitajSobehotela();
 				prikaziUsluge(podaciHotela.cjenovnikDodatnihUsluga);
+				prikaziPodatkeHotela();
 			}
 		},
 	});
@@ -189,6 +236,13 @@ function prikaziUslugu(usluga) {
 	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
 	noviRed.append('<td class="column5"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
 	uslugeTabela.append(noviRed);
+}
+
+function prikaziPodatkeHotela() {
+	$("#nazivHotela").val(podaciHotela.naziv);
+	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
+	$("#opisHotela").val(podaciHotela.promotivniOpis);
+	$("#slikaHotela").attr("src", defaultSlika);
 }
 
 function odjava() {
