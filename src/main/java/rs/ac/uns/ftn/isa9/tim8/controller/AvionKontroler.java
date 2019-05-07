@@ -84,5 +84,10 @@ public class AvionKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping(value = "/dobaviBrojRedovaAviona/{idAviona}", method = RequestMethod.GET)
+	public ResponseEntity<Integer> brojRedovaAviona(@PathVariable("idAviona") Long idAviona) {
+		return new ResponseEntity<Integer>(servis.dobaviBrojRedovaAviona(idAviona), HttpStatus.OK);
+	}
 
 }

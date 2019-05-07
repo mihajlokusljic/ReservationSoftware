@@ -219,4 +219,21 @@ public class AvionService {
 		return a;
 	}
 
+	public Integer dobaviBrojRedovaAviona(Long idAviona) {
+		Optional<Avion> optionalAvion = avionRepository.findById(idAviona);
+		
+		Avion a = optionalAvion.get();
+		
+		int najveciRed = 0;
+		
+		for (Sjediste s : a.getSjedista()) {
+			if (s.getRed() > najveciRed) {
+				najveciRed = s.getRed();
+			}
+		}
+		
+		return najveciRed;
+		
+	}
+
 }

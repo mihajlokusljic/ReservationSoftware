@@ -73,6 +73,22 @@ $(document).ready(function() {
 		if ($("#definisanjeSegmenataBtn").is(":checked")) {
 			$("#prvaFormaDodajAvion").hide();
 			$("#drugaFormaNaziviSegmenata").show();
+			
+			let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
+			
+			$.ajax({
+				type: "GET",
+				url: "../avioni/dobaviBrojRedovaAviona/" + id_aviona,
+				contentType : "application/json; charset=utf-8",
+				success: function(response) {
+					$("#krajnjaVrstaZaSegment").attr("max", response);
+					$("#krajnjaVrstaZaSegment").val(response);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					alert("AJAX error: " + errorThrown);
+				}
+			});
+			
 		}
 	});
 	
@@ -120,6 +136,24 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#avionZaDodavanjeNekogSegmentaSelect").change(function() {
+		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
+		
+		$.ajax({
+			type: "GET",
+			url: "../avioni/dobaviBrojRedovaAviona/" + id_aviona,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				$("#krajnjaVrstaZaSegment").attr("max", response);
+				$("#krajnjaVrstaZaSegment").val(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
 	$("#FORMdrugaFormaNaziviSegmenata").submit(function(e) {
 		e.preventDefault();
 		
@@ -148,6 +182,9 @@ $(document).ready(function() {
 				else {
 					alert("Segment je uspješno dodat.");
 					prikaziSegment(response, $("#osnovniSegmentiRows"));
+					$("#pocetnaVrstaZaSegment").attr("min", parseInt(krajnji_red) + 1);
+					$("#pocetnaVrstaZaSegment").val(parseInt(krajnji_red) + 1);
+					$("#pocetnaVrstaZaSegment").attr("readonly", "readonly");
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
