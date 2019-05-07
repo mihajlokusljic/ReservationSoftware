@@ -62,12 +62,10 @@ public class AvionService {
 			a = avionSearch.get();
 			for (Segment s : a.getSegmenti()) {
 				if (s.getNaziv().equalsIgnoreCase("")) {
-					Segment noviSegment = new Segment(nazivSegmenta);
-					a.getSegmenti().add(noviSegment);
+					s.setNaziv(nazivSegmenta);
 
-					segmentRepository.save(noviSegment);
 					avionRepository.save(a);
-					return noviSegment;
+					return s;
 				}
 			}
 			throw new NevalidniPodaciException("Svi segmenti zauzeti.");

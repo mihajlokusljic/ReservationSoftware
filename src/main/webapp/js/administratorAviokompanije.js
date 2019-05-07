@@ -3,7 +3,6 @@ var aviokompanija = null;
 var podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 
-
 $(document).ready(function() {
 	
 	$.ajaxSetup({
@@ -119,11 +118,38 @@ $(document).ready(function() {
 			}
 		});
 		
-	}	);
+	});
 	
 	$("#FORMdrugaFormaNaziviSegmenata").submit(function(e) {
 		e.preventDefault();
 		
+		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
+		let naziv_segmenta = $("#avioniNazivSegmentaZaDodavanje").val();
+		
+		let noviSegment = {
+				naziv : naziv_segmenta,
+				idAviona : id_aviona
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../avioni/dodajSegment/",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(noviSegment),
+			success: function(response) {
+				if(response == "Svi segmenti zauzeti.") {
+					alert("Svi segmenti su zauzeti, tj. već su im zadati nazivi.");
+					return;
+				}
+				else {
+					alert("Segment je uspješno dodat.");
+					prikaziSegment(response, $("#osnovniSegmentiRows"));
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
 		
 	});
 	
@@ -292,6 +318,23 @@ function prikaziDestinacije(destinacije){
 
 }
 
+function prikaziSegment(segment, tbody) {
+	let row = $("<tr></tr>");
+	
+	row.append('<td class="column3">' + segment.naziv + "</td>");
+
+	tbody.append(row);
+}
+
+function prikaziSegmente(segmenti) {
+	let tbody = $("#osnovniSegmentiRows");
+	tbody.empty();
+	
+	$.each(segmenti, function(i, segment){
+		prikaziSegment(segment, tbody);
+	});
+}
+
 function updateLetovi(letovi) {
 	let table = $("#letoviRows");
 	table.empty();
@@ -345,18 +388,26 @@ function popuniListuZaDestinacije(destinacije) {
 
 function popuniListuZaAvion(avion) {
 	let avioniLista = $("#avionZaLetSelect");
+	let avioniKodSegmenata = $("#avionZaDodavanjeNekogSegmentaSelect");
 	
 	avioniLista.append('<option value="' + avion.id + '">' + avion.naziv
+			+ '</option>');
+	avioniKodSegmenata.append('<option value="' + avion.id + '">' + avion.naziv
 			+ '</option>');
 }
 
 function popuniListuZaAvione(avioni) {
 	let avioniLista = $("#avionZaLetSelect");
-	
+	let avioniKodSegmenata = $("#avionZaDodavanjeNekogSegmentaSelect");
+
 	avioniLista.empty();
+	avioniKodSegmenata.empty();
+	
 	$.each(avioni, function(i, avion) {
 		// <option value="1">A</option>
 		avioniLista.append('<option value="' + avion.id + '">' + avion.naziv
+				+ '</option>');
+		avioniKodSegmenata.append('<option value="' + avion.id + '">' + avion.naziv
 				+ '</option>');
 	});
 	
