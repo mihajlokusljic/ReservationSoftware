@@ -42,8 +42,13 @@ public class AvionKontroler {
 	}
 	
 	@RequestMapping(value = "/dodajSegment", method = RequestMethod.POST)
-	public ResponseEntity<Segment> dodajSegment(@RequestBody SegmentDTO segment) {
+	public ResponseEntity<?> dodajSegment(@RequestBody SegmentDTO segment) {
+		try {
 		return new ResponseEntity<Segment>(servis.dodajSegment(segment.getIdAviona(), segment.getNaziv()), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
 	@RequestMapping(value = "/dodajSjediste", method = RequestMethod.POST)

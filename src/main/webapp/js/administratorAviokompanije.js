@@ -63,6 +63,49 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#administratorAviokompanijeDestinacijeForm").click(function(e) {
+		e.preventDefault();
+				
+		let naziv_destinacije = $("#destinacijeNazivDestinacije").val();		
+		let puna_adresa = $("#destinacijePunaAdresa").val();
+		
+		let novaDestinacija = {
+			naziv : naziv_destinacije,
+			punaAdresa : puna_adresa,
+			idAviokompanije : aviokompanija.id
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../destinacije/dodaj/",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(novaDestinacija),
+			success: function(response) {
+				if(response == "Takva destinacija vec postoji.") {
+					alert("Već postoji destinacija sa takvom punom adresom.");
+					return;
+				}
+				else if (response == "Ne postoji aviokompanija sa datim id-jem.") {
+					alert("Ne postoji aviokompanija sa datim id-jem.");
+					return;
+				}
+				else if (response == "Ne mogu postojati dvije destinacije na istoj adresi.") {
+					alert("Adresa je već zauzeta.");
+					return;
+				}
+				else {
+					alert("Destinacija je uspješno dodata.");
+					prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
+					popuniListuZaDestinaciju(response);
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
 	$("#administratorAviokompanijeLetoviForm").submit(function(e) {
 		e.preventDefault();
 				
