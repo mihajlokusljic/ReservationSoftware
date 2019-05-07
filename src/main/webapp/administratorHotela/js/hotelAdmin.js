@@ -152,7 +152,7 @@ function izmjenaInfoStranice() {
 		data: JSON.stringify(hotel),
 		success: function(response) {
 			podaciHotela = response;
-			alert("Informacije hiotela su uspjesno izmjenjene.");
+			alert("Informacije hotela su uspjesno izmjenjene.");
 		},
 	});
 }

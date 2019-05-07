@@ -92,16 +92,22 @@ public class HotelService {
 			this.validirajHotel(noviPodaciHotela);
 			target.setNaziv(noviPodaciHotela.getNaziv());
 		}
+		Adresa staraAdresa = null;
 		Adresa novaAdresa = noviPodaciHotela.getAdresa();
 		if (novaAdresa == null) {
 			throw new NevalidniPodaciException("Adresa hotela mora biti zadata.");
 		}
 		if (!novaAdresa.getPunaAdresa().equals(target.getAdresa().getPunaAdresa())) {
 			validirajAdresu(novaAdresa);
+			staraAdresa = target.getAdresa();
 			target.setAdresa(novaAdresa);
 		}
 		target.setPromotivniOpis(noviPodaciHotela.getPromotivniOpis());
 		this.hotelRepository.save(target);
+		if(staraAdresa != null) {
+			//oslobadjamo staru adresu kako bi postala raspoloziva drugim poslovnicama
+			this.adresaRepository.delete(staraAdresa);
+		}
 		return target;
 	}
 
