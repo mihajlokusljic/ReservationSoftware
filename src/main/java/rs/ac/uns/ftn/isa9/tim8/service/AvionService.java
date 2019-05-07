@@ -54,7 +54,8 @@ public class AvionService {
 		return null;
 	}
 
-	public Segment dodajSegment(Long idAviona, String nazivSegmenta) throws NevalidniPodaciException {
+	public Segment dodajSegment(Long idAviona, String nazivSegmenta, int pocetniRed, int krajnjiRed)
+			throws NevalidniPodaciException {
 		Optional<Avion> avionSearch = avionRepository.findById(idAviona);
 		Avion a = null;
 

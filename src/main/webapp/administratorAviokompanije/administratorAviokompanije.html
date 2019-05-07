@@ -96,14 +96,11 @@
                                         <input type="radio" checked="checked" name="class" id="osnovniPodaciAvionBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container m-r-45">Korak 2: Definisanje naziva segmenata
+                                    <label class="radio-container m-r-45">Korak 2: Definisanje naziva segmenata i pripadnost sjedišta segmentima
                                         <input type="radio" name="class" id="definisanjeSegmenataBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container">Korak 3: Pripadnost sjedišta segmentima
-                                        <input type="radio" name="class" id="pripadnostSjedistaBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
+
                                 </div>
                                 
                                 <p>&nbsp</p>
@@ -170,6 +167,21 @@
                                    		<label class="label">Naziv segmenta: </label>
                                    		<input class="input--style-2" type="text" placeholder="Unesite naziv segmenta" required="required" id="avioniNazivSegmentaZaDodavanje">
                                    	</div>
+ 
+                                	<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Početni red: </label>
+                                            <input class="input--style-2" type="number" placeholder="Unesite početnu vrstu za segment" required="required" id="pocetnaVrstaZaSegment">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Krajnji red: </label>
+                                            <input class="input--style-2" type="number" placeholder="Unesite krajnju vrstu za segment" required="required" id="krajnjaVrstaZaSegment">
+                                        </div>
+                                    </div>
+                                	</div>
                             
                             	<input id = "dodajSegmentZaAvionBtn" type="submit" class="btn btn-submit" value="Dodaj segment"/>
                               	</form>							
