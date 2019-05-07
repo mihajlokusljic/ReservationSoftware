@@ -168,7 +168,7 @@ public class AvionService {
 		return null;
 	}
 
-	public Avion dodajAvion(AvionDTO noviAvion) {
+	public Avion dodajAvion(AvionDTO noviAvion) throws NevalidniPodaciException {
 		Avion a = avionRepository.findOneByNaziv(noviAvion.getNaziv());
 
 		Optional<Aviokompanija> aviokompanijaSearchOptional = aviokompanijaRepository
@@ -187,7 +187,7 @@ public class AvionService {
 			if (Avion.getNaziv().equalsIgnoreCase(noviAvion.getNaziv())) {
 				// Ako vec postoji avion sa zadatim nazivom, onda ce kao rezultat dodavanja da
 				// se vrati NULL
-				return null;
+				throw new NevalidniPodaciException("Vec postoji avion sa zadatim nazivom.");
 			}
 		}
 
@@ -196,7 +196,7 @@ public class AvionService {
 		aviokompanija.getAvioni().add(a);
 
 		for (int i = 0; i < noviAvion.getBrojVrsta(); i++) {
-			for (int j = 0; j < noviAvion.getBrojKolona(); i++) {
+			for (int j = 0; j < noviAvion.getBrojKolona(); j++) {
 				Sjediste novoSjed = new Sjediste(null, i + 1, j + 1, a);
 				a.getSjedista().add(novoSjed);
 			}

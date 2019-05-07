@@ -63,46 +63,67 @@ $(document).ready(function() {
 		
 	});
 	
-	$("#administratorAviokompanijeDestinacijeForm").click(function(e) {
+	$("#osnovniPodaciAvionBtn").click(function() {
+		if ($("#osnovniPodaciAvionBtn").is(":checked")) {
+			$("#prvaFormaDodajAvion").show();
+			$("#drugaFormaNaziviSegmenata").hide();
+		}
+	});
+
+	$("#definisanjeSegmenataBtn").click(function() {
+		if ($("#definisanjeSegmenataBtn").is(":checked")) {
+			$("#prvaFormaDodajAvion").hide();
+			$("#drugaFormaNaziviSegmenata").show();
+		}
+	});
+	
+	$("#FORMprvaFormaDodajAvion").submit(function(e) {
 		e.preventDefault();
-				
-		let naziv_destinacije = $("#destinacijeNazivDestinacije").val();		
-		let puna_adresa = $("#destinacijePunaAdresa").val();
 		
-		let novaDestinacija = {
-			naziv : naziv_destinacije,
-			punaAdresa : puna_adresa,
-			idAviokompanije : aviokompanija.id
+		let naziv_aviona = $("#avioniNazivAviona").val();
+		let broj_vrsta = $("#avioniBrojVrsta").val();
+		let broj_kolona = $("#avioniBrojKolona").val();
+		let broj_segmenata = $("#avioniBrojSegmenata").val();
+		
+		if (parseInt(broj_segmenata) > parseInt(broj_vrsta)) {
+			alert("Broj segmenata ne moze biti veći od broja vrsta (redova) aviona.");
+			return;
+		}
+		
+		let novi_avion = {
+				naziv : naziv_aviona,
+				idAviokompanije : aviokompanija.id,
+				brojVrsta : broj_vrsta,
+				brojKolona : broj_kolona,
+				brojSegmenata : broj_segmenata
 		};
-		
+
 		$.ajax({
 			type: "POST",
-			url: "../destinacije/dodaj/",
+			url: "../avioni/dodaj/",
 			contentType : "application/json; charset=utf-8",
-			data: JSON.stringify(novaDestinacija),
+			data: JSON.stringify(novi_avion),
 			success: function(response) {
-				if(response == "Takva destinacija vec postoji.") {
-					alert("Već postoji destinacija sa takvom punom adresom.");
-					return;
-				}
-				else if (response == "Ne postoji aviokompanija sa datim id-jem.") {
-					alert("Ne postoji aviokompanija sa datim id-jem.");
-					return;
-				}
-				else if (response == "Ne mogu postojati dvije destinacije na istoj adresi.") {
-					alert("Adresa je već zauzeta.");
+				if(response == "Vec postoji avion sa zadatim nazivom.") {
+					alert("Već postoji avion sa zadatim nazivom.");
 					return;
 				}
 				else {
-					alert("Destinacija je uspješno dodata.");
-					prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
-					popuniListuZaDestinaciju(response);
+					alert("Avion je uspješno dodat.");
+					prikaziAvion(response, $("#OsnovniAvioniRows"));
+					popuniListuZaAvion(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX error: " + errorThrown);
 			}
 		});
+		
+	}	);
+	
+	$("#FORMdrugaFormaNaziviSegmenata").submit(function(e) {
+		e.preventDefault();
+		
 		
 	});
 	
@@ -135,7 +156,7 @@ $(document).ready(function() {
 					return;
 				}
 				else {
-					alert("Destinacija je uspješno dodata.");
+					alert("Let je uspješno dodat.");
 					//prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
 				}
 			},
@@ -207,6 +228,7 @@ function ucitajAvione() {
 		dataType : "json",
 		success : function(response) {
 			popuniListuZaAvione(response);
+			prikaziAvione(response);
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + errorThrown);
@@ -225,6 +247,26 @@ function ucitajLetove() {
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + errorThrown);
 		}
+	});
+}
+
+function prikaziAvion(avion, tbody) {
+	let row = $("<tr></tr>");
+	
+	row.append('<td class="column3">' + '<img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Pan_Am_Boeing_747-121_N732PA_Bidini.jpg"' + 
+			'</td>');
+	row.append('<td class="column3">' + avion.naziv + "</td>");
+	row.append('<td class="column5">' + avion.sjedista.length + "</td>");
+	row.append('<td class="column5">' + avion.segmenti.length + "</td>");
+	tbody.append(row);
+}
+
+function prikaziAvione(avioni) {
+	let tbody = $("#OsnovniAvioniRows");
+	tbody.empty();
+	
+	$.each(avioni, function(i, avion){
+		prikaziAvion(avion, tbody);
 	});
 }
 
@@ -299,6 +341,13 @@ function popuniListuZaDestinacije(destinacije) {
 		popuniListuZaDestinaciju(destinacija);
 	});
 	
+}
+
+function popuniListuZaAvion(avion) {
+	let avioniLista = $("#avionZaLetSelect");
+	
+	avioniLista.append('<option value="' + avion.id + '">' + avion.naziv
+			+ '</option>');
 }
 
 function popuniListuZaAvione(avioni) {

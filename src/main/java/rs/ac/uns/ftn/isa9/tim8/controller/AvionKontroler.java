@@ -32,8 +32,13 @@ public class AvionKontroler {
 	}
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<Avion> dodajAvion(@RequestBody AvionDTO noviAvion) {
+	public ResponseEntity<?> dodajAvion(@RequestBody AvionDTO noviAvion) {
+		try {
 		return new ResponseEntity<Avion>(servis.dodajAvion(noviAvion), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}	
 	
 	@RequestMapping(value = "/dobaviSegmenteZaAvion/{idAviona}", method = RequestMethod.GET)

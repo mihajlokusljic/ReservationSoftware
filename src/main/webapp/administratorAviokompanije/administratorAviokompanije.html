@@ -90,9 +90,7 @@
 						</tbody>
 					</table>
                         </div>
-						<div class="tab-pane" id="tab-avioni">
-                            <form method="POST" action="#" id="dodavanjeAvionaForm">
-                            
+						<div class="tab-pane" id="tab-avioni">                            
                             	<div class="radio-row">
                                     <label class="radio-container m-r-45">Korak 1: Osnovni podaci o avionu
                                         <input type="radio" checked="checked" name="class" id="osnovniPodaciAvionBtn">
@@ -111,7 +109,7 @@
                                 <p>&nbsp</p>
                                 
                                 <div id = "prvaFormaDodajAvion">
-                                
+                                	<form id="FORMprvaFormaDodajAvion">
                                 	<div class="input-group">
                                    		<label class="label">Naziv aviona: </label>
                                    		<input class="input--style-2" type="text" placeholder="Unesite naziv aviona" required="required" id="avioniNazivAviona">
@@ -135,7 +133,10 @@
                                    		<label class="label">Broj segmenata: </label>
                                    		<input class="input--style-2" type="number" min = "1" placeholder="Unesite broj segmenata" required="required" id="avioniBrojSegmenata">
                                    	</div>                                
-                            	<input id = "dodajAvionBtn" type="button" class="btn btn-submit" value="Dodaj avion"/>
+                            	<input id = "dodajAvionBtn" type="submit" class="btn btn-submit" value="Dodaj avion"/>
+                          		</form>							
+                            	
+                            	<br><br>
                              	
                            	<table>
 								<thead>
@@ -148,17 +149,14 @@
 								</thead>
 								<tbody id="OsnovniAvioniRows">
 								<tr>
-									<td class="column3"><img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Pan_Am_Boeing_747-121_N732PA_Bidini.jpg"></td>
-									<td class="column3">Boeing 747</td>
-									<td class="column5">144</td>
-									<td class="column5">4</td>
+
 								</tr>
 								</tbody>
 							</table>
-                             									
 								</div>
 							
                                 <div id = "drugaFormaNaziviSegmenata" hidden>
+                                	<form id="FORMdrugaFormaNaziviSegmenata">
 	                       			<div class="input-group" id="avionZaDodavanjeNekogSegmenta">
 	                                            <label class="label">Avion:</label>
 	                                            <div class="rs-select2 js-select-simple">
@@ -173,8 +171,10 @@
                                    		<input class="input--style-2" type="text" placeholder="Unesite naziv segmenta" required="required" id="avioniNazivSegmentaZaDodavanje">
                                    	</div>
                             
-                            	<input id = "dodajSegmentZaAvionBtn" type="button" class="btn btn-submit" value="Dodaj segment"/>
-                              	
+                            	<input id = "dodajSegmentZaAvionBtn" type="submit" class="btn btn-submit" value="Dodaj segment"/>
+                              	</form>							
+
+                              	<br><br>
                               	                           	<table>
 								<thead>
 								<tr class="table100-head">
@@ -189,7 +189,6 @@
 								</tr>
 								</tbody>
 							</table>
-                              									
 								</div>
 
 	                            
@@ -202,7 +201,6 @@
 	                                            </div>
 	                            </div>
 	                            
-                            </form>
                         </div>
                         <div class="tab-pane" id="tab-letovi">
                        	<form method="POST" action="#" id= "administratorAviokompanijeLetoviForm">
