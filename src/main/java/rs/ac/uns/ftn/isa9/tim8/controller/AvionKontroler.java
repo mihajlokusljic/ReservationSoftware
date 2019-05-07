@@ -32,8 +32,13 @@ public class AvionKontroler {
 	}
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	public ResponseEntity<Avion> dodajAvion(@RequestBody AvionDTO noviAvion) {
+	public ResponseEntity<?> dodajAvion(@RequestBody AvionDTO noviAvion) {
+		try {
 		return new ResponseEntity<Avion>(servis.dodajAvion(noviAvion), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}	
 	
 	@RequestMapping(value = "/dobaviSegmenteZaAvion/{idAviona}", method = RequestMethod.GET)
@@ -42,8 +47,13 @@ public class AvionKontroler {
 	}
 	
 	@RequestMapping(value = "/dodajSegment", method = RequestMethod.POST)
-	public ResponseEntity<Segment> dodajSegment(@RequestBody SegmentDTO segment) {
+	public ResponseEntity<?> dodajSegment(@RequestBody SegmentDTO segment) {
+		try {
 		return new ResponseEntity<Segment>(servis.dodajSegment(segment.getIdAviona(), segment.getNaziv()), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
 	}
 	
 	@RequestMapping(value = "/dodajSjediste", method = RequestMethod.POST)

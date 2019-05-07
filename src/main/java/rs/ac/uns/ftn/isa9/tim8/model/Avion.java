@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,7 +34,6 @@ public class Avion {
 	@JoinTable(name="avion_segment", joinColumns=@JoinColumn(name="avion_id"), inverseJoinColumns=@JoinColumn(name="segment_id"))	
 	protected Set<Segment> segmenti;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "avion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Sjediste> sjedista;
 	
@@ -42,7 +42,8 @@ public class Avion {
 	protected Aviokompanija aviokompanija;
 
 	public Avion() {
-		super();
+		this.segmenti = new HashSet<Segment>();
+		this.sjedista = new HashSet<Sjediste>();
 	}
 
 	public String getNaziv() {

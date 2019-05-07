@@ -20,7 +20,7 @@ public class Segment {
 	
 
 	public Segment() {
-		super();
+		this.naziv = "";
 	}
 
 	

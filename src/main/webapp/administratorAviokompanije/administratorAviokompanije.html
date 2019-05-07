@@ -90,91 +90,113 @@
 						</tbody>
 					</table>
                         </div>
-						<div class="tab-pane" id="tab-avioni">
-                    	<form method="POST" action="#" id= "administratorAviokompanijeDestinacijeForm">
-                                <div class="input-group">
-                                    <label class="label">Naziv destinacije: </label>
-                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv destinacije" required="required">
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Puna adresa: </label>
-                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Unesite punu adresu destinacije" required="required">
-                                </div>
-
-                                <div class="radio-row">
-                                    <label class="radio-container m-r-45">First Class
-                                        <input type="radio" name="class">
+						<div class="tab-pane" id="tab-avioni">                            
+                            	<div class="radio-row">
+                                    <label class="radio-container m-r-45">Korak 1: Osnovni podaci o avionu
+                                        <input type="radio" checked="checked" name="class" id="osnovniPodaciAvionBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container m-r-45">Business
-                                        <input type="radio" name="class">
+                                    <label class="radio-container m-r-45">Korak 2: Definisanje naziva segmenata
+                                        <input type="radio" name="class" id="definisanjeSegmenataBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container">Economy
-                                        <input type="radio" checked="checked" name="class">
+                                    <label class="radio-container">Korak 3: Pripadnost sjedišta segmentima
+                                        <input type="radio" name="class" id="pripadnostSjedistaBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
                                 </div>
-                            </form>
-						<button type="button" class="btn btn-submit" action ="#tab-dodaj-destinaciju">Dodaj novu destinaciju</button> <br><br>
-                           <table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column3">Slika</th>
-								<th class="column3">Naziv</th>
-								<th class="column3">Adresa</th>
-							</tr>
-						</thead>
-						<tbody>
+                                
+                                <p>&nbsp</p>
+                                
+                                <div id = "prvaFormaDodajAvion">
+                                	<form id="FORMprvaFormaDodajAvion">
+                                	<div class="input-group">
+                                   		<label class="label">Naziv aviona: </label>
+                                   		<input class="input--style-2" type="text" placeholder="Unesite naziv aviona" required="required" id="avioniNazivAviona">
+                                   	</div>
+                                	
+                                	<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Dimenzije aviona: </label>
+                                            <input class="input--style-2" type="number" min = "6" placeholder="Unesite broj vrsta (min. 6)" required="required" id="avioniBrojVrsta">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Dimenzije aviona: </label>
+                                            <input class="input--style-2" type="number" min = "3" placeholder="Unesite broj kolona (min 3.)" required="required" id="avioniBrojKolona">
+                                        </div>
+                                    </div>
+                                	</div>
+                                	<div class="input-group">
+                                   		<label class="label">Broj segmenata: </label>
+                                   		<input class="input--style-2" type="number" min = "1" placeholder="Unesite broj segmenata" required="required" id="avioniBrojSegmenata">
+                                   	</div>                                
+                            	<input id = "dodajAvionBtn" type="submit" class="btn btn-submit" value="Dodaj avion"/>
+                          		</form>							
+                            	
+                            	<br><br>
+                             	
+                           	<table>
+								<thead>
+								<tr class="table100-head">
+									<th class="column3">Slika</th>
+									<th class="column3">Naziv aviona</th>
+									<th class="column5">Broj sjedišta</th>
+									<th class="column5">Broj segmenata</th>
+								</tr>
+								</thead>
+								<tbody id="OsnovniAvioniRows">
 								<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
+
 								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
+								</tbody>
+							</table>
+								</div>
+							
+                                <div id = "drugaFormaNaziviSegmenata" hidden>
+                                	<form id="FORMdrugaFormaNaziviSegmenata">
+	                       			<div class="input-group" id="avionZaDodavanjeNekogSegmenta">
+	                                            <label class="label">Avion:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id = "avionZaDodavanjeNekogSegmentaSelect" required="required">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                            				</div>
+	                       			</div>
+
+                                	<div class="input-group">
+                                   		<label class="label">Naziv segmenta: </label>
+                                   		<input class="input--style-2" type="text" placeholder="Unesite naziv segmenta" required="required" id="avioniNazivSegmentaZaDodavanje">
+                                   	</div>
+                            
+                            	<input id = "dodajSegmentZaAvionBtn" type="submit" class="btn btn-submit" value="Dodaj segment"/>
+                              	</form>							
+
+                              	<br><br>
+                              	                           	<table>
+								<thead>
+								<tr class="table100-head">
+									<th class="column3">Naziv segmenta</th>
 								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-																<tr>
-									<td class="column3"><img src="https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w"></td>
-									<td class="column3">Ulica Konstantina Popovića</td>
-									<td class="column3">Bosanski Brod, Republika Srpska, Bosna i Hercegovina</td>
-								</tr>
-						</tbody>
-					</table>
+								</thead>
+								<tbody id="osnovniSegmentiRows">
+
+								</tbody>
+							</table>
+								</div>
+
+	                            
+                                <div class="input-group" id="racServisAdmina" hidden>
+	                                            <label class="label">Administrirani rent-a-car servis:</label>
+	                                            <div class="rs-select2 js-select-simple">
+	                                                <select id ="racServisAdminaSelect">
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                            </div>
+	                            
                         </div>
                         <div class="tab-pane" id="tab-letovi">
                        	<form method="POST" action="#" id= "administratorAviokompanijeLetoviForm">
