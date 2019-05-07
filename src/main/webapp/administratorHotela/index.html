@@ -59,151 +59,196 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                    <!-- Rad sa sobama -->
+                    
+                    	<!-- Rad sa sobama -->
                         <div class="tab-pane active" id="tab-sobe">
-                        
-                        <form method="POST" action="#" id="dodavanjeSobeForm">
-                                <div class="input-group">
-                                    <label class="label">Broj sobe:</label>
-                                    <input class="input--style-2" type="number" min="1" placeholder="Unesite broj sobe" required="required" id="brojSobeUnos">
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Sprat:</label>
-                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj sprata" required="required" id="spratSobeUnos">
-                                </div>
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Red:</label>
-                                            <input class="input--style-2" type="number" min="1" placeholder="U kojem redu na spratu se nalazi soba?" required="required" id="redSobeUnos">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Kolona:</label>
-                                            <input class="input--style-2" type="number" min="1" placeholder="U kojoj koloni na spratu se nalazi soba?" required="required" id="kolonaSobeUnos">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Broj kreveta:</label>
-                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj kreveta u sobi" required="required" id="brKrevetaSobeUnos">
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Cijena noćenja:</label>
-                                    <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite cijenu noćenja" required="required" id="cijenaNocenjaUnos">
-                                </div>
-                                <input type="submit" class="btn btn-submit" value="Dodaj sobu"/>
-                        </form>
-                        <h1>&nbsp</h1>
-                        <table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column1">Broj sobe</th>
-								<th class="column1">Broj kreveta</th>
-								<th class="column1">Cijena noćenja</th>
-								<th class="column1">Sprat</th>
-								<th class="column1">Red</th>
-								<th class="column1">Kolona</th>
-								<th class="column1">Akcije</th>
-							</tr>
-						</thead>
-						<tbody id="prikazSoba">
-						</tbody>
-					</table>
-                        </div>
-                        <div class="tab-pane" id="tab-dodatne-usluge">
-                        <form method="POST" action="#" id="dodavanjeDodatneUslugeForm">
-                                <div class="input-group">
-                                    <label class="label">Naziv:</label>
-                                    <input class="input--style-2" type="text" placeholder="Unesite naziv usluge" required="required" id="nazivUslugeUnos">
-                                </div>
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Cijena:</label>
-                                            <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite baznu cijunu usluge" required="required" id="cijenaUslugeUnos">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-											<div class="input-group">
-	                                            <label class="label">Način plaćanja:</label>
-	                                            <div class="rs-select2 js-select-simple select--no-search">
-	                                                <select id = "nacinPlacanjaUslugeInput">
-	                                                    <option selected="selected" value="1" id="nacinPlacanjaUnos">Dnevno, po osobi</option>
-	                                                    <option value="2">Dnevno</option>
-	                                                    <option value="3">Fiksna cijena, po osobi</option>
-	                                                    <option value="4">Fiksna cijena</option>
-	                                                </select>
-	                                                <div class="select-dropdown"></div>
-	                                            </div>
+	                        <form method="POST" action="#" id="dodavanjeSobeForm">
+	                                <div class="input-group">
+	                                    <label class="label">Broj sobe:</label>
+	                                    <input class="input--style-2" type="number" min="1" placeholder="Unesite broj sobe" required="required" id="brojSobeUnos">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Sprat:</label>
+	                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj sprata" required="required" id="spratSobeUnos">
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Red:</label>
+	                                            <input class="input--style-2" type="number" min="1" placeholder="U kojem redu na spratu se nalazi soba?" required="required" id="redSobeUnos">
 	                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Procenat popusta:</label>
-                                    <input class="input--style-2" type="number" min="0" max="100" placeholder="Unesite popust na ukupnu cijenu smjestaja koji se ostvaruje izborom ove usluge" required="required" id="popustUslugeUnos">
-                                </div>
-                                <div class="input-group">
-                                    <label class="label">Detaljan opis usluge:</label>
-                                    <textarea rows="10" cols="5" id="opisUslugeUnos"></textarea>
-                                </div>
-                                <input type="submit" class="btn btn-submit" value="Dodaj uslugu"/>
-                        </form>
-                        <h1>&nbsp</h1>
-                        <table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column1">Naziv</th>
-								<th class="column6">Cijena</th>
-								<th class = "column1">Način plaćanja</th>
-								<th class = "column5">Akcije</th>
-							</tr>
-						</thead>
-						<tbody id="prikazUsluga">
-						</tbody>
-					</table>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Kolona:</label>
+	                                            <input class="input--style-2" type="number" min="1" placeholder="U kojoj koloni na spratu se nalazi soba?" required="required" id="kolonaSobeUnos">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj kreveta:</label>
+	                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj kreveta u sobi" required="required" id="brKrevetaSobeUnos">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Cijena noćenja:</label>
+	                                    <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite cijenu noćenja" required="required" id="cijenaNocenjaUnos">
+	                                </div>
+	                                <input type="submit" class="btn btn-submit" value="Dodaj sobu"/>
+	                        </form>
+	                        <h1>&nbsp</h1>
+	                        <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Broj sobe</th>
+										<th class="column1">Broj kreveta</th>
+										<th class="column1">Cijena noćenja</th>
+										<th class="column1">Sprat</th>
+										<th class="column1">Red</th>
+										<th class="column1">Kolona</th>
+										<th class="column1">Akcije</th>
+									</tr>
+								</thead>
+								<tbody id="prikazSoba">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-izmjena-sobe">
+	                        <form method="POST" action="#" id="izmjenaSobeForm">
+	                                <div class="input-group">
+	                                    <label class="label">Broj sobe:</label>
+	                                    <input class="input--style-2" type="number" min="1" placeholder="Unesite broj sobe" required="required" id="brojSobeIzmjena">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Sprat:</label>
+	                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj sprata" required="required" id="spratSobeIzmjena">
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Red:</label>
+	                                            <input class="input--style-2" type="number" min="1" placeholder="U kojem redu na spratu se nalazi soba?" required="required" id="redSobeIzmjena">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Kolona:</label>
+	                                            <input class="input--style-2" type="number" min="1" placeholder="U kojoj koloni na spratu se nalazi soba?" required="required" id="kolonaSobeIzmjena">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj kreveta:</label>
+	                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj kreveta u sobi" required="required" id="brKrevetaSobeIzmjena">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Cijena noćenja:</label>
+	                                    <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite cijenu noćenja" required="required" id="cijenaNocenjaIzmjena">
+	                                </div>
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaSobe">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
+	                        </form>
+                        </div>
+                        
+                        <!-- Rad sa dodatnim uslugama -->
+                        <div class="tab-pane" id="tab-dodatne-usluge">
+	                        <form method="POST" action="#" id="dodavanjeDodatneUslugeForm">
+	                                <div class="input-group">
+	                                    <label class="label">Naziv:</label>
+	                                    <input class="input--style-2" type="text" placeholder="Unesite naziv usluge" required="required" id="nazivUslugeUnos">
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Cijena:</label>
+	                                            <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite baznu cijunu usluge" required="required" id="cijenaUslugeUnos">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+												<div class="input-group">
+		                                            <label class="label">Način plaćanja:</label>
+		                                            <div class="rs-select2 js-select-simple select--no-search">
+		                                                <select id = "nacinPlacanjaUslugeInput">
+		                                                    <option selected="selected" value="1" id="nacinPlacanjaUnos">Dnevno, po osobi</option>
+		                                                    <option value="2">Dnevno</option>
+		                                                    <option value="3">Fiksna cijena, po osobi</option>
+		                                                    <option value="4">Fiksna cijena</option>
+		                                                </select>
+		                                                <div class="select-dropdown"></div>
+		                                            </div>
+		                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Procenat popusta:</label>
+	                                    <input class="input--style-2" type="number" min="0" max="100" placeholder="Unesite popust na ukupnu cijenu smjestaja koji se ostvaruje izborom ove usluge" required="required" id="popustUslugeUnos">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Detaljan opis usluge:</label>
+	                                    <textarea rows="10" cols="5" id="opisUslugeUnos"></textarea>
+	                                </div>
+	                                <input type="submit" class="btn btn-submit" value="Dodaj uslugu"/>
+	                        </form>
+	                        <h1>&nbsp</h1>
+	                        <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Naziv</th>
+										<th class="column6">Cijena</th>
+										<th class = "column1">Način plaćanja</th>
+										<th class = "column5">Akcije</th>
+									</tr>
+								</thead>
+								<tbody id="prikazUsluga">
+								</tbody>
+							</table>
                         </div>
 							
+						<!-- Uredjivanje info stranice -->
                         <div class="tab-pane" id="tab-info-stranica">
-                        
-                        <form method="POST" action="#" id="izmjenaInfoStraniceForm">
-                        		<div class="row row-space">
-                        			<div class="col-2">
-                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaHotela">
-                        				<div class="input-group">
-		                                    <label class="label">Izmjena profilne slike hotela (u izradi):</label>
-		                                    <input class="input--style-2" type="file" id="novaSlikaUpload">
-		                                </div>
-                        			</div>
-                        			<div class="col-2">
-                        				<h3>&nbsp;</h3>
-		                                <div class="input-group">
-		                                    <label class="label">Naziv hotela:</label>
-		                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
-		                                </div>
-		                                <div class="input-group">
-		                                    <label class="label">Adresa:</label>
-		                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
-		                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
+	                        <form method="POST" action="#" id="izmjenaInfoStraniceForm">
+	                        		<div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaHotela">
+	                        				<div class="input-group">
+			                                    <label class="label">Izmjena profilne slike hotela (u izradi):</label>
+			                                    <input class="input--style-2" type="file" id="novaSlikaUpload">
+			                                </div>
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv hotela:</label>
+			                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa:</label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
+			                                </div>
 		                                </div>
 	                                </div>
-                                </div>
-                                <h2>&nbsp;</h2>
-                                <div class="input-group">
-                                    <label class="label">Promotivni opis:</label>
-                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="opisHotela"></textarea>
-                                </div>
-                                <div class="row row-space">
-                                    <div class="col-2">
-                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
-                                    </div>
-                                    <div class="col-2">
-                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaStraniceHotela">Poništi izmjene</button>
-                                    </div>
-                                </div>
-                        </form>
-
+	                                <h2>&nbsp;</h2>
+	                                <div class="input-group">
+	                                    <label class="label">Promotivni opis:</label>
+	                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="opisHotela"></textarea>
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaStraniceHotela">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
+	                        </form>
                         </div>
                         
                         <div class="tab-pane" id="tab-brze-rezervacije">

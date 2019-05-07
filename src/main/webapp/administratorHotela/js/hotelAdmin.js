@@ -87,7 +87,8 @@ function dodavanjeSobe() {
 		contentType : "application/json; charset=utf-8",
 		data: JSON.stringify(novaSoba),
 		success: function(response) {
-			prikaziSobu(response);
+			podaciHotela.sobe.push(response)
+			prikaziSobe(podaciHotela.sobe);
 		},
 	});
 }
@@ -204,9 +205,18 @@ function ucitajSobehotela() {
 }
 
 function prikaziSobe(sobe) {
+	let sobeTabela = $("#prikazSoba");
+	sobeTabela.empty();
 	$.each(sobe, function(i, soba) {
 		prikaziSobu(soba);
-	})
+	});
+	
+	$(".brisanjeSobe").click(function(e) {
+		e.preventDefault();
+		var idSobe = e.target.id.substring(2); //id datog linka je: bs + id_sobe (brisanje sobe <id sobe>)
+		idSobe = parseInt(idSobe);
+		brisanjeSobe(idSobe);
+	});
 }
 
 function prikaziSobu(soba) {
@@ -218,8 +228,42 @@ function prikaziSobu(soba) {
 	noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 	noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 	noviRed.append('<td class="column1">' + soba.kolona + '</td>');
-	noviRed.append('<td class="column6"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
+	noviRed.append('<td class="column6"><a href="#">Izmjeni</a>&nbsp&nbsp<a class="brisanjeSobe" href="#" id="bs' + soba.id + '">Obriši</a></td>');
 	sobeTabela.append(noviRed);
+}
+
+function brisanjeSobe(idSobe) {
+	let indeksSobe = 0;
+	let soba = null;
+	for(indeksSobe in podaciHotela.sobe) {
+		soba = podaciHotela.sobe[indeksSobe];
+		if(soba.id == idSobe) {
+			break;
+		}
+	}
+	if(soba == null) {
+		alert("Doslo je do greske pri brisanju sobe.");
+		return;
+	}
+	let obrisi = confirm("Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?");
+	if(!obrisi) {
+		return;
+	}
+	
+	$.ajax({
+		type: "DELETE",
+		url: "../hotelskeSobe/obrisi/" + idSobe,
+		success: function(response) {
+			alert(response);
+			//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
+			for(i in podaciHotela.sobe) {
+				if(podaciHotela.sobe[i].id == idSobe) {
+					podaciHotela.sobe.pop(i);
+				}
+			}
+			prikaziSobe(podaciHotela.sobe);
+		},
+	});
 }
 
 function prikaziUsluge(usluge) {
