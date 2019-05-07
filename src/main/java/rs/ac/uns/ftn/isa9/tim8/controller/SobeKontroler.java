@@ -34,6 +34,16 @@ public class SobeKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/izmjeni", method = RequestMethod.PUT)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+	public ResponseEntity<?> izmjeniSobu(@RequestBody HotelskaSoba noviPodaciSobe) {
+		try {
+			return new ResponseEntity<HotelskaSoba>(sobeService.izmjeniSobu(noviPodaciSobe), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasAuthority('AdministratorHotela')")
 	public ResponseEntity<?> obrisiHotelskuSobu(@PathVariable("id") Long idSobe) {
