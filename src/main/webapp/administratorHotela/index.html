@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colrolib Templates">
+    <meta name="author" content="Colrolib">
+    <meta name="keywords" content="Colrolib Templates">
+
+    <!-- Title Page-->
+    <title>Administraija hotela</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    
+	
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+        <div class="wrapper wrapper--w1050">
+            <div class="card card-3">
+                <div class="card-body">
+                    <ul class="tab-list">
+                        <li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-sobe" data-toggle="tab" id ="sobe">Sobe</a>
+                        </li>
+						<li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-dodaj-aviokompaniju" data-toggle="tab" id = "vozila"></a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-info-stranica" data-toggle="tab" id = "rac">Info stranica hotela</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-brze-rezervacije" data-toggle="tab" id = "administrtori">Brze rezervacije</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-izvjestaji" data-toggle="tab" id = "administrtori">Izvještaji</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id ="odjava">Odjavi se</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                    <!-- Rad sa sobama -->
+                        <div class="tab-pane active" id="tab-sobe">
+                        
+                        <form method="POST" action="#" id="dodavanjeSobeForm">
+                                <div class="input-group">
+                                    <label class="label">Broj sobe:</label>
+                                    <input class="input--style-2" type="number" min="1" placeholder="Unesite broj sobe" required="required" id="brojSobeUnos">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Sprat:</label>
+                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj sprata" required="required" id="spratSobeUnos">
+                                </div>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Red:</label>
+                                            <input class="input--style-2" type="number" min="1" placeholder="U kojem redu na spratu se nalazi soba?" required="required" id="redSobeUnos">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Kolona:</label>
+                                            <input class="input--style-2" type="number" min="1" placeholder="U kojoj koloni na spratu se nalazi soba?" required="required" id="kolonaSobeUnos">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Broj kreveta:</label>
+                                    <input class="input--style-2" type="number" min="0" placeholder="Unesite broj kreveta u sobi" required="required" id="brKrevetaSobeUnos">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Cijena noćenja:</label>
+                                    <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite cijenu noćenja" required="required" id="cijenaNocenjaUnos">
+                                </div>
+                                <input type="submit" class="btn btn-submit" value="Dodaj sobu"/>
+                        </form>
+                        <h1>&nbsp</h1>
+                        <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Broj sobe</th>
+								<th class="column1">Broj kreveta</th>
+								<th class="column1">Cijena noćenja</th>
+								<th class="column1">Sprat</th>
+								<th class="column1">Red</th>
+								<th class="column1">Kolona</th>
+								<th class="column1">Akcije</th>
+							</tr>
+						</thead>
+						<tbody id="prikazSoba">
+						</tbody>
+					</table>
+                        </div>
+                        <div class="tab-pane" id="tab-dodatne-usluge">
+                        <form method="POST" action="#" id="dodavanjeDodatneUslugeForm">
+                                <div class="input-group">
+                                    <label class="label">Naziv:</label>
+                                    <input class="input--style-2" type="text" placeholder="Unesite naziv usluge" required="required" id="nazivUslugeUnos">
+                                </div>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena:</label>
+                                            <input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite baznu cijunu usluge" required="required" id="cijenaUslugeUnos">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+											<div class="input-group">
+	                                            <label class="label">Način plaćanja:</label>
+	                                            <div class="rs-select2 js-select-simple select--no-search">
+	                                                <select id = "nacinPlacanjaUslugeInput">
+	                                                    <option selected="selected" value="1" id="nacinPlacanjaUnos">Dnevno, po osobi</option>
+	                                                    <option value="2">Dnevno</option>
+	                                                    <option value="3">Fiksna cijena, po osobi</option>
+	                                                    <option value="4">Fiksna cijena</option>
+	                                                </select>
+	                                                <div class="select-dropdown"></div>
+	                                            </div>
+	                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Procenat popusta:</label>
+                                    <input class="input--style-2" type="number" min="0" max="100" placeholder="Unesite popust na ukupnu cijenu smjestaja koji se ostvaruje izborom ove usluge" required="required" id="popustUslugeUnos">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Detaljan opis usluge:</label>
+                                    <textarea rows="10" cols="5" id="opisUslugeUnos"></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-submit" value="Dodaj uslugu"/>
+                        </form>
+                        <h1>&nbsp</h1>
+                        <table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Naziv</th>
+								<th class="column6">Cijena</th>
+								<th class = "column1">Način plaćanja</th>
+								<th class = "column5">Akcije</th>
+							</tr>
+						</thead>
+						<tbody id="prikazUsluga">
+						</tbody>
+					</table>
+                        </div>
+							
+                        <div class="tab-pane" id="tab-info-stranica">
+                        
+                        <form method="POST" action="#" id="izmjenaInfoStraniceForm">
+                        		<div class="row row-space">
+                        			<div class="col-2">
+                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaHotela">
+                        				<div class="input-group">
+		                                    <label class="label">Izmjena profilne slike hotela (u izradi):</label>
+		                                    <input class="input--style-2" type="file" id="novaSlikaUpload">
+		                                </div>
+                        			</div>
+                        			<div class="col-2">
+                        				<h3>&nbsp;</h3>
+		                                <div class="input-group">
+		                                    <label class="label">Naziv hotela:</label>
+		                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" id="nazivHotela">
+		                                </div>
+		                                <div class="input-group">
+		                                    <label class="label">Adresa:</label>
+		                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+		                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
+		                                </div>
+	                                </div>
+                                </div>
+                                <h2>&nbsp;</h2>
+                                <div class="input-group">
+                                    <label class="label">Promotivni opis:</label>
+                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="opisHotela"></textarea>
+                                </div>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+                                    </div>
+                                    <div class="col-2">
+                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaStraniceHotela">Poništi izmjene</button>
+                                    </div>
+                                </div>
+                        </form>
+
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-brze-rezervacije">
+                            <p>Brze rezervacije</p>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-izvjestaji">
+                            <p>Izvjestaji</p>
+                        </div>
+                        
+						<div class="tab-pane" id="tab-profil-kor">
+                            <p id="podaciAdmina">Hotel administrator: </p>
+                        </div>
+                        
+						<div class="tab-pane" id="tab-odjava">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
+    <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/hotelAdmin.js"></script>
+    <script src="js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->

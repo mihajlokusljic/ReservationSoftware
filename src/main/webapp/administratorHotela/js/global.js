@@ -136,17 +136,17 @@
             totalRoom++;
     
             listRoom.append('<li class="list-room__item">' +
-                '                                        <span class="list-room__name"> Zahtjev '+ totalRoom +'</span>' +
+                '                                        <span class="list-room__name"> Room '+ totalRoom +'</span>' +
                 '                                        <ul class="list-person">' +
                 '                                            <li class="list-person__item">' +
                 '                                                <span class="name">' +
-                '													Broj kreveta po sobi' +
+                '                                                    Adults' +
                 '                                                </span>' +
                 '                                                <div class="quantity quantity1">' +
                 '                                                    <span class="minus">' +
                 '                                                        -' +
                 '                                                    </span>' +
-                '                                                    <input type="number" min="1" value="1" class="inputQty">' +
+                '                                                    <input type="number" min="0" value="0" class="inputQty">' +
                 '                                                    <span class="plus">' +
                 '                                                        +' +
                 '                                                    </span>' +
@@ -154,13 +154,13 @@
                 '                                            </li>' +
                 '                                            <li class="list-person__item">' +
                 '                                                <span class="name">' +
-                '                                                    Broj soba' +
+                '                                                    Children' +
                 '                                                </span>' +
                 '                                                <div class="quantity quantity2">' +
                 '                                                    <span class="minus">' +
                 '                                                        -' +
                 '                                                    </span>' +
-                '                                                    <input type="number" min="0" value="1" class="inputQty">' +
+                '                                                    <input type="number" min="0" value="0" class="inputQty">' +
                 '                                                    <span class="plus">' +
                 '                                                        +' +
                 '                                                    </span>' +
@@ -203,18 +203,27 @@
         }
     
         function updateRoom() {
-        	azurirajSobeZahtjev();
+            var totalAd = parseInt(countAdult());
+            var totalChi = parseInt(countChildren());
+            var adults = 'Adult, ';
+            var rooms = 'Room';
+    
+            if (totalAd > 1) {
+                adults = 'Adults, ';
+            }
+    
+            if (totalRoom > 1) {
+                rooms = 'Rooms';
+            }
+    
+            var infoText = totalAd + ' ' + adults + totalChi + ' ' + 'Children, ' + totalRoom + ' ' + rooms;
+    
+            info.val(infoText);
         }
     
     } catch (e) {
         console.log(e);
     }
-    
-    $("#hotelSearchForm").submit(function(e) {
-    	e.preventDefault();
-    	totalRoom = 1;
-    	
-    });
     /*[ Select 2 Config ]
         ===========================================================*/
     

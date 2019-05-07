@@ -154,7 +154,7 @@ public class AuthenticationController {
 			redirectionURL = "../index.html";
 		} else if (user instanceof AdministratorHotela) {
 			tipKorisnika = TipKorisnika.AdministratorHotela;
-			redirectionURL = "../AdministracijaHotela.html";
+			redirectionURL = "../administratorHotela/index.html";
 		} else if (user instanceof AdministratorRentACar) {
 			tipKorisnika = TipKorisnika.AdministratorRentACar;
 			redirectionURL = "../administratorRentACarServisa/administratorRentACarServisa.html";
