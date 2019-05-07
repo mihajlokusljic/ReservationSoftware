@@ -125,10 +125,14 @@ $(document).ready(function() {
 		
 		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
 		let naziv_segmenta = $("#avioniNazivSegmentaZaDodavanje").val();
+		let pocetni_red = $("#pocetnaVrstaZaSegment").val();
+		let krajnji_red = $("#krajnjaVrstaZaSegment").val();
 		
 		let noviSegment = {
 				naziv : naziv_segmenta,
-				idAviona : id_aviona
+				idAviona : id_aviona,
+				pocetniRed : parseInt(pocetni_red),
+				krajnjiRed : parseInt(krajnji_red)
 		};
 		
 		$.ajax({

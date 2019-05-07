@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.Collection;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,15 @@ public class AvionService {
 			for (Segment s : a.getSegmenti()) {
 				if (s.getNaziv().equalsIgnoreCase("")) {
 					s.setNaziv(nazivSegmenta);
-
+										
+					for (Sjediste ss : a.getSjedista()) {
+						if (ss.getRed() >= pocetniRed) {
+							if (ss.getRed() <= krajnjiRed) {
+								ss.setSegment(s);
+							}
+						}
+					}
+					
 					avionRepository.save(a);
 					return s;
 				}
