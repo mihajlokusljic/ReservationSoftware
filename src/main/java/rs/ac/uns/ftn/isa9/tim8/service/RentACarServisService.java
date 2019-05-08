@@ -94,7 +94,7 @@ public class RentACarServisService {
 		}
 		for (Vozilo vozilo : vozila) {
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
-					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), vozilo.getId());
+					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), vozilo.getFilijala().getAdresa().getPunaAdresa(), vozilo.getId());
 			vozilaDTO.add(vozDto);
 		}
 		
@@ -105,11 +105,23 @@ public class RentACarServisService {
 		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
 		if (rentACar == null) {
 			return "Ne postoji servis sa unijetim nazivom.";
+		}		
+		
+		Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+		
+		if (!pretragaFilijala.isPresent()) {
+			return "Nevalidan id";
 		}
+		
+		Filijala filijala = pretragaFilijala.get();
+		
+		filijala.setBrojVozila(filijala.getBrojVozila()+1);
 		vozilo.setRentACar(rentACar);
 		vozilo.setId(null);
+		vozilo.setFilijala(filijala);
 		rentACar.getVozila().add(vozilo);
 		rentACarRepository.save(rentACar);
+		filijalaRepository.save(filijala);
 		
 		return null;
 	}
@@ -193,7 +205,24 @@ public class RentACarServisService {
 		if (!rVozila.isEmpty()) {
 			return "Ne mozete izmjeniti rezervisano vozilo";
 		}
+		Adresa adresa = adresaRepository.findOneByPunaAdresa(vozilo.getFilijala());
+		Filijala filijala = null;
+		if (adresa != null) {
+			filijala = filijalaRepository.findOneByAdresa(adresa);
+		}
+		
+		if (vozilo.getFilijala() != voz.getFilijala().getAdresa().getPunaAdresa()) {
+			Filijala fil = filijalaRepository.findOneByAdresa(voz.getFilijala().getAdresa());
+			fil.setBrojVozila(fil.getBrojVozila()-1);
+			filijala.setBrojVozila(filijala.getBrojVozila()+1);
+			voz.setFilijala(filijala);
+			filijalaRepository.save(fil);
+			filijalaRepository.save(filijala);
+			
+		}
+
 		voziloRepository.save(voz);
+
 		return null;
 	}
 	

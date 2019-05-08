@@ -86,14 +86,14 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Naziv:</label>
-	                                            <input class="input--style-2" type="text" placeholder="naziv vozila" required="required" id = "naziv_input">
+	                                            <input class="input--style-2" type="text" placeholder="Unesite naziv vozila" required="required" id = "naziv_input">
 	
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Marka:</label>
-	                                            <input class="input--style-2" type="text" placeholder="marka vozila" required="required" id = "marka_input">
+	                                            <input class="input--style-2" type="text" placeholder="Unesite marku vozila" required="required" id = "marka_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -102,7 +102,7 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Model:</label>
-	                                            <input class="input--style-2" type="text" placeholder="model vozila" required="required" id = "model_input">
+	                                            <input class="input--style-2" type="text" placeholder="Unesite model vozila" required="required" id = "model_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
@@ -124,13 +124,13 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Godina proizvodnje:</label>
-	                                            <input class="input--style-2" type="number" min = "1" placeholder="2010" required="required" id = "godina_proizvodnje_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="Uneisite godinu proizvodnje vozila" required="required" id = "godina_proizvodnje_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Broj sjedišta:</label>
-	                                            <input class="input--style-2" type="number" min = "1" placeholder="5" required="required" id = "broj_sjedista_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="Unesite broj sjedišta vozila" required="required" id = "broj_sjedista_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -138,13 +138,13 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Broj vrata:</label>
-	                                            <input class="input--style-2" type="number" min = "1" placeholder="5" required="required" id = "broj_vrata_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="Unesite broj vrata vozila" required="required" id = "broj_vrata_input">
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Cijena po danu:</label>
-	                                            <input class="input--style-2" type="number" min = "1" placeholder="64" required="required" id = "cijena_input">
+	                                            <input class="input--style-2" type="number" min = "1" placeholder="Unesite cijenu po danu vozila" required="required" id = "cijena_input">
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -152,7 +152,7 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Fotografija vozila</label>
-	                                            <input class="input--style-2" type="file" name="pic" accept="image/*" placeholder="dodajte sliku vozila" required="required">
+	                                            <input class="input--style-2" type="file" name="pic" accept="image/*" placeholder="Dodajte sliku vozila" required="required">
 											    <i class="zmdi zmdi-collection-image-o input-icon"></i>
 	
 	                                        </div>
@@ -161,7 +161,7 @@
 	                                        <div class="input-group">
 	                                            <label class="label">Filijala:</label>
 	                                            <div class="rs-select2 js-select-simple select--no-search">
-	                                                <select name="filijala">
+	                                                <select id="filijalaSelect">
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
 	                                            </div>
@@ -243,7 +243,7 @@
                                         <div class="input-group">
                                             <label class="label">Filijala:</label>
                                             <div class="rs-select2 js-select-simple select--no-search">
-                                                <select name="filijala">
+                                                <select id="filijalaSelectDetaljanPrikaz">
                                                 </select>
                                                 <div class="select-dropdown"></div>
                                             </div>
