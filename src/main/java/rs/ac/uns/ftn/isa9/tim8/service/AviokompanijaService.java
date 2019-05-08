@@ -49,10 +49,10 @@ public class AviokompanijaService {
 		if (adresa != null) {
 			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi.");
 		}
-		if(novaAviokompanija.getNaziv().equals("")) {
+		if (novaAviokompanija.getNaziv().equals("")) {
 			throw new NevalidniPodaciException("Naziv aviokompanije mora biti zadat.");
 		}
-		if(novaAviokompanija.getAdresa().getPunaAdresa().equals("")) {
+		if (novaAviokompanija.getAdresa().getPunaAdresa().equals("")) {
 			throw new NevalidniPodaciException("Adresa aviokompanije mora biti zadata.");
 		}
 		aviokompanijaRepository.save(novaAviokompanija);
@@ -126,16 +126,27 @@ public class AviokompanijaService {
 			throw new NevalidniPodaciException("Ne postoje makar dvije destinacije definisane za datu aviokompaniju.");
 		}
 		
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		Date datumPoletanjaAviona = null;
+		Date datumSletanjaAviona = null;
+		Date datumPovratkaAviona = null;
 		
-		/*
-		if (letDTO.getDatumSletanja().before(letDTO.getDatumPoletanja())) {
+		try {
+			 datumPoletanjaAviona = df.parse(letDTO.getDatumPoletanja());
+			 datumSletanjaAviona = df.parse(letDTO.getDatumSletanja());
+			 datumPovratkaAviona = df.parse(letDTO.getDuzinaPutovanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		
+		if (datumSletanjaAviona.before(datumPoletanjaAviona)) {
 			throw new NevalidniPodaciException("Datum poletanja mora biti prije datuma sletanja");
 		}
 
-		if (letDTO.getDuzinaPutovanja().before(letDTO.getDatumSletanja())) {
+		if (datumPovratkaAviona.before(datumSletanjaAviona)) {
 			throw new NevalidniPodaciException("Datum povratka mora biti nakon datuma sletanja.");
-		}*/
+		}
 
 		// Provjera postoji li avion
 		Optional<Avion> avionSearch = avionRepository.findById(letDTO.getIdAviona());
@@ -193,13 +204,9 @@ public class AviokompanijaService {
 		Let let = new Let();
 
 		let.setBrojLeta(letDTO.getBrojLeta());
-		
-		/*
-		let.setDatumPoletanja(letDTO.getDatumPoletanja());
-		let.setDatumSletanja(letDTO.getDatumSletanja());
-		let.setDuzinaPutovanja(letDTO.getDuzinaPutovanja());
-		*/
-		
+		let.setDatumPoletanja(datumPoletanjaAviona);
+		let.setDatumSletanja(datumSletanjaAviona);
+		let.setDuzinaPutovanja(datumPovratkaAviona);		
 		let.setCijenaKarte(letDTO.getCijenaKarte());
 		let.setPolaziste(polazna);
 		let.setOdrediste(odredisna);
@@ -227,13 +234,15 @@ public class AviokompanijaService {
 		Date trazeniDatumPovratka = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			if(!kriterijumiPretrage.getDatumPoletanja().equals("") && kriterijumiPretrage.getDatumPoletanja() != null) {
+			if (!kriterijumiPretrage.getDatumPoletanja().equals("")
+					&& kriterijumiPretrage.getDatumPoletanja() != null) {
 				trazeniDatumPoletanja = df.parse(kriterijumiPretrage.getDatumPoletanja());
 			}
-			if(!kriterijumiPretrage.getDatumSletanja().equals("") && kriterijumiPretrage.getDatumSletanja() != null) {
+			if (!kriterijumiPretrage.getDatumSletanja().equals("") && kriterijumiPretrage.getDatumSletanja() != null) {
 				trazeniDatumSletanja = df.parse(kriterijumiPretrage.getDatumSletanja());
 			}
-			if(!kriterijumiPretrage.getDuzinaPutovanja().equals("") && kriterijumiPretrage.getDuzinaPutovanja() != null) {
+			if (!kriterijumiPretrage.getDuzinaPutovanja().equals("")
+					&& kriterijumiPretrage.getDuzinaPutovanja() != null) {
 				trazeniDatumPovratka = df.parse(kriterijumiPretrage.getDuzinaPutovanja());
 			}
 		} catch (ParseException e) {
@@ -288,11 +297,11 @@ public class AviokompanijaService {
 
 		while (it.hasNext()) {
 			trenutniLet = it.next();
-			
+
 			if (kriterijumiPretrage.getDatumPoletanja() == null || kriterijumiPretrage.getDatumPoletanja().equals("")) {
 				break;
 			}
-			
+
 			trenutniDatumPoletanja = df.format(trenutniLet.getDatumPoletanja());
 			if (!trenutniDatumPoletanja.equals(kriterijumiPretrage.getDatumPoletanja())) {
 				it.remove();
@@ -304,11 +313,11 @@ public class AviokompanijaService {
 
 		while (it.hasNext()) {
 			trenutniLet = it.next();
-			
+
 			if (kriterijumiPretrage.getDatumSletanja() == null || kriterijumiPretrage.getDatumSletanja().equals("")) {
 				break;
 			}
-			
+
 			trenutniDatumSletanja = df.format(trenutniLet.getDatumSletanja());
 			if (!trenutniDatumSletanja.equals(kriterijumiPretrage.getDatumSletanja())) {
 				it.remove();
@@ -319,11 +328,12 @@ public class AviokompanijaService {
 
 		while (it.hasNext()) {
 			trenutniLet = it.next();
-			
-			if (kriterijumiPretrage.getDuzinaPutovanja() == null || kriterijumiPretrage.getDuzinaPutovanja().equals("")) {
+
+			if (kriterijumiPretrage.getDuzinaPutovanja() == null
+					|| kriterijumiPretrage.getDuzinaPutovanja().equals("")) {
 				break;
 			}
-			
+
 			String trenutniDatumPovratka = df.format(trenutniLet.getDuzinaPutovanja());
 			if (!trenutniDatumPovratka.equals(kriterijumiPretrage.getDuzinaPutovanja())) {
 				it.remove();
@@ -335,11 +345,10 @@ public class AviokompanijaService {
 		while (it.hasNext()) {
 			trenutniLet = it.next();
 
-
 			if (kriterijumiPretrage.getCijenaKarte() == 0) {
 				continue;
 			}
-			
+
 			if (trenutniLet.getCijenaKarte() > kriterijumiPretrage.getCijenaKarte()) {
 				it.remove();
 			}
