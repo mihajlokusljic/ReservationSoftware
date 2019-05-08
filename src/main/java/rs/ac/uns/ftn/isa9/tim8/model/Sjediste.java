@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "sjediste")
 public class Sjediste {
@@ -19,7 +20,7 @@ public class Sjediste {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "segment_id")
 	protected Segment segment;
 
@@ -28,7 +29,8 @@ public class Sjediste {
 
 	@Column(name = "kolona", nullable = false)
 	int kolona;
-
+	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "avion_id")
 	protected Avion avion;
