@@ -2,6 +2,7 @@ var tokenKey = "jwtToken";
 var aviokompanija = null;
 var podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let podrazumjevana_slika = "https://assets.nst.com.my/images/articles/PELANCARAN_SARAWAK_AIRCRAFT_LIVERsdjvsdjfjdfjfbgbfjdggfhY_1549092511.jpg";
 
 $(document).ready(function() {
 	
@@ -264,6 +265,17 @@ $(document).ready(function() {
 		
 	});
 
+	$("#izmjenaInfoStraniceAviokompanijeForm").submit(function(e) {
+		e.preventDefault();
+		izmjenaInfoStraniceAviokompanije();
+	});
+	
+	$("#ponistiIzmjeneInfoStranicaAviokompanije").click(function(e) {
+		e.preventDefault();
+		$("#izmjenaInfoStraniceAviokompanijeForm")[0].reset();
+		prikaziPodatkeAviokompanije();
+	});
+	
 	$("#odjava").click(function(e) {
 		e.preventDefault();
 		odjava();
@@ -298,6 +310,7 @@ function ucitajPodatkeSistema() {
 		success: function(data){
 			if(data != null){
 				aviokompanija = data;
+				prikaziPodatkeAviokompanije();
 			}
 		}
 	});
@@ -345,6 +358,47 @@ function ucitajLetove() {
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
+}
+
+function izmjenaInfoStraniceAviokompanije() {
+	let _naziv = $("#nazivAviokompanijeInfoStranica").val();
+	let _adresa = $("#adresaAviokompanijeInfoStranica").val();
+	let _opis = $("#promotivniOpisAviokompanijeInfoStranica").val();
+	
+	if (_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	if (_adresa == "") {
+		alert("Adresa aviokompanije mora biti zadata.");
+		return;
+	}
+	
+	let izmjena_aviokompanija = {
+			adresa : {punaAdresa : _adresa},
+			naziv : _naziv,
+			promotivniOpis : _opis
+	};
+	
+	$.ajax({
+		type: "PUT",
+		url: "../aviokompanije/izmjeni",
+		data: JSON.stringify(izmjena_aviokompanija),
+		success: function(response) {
+			aviokompanija = response;
+			alert("Informacije o aviokompaniji su uspješno izmjenjene.");
+		},
+	});
+	
+}
+
+function prikaziPodatkeAviokompanije() {
+	$("#nazivAviokompanijeInfoStranica").val(aviokompanija.naziv);
+	$("#adresaAviokompanijeInfoStranica").val(aviokompanija.adresa.punaAdresa);
+	$("#promotivniOpisAviokompanijeInfoStranica").val(aviokompanija.promotivniOpis);
+	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
+	
 }
 
 function prikaziAvion(avion, tbody) {
