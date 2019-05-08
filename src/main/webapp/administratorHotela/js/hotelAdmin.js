@@ -32,6 +32,7 @@ $(document).ready(function(e) {
 	$("#dodavanjeSobeForm").submit(function(e) {
 		e.preventDefault();
 		dodavanjeSobe();
+		$("#dodavanjeSobeForm")[0].reset();
 	});
 	
 	//dodavanje usluge hotela
@@ -46,11 +47,25 @@ $(document).ready(function(e) {
 		izmjenaInfoStranice();
 	})
 	
-	//ponistavanje unijetih uzmjena
+	//ponistavanje unijetih izmjena info stranice
 	$("#ponistavanjeIzmjenaStraniceHotela").click(function(e) {
 		e.preventDefault();
 		$("#izmjenaInfoStraniceForm")[0].reset();
 		prikaziPodatkeHotela();
+	});
+	
+	//izmjena podataka sobe
+	$("#izmjenaSobeForm").submit(function(e) {
+		e.preventDefault();
+		izmjenaSobe();
+	});
+	
+	//ponistavanje unijetih izmjena sobe
+	$("#ponistavanjeIzmjenaSobe").click(function(e) {
+		e.preventDefault();
+		$("#tab-izmjena-sobe").toggleClass("active");
+		$("#tab-sobe").toggleClass("active");
+		$("#izmjenaSobeForm")[0].reset();
 	});
 	
 	//odjavljivanje
@@ -91,6 +106,53 @@ function dodavanjeSobe() {
 			prikaziSobe(podaciHotela.sobe);
 		},
 	});
+}
+
+function izmjenaSobe() {
+	let _id = $("#idSobeIzmjena").val();
+	let _brSobe = $("#brojSobeIzmjena").val();
+	let _sprat = $("#spratSobeIzmjena").val();
+	let _red = $("#redSobeIzmjena").val();
+	let _kolona = $("#kolonaSobeIzmjena").val();
+	let _brKreveta = $("#brKrevetaSobeIzmjena").val();
+	let _cijena = $("#cijenaNocenjaIzmjena").val();
+	
+	let noviPodaciSobe = {
+		id: _id,
+		brojSobe: _brSobe,
+		sprat: _sprat,
+		vrsta: _red,
+		kolona: _kolona,
+		brojKreveta: _brKreveta,
+		cijena: _cijena,
+	}
+	
+	$.ajax({
+		type: "PUT",
+		url: "../hotelskeSobe/izmjeni",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(noviPodaciSobe),
+		success: function(response) {
+			let updated = false;
+			
+			for(i in podaciHotela.sobe) {
+				if(podaciHotela.sobe[i].id == _id) {
+					podaciHotela.sobe[i] = response;
+					updated = true;
+					break;
+				}
+			}
+			
+			if(!updated) {
+				podaciHotela.sobe.push(response)
+			}
+			
+			prikaziSobe(podaciHotela.sobe);
+			$("#tab-izmjena-sobe").toggleClass("active");
+			$("#tab-sobe").toggleClass("active");
+		},
+	});
+	
 }
 
 function dodavanjeUsluge() {
@@ -217,6 +279,13 @@ function prikaziSobe(sobe) {
 		idSobe = parseInt(idSobe);
 		brisanjeSobe(idSobe);
 	});
+	
+	$(".izmjenaSobe").click(function(e) {
+		e.preventDefault();
+		var idSobe = e.target.id.substring(2); //id datog linka je: is + id_sobe (izmjena sobe <id sobe>)
+		idSobe = parseInt(idSobe);
+		prikaziIzmjenuSobe(idSobe);
+	});
 }
 
 function prikaziSobu(soba) {
@@ -228,8 +297,35 @@ function prikaziSobu(soba) {
 	noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 	noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 	noviRed.append('<td class="column1">' + soba.kolona + '</td>');
-	noviRed.append('<td class="column6"><a href="#">Izmjeni</a>&nbsp&nbsp<a class="brisanjeSobe" href="#" id="bs' + soba.id + '">Obriši</a></td>');
+	noviRed.append('<td class="column6"><a href="#" class="izmjenaSobe" id="is' + soba.id + '">Izmjeni</a>&nbsp&nbsp<a class="brisanjeSobe" href="#" id="bs' + soba.id + '">Obriši</a></td>');
 	sobeTabela.append(noviRed);
+}
+
+function prikaziIzmjenuSobe(idSobe) {
+	let indeksSobe = 0;
+	let soba = null;
+	for(indeksSobe in podaciHotela.sobe) {
+		soba = podaciHotela.sobe[indeksSobe];
+		if(soba.id == idSobe) {
+			break;
+		}
+	}
+	if(soba == null) {
+		alert("Doslo je do greske pri izmjeni sobe.");
+		return;
+	}
+	
+	//podesi formu za izmjenu sobe
+	$("#idSobeIzmjena").val(idSobe);
+	$("#brojSobeIzmjena").val(soba.brojSobe);
+	$("#spratSobeIzmjena").val(soba.sprat);
+	$("#redSobeIzmjena").val(soba.vrsta);
+	$("#kolonaSobeIzmjena").val(soba.kolona);
+	$("#brKrevetaSobeIzmjena").val(soba.brojKreveta);
+	$("#cijenaNocenjaIzmjena").val(soba.cijena);
+	$("#tab-sobe").toggleClass("active");
+	$("#tab-izmjena-sobe").toggleClass("active");
+	
 }
 
 function brisanjeSobe(idSobe) {

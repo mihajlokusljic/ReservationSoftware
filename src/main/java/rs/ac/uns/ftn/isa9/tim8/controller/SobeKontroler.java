@@ -28,9 +28,9 @@ public class SobeKontroler {
 		try {
 			return new ResponseEntity<HotelskaSoba>(this.sobeService.dodajSobuHotelu(novaSobaPodaci), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (NullPointerException e) {
-			return new ResponseEntity<String>("Sve vrijednosti moraju biti zadate.", HttpStatus.OK);
+			return new ResponseEntity<String>("Sve vrijednosti moraju biti zadate.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
