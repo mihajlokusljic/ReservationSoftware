@@ -2,6 +2,7 @@ var tokenKey = "jwtToken";
 var aviokompanija = null;
 var podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let podrazumjevana_slika = "https://assets.nst.com.my/images/articles/PELANCARAN_SARAWAK_AIRCRAFT_LIVERsdjvsdjfjdfjfbgbfjdggfhY_1549092511.jpg";
 
 $(document).ready(function() {
 	
@@ -73,6 +74,22 @@ $(document).ready(function() {
 		if ($("#definisanjeSegmenataBtn").is(":checked")) {
 			$("#prvaFormaDodajAvion").hide();
 			$("#drugaFormaNaziviSegmenata").show();
+			
+			let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
+			
+			$.ajax({
+				type: "GET",
+				url: "../avioni/dobaviBrojRedovaAviona/" + id_aviona,
+				contentType : "application/json; charset=utf-8",
+				success: function(response) {
+					$("#krajnjaVrstaZaSegment").attr("max", response);
+					$("#krajnjaVrstaZaSegment").val(response);
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					alert("AJAX error: " + errorThrown);
+				}
+			});
+			
 		}
 	});
 	
@@ -120,15 +137,37 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#avionZaDodavanjeNekogSegmentaSelect").change(function() {
+		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
+		
+		$.ajax({
+			type: "GET",
+			url: "../avioni/dobaviBrojRedovaAviona/" + id_aviona,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				$("#krajnjaVrstaZaSegment").attr("max", response);
+				$("#krajnjaVrstaZaSegment").val(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+		
+	});
+	
 	$("#FORMdrugaFormaNaziviSegmenata").submit(function(e) {
 		e.preventDefault();
 		
 		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
 		let naziv_segmenta = $("#avioniNazivSegmentaZaDodavanje").val();
+		let pocetni_red = $("#pocetnaVrstaZaSegment").val();
+		let krajnji_red = $("#krajnjaVrstaZaSegment").val();
 		
 		let noviSegment = {
 				naziv : naziv_segmenta,
-				idAviona : id_aviona
+				idAviona : id_aviona,
+				pocetniRed : parseInt(pocetni_red),
+				krajnjiRed : parseInt(krajnji_red)
 		};
 		
 		$.ajax({
@@ -144,6 +183,9 @@ $(document).ready(function() {
 				else {
 					alert("Segment je uspješno dodat.");
 					prikaziSegment(response, $("#osnovniSegmentiRows"));
+					$("#pocetnaVrstaZaSegment").attr("min", parseInt(krajnji_red) + 1);
+					$("#pocetnaVrstaZaSegment").val(parseInt(krajnji_red) + 1);
+					$("#pocetnaVrstaZaSegment").attr("readonly", "readonly");
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -159,12 +201,26 @@ $(document).ready(function() {
 		let broj_leta = $("#administratorAviokompanijeBrojLeta").val();		
 		let polaziste = $("#administratorAviokompanijePolaziste").val();
 		let odrediste = $("#administratorAviokompanijeOdrediste").val();
-		
-
+		let datum_poletanja = $("#input-start-2").val() + " " + $("#vrijemePolaskaTime").val();
+		let datum_sletanja = $("#input-end-2").val() + " " + $("#vrijemeDolaskaTime").val();
+		let datum_povratka = $("#duzinaPutovanja").val() + " " + $("#duzinaPutovanjaKadSeVracas").val();
+		let cijena_karte = $("#baznaCijenaKarte").val();
+		let id_aviona = $("#avionZaLetSelect").val();
+		let id_odrediste = $("#administratorAviokompanijeOdrediste").val();
+		let id_polaziste = $("#administratorAviokompanijePolaziste").val();
+		let sva_presjedanja = $("#svaPresjedanja").val();
+			
 		let noviLet = {
-			naziv : naziv_destinacije,
-			punaAdresa : puna_adresa,
-			idAviokompanije : aviokompanija.id
+			brojLeta : broj_leta,
+			cijenaKarte : parseInt(cijena_karte),
+			datumPoletanja : datum_poletanja,
+			datumSletanja : datum_sletanja,
+			duzinaPutovanja : datum_povratka,
+			idAviokompanije : aviokompanija.id,
+			idAviona : id_aviona,
+			idDestinacijePresjedanja : sva_presjedanja,
+			idOdrediste : id_odrediste,
+			idPolaziste : id_polaziste
 		};
 		
 		$.ajax({
@@ -173,17 +229,33 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(noviLet),
 			success: function(response) {
-				if(response == "Takva destinacija vec postoji.") {
-					alert("Već postoji destinacija sa takvom punom adresom.");
+				if(response == "Vec postoji let sa datim brojem leta.") {
+					alert("Već postoji let sa datim brojem leta.");
 					return;
 				}
-				else if (response == "Ne postoji aviokompanija sa datim id-jem.") {
-					alert("Ne postoji aviokompanija sa datim id-jem.");
+				else if (response == "Ne postoje makar dvije destinacije definisane za datu aviokompaniju.") {
+					alert("Ne postoje makar dvije destinacije definisane za datu aviokompaniju.");
+					return;
+				}
+				else if (response == "Datum poletanja mora biti prije datuma sletanja") {
+					alert("Datum poletanja mora biti prije datuma sletanja");
+					return;
+				}
+				else if (response == "Datum povratka mora biti nakon datuma sletanja.") {
+					alert("Datum povratka mora biti nakon datuma sletanja.");
+					return;
+				}
+				else if (response == "Nevalidan format datuma.") {
+					alert("Nevalidan format datuma. Pokušajte ponovo.");
+					return;
+				}
+				else if (response == "Cijena karte ne moze biti negativna.") {
+					alert("Cijena karte ne moze biti negativna.");
 					return;
 				}
 				else {
 					alert("Let je uspješno dodat.");
-					//prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
+					updateLet(response, $("#letoviRows"));
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -193,6 +265,17 @@ $(document).ready(function() {
 		
 	});
 
+	$("#izmjenaInfoStraniceAviokompanijeForm").submit(function(e) {
+		e.preventDefault();
+		izmjenaInfoStraniceAviokompanije();
+	});
+	
+	$("#ponistiIzmjeneInfoStranicaAviokompanije").click(function(e) {
+		e.preventDefault();
+		$("#izmjenaInfoStraniceAviokompanijeForm")[0].reset();
+		prikaziPodatkeAviokompanije();
+	});
+	
 	$("#odjava").click(function(e) {
 		e.preventDefault();
 		odjava();
@@ -227,6 +310,7 @@ function ucitajPodatkeSistema() {
 		success: function(data){
 			if(data != null){
 				aviokompanija = data;
+				prikaziPodatkeAviokompanije();
 			}
 		}
 	});
@@ -274,6 +358,47 @@ function ucitajLetove() {
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
+}
+
+function izmjenaInfoStraniceAviokompanije() {
+	let _naziv = $("#nazivAviokompanijeInfoStranica").val();
+	let _adresa = $("#adresaAviokompanijeInfoStranica").val();
+	let _opis = $("#promotivniOpisAviokompanijeInfoStranica").val();
+	
+	if (_naziv == "") {
+		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	if (_adresa == "") {
+		alert("Adresa aviokompanije mora biti zadata.");
+		return;
+	}
+	
+	let izmjena_aviokompanija = {
+			adresa : {punaAdresa : _adresa},
+			naziv : _naziv,
+			promotivniOpis : _opis
+	};
+	
+	$.ajax({
+		type: "PUT",
+		url: "../aviokompanije/izmjeni",
+		data: JSON.stringify(izmjena_aviokompanija),
+		success: function(response) {
+			aviokompanija = response;
+			alert("Informacije o aviokompaniji su uspješno izmjenjene.");
+		},
+	});
+	
+}
+
+function prikaziPodatkeAviokompanije() {
+	$("#nazivAviokompanijeInfoStranica").val(aviokompanija.naziv);
+	$("#adresaAviokompanijeInfoStranica").val(aviokompanija.adresa.punaAdresa);
+	$("#promotivniOpisAviokompanijeInfoStranica").val(aviokompanija.promotivniOpis);
+	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
+	
 }
 
 function prikaziAvion(avion, tbody) {
@@ -335,26 +460,37 @@ function prikaziSegmente(segmenti) {
 	});
 }
 
+function updateLet(flight, tbody) {	
+	let row = $("<tr></tr>");
+	
+	// 2019-05-16	
+	let datum_poletanja = new Date(flight.datumPoletanja);
+	let datum_sletanja = new Date(flight.datumSletanja);
+	
+	row.append('<td class="column2">' + flight.brojLeta + "</td>");
+	row.append('<td class="column3">' + flight.polaziste.nazivDestinacije + "</td>");
+	row.append('<td class="column3">' + flight.odrediste.nazivDestinacije + "</td>");
+	row.append('<td class="column1">' + datum_poletanja.getFullYear() + "-" + datum_poletanja.getMonth() + 
+			"-" + datum_poletanja.getDate() + "</td>");
+	row.append('<td class="column1">' + datum_sletanja.getFullYear() + "-" + datum_sletanja.getMonth() + 
+			"-" + datum_sletanja.getDate() + "</td>");
+	row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
+	row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
+	if (flight.brojOcjena > 0) {
+		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+	} else {
+		row.append('<td class="column6">Nema ocjena</td>');
+	}
+	tbody.append(row);
+
+}
+
 function updateLetovi(letovi) {
 	let table = $("#letoviRows");
 	table.empty();
 	
 	$.each(letovi, function(i, flight) {
-		let row = $("<tr></tr>");
-		
-		row.append('<td class="column2">' + flight.brojLeta + "</td>");
-		row.append('<td class="column3">' + flight.polaziste.nazivDestinacije + "</td>");
-		row.append('<td class="column3">' + flight.odrediste.nazivDestinacije + "</td>");
-		row.append('<td class="column1">' + flight.datumPoletanja + "</td>");
-		row.append('<td class="column1">' + flight.datumSletanja + "</td>");
-		row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
-		row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
-		if (flight.brojOcjena > 0) {
-			row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
-		} else {
-			row.append('<td class="column6">Nema ocjena</td>');
-		}
-		table.append(row);
+		updateLet(flight, table);
 	});
 }
 

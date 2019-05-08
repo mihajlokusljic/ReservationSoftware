@@ -11,7 +11,7 @@
     <meta name="keywords" content="Colrolib Templates">
 
     <!-- Title Page-->
-    <title>Softver za rezervacije</title>
+    <title>Administrator aviokompanije</title>
 
     <!-- Icons font CSS-->
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -56,7 +56,10 @@
                             <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
                         </li>
 						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-profil" data-toggle="tab" id = "profil">Profil</a>
+                            <a class="tab-list__link" href="#tab-profilKorisnika" data-toggle="tab" id = "profilKorisn">Profil korisnika</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-profilAviokompanije" data-toggle="tab" id = "profilAviokomp">Profil aviokompanije</a>
                         </li>
 						<li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
@@ -96,14 +99,11 @@
                                         <input type="radio" checked="checked" name="class" id="osnovniPodaciAvionBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container m-r-45">Korak 2: Definisanje naziva segmenata
+                                    <label class="radio-container m-r-45">Korak 2: Definisanje naziva segmenata i pripadnost sjedišta segmentima
                                         <input type="radio" name="class" id="definisanjeSegmenataBtn">
                                         <span class="radio-checkmark"></span>
                                     </label>
-                                    <label class="radio-container">Korak 3: Pripadnost sjedišta segmentima
-                                        <input type="radio" name="class" id="pripadnostSjedistaBtn">
-                                        <span class="radio-checkmark"></span>
-                                    </label>
+
                                 </div>
                                 
                                 <p>&nbsp</p>
@@ -125,7 +125,7 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Dimenzije aviona: </label>
-                                            <input class="input--style-2" type="number" min = "3" placeholder="Unesite broj kolona (min 3.)" required="required" id="avioniBrojKolona">
+                                            <input class="input--style-2" type="number" min = "3" placeholder="Unesite broj kolona (min. 3)" required="required" id="avioniBrojKolona">
                                         </div>
                                     </div>
                                 	</div>
@@ -170,6 +170,21 @@
                                    		<label class="label">Naziv segmenta: </label>
                                    		<input class="input--style-2" type="text" placeholder="Unesite naziv segmenta" required="required" id="avioniNazivSegmentaZaDodavanje">
                                    	</div>
+ 
+                                	<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Početni red: </label>
+                                            <input class="input--style-2" type="number" min= "1" value = "1" placeholder="Unesite početnu vrstu za segment" required="required" id="pocetnaVrstaZaSegment">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Krajnji red: </label>
+                                            <input class="input--style-2" type="number" min = "1" placeholder="Unesite krajnju vrstu za segment" required="required" id="krajnjaVrstaZaSegment">
+                                        </div>
+                                    </div>
+                                	</div>
                             
                             	<input id = "dodajSegmentZaAvionBtn" type="submit" class="btn btn-submit" value="Dodaj segment"/>
                               	</form>							
@@ -245,12 +260,199 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                
+                               	<div class="row row-space" id ="letoviVremena">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme polaska: </label>
+                                            <i class="zmdi zmdi-time input-group-symbol"></i>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="time-pickup" id="vrijemePolaskaTime">
+                                                    <option selected="selected">12:00</option>
+                                                    <option>12:30</option>
+                                                    <option>13:00</option>
+                                                    <option>13:30</option>
+                                                    <option>14:00</option>
+                                                    <option>14:30</option>
+                                                    <option>15:00</option>
+                                                    <option>15:30</option>
+                                                    <option>16:00</option>
+                                                    <option>16:30</option>
+                                                    <option>17:00</option>
+                                                    <option>17:30</option>                                                    
+                                                    <option>18:00</option>                                                    
+                                                    <option>18:30</option>
+                                                    <option>19:00</option>                                                    
+                                                    <option>19:30</option>
+                                                    <option>20:00</option>
+                                                    <option>20:30</option>
+                                                    <option>21:00</option>                                                    
+                                                    <option>21:30</option>
+                                                    <option>22:00</option>
+                                                    <option>22:30</option>
+                                                    <option>23:00</option>
+                                                    <option>23:30</option>
+                                                    <option>00:00</option>
+                                                    <option>00:30</option>
+                                                    <option>01:00</option>
+                                                    <option>01:30</option>
+                                                    <option>02:00</option>
+                                                    <option>02:30</option>
+                                                    <option>03:00</option>
+                                                    <option>03:30</option>
+                                                    <option>04:00</option>
+                                                    <option>04:30</option>
+                                                    <option>05:00</option>                                                    
+                                                    <option>05:30</option>                                                    
+                                                    <option>06:00</option>
+                                                    <option>06:30</option>                                                    
+                                                    <option>07:00</option>
+                                                    <option>07:30</option>
+                                                    <option>08:00</option>
+                                                    <option>08:30</option>                                                    
+                                                    <option>09:00</option>
+                                                    <option>09:30</option>
+                                                    <option>10:00</option>
+                                                    <option>10:30</option>
+                                                    <option>11:00</option>
+                                                    <option>11:30</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme dolaska: </label>
+                                            <i class="zmdi zmdi-time input-group-symbol"></i>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="time-pickup" id= "vrijemeDolaskaTime">
+                                                    <option selected="selected">12:00</option>
+                                                    <option>12:30</option>
+                                                    <option>13:00</option>
+                                                    <option>13:30</option>
+                                                    <option>14:00</option>
+                                                    <option>14:30</option>
+                                                    <option>15:00</option>
+                                                    <option>15:30</option>
+                                                    <option>16:00</option>
+                                                    <option>16:30</option>
+                                                    <option>17:00</option>
+                                                    <option>17:30</option>                                                    
+                                                    <option>18:00</option>                                                    
+                                                    <option>18:30</option>
+                                                    <option>19:00</option>                                                    
+                                                    <option>19:30</option>
+                                                    <option>20:00</option>
+                                                    <option>20:30</option>
+                                                    <option>21:00</option>                                                    
+                                                    <option>21:30</option>
+                                                    <option>22:00</option>
+                                                    <option>22:30</option>
+                                                    <option>23:00</option>
+                                                    <option>23:30</option>
+                                                    <option>00:00</option>
+                                                    <option>00:30</option>
+                                                    <option>01:00</option>
+                                                    <option>01:30</option>
+                                                    <option>02:00</option>
+                                                    <option>02:30</option>
+                                                    <option>03:00</option>
+                                                    <option>03:30</option>
+                                                    <option>04:00</option>
+                                                    <option>04:30</option>
+                                                    <option>05:00</option>                                                    
+                                                    <option>05:30</option>                                                    
+                                                    <option>06:00</option>
+                                                    <option>06:30</option>                                                    
+                                                    <option>07:00</option>
+                                                    <option>07:30</option>
+                                                    <option>08:00</option>
+                                                    <option>08:30</option>                                                    
+                                                    <option>09:00</option>
+                                                    <option>09:30</option>
+                                                    <option>10:00</option>
+                                                    <option>10:30</option>
+                                                    <option>11:00</option>
+                                                    <option>11:30</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         	
+                        	  	<div class="row row-space" id ="povratakKolone">
+                                    <div class="col-2">
                               	<div class="input-group">
                                             <label class="label">Datum povratka: </label>
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                             <input class="js-single-datepicker" type="text" name="check-out" placeholder="mm/dd/yyyy" id="duzinaPutovanja" required="required">
                               	</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme povratka: </label>
+                                            <i class="zmdi zmdi-time input-group-symbol"></i>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="time-pickup" id= "duzinaPutovanjaKadSeVracas">
+                                                    <option selected="selected">12:00</option>
+                                                    <option>12:30</option>
+                                                    <option>13:00</option>
+                                                    <option>13:30</option>
+                                                    <option>14:00</option>
+                                                    <option>14:30</option>
+                                                    <option>15:00</option>
+                                                    <option>15:30</option>
+                                                    <option>16:00</option>
+                                                    <option>16:30</option>
+                                                    <option>17:00</option>
+                                                    <option>17:30</option>                                                    
+                                                    <option>18:00</option>                                                    
+                                                    <option>18:30</option>
+                                                    <option>19:00</option>                                                    
+                                                    <option>19:30</option>
+                                                    <option>20:00</option>
+                                                    <option>20:30</option>
+                                                    <option>21:00</option>                                                    
+                                                    <option>21:30</option>
+                                                    <option>22:00</option>
+                                                    <option>22:30</option>
+                                                    <option>23:00</option>
+                                                    <option>23:30</option>
+                                                    <option>00:00</option>
+                                                    <option>00:30</option>
+                                                    <option>01:00</option>
+                                                    <option>01:30</option>
+                                                    <option>02:00</option>
+                                                    <option>02:30</option>
+                                                    <option>03:00</option>
+                                                    <option>03:30</option>
+                                                    <option>04:00</option>
+                                                    <option>04:30</option>
+                                                    <option>05:00</option>                                                    
+                                                    <option>05:30</option>                                                    
+                                                    <option>06:00</option>
+                                                    <option>06:30</option>                                                    
+                                                    <option>07:00</option>
+                                                    <option>07:30</option>
+                                                    <option>08:00</option>
+                                                    <option>08:30</option>                                                    
+                                                    <option>09:00</option>
+                                                    <option>09:30</option>
+                                                    <option>10:00</option>
+                                                    <option>10:30</option>
+                                                    <option>11:00</option>
+                                                    <option>11:30</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+
                               
                               <div class="input-group">
 	                                            <label class="label">Presjedanja: </label>
@@ -301,106 +503,51 @@
 					</table>
 					
 				</div>
-                        <div class="tab-pane" id="tab-filijala">
-                            <table>
-						<thead>
-							<tr class="table100-head">
-								<th class="column1">Lokacija filijale</th>
-								<th class="column2">Broj vozila u filijali</th>
-								<th class = "column3"></th>
-								<th class = "column4"></th>
-							</tr>
-						</thead>
-						<tbody>
-								<tr>
-									<td class="column1">Novi sad, Bulevar Oslobođenja 66</td>
-									<td class="column2">5</td>
-									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
-									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
-								</tr>
-								<tr>
-									<td class="column1">Beograd, Knez Mihajlova 66</td>
-									<td class="column2">10</td>
-									<td class="column3"><a href = "#">Izmjeni lokaciju</a></td>
-									<td class="column4"><a href = "#">Ukloni filijalu</a></td>
-								</tr>
 
-						</tbody>
-					</table>
-					<button type="button" class="btn btn-submit">Dodaj novu filijalu</button>
-                        </div>
-
-						<div class="tab-pane" id = "tab-izmjeni-filijalu">
-							<div class="input-group">
-								<label class="label">Naziv lokacije:</label>
-								<input class="input--style-1" type="text" value ="Adresa 1" required="required">
-								<i class="zmdi zmdi-pin input-group-symbol"></i>
-
-							</div>
-							<div class="input-group">
-								<label class="label">Dužina:</label>
-								<input class="input--style-1" type="number" step = "0.0001" value ="120.89" required="required">
-							</div>
-							<div class="input-group">
-								<label class="label">Širina:</label>
-								<input class="input--style-1" type="number" step = "0.0001" value ="67.88" required="required">
-							</div>
-							<button type="button" class="btn btn-submit">Izmjeni</button>
-
-						</div>
-						<div class="tab-pane" id = "tab-dodaj-filijalu">
-							<div class="input-group">
-								<label class="label">Naziv lokacije:</label>
-								<input class="input--style-1" type="text" placeholder ="Unesite naziv lokacije" required="required">
-								<i class="zmdi zmdi-pin input-group-symbol"></i>
-
-							</div>
-							<div class="input-group">
-								<label class="label">Dužina:</label>
-								<input class="input--style-1" type="number" step = "0.0001" required="required">
-							</div>
-							<div class="input-group">
-								<label class="label">Širina:</label>
-								<input class="input--style-1" type="number" step = "0.0001" required="required">
-							</div>
-							<button type="button" class="btn btn-submit">Dodaj</button>
-
-						</div>
-                        <div class="tab-pane" id="tab-profil-servisa">
-                            <div class="input-group">
-								<label class="label">Naziv servisa:</label>
-								<input class="input--style-1" type="text" value ="Rent A Car servis" readonly>
-							</div>
-							<div class="input-group">
-								<label class="label">Naziv adrese</label>
-								<input class="input--style-1" type="text" value ="Adresa 1">
-							</div>
-							<div class="row row-space">
-
-                                    <div class="col-2">
-                                        <div class="input-group">
-											<label class="label">Dužina:</label>
-											<input class="input--style-1" type="number" step = "0.0001" value = "37.5" required="required">
-										</div>
-                                    </div>
-									<div class="col-2">
-                                        <div class="input-group">
-											<label class="label">Širina:</label>
-											<input class="input--style-1" type="number" step = "0.0001" value = "40.0" required="required">
-										</div>
-                                    </div>
-                            </div>
-							<div class="input-group">
-								<label class="label">Opis:</label>
-								<input class="input--style-1" type="text" value ="Neki opis">
-							</div>
-							<button type="button" class="btn btn-submit">Izmjeni</button>
-                        </div>
-						<div class="tab-pane" id="tab-profil-kor">
-                            Profil korisnika
-                        </div>
 						<div class="tab-pane" id="tab-izvjestaj">
                             Izvjestaj
+                        </div>
+						<div class="tab-pane" id="tab-profilKorisnika">
+                            Profil korisnika
+                        </div>
+						<div class="tab-pane" id="tab-profilAviokompanije">
+							<form method="POST" action="#" id="izmjenaInfoStraniceAviokompanijeForm">
+	                        		<div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img id="slikaAviokompanije" alt="Došlo je do greške pri učitavaju slike" src="https://assets.nst.com.my/images/articles/PELANCARAN_SARAWAK_AIRCRAFT_LIVERsdjvsdjfjdfjfbgbfjdggfhY_1549092511.jpg">
+	                        				<div class="input-group">
+	                        					<i class="zmdi zmdi-collection-image-o input-icon"></i>
+			                                    <label class="label">Izmjena profilne slike aviokompanije (u izradi):</label>
+			                                    <input class="input--style-2" type="file" id="novaSlikaAviokompanijeUpload">
+			                                </div>
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv aviokompanije:</label>
+			                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv aviokompanije" required="required" id="nazivAviokompanijeInfoStranica">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa aviokompanije: </label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu aviokompanije" required="required" id="adresaAviokompanijeInfoStranica">
+			                                </div>
+		                                </div>
+	                                </div>
+	                                <h2>&nbsp;</h2>
+	                                <div class="input-group">
+	                                    <label class="label">Promotivni opis aviokompanije:</label>
+	                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis aviokompanije" required="required" id="promotivniOpisAviokompanijeInfoStranica"></textarea>
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistiIzmjeneInfoStranicaAviokompanije">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
+	                        </form>
                         </div>
 						<div class="tab-pane" id="tab-odjava">
                             

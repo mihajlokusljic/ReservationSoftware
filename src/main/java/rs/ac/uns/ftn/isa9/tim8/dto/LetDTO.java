@@ -13,11 +13,11 @@ public class LetDTO {
 
 	protected Long idOdrediste;
 
-	protected Date datumPoletanja;
+	protected String datumPoletanja;
 
-	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
+	protected String datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
 
-	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
+	protected String duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
 	protected Collection<Long> idDestinacijePresjedanja;
 
@@ -29,8 +29,8 @@ public class LetDTO {
 		super();
 	}
 
-	public LetDTO(String brojLeta, Long idAviokompanije, Long idPolaziste, Long idOdrediste, Date datumPoletanja,
-			Date datumSletanja, Date duzinaPutovanja, Collection<Long> idDestinacijePresjedanja, Long idAviona,
+	public LetDTO(String brojLeta, Long idAviokompanije, Long idPolaziste, Long idOdrediste, String datumPoletanja,
+			String datumSletanja, String duzinaPutovanja, Collection<Long> idDestinacijePresjedanja, Long idAviona,
 			double cijenaKarte) {
 		super();
 		this.brojLeta = brojLeta;
@@ -77,27 +77,27 @@ public class LetDTO {
 		this.idOdrediste = idOdrediste;
 	}
 
-	public Date getDatumPoletanja() {
+	public String getDatumPoletanja() {
 		return datumPoletanja;
 	}
 
-	public void setDatumPoletanja(Date datumPoletanja) {
+	public void setDatumPoletanja(String datumPoletanja) {
 		this.datumPoletanja = datumPoletanja;
 	}
 
-	public Date getDatumSletanja() {
+	public String getDatumSletanja() {
 		return datumSletanja;
 	}
 
-	public void setDatumSletanja(Date datumSletanja) {
+	public void setDatumSletanja(String datumSletanja) {
 		this.datumSletanja = datumSletanja;
 	}
 
-	public Date getDuzinaPutovanja() {
+	public String getDuzinaPutovanja() {
 		return duzinaPutovanja;
 	}
 
-	public void setDuzinaPutovanja(Date duzinaPutovanja) {
+	public void setDuzinaPutovanja(String duzinaPutovanja) {
 		this.duzinaPutovanja = duzinaPutovanja;
 	}
 
