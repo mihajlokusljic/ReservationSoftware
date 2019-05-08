@@ -25,10 +25,12 @@ public class VoziloDTO {
 	
 	protected int sumaOcjena;
 	
+	protected String filijala;
+	
 	protected Long Id;
 
 	public VoziloDTO(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
-			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, Long Id) {
+			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, String filijala, Long Id) {
 		super();
 		this.naziv = naziv;
 		this.marka = marka;
@@ -39,6 +41,7 @@ public class VoziloDTO {
 		this.broj_vrata = broj_vrata;
 		this.kilovati = kilovati;
 		this.cijena_po_danu = cijena_po_danu;
+		this.filijala = filijala;
 		this.Id = Id;
 	}
 
@@ -140,6 +143,14 @@ public class VoziloDTO {
 
 	public void setId(Long id) {
 		this.Id = id;
+	}
+
+	public String getFilijala() {
+		return filijala;
+	}
+
+	public void setFilijala(String filijala) {
+		this.filijala = filijala;
 	}
 	
 	

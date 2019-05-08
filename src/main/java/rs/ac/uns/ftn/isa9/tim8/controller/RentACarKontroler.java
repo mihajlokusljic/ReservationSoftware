@@ -61,6 +61,7 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/dodajVozilo/{imeRacServisa}", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> dodajNovoVozilo(@PathVariable("imeRacServisa") String nazivServisa,@RequestBody Vozilo vozilo) {
+		System.out.println("Filijala id " + vozilo.getFilijala().getId());
 		return new ResponseEntity<String>(servis.dodajVozilo(nazivServisa, vozilo),HttpStatus.OK);
 	}
 	

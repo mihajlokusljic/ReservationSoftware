@@ -93,8 +93,12 @@ public class RentACarServisService {
 			return null;
 		}
 		for (Vozilo vozilo : vozila) {
+			String adresa = null;
+			if (vozilo.getFilijala() != null) {
+				adresa = vozilo.getFilijala().getAdresa().getPunaAdresa();
+			}
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
-					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), vozilo.getId());
+					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), adresa, vozilo.getId());
 			vozilaDTO.add(vozDto);
 		}
 		
@@ -105,11 +109,23 @@ public class RentACarServisService {
 		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
 		if (rentACar == null) {
 			return "Ne postoji servis sa unijetim nazivom.";
+		}		
+		
+		Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+		
+		if (!pretragaFilijala.isPresent()) {
+			return "Nevalidan id";
 		}
+		
+		Filijala filijala = pretragaFilijala.get();
+		
+		filijala.setBrojVozila(filijala.getBrojVozila()+1);
 		vozilo.setRentACar(rentACar);
 		vozilo.setId(null);
+		vozilo.setFilijala(filijala);
 		rentACar.getVozila().add(vozilo);
 		rentACarRepository.save(rentACar);
+		filijalaRepository.save(filijala);
 		
 		return null;
 	}
@@ -167,6 +183,11 @@ public class RentACarServisService {
 		if (!rVozila.isEmpty()) {
 			return "Ne mozete obrisati rezervisano vozilo";
 		}
+		Filijala f = filijalaRepository.findOneByAdresa(voz.getFilijala().getAdresa());
+		if (f != null) {
+			f.setBrojVozila(f.getBrojVozila()-1);
+			filijalaRepository.save(f);
+		}
 		voziloRepository.delete(voz);
 		return null;
 	}
@@ -193,7 +214,28 @@ public class RentACarServisService {
 		if (!rVozila.isEmpty()) {
 			return "Ne mozete izmjeniti rezervisano vozilo";
 		}
+		Adresa adresa = adresaRepository.findOneByPunaAdresa(vozilo.getFilijala());
+		Filijala filijala = null;
+		if (adresa != null) {
+			filijala = filijalaRepository.findOneByAdresa(adresa);
+		}
+		if (voz.getFilijala() == null && !vozilo.getFilijala().isEmpty() ) {
+			filijala.setBrojVozila(filijala.getBrojVozila()+1);
+			voz.setFilijala(filijala);
+			filijalaRepository.save(filijala);
+		}
+		else if (vozilo.getFilijala() != voz.getFilijala().getAdresa().getPunaAdresa()) {
+			Filijala fil = filijalaRepository.findOneByAdresa(voz.getFilijala().getAdresa());
+			fil.setBrojVozila(fil.getBrojVozila()-1);
+			filijala.setBrojVozila(filijala.getBrojVozila()+1);
+			voz.setFilijala(filijala);
+			filijalaRepository.save(fil);
+			filijalaRepository.save(filijala);
+			
+		}
+
 		voziloRepository.save(voz);
+
 		return null;
 	}
 	
@@ -239,6 +281,13 @@ public class RentACarServisService {
 		
 		Filijala f = pretragaFilijale.get();
 		
+		List<Vozilo> vozila = voziloRepository.findAllByFilijala(f);
+		if (vozila.size()>0) {
+			for (Vozilo vozilo : vozila) {
+				vozilo.setFilijala(null);
+			}
+			voziloRepository.saveAll(vozila);
+		}
 		filijalaRepository.delete(f);
 		return null;
 	}
@@ -257,6 +306,14 @@ public class RentACarServisService {
 			return "Zauzeta adresa";
 		}
 		f.getAdresa().setPunaAdresa(novLokacija);
+		List<Vozilo> vozila = voziloRepository.findAllByFilijala(f);
+		if (vozila.size()>0) {
+			for (Vozilo vozilo : vozila) {
+				vozilo.setFilijala(f);
+			}
+			voziloRepository.saveAll(vozila);
+		}
+
 		filijalaRepository.save(f);
 		return null;
 	}

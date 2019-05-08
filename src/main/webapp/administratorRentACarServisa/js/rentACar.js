@@ -1,10 +1,12 @@
 var rentACarServis = null;
 var korisnik = null;
+var filijale = null;
 
 $(document).ready(function() {
 	korisnikInfo();
 	ucitajPodatkeSistema();
 	dobaviSvaVozilaServisa();
+	ponudiFilijale();
 	
 	$("#vozila").click(function(e){
 		e.preventDefault();
@@ -20,6 +22,8 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-vozila").show();
 		dobaviSvaVozilaServisa();
+		ponudiFilijale();
+
 	
 	});
 	
@@ -99,6 +103,7 @@ $(document).ready(function() {
 		$("#tab-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-dodaj-vozilo").show();
+		//ponudiFilijale();
 		dodajVozilo();
 	});
 	
@@ -179,7 +184,8 @@ function dobaviSvaVozilaServisa(){
 				
 			}
 		},
-		 error: function(XMLHttpRequest, textStatus, errorThrown) {
+		async: false,
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 			}
 	});
@@ -212,9 +218,9 @@ function prikaziVozila(vozila){
 		$("#broj_sjedista_input1").val(vozilo.broj_sjedista);
 		$("#broj_vrata_input1").val(vozilo.broj_vrata);
 		$("#cijena_input1").val(vozilo.cijena_po_danu);
-		$('#tip_vozila_input1').val(vozilo.tip_vozila);
-		$('#tip_vozila_input1').trigger('change'); //obavjestavanje komponenti
-		
+		$("#filijalaSelectDetaljanPrikaz").val(vozilo.filijala).change();
+		$('#tip_vozila_input1').val(vozilo.tip_vozila).change();
+		//$('#tip_vozila_input1').trigger('change'); //obavjestavanje komponenti
 		
 		$("#izmjeni_vozilo_dugme").unbind().click(function(e){
 			e.preventDefault();
@@ -283,6 +289,8 @@ function prikaziVozila(vozila){
 				return;
 			}
 			
+			let filijala = $("#filijalaSelectDetaljanPrikaz option:selected").text();
+			
 			let voz= {
 					Id: vozilo.id,
 					naziv:naziv_v,
@@ -293,7 +301,8 @@ function prikaziVozila(vozila){
 					tip_vozila:tip_vozila_,
 					broj_vrata:broj_vrata_v,
 					kilovati:0,
-					cijena_po_danu:cijena_v
+					cijena_po_danu:cijena_v,
+					filijala:filijala
 			};
 			$.ajax({
 				type : "POST",
@@ -397,6 +406,9 @@ function dodajVozilo(){
 			return;
 		}
 		
+		let filijala = $("#filijalaSelect").val();
+		
+		
 		let vozilo = {
 				naziv:naziv,
 				marka:marka,
@@ -406,7 +418,8 @@ function dodajVozilo(){
 				tip_vozila:tip_vozila,
 				broj_vrata:broj_vrata_v,
 				kilovati:0,
-				cijena_po_danu:cijena_v
+				cijena_po_danu:cijena_v,
+				filijala: {id : filijala}
 		};
 		
 		$.ajax({
@@ -456,7 +469,8 @@ function prikazFilijala(filijale){
 		tbody.append('<tr><td class = "column1">' + filijala["punaAdresa"] + '</td><td class = "column2">' + filijala["brojVozila"] + '</td>'+
 		 '<td class = "column3"><a href = "javascript:void(0)" class = "izmjeni_lokaciju" id = "' + i + '">Izmjeni lokaciju</a></td>' + 
 		 '<td class = "column4"><a href = "javascript:void(0)" class = "ukloni_filijalu" id = "' + i + '">Ukloni filijalu</a></td></tr>'
-		 )
+		 );
+		
 	});
 	
 	$(".ukloni_filijalu").click(function(e){
@@ -744,9 +758,30 @@ function promjeniLozinku(){
 				
 			}
 		});
+	});	
+}
+
+function ponudiFilijale(){
+	
+	let naziv_servisa_ = rentACarServis.naziv;
+	let filijale_select = $("#filijalaSelect");
+	filijale_select.empty();
+	let filijala_select2 = $("#filijalaSelectDetaljanPrikaz");
+	filijala_select2.empty();
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/dobaviFilijale/" + naziv_servisa_,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			$.each(response, function(i,filijala){
+				filijale_select.append('<option value = "' + filijala.id + '">' + filijala.punaAdresa + '</option>');
+				filijala_select2.append('<option value = "' + filijala.punaAdresa + '">' + filijala.punaAdresa + '</option>');
+			});
+		},
+		async: false,
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
 	});
-	
-	
-	
-	
+
 }
