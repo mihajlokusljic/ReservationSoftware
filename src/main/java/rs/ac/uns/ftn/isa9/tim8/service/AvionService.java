@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.Collection;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,8 @@ public class AvionService {
 		return null;
 	}
 
-	public Segment dodajSegment(Long idAviona, String nazivSegmenta) throws NevalidniPodaciException {
+	public Segment dodajSegment(Long idAviona, String nazivSegmenta, int pocetniRed, int krajnjiRed)
+			throws NevalidniPodaciException {
 		Optional<Avion> avionSearch = avionRepository.findById(idAviona);
 		Avion a = null;
 
@@ -63,7 +64,15 @@ public class AvionService {
 			for (Segment s : a.getSegmenti()) {
 				if (s.getNaziv().equalsIgnoreCase("")) {
 					s.setNaziv(nazivSegmenta);
-
+										
+					for (Sjediste ss : a.getSjedista()) {
+						if (ss.getRed() >= pocetniRed) {
+							if (ss.getRed() <= krajnjiRed) {
+								ss.setSegment(s);
+							}
+						}
+					}
+					
 					avionRepository.save(a);
 					return s;
 				}
@@ -208,6 +217,23 @@ public class AvionService {
 		avionRepository.save(a);
 		aviokompanijaRepository.save(aviokompanija);
 		return a;
+	}
+
+	public Integer dobaviBrojRedovaAviona(Long idAviona) {
+		Optional<Avion> optionalAvion = avionRepository.findById(idAviona);
+		
+		Avion a = optionalAvion.get();
+		
+		int najveciRed = 0;
+		
+		for (Sjediste s : a.getSjedista()) {
+			if (s.getRed() > najveciRed) {
+				najveciRed = s.getRed();
+			}
+		}
+		
+		return najveciRed;
+		
 	}
 
 }
