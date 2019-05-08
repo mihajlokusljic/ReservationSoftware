@@ -130,6 +130,9 @@ public class HotelskeSobeService {
 	}
 	
 	public boolean sobaJeRezervisana(HotelskaSoba soba, Date pocetniDatum, Date krajnjiDatum) {
+		if(pocetniDatum == null || krajnjiDatum == null) {
+			return false;
+		}
 		for(RezervacijaSobe r : this.rezervacijeRepository.findAllByRezervisanaSoba(soba)) {
 			if(!pocetniDatum.after(r.getDatumOdlaska()) && !r.getDatumDolaska().after(krajnjiDatum)) {
 				return true;
