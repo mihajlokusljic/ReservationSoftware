@@ -22,6 +22,11 @@ $(document).ready(function(e) {
 	
 	
 	ucitajPodatkeHotela();
+	
+	$("#pretragaSobaForm").submit(function(e) {
+		e.preventDefault();
+		pretragaSoba();
+	})
 });
 
 function ucitajPodatkeHotela() {
@@ -64,4 +69,56 @@ function ucitajPodatkeHotela() {
 		},
 	});
 
+}
+
+function pretragaSoba() {
+	let _datumDolaska = $("#input-start").val();
+	let _datumOdlaska = $("#input-end").val();
+	
+	let pretragaSobaHotela = {
+			idHotela: podaciHotela.id,
+			datumDolaska: _datumDolaska,
+			datumOdlaska: _datumOdlaska,
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: "../hotelskeSobe/pretrazi",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(pretragaSobaHotela),
+		success: function(response) {
+			if(response.length == 0) {
+				alert("Ne postoji ni jedna slobodna soba za dati vremenski period.");
+				return;
+			}
+			prikaziSobe(response);
+		},
+	});
+	
+}
+
+function prikaziSobe(sobe) {
+	$("#tabelaSobe").show();
+	let prikaz = $("#prikazSoba");
+	prikaz.empty();
+	
+	$.each(sobe, function(i, soba) {
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + soba.brojSobe + '</td>');
+		noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
+		noviRed.append('<td class="column1">' + soba.cijena + '</td>');
+		noviRed.append('<td class="column1">' + soba.sprat + '</td>');
+		noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
+		noviRed.append('<td class="column1">' + soba.kolona + '</td>');
+		let sumaOcjena = soba.sumaOcjena;
+		sumaOcjena = parseFloat(sumaOcjena);
+		let brOcjena = soba.brojOcjena;
+		brOcjena = parseInt(brOcjena);
+		if(brOcjena > 0) {
+			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+		} else {
+			noviRed.append('<td class="column1">Nema ocjena</td>');
+		}
+		prikaz.append(noviRed);
+	})
 }
