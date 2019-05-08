@@ -22,6 +22,8 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-vozila").show();
 		dobaviSvaVozilaServisa();
+		ponudiFilijale();
+
 	
 	});
 	
@@ -216,7 +218,6 @@ function prikaziVozila(vozila){
 		$("#broj_sjedista_input1").val(vozilo.broj_sjedista);
 		$("#broj_vrata_input1").val(vozilo.broj_vrata);
 		$("#cijena_input1").val(vozilo.cijena_po_danu);
-		alert(vozilo.filijala);
 		$("#filijalaSelectDetaljanPrikaz").val(vozilo.filijala).change();
 		$('#tip_vozila_input1').val(vozilo.tip_vozila).change();
 		//$('#tip_vozila_input1').trigger('change'); //obavjestavanje komponenti
