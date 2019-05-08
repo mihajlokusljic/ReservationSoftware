@@ -511,7 +511,43 @@
                             Profil korisnika
                         </div>
 						<div class="tab-pane" id="tab-profilAviokompanije">
-                            Profil aviokompanije
+							<form method="POST" action="#" id="izmjenaInfoStraniceAviokompanijeForm">
+	                        		<div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img alt="Došlo je do greške pri učitavaju slike" src="https://assets.nst.com.my/images/articles/PELANCARAN_SARAWAK_AIRCRAFT_LIVERsdjvsdjfjdfjfbgbfjdggfhY_1549092511.jpg">
+	                        				<div class="input-group">
+	                        					<i class="zmdi zmdi-collection-image-o input-icon"></i>
+			                                    <label class="label">Izmjena profilne slike aviokompanije (u izradi):</label>
+			                                    <input class="input--style-2" type="file" id="novaSlikaAviokompanijeUpload">
+			                                </div>
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv aviokompanije:</label>
+			                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv aviokompanije" required="required" id="nazivAviokompanijeInfoStranica">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa aviokompanije: </label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu aviokompanije" required="required" id="adresaAviokompanijeInfoStranica">
+			                                </div>
+		                                </div>
+	                                </div>
+	                                <h2>&nbsp;</h2>
+	                                <div class="input-group">
+	                                    <label class="label">Promotivni opis aviokompanije:</label>
+	                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis aviokompanije" required="required" id="promotivniOpisAviokompanijeInfoStranica"></textarea>
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistiIzmjeneInfoStranicaAviokompanije">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
+	                        </form>
                         </div>
 						<div class="tab-pane" id="tab-odjava">
                             
