@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -124,14 +125,17 @@ public class AviokompanijaService {
 		if (destinacije.size() < 2) {
 			throw new NevalidniPodaciException("Ne postoje makar dvije destinacije definisane za datu aviokompaniju.");
 		}
-
+		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		/*
 		if (letDTO.getDatumSletanja().before(letDTO.getDatumPoletanja())) {
 			throw new NevalidniPodaciException("Datum poletanja mora biti prije datuma sletanja");
 		}
 
 		if (letDTO.getDuzinaPutovanja().before(letDTO.getDatumSletanja())) {
 			throw new NevalidniPodaciException("Datum povratka mora biti nakon datuma sletanja.");
-		}
+		}*/
 
 		// Provjera postoji li avion
 		Optional<Avion> avionSearch = avionRepository.findById(letDTO.getIdAviona());
@@ -189,9 +193,13 @@ public class AviokompanijaService {
 		Let let = new Let();
 
 		let.setBrojLeta(letDTO.getBrojLeta());
+		
+		/*
 		let.setDatumPoletanja(letDTO.getDatumPoletanja());
 		let.setDatumSletanja(letDTO.getDatumSletanja());
 		let.setDuzinaPutovanja(letDTO.getDuzinaPutovanja());
+		*/
+		
 		let.setCijenaKarte(letDTO.getCijenaKarte());
 		let.setPolaziste(polazna);
 		let.setOdrediste(odredisna);
