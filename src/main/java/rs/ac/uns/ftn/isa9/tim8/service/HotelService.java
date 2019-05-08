@@ -259,4 +259,12 @@ public class HotelService {
 		return usluga;
 	}
 
+	public Hotel dobaviHotel(Long idHotela) throws NevalidniPodaciException {
+		Optional<Hotel> hotelSearch = this.hotelRepository.findById(idHotela);
+		if(!hotelSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji hotel sa zadatim id-em");
+		}
+		return hotelSearch.get();
+	}
+
 }
