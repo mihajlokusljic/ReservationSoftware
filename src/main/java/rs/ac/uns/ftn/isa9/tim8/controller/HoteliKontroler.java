@@ -39,6 +39,15 @@ public class HoteliKontroler {
 		return new ResponseEntity<Collection<Hotel>>(servis.dobaviHotele(),HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping(value = "/dobavi/{idHotela}", method = RequestMethod.GET)
+	public ResponseEntity<?> dobaviHotel(@PathVariable("idHotela") Long idHotela) {
+		try {
+			return new ResponseEntity<Hotel>(servis.dobaviHotel(idHotela), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 	@RequestMapping(value = "/sobeHotela/{idHotela}", method = RequestMethod.GET)
 	public ResponseEntity<?> sobeHotela(@PathVariable("idHotela") Long idHotela) {
 		try {

@@ -73,7 +73,7 @@ function refreshHotels(hotels) {
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
-		noviRed.append('<td class="column1"><a href="#">Pogledaj detalje</a></td>');
+		noviRed.append('<td class="column1"><a href="../infoStranicaHotela/index.html?id=' + hotel.id + '">Pogledaj detalje</a></td>');
 		hotelsTableBody.append(noviRed);
 	}
 }

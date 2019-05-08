@@ -1,7 +1,10 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -10,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
@@ -126,6 +130,9 @@ public class HotelskeSobeService {
 	}
 	
 	public boolean sobaJeRezervisana(HotelskaSoba soba, Date pocetniDatum, Date krajnjiDatum) {
+		if(pocetniDatum == null || krajnjiDatum == null) {
+			return false;
+		}
 		for(RezervacijaSobe r : this.rezervacijeRepository.findAllByRezervisanaSoba(soba)) {
 			if(!pocetniDatum.after(r.getDatumOdlaska()) && !r.getDatumDolaska().after(krajnjiDatum)) {
 				return true;
@@ -150,6 +157,30 @@ public class HotelskeSobeService {
 			}
 		}
 		return false;
+	}
+
+	public Collection<HotelskaSoba> pretraziSobeHotela(PretragaSobaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+		Optional<Hotel> hotelSearch = this.hoteliRepository.findById(kriterijumiPretrage.getIdHotela());
+		if(!hotelSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadati hotel.");
+		}
+		Hotel hotel = hotelSearch.get();
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumDolaska());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumOdlaska());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		ArrayList<HotelskaSoba> rezultat = new ArrayList<HotelskaSoba>();
+		for(HotelskaSoba s : hotel.getSobe()) {
+			if(!this.sobaJeRezervisana(s, pocetniDatum, krajnjiDatum)) {
+				rezultat.add(s);
+			}
+		}
+		return rezultat;
 	}
 
 }
