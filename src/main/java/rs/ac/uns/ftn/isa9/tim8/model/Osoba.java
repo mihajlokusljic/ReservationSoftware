@@ -68,6 +68,9 @@ public class Osoba implements UserDetails{
     @Column(name = "lozinka_promjenjena")
     protected boolean lozinkaPromjenjena;
     
+    @Column(name = "verifikovan_mail")
+    protected boolean verifikovanMail = true;
+    
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "korisnik_autoritet", joinColumns = @JoinColumn(name = "korisnik_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "autoritet_id", referencedColumnName = "id"))
 	protected Set<Authority> authorities;
@@ -90,6 +93,7 @@ public class Osoba implements UserDetails{
 		this.adresa = adresa;
 		this.putanjaSlike = putanjaSlike;
 		this.lozinkaPromjenjena = false;
+		this.verifikovanMail = true;
 
 	}
 	
@@ -105,6 +109,8 @@ public class Osoba implements UserDetails{
 		this.adresa = adresa;
 		this.putanjaSlike = putanjaSlike;
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
+		this.verifikovanMail = true;
+
 
 	}
 	
@@ -123,6 +129,8 @@ public class Osoba implements UserDetails{
 		this.lastPasswordResetDate = lastPasswordResetDate;
 		this.authorities = authorities;
 		this.lozinkaPromjenjena = false;
+		this.verifikovanMail = true;
+
 
 	}
 
@@ -225,6 +233,9 @@ public class Osoba implements UserDetails{
 		return serialVersionUID;
 	}
 
+	
+	
+	
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
@@ -252,6 +263,14 @@ public class Osoba implements UserDetails{
 
 	public void setLozinkaPromjenjena(boolean lozinkaPromjenjena) {
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
+	}
+
+	public boolean isVerifikovanMail() {
+		return verifikovanMail;
+	}
+
+	public void setVerifikovanMail(boolean verifikovanMail) {
+		this.verifikovanMail = verifikovanMail;
 	}
 	
 	
