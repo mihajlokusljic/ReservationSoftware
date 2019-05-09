@@ -32,4 +32,8 @@ public class KorisnikService {
 		return korisnik;
 		
 	}
+	
+	public Osoba vratiKorisnikaPoTokenu(String token) {
+		return korisnikRepository.findByToken(token);
+	}
 }

@@ -25,7 +25,12 @@ $(document).ready(function() {
 				if(response == '') {
 					alert("Pogrešan email/korisničko ime ili lozinka");
 					return;
-				} else {
+				} 
+				else if(response == 'verifikacija'){
+					alert("Niste verifikovali svoj nalog.");
+					return;
+				}
+				else {
 					setJwtToken(TOKEN_KEY, response.accessToken);			
 					if (response.tipKorisnika == "RegistrovanKorisnik"){
 						alert ("Prijavili ste se kao registrovani korisnik.");

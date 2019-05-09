@@ -50,7 +50,7 @@ public class EmailService {
 		mail.setSubject("Registracija korisnika");
 		String tekst = null;
 		try {
-			tekst = String.format("Potvrdite registracije na sledecem linku: \nhttp://localhost:8080/auth/confirm?token=%s",URLEncoder.encode(token, "UTF-8"));
+			tekst = String.format("Potvrdite registraciju na sledecem linku: \nhttp://localhost:8080/auth/confirm?token=%s",URLEncoder.encode(token, "UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

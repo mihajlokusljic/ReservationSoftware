@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.RegistracijaAdminaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
@@ -40,6 +42,7 @@ import rs.ac.uns.ftn.isa9.tim8.security.TokenUtils;
 import rs.ac.uns.ftn.isa9.tim8.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.isa9.tim8.service.CustomUserDetailsService;
 import rs.ac.uns.ftn.isa9.tim8.service.EmailService;
+import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
@@ -57,6 +60,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private EmailService mailService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@Valid @RequestBody Osoba korisnik) {
@@ -76,7 +82,8 @@ public class AuthenticationController {
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
 		registrovaniKorisnik.setPrijatelji(new HashSet<RegistrovanKorisnik>());
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
-		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
+		registrovaniKorisnik.setEnabled(true); 
+		registrovaniKorisnik.setVerifikovanMail(false); //ceka se verifikacija
 		
 		String dodatKor = userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik);
 		try {
@@ -157,6 +164,10 @@ public class AuthenticationController {
 
 		// Kreiraj token
 		Osoba user = (Osoba) authentication.getPrincipal();
+		
+		if (!user.isVerifikovanMail()) {
+			return new ResponseEntity<String>("verifikacija",HttpStatus.OK);
+		}
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 		TipKorisnika tipKorisnika = null;
@@ -199,6 +210,17 @@ public class AuthenticationController {
 		int expiresIn = tokenUtils.getExpiredIn();
 		Set<Authority> a = (Set<Authority>) o.getAuthorities();
 		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.iterator().next().getTipKorisnika(), true), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	public RedirectView confirmRegistration(@RequestParam String token) {
+		Osoba korisnik = korisnikService.vratiKorisnikaPoTokenu(token);
+		if (korisnik != null) {
+			korisnik.setVerifikovanMail(true);
+			userDetailsService.dodajRegistrovanogKorisnika((RegistrovanKorisnik) korisnik);
+			return new RedirectView("/registracija/verifikacija.html");
+		}
+		return null;
 	}
 
 }
