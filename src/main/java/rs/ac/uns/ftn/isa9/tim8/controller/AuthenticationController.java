@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,6 +39,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.UserTokenState;
 import rs.ac.uns.ftn.isa9.tim8.security.TokenUtils;
 import rs.ac.uns.ftn.isa9.tim8.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.isa9.tim8.service.CustomUserDetailsService;
+import rs.ac.uns.ftn.isa9.tim8.service.EmailService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
 @RestController
@@ -52,6 +54,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
+	
+	@Autowired
+	private EmailService mailService;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@Valid @RequestBody Osoba korisnik) {
@@ -73,7 +78,15 @@ public class AuthenticationController {
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
 		registrovaniKorisnik.setEnabled(true); //dok ne uvedemo verifikaciju mailom
 		
-		return new ResponseEntity<String> (userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik),HttpStatus.OK);
+		String dodatKor = userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik);
+		try {
+			mailService.sendMailAsync(registrovaniKorisnik);
+		} catch (MailException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return new ResponseEntity<String> (dodatKor,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
