@@ -59,7 +59,7 @@
                             <a class="tab-list__link" href="#tab-profil" data-toggle="tab">Profil</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab">Odjavi se</a>
+                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
                         </li>
                     </ul>
 
@@ -67,22 +67,104 @@
                     	
                     	<!-- Lista aviokompanija -->
                     	<div class="tab-pane active" id="tab-aviokompanije">
-                    		Aviokompanije
+             				<div class="col-4">
+                                  <div class="input-group">
+                                      <label class = "label">Sortiraj po:</label>
+                                      <div class="rs-select2 js-select-simple select--no-search">
+                                          <select name="tip_vozila" id = "tip_vozila_input">
+                                              <option selected="selected">Nazivu</option>
+                                              <option>Adresi</option>
+                                          </select>
+                                          <div class="select-dropdown"></div>
+                                      </div>
+                                  </div>
+                             </div>
+                    		 <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Slika</th>
+										<th class="column1">Naziv</th>
+										<th class="column1">Adresa</th>
+										<th class="column1">Promotivni opis</th>
+										<th class="column1">Ocjena</th>
+										<th class = "column1">Oznaka za pretragu</th>
+										<th class = "column1"></th>
+										
+									</tr>
+								</thead>
+								<tbody id="prikazAviokompanija">
+								</tbody>
+							</table>
                     	</div>
                     	
                     	<!-- Lista hotela -->
                         <div class="tab-pane" id="tab-hoteli">
-                    		Hoteli
+                    		<div class="col-4">
+                                  <div class="input-group">
+                                      <label class = "label">Sortiraj po:</label>
+                                      <div class="rs-select2 js-select-simple select--no-search">
+                                          <select name="tip_vozila" id = "tip_vozila_input">
+                                              <option selected="selected">Nazivu</option>
+                                              <option>Adresi</option>
+                                          </select>
+                                          <div class="select-dropdown"></div>
+                                      </div>
+                                  </div>
+                             </div>
+                    		 <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Slika</th>
+										<th class="column1">Naziv</th>
+										<th class="column1">Adresa</th>
+										<th class="column1">Promotivni opis</th>
+										<th class="column1">Ocjena</th>
+										<th class = "column1">Oznaka za pretragu</th>
+										<th class = "column1"></th>
+										
+									</tr>
+								</thead>
+								<tbody id="prikazHotela">
+									
+								</tbody>
+							</table>
                     	</div>
                         
                         <!-- Lista RAC servisa -->
                     	<div class="tab-pane" id="tab-rac-servisi">
-                    		Rent-a-car servisi
+                    		<div class="col-4">
+                                  <div class="input-group">
+                                      <label class = "label">Sortiraj po:</label>
+                                      <div class="rs-select2 js-select-simple select--no-search">
+                                          <select name="tip_vozila" id = "tip_vozila_input">
+                                              <option selected="selected">Nazivu</option>
+                                              <option>Adresi</option>
+                                          </select>
+                                          <div class="select-dropdown"></div>
+                                      </div>
+                                  </div>
+                             </div>
+                    		 <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Slika</th>
+										<th class="column1">Naziv</th>
+										<th class="column1">Adresa</th>
+										<th class="column1">Promotivni opis</th>
+										<th class="column1">Ocjena</th>
+										<th class = "column1">Oznaka za pretragu</th>
+										<th class = "column1"></th>
+									</tr>
+								</thead>
+								<tbody id="prikazRacServisa">
+									
+								</tbody>
+							</table>
                     	</div>
                     
                     	<!-- Istorija rezervacija -->
                     	<div class="tab-pane" id="tab-rezervacije">
-                    		Rezervacije
+                    		Istorija rezervacijacheckbox
                     	</div>
                     	
                     	<!-- Lista prijatelja -->
@@ -99,13 +181,7 @@
                     	<div class="tab-pane" id="tab-profil">
                     		Profil korisnika
                     	</div>
-                    	
-                    	<!-- Odjava -->
-                    	<div class="tab-pane" id="tab-odjava">
-                    		Odjava
-                    	</div>
-
-                    
+                                        
                     </div>
                     
                 </div>
@@ -124,8 +200,8 @@
     <script src="vendor/datepicker/daterangepicker.js"></script>
 
     <!-- Main JS-->
-    <script type="text/javascript" src="js/pretragaHotela.js"></script>
-    <script type="text/javascript" src="js/pretragaLetova.js"></script>
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/regKor.js"></script>
     <script src="js/global.js"></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
