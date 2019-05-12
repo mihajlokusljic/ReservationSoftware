@@ -37,7 +37,7 @@ public class AviokompanijeKontroler {
 	}
 	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAviokompaniju(@RequestBody Aviokompanija novaAviokompanija) {
 		try {
 			return new ResponseEntity<Aviokompanija>(servis.dodajAviokompaniju(novaAviokompanija),HttpStatus.OK);
