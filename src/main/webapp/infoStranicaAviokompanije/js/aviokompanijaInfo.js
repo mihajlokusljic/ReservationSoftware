@@ -60,9 +60,48 @@ $(document).ready(function(e) {
 		prikaziTab("tab-brze-rezervacije");
 	});
 	
+	$("#pretragaLetovaForm").submit(function(e) {
+		e.preventDefault();
+		pretragaLetova();
+	});
 	
 	ucitajPodatkeAviokompanije();
 });
+
+function pretragaLetova() {
+	let cijenaK = $("#cijenaKarte").val();
+	if (cijenaK == "") {
+		cijenaK = 0;
+	}
+	
+	let parametriPretrage = {
+			brojLeta : $("#brojLeta").val(),
+			nazivAviokompanije : podaciAviokompanije.naziv,
+			nazivPolazista : $("#nazivPolazista").val(),
+			nazivOdredista : $("#nazivOdredista").val(),
+			datumPoletanja : $("#input-start").val(),
+			datumSletanja : $("#input-end").val(),
+			duzinaPutovanja : "",
+			cijenaKarte : cijenaK
+	};
+	
+	  $.ajax({
+		    type : "POST",
+		    url : "../letovi/pretraziLetove",
+		    contentType: "application/json; charset=utf-8",
+		    data : JSON.stringify(parametriPretrage),
+		    success : function(response) {
+		      if (response == undefined) {
+		        alert("Došlo je do greške.");
+		      } else {
+		        if (response.length == 0) {
+		          alert("Ne postoji ni jedan let koji zadovoljava kriterijume pretrage.");
+		        }
+		        prikaziLetove(response);
+		      }
+		    }	
+		  });
+}
 
 function prikaziTab(idTaba) {
 	for(i in tabovi) {
@@ -99,7 +138,7 @@ function ucitajPodatkeAviokompanije() {
 			prikaziPodatkeAviokompanije();
 			prikaziDestinacije();
 			prikaziAvione();
-			ucitajLetove();
+			//ucitajLetove();
 			prikaziCjenovnikPrtljaga();
 			
 		},
