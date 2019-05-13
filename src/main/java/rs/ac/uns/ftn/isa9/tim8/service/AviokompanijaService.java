@@ -425,4 +425,20 @@ public class AviokompanijaService {
 		
 	}
 
+	public Aviokompanija dobaviAviokompaniju(Long aviokompanijaId) throws NevalidniPodaciException {
+		Optional<Aviokompanija> aviokompanijaSearch = this.aviokompanijaRepository.findById(aviokompanijaId);
+		if(!aviokompanijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em.");
+		}
+		return aviokompanijaSearch.get();
+	}
+
+	public Collection<Let> dobaviLetoveAviokompanije(Long aviokompanijaId) throws NevalidniPodaciException {
+		Optional<Aviokompanija> aviokompanijaSearch = this.aviokompanijaRepository.findById(aviokompanijaId);
+		if(!aviokompanijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em.");
+		}
+		return aviokompanijaSearch.get().getLetovi();
+	}
+
 }
