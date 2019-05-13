@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colrolib Templates">
+    <meta name="author" content="Colrolib">
+    <meta name="keywords" content="Colrolib Templates">
+
+    <!-- Title Page-->
+    <title id="title">Aviokompanija</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    
+	
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+        <div class="wrapper wrapper--w1050">
+            <div class="card card-3">
+                <div class="card-body">
+                	<h1 id="aviokompanijaNaslov">Naziv aviokompanije</h1>
+                
+                    <ul class="tab-list">
+                        <li class="dropdown">
+                            <a class="tab-list__link active" href="#tab-info" data-toggle="tab" id ="info">O nama</a>
+                        </li>
+                        <li class="dropdown">
+	                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="dropdown" id = "pregledaj">Pregledanje</a>
+	                        	<ul class="dropdown-content">
+								  <li><a href="#tab-destinacije" data-toggle="tab" id ="destinacije">Destinacije</a></li>
+								  <li><a href="#tab-avioni" data-toggle="tab" id ="avioni">Avioni</a></li>
+								  <li><a href="#tab-letovi" data-toggle="tab" id ="letovi">Letovi</a></li>
+								  <li><a href="#tab-prtljag" data-toggle="tab" id ="prtljag">Cjenovnik prtljaga</a></li>
+								</ul>
+	                    </li>
+                        
+                        <li class="dropdown">
+                            <a class="tab-list__link" href="#tab-brze-rezervacije" data-toggle="tab" id ="brzeRezervacije">Brze rezervacije</a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="tab-list__link" href="../pocetnaStranica/index.html">Nazad na početnu stranicu</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                    
+                        <div class="tab-pane active" id="tab-info">
+	                        <div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaAviokompanije">
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv aviokompanije:</label>
+			                                    <input class="input--style-2" type="text" id="nazivAviokompanije" readonly="readonly">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa:</label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" id="adresaAviokompanije" readonly="readonly">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Ocjena:</label>
+			                                    <input class="input--style-2" type="text" id="ocjenaAviokompanije" readonly="readonly">
+			                                </div>
+		                                </div>
+	                         </div>
+	                         <h2>&nbsp;</h2>
+	                         <div class="input-group">
+		                                    <label class="label">Promotivni opis:</label>
+		                                    <textarea rows="15" cols="10" id="opisAviokompanije" readonly="readonly"></textarea>
+		                     </div>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-destinacije">
+                        	<h2>Destinacije</h2>
+	                        <table>
+							<thead>
+								<tr class="table100-head">
+									<th class="column3">Slika</th>
+									<th class="column3">Naziv</th>
+									<th class="column3">Adresa</th>
+								</tr>
+							</thead>
+							<tbody id = "prikazDestinacija">
+							</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-avioni">
+	                        <table>
+								<thead>
+								<tr class="table100-head">
+									<th class="column3">Slika</th>
+									<th class="column3">Naziv aviona</th>
+									<th class="column5">Broj sjedišta</th>
+									<th class="column5">Broj segmenata</th>
+								</tr>
+								</thead>
+								<tbody id="prikazAviona">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-letovi">
+		                	<table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column2">Broj leta</th>
+										<th class="column3">Naziv polazišta</th>
+										<th class="column3">Naziv odredišta</th>
+										<th class="column1">Datum poletanja</th>
+										<th class="column1">Datum sletanja</th>
+										<th class="column5">Broj presjedanja</th>
+										<th class="column6">Cijena karte</th>
+										<th class="column6">Prosječna ocjena</th>
+									</tr>
+								</thead>
+								<tbody id="prikazLetova">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-prtljag">
+	                        <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Tip prtljaga</th>
+										<th class = "column1">Opis</th>
+										<th class="column1">Cijena €</th>
+									</tr>
+								</thead>
+								<tbody id="prikazPrtljaga">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-brze-rezervacije">
+	                        Brze rezervacije
+                        </div>
+							
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
+    <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/aviokompanijaInfo.js"></script>
+    <script src="js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->
