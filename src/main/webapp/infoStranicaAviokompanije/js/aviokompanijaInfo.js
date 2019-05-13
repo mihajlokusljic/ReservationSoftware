@@ -1,5 +1,7 @@
 let podaciAviokompanije = null;
 let defaultSlika = "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg";
+let defaultSlikaDestinacije = "https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w";
+let defaultSlikaAviona = "https://upload.wikimedia.org/wikipedia/commons/4/40/Pan_Am_Boeing_747-121_N732PA_Bidini.jpg";
 let stavkeMenija = ["info", "pregledaj", "brzeRezervacije"];
 let tabovi = ["tab-info", "tab-destinacije", "tab-avioni", "tab-letovi", "tab-prtljag", "tab-brze-rezervacije"];
 
@@ -129,7 +131,7 @@ function prikaziDestinacije() {
 	
 	$.each(podaciAviokompanije.destinacije, function(i, destinacija) {
 		let noviRed = $("<tr></tr>");
-		noviRed.append('<td class="column3"><img src="' + destinacija.putanjaSlike + '" alt="Greska pri učitavanju slike"/></td>');
+		noviRed.append('<td class="column3"><img src="' + defaultSlikaDestinacije + '" alt="Greska pri učitavanju slike"/></td>');
 		noviRed.append('<td class="column3">' + destinacija.nazivDestinacije + '</td>');
 		noviRed.append('<td class="column3">' + destinacija.adresa.punaAdresa + '</td>');
 		tabela.append(noviRed);
@@ -142,7 +144,7 @@ function prikaziAvione() {
 	
 	$.each(podaciAviokompanije.avioni, function(i, avion) {
 		let noviRed = $("<tr></tr>");
-		noviRed.append('<td class="column3"><img src="' + avion.putanjaSlike + '" alt="Greska pri učitavanju slike"/></td>');
+		noviRed.append('<td class="column3"><img src="' + defaultSlikaAviona + '" alt="Greska pri učitavanju slike"/></td>');
 		noviRed.append('<td class="column3">' + avion.naziv + '</td>');
 		noviRed.append('<td class="column5">' + avion.sjedista.length + '</td>');
 		noviRed.append('<td class="column5">' + avion.segmenti.length + '</td>');
