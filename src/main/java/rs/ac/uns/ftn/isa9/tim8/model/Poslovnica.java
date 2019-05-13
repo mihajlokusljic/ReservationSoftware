@@ -26,7 +26,7 @@ public class Poslovnica {
 	@Column(name = "naziv", nullable = false)
 	protected String naziv;
 	
-	@Column(name = "promotivni_opis", nullable = true)
+	@Column(name = "promotivni_opis", nullable = true, columnDefinition = "TEXT")
 	protected String promotivniOpis;
 	
 	@OneToOne(cascade = CascadeType.ALL)
