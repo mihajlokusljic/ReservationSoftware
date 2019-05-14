@@ -2,6 +2,9 @@ let podaciAdmina = null;
 let podaciHotela = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
+let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
+let tabovi = ["tab-sobe", "tab-dodatne-usluge", "tab-info-stranica", "tab-brze-rezervacije", "tab-izvjestaji", "tab-profil-kor", "tab-profil-lozinka"];
+
 
 $(document).ready(function(e) {
 	
@@ -19,6 +22,49 @@ $(document).ready(function(e) {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
 		}
+	});
+	
+	//dodavanje reakcija na klikove na navigacionom meniju
+	$("#sobe").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaUredjivanjeHotela");
+		prikaziTab("tab-sobe");
+	});
+	
+	$("#dodatneUsluge").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaUredjivanjeHotela");
+		prikaziTab("tab-dodatne-usluge");
+	});
+	
+	$("#infoStranica").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaUredjivanjeHotela");
+		prikaziTab("tab-info-stranica");
+	});
+	
+	$("#brzeRezervacije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaBrzeRezervacije");
+		prikaziTab("tab-brze-rezervacije");
+	});
+	
+	$("#izvjestaji").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaIzvjestaji");
+		prikaziTab("tab-izvjestaji");
+	});
+	
+	$("#izmjeni_podatke").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-profil-kor");
+	});
+	
+	$("#promjeni_lozinku").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-profil-lozinka");
 	});
 	
 	//ucitavanje podataka profila administratora
@@ -76,6 +122,26 @@ $(document).ready(function(e) {
 		
 	
 });
+
+function prikaziTab(idTaba) {
+	for(i in tabovi) {
+		if(idTaba == tabovi[i]) {
+			$("#" + tabovi[i]).addClass("active");
+		} else {
+			$("#" + tabovi[i]).removeClass("active");
+		}
+	}
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
+}
 
 function dodavanjeSobe() {
 	let _idHotela = podaciHotela.id;

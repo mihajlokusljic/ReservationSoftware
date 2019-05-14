@@ -33,29 +33,29 @@
             <div class="card card-3">
                 <div class="card-body">
                     <ul class="tab-list">
-                        <li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab-sobe" data-toggle="tab" id ="sobe">Sobe</a>
+                    	<li class="dropdown active" id ="stavkaUredjivanjeHotela">
+                    		<a class="tab-list__link" href="#" data-toggle="dropdown" id ="uredjivanjeHotela">Uređivanje hotela</a>
+                    		<ul class="dropdown-content">
+                    			<li><a href="#" id ="sobe">Sobe</a></li>
+                    			<li><a href="#" id ="dodatneUsluge">Dodatne usluge</a></li>
+                    			<li><a href="#" id ="infoStranica">Info stranica hotela</a></li>
+                    		</ul>
+                    	</li>
+                        <li class="dropdown" id="stavkaBrzeRezervacije">
+                            <a class="tab-list__link" href="#" id="brzeRezervacije">Brze rezervacije</a>
                         </li>
-						<li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab-dodaj-aviokompaniju" data-toggle="tab" id = "vozila"></a>
+                        <li class="dropdown" id="stavkaIzvjestaji">
+                            <a class="tab-list__link" href="#" id="izvjestaji">Izvještaji</a>
                         </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
+						<li class="dropdown" id="stavkaProfilKorisnika">
+                            <a class="tab-list__link" href="#" id="profil_korisnika">Profil</a>
+                            <ul class="dropdown-content">
+								<li><a href="#" id ="izmjeni_podatke">Izmjeni podatke</a></li>
+								<li><a href="#" id ="promjeni_lozinku">Promjeni lozinku</a></li>
+							</ul>
                         </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-info-stranica" data-toggle="tab" id = "rac">Info stranica hotela</a>
-                        </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-brze-rezervacije" data-toggle="tab" id = "administrtori">Brze rezervacije</a>
-                        </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-izvjestaji" data-toggle="tab" id = "administrtori">Izvještaji</a>
-                        </li>
-						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil</a>
-                        </li>
-						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id ="odjava">Odjavi se</a>
+						<li class="dropdown">
+                            <a class="tab-list__link" href="#" id ="odjava">Odjavi se</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -252,20 +252,71 @@
 	                        </form>
                         </div>
                         
+                        
+                        <!-- Rad sa brzim rezervacijama -->
                         <div class="tab-pane" id="tab-brze-rezervacije">
                             <p>Brze rezervacije</p>
                         </div>
                         
+                        <!-- Izvjestaji -->
                         <div class="tab-pane" id="tab-izvjestaji">
                             <p>Izvjestaji</p>
                         </div>
                         
-						<div class="tab-pane" id="tab-profil-kor">
-                            <p id="podaciAdmina">Hotel administrator: </p>
-                        </div>
+						<!-- Izmjena profila administratora -->
+                        <div class="tab-pane" id="tab-profil-kor">
+                        	<form id = "forma_profil_korisnika">
+	                            <div class="input-group">
+	                                    <label class="label">E-mail:</label>
+	                                    <input class="input--style-2" type="email" required="required" id="emailAdmina" readonly>
+	                                </div>
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Ime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="imeAdmina">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Prezime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="prezimeAdmina">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj telefona:</label>
+	                                    <input class="input--style-2" type="number" id="brTelefonaAdmina">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Adresa:</label>
+	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                    <input class="input--style-2" type="text" required="required" id="adresaAdmina">
+	                                </div>
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>
+                                </form>
+                        	</div>
+                        	
+                        	<!-- Izmjena lozinke administratora hotela -->
+                        	<div class="tab-pane" id="tab-profil-lozinka">
+                        		<form id = "forma_lozinka">
+                        		    <div class="input-group">
+	                                    <label class="label">Trenutna:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
+	                                </div>	                                
+	                                <div class="input-group">    
+	                                    <label class="label">Nova lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite novu lozinku" required="required" id="novaLozinka">
+	                                </div>
+	                                <div class="input-group">    
+	                                    <label class="label">Potvrdite novu lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Ponovo unesite novu lozinku" required="required" id="novaLozinka2">
+	                                </div> 
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
+                        		</form>
+                        	</div>
                         
-						<div class="tab-pane" id="tab-odjava">
-                        </div>
                     </div>
                 </div>
             </div>
