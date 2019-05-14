@@ -22,12 +22,23 @@
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
     
+    <!-- Popup window -->
+    <link href="css/popup.css" rel="stylesheet" media="all">
+    
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
 </head>
 
 <body>
+	<div class="hover_bkgr_fricc">
+		<span class="helper"></span>
+		    <div>
+		        <div class="popupCloseButton">X</div>
+		        <p>Add any HTML content<br />inside the popup box!</p>
+		    </div>
+	</div>
+							
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
         <div class="wrapper wrapper--w1050">
             <div class="card card-3">
@@ -65,6 +76,7 @@
 			                                    <label class="label">Adresa:</label>
 			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
 			                                    <input class="input--style-2" type="text" id="adresaHotela" readonly="readonly">
+			                                    <a class="trigger_popup_fricc">Click here to show the popup</a>
 			                                </div>
 			                                <div class="input-group">
 			                                    <label class="label">Ocjena:</label>
@@ -147,6 +159,7 @@
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
+    <script src="js/popup.js"></script>
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
