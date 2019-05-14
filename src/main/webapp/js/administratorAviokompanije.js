@@ -674,7 +674,7 @@ function profilKorisnika(){
 		};
 		$.ajax({
 			type:"POST",
-			url:"../rentACar/izmjeniProfilKorisnika",
+			url:"../aviokompanije/izmjeniProfilKorisnika",
 			contentType : "application/json; charset=utf-8",
 			data:JSON.stringify(admin),
 			headers: createAuthorizationTokenHeader("jwtToken"),
