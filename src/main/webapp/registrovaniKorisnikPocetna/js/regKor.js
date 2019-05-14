@@ -1,3 +1,4 @@
+var tokenKey = "jwtToken";
 var aviokompanije = [];
 var hoteli = [];
 var rentACarServisi = [];
@@ -21,6 +22,8 @@ $(document).ready(function() {
 	    	}
 		}
 	});
+	
+	korisnikInfo();
 	
 	//ucitavanje aviokompanija
 	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
@@ -125,7 +128,8 @@ $(document).ready(function() {
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		profilKorisnika();
 	});
 	
 	$("#promjeni_lozinku_tab").click(function(e){
@@ -138,7 +142,8 @@ $(document).ready(function() {
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		promjeniLozinku();
 	});
 	
 	$("#racSearchForm").submit(function(e) {
@@ -177,6 +182,23 @@ $(document).ready(function() {
 
 });
 
+function korisnikInfo(){
+	let token = getJwtToken("jwtToken");
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/getInfo",
+		dataType : "json",
+		success: function(data){
+			if(data != null){
+				korisnik = data;
+				$("#korisnik").append(data.ime + " " + data.prezime);
+			}
+			else{
+				alert("Nepostojeći korisnik");
+			}
+		},
+	});
+}
 
 function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, defaultSlika, infoStranica) {
 	let tabela = $("#" + idTabeleZaPrikaz);
@@ -210,11 +232,11 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 }
 
 function profilKorisnika(){
-	$("#emailAdmina").val(podaciAdmina.email);
-	$("#imeAdmina").val(podaciAdmina.ime);
-	$("#prezimeAdmina").val(podaciAdmina.prezime);
-	$("#brTelefonaAdmina").val(podaciAdmina.brojTelefona);
-	$("#adresaAdmina").val(podaciAdmina.adresa.punaAdresa);
+	$("#emailAdmina").val(korisnik.email);
+	$("#imeAdmina").val(korisnik.ime);
+	$("#prezimeAdmina").val(korisnik.prezime);
+	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
+	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
 	
 	$("#forma_profil_korisnika").unbind().submit(function(e){
 		e.preventDefault();
@@ -240,17 +262,17 @@ function profilKorisnika(){
 		}		
 
 		let admin = {
-				id: podaciAdmina.id,
+				id: korisnik.id,
 				ime: imeAdmina,
-				prezime: podaciAdmina.prezime,
-				email: podaciAdmina.email,
-				lozinka: podaciAdmina.lozinka,
+				prezime: korisnik.prezime,
+				email: korisnik.email,
+				lozinka: korisnik.lozinka,
 				brojTelefona: brTelefonaAdmina,
 				adresa: { punaAdresa : adresaAdmina }
 		};
 		$.ajax({
 			type:"POST",
-			url:"../aviokompanije/izmjeniProfilKorisnika",
+			url:"../korisnik/izmjeniProfilKorisnika",
 			contentType : "application/json; charset=utf-8",
 			data:JSON.stringify(admin),
 			headers: createAuthorizationTokenHeader("jwtToken"),
@@ -260,7 +282,7 @@ function profilKorisnika(){
 				}
 				else{
 					alert("Uspješno ste izmjenili profil.");
-					podaciAdmina = response;
+					korisnik = response;
 					profilKorisnika();
 				}
 				
