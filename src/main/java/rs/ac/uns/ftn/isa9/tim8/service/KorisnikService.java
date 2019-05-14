@@ -81,4 +81,20 @@ public class KorisnikService {
 	public Osoba vratiKorisnikaPoTokenu(String token) {
 		return korisnikRepository.findByToken(token);
 	}
+
+	public KorisnikDTO izmjeniProfilRegistrovanogKorisnika(KorisnikDTO korisnik) {
+		Optional<Osoba> pretragaOsoba = korisnikRepository.findById(korisnik.getId());
+
+		if (!pretragaOsoba.isPresent()) {
+			return null;
+		}
+
+		Osoba o = pretragaOsoba.get();
+
+		o.setIme(korisnik.getIme());
+		o.setPrezime(korisnik.getPrezime());
+		o.setBrojTelefona(korisnik.getBrojTelefona());
+		o.setAdresa(korisnik.getAdresa());
+		korisnikRepository.save(o);
+		return korisnik;	}
 }

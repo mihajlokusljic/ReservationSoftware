@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,11 @@ public class KorisnikKontroler {
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
+	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
+		return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniProfilRegistrovanogKorisnika(korisnik), HttpStatus.OK);
 	}
 
 }

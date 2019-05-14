@@ -727,7 +727,7 @@ function promjeniLozinku(){
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspjesno ste izmjenili lozinku");	
+					alert("Uspješno ste izmjenili lozinku");	
 				}
 				
 			}

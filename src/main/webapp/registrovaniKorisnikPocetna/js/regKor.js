@@ -1,3 +1,4 @@
+var tokenKey = "jwtToken";
 var aviokompanije = [];
 var hoteli = [];
 var rentACarServisi = [];
@@ -22,6 +23,8 @@ $(document).ready(function() {
 		}
 	});
 	
+	korisnikInfo();
+	
 	//ucitavanje aviokompanija
 	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 	
@@ -35,6 +38,112 @@ $(document).ready(function() {
 	$("#odjava").click(function(e) {
 		e.preventDefault();
 		odjava();
+	});
+	
+	$("#aviokompanijeT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").show();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#hoteliT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").show();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#rentacarT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").show();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#rezervacijeT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").show();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#prijateljiT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").show();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#pozivniceT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").show();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#izmjeni_podatke_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").show();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();
+		profilKorisnika();
+	});
+	
+	$("#promjeni_lozinku_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#tab-prijatelji").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").show();
+		$("#tab-odjava").hide();
+		promjeniLozinku();
 	});
 	
 	$("#racSearchForm").submit(function(e) {
@@ -73,6 +182,23 @@ $(document).ready(function() {
 
 });
 
+function korisnikInfo(){
+	let token = getJwtToken("jwtToken");
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/getInfo",
+		dataType : "json",
+		success: function(data){
+			if(data != null){
+				korisnik = data;
+				$("#korisnik").append(data.ime + " " + data.prezime);
+			}
+			else{
+				alert("Nepostojeći korisnik");
+			}
+		},
+	});
+}
 
 function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, defaultSlika, infoStranica) {
 	let tabela = $("#" + idTabeleZaPrikaz);
@@ -103,6 +229,106 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
 
 	tabelaZaPrikaz.append(noviRed);
+}
+
+function profilKorisnika(){
+	$("#emailAdmina").val(korisnik.email);
+	$("#imeAdmina").val(korisnik.ime);
+	$("#prezimeAdmina").val(korisnik.prezime);
+	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
+	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
+	
+	$("#forma_profil_korisnika").unbind().submit(function(e){
+		e.preventDefault();
+		var imeAdmina = $("#imeAdmina").val();
+		if (imeAdmina == ''){
+			alert("Polje za unos imena ne moze biti prazno.");
+			return;
+		}
+		var prezimeAdmina = $("#prezimeAdmina").val();
+		if (prezimeAdmina == ''){
+			alert("Polje za unos prezimena ne moze biti prazno.");
+			return;
+		}
+		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
+		if (brTelefonaAdmina == ''){
+			alert("Polje za unos broja telefona ne moze biti prazno.");
+			return;
+		}
+		var adresaAdmina = $("#adresaAdmina").val();
+		if (adresaAdmina == ''){
+			alert("Polje za unos adrese ne moze biti prazno.");
+			return;
+		}		
+
+		let admin = {
+				id: korisnik.id,
+				ime: imeAdmina,
+				prezime: korisnik.prezime,
+				email: korisnik.email,
+				lozinka: korisnik.lozinka,
+				brojTelefona: brTelefonaAdmina,
+				adresa: { punaAdresa : adresaAdmina }
+		};
+		$.ajax({
+			type:"POST",
+			url:"../korisnik/izmjeniProfilKorisnika",
+			contentType : "application/json; charset=utf-8",
+			data:JSON.stringify(admin),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success:function(response){
+				if (response == ''){
+					alert("Izmjena nije uspjela.");
+				}
+				else{
+					alert("Uspješno ste izmjenili profil.");
+					korisnik = response;
+					profilKorisnika();
+				}
+				
+			},
+		});
+		
+	});
+}
+
+function promjeniLozinku(){
+	$("#forma_lozinka").unbind().submit(function(e){
+		e.preventDefault();
+		var staraLozinka = $("#staraLozinka").val();
+		var novaLozinka = $("#novaLozinka").val();
+		var novaLozinka2 = $("#novaLozinka2").val();
+
+		if (novaLozinka == ''){
+			alert("Niste unijeli novu lozinku");
+			return;
+		}
+		
+		if (novaLozinka != novaLozinka2){
+			alert("Greška. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		
+		
+		$.ajax({
+			type : 'PUT',
+			url : "../auth/changePassword/" + staraLozinka,
+			headers : createAuthorizationTokenHeader("jwtToken"),
+			contentType : "application/json",
+			data : novaLozinka,
+			success : function(data) {
+				if (data == ''){
+					alert("Pogrešna trenutna lozinka.");
+					return;
+				}
+				else{
+					setJwtToken("jwtToken", data.accessToken);
+					alert("Uspješno ste izmjenili lozinku.");	
+				}
+				
+			}
+		});
+	});	
 }
 
 function odjava() {
