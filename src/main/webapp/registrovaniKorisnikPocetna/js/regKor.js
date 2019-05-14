@@ -23,13 +23,13 @@ $(document).ready(function() {
 	});
 	
 	//ucitavanje aviokompanija
-	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
+	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 	
 	//ucitavanje hotela
-	ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
+	ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg", "infoStranicaHotela");
 
 	//ucitavanje rent-a-car servisa
-	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStraanicaRac");
 	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
@@ -60,7 +60,7 @@ $(document).ready(function() {
 				tbody.empty();
 				$.each(response, function(i, podatak) {
 
-					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStraanicaRac");
 				});
 				if(response.length == 0) {
 					alert("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
@@ -74,20 +74,20 @@ $(document).ready(function() {
 });
 
 
-function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, defaultSlika) {
+function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, defaultSlika, infoStranica) {
 	let tabela = $("#" + idTabeleZaPrikaz);
 	$.ajax({
 		type: "GET",
 		url: putanjaControlera,
 		success: function(response) {
 			$.each(response, function(i, podatak) {
-				prikazi(podatak, tabela, defaultSlika);
+				prikazi(podatak, tabela, defaultSlika, infoStranica);
 			});
 		},
 	});
 }
 
-function prikazi(podatak, tabelaZaPrikaz, defaultSlika) {
+function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 	let noviRed = $("<tr></tr>");
 	var ocjena = null;
 	if (podatak.sumaOcjena == 0){
@@ -100,7 +100,7 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika) {
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');
 	noviRed.append('<td class="column1">' + podatak.adresa.punaAdresa + '</td>');
 	noviRed.append('<td class="column1">' + ocjena + '</td>');
-	noviRed.append('<td class="column1"><a href="../infoStranicaRac/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
+	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
 
 	tabelaZaPrikaz.append(noviRed);
 }

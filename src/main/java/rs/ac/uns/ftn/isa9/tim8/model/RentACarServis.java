@@ -21,12 +21,15 @@ public class RentACarServis extends Poslovnica implements Serializable {
 	 */
 	private static final long serialVersionUID = 5971300871523033595L;
 
+//	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Vozilo> vozila;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
+//  @JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")	
 	protected Set<Filijala> filijale;
 	
+//	@JsonIgnore
 	@OneToMany(mappedBy = "rentACarServis",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<RezervacijaVozila> rezervisanaVozila;
 	
