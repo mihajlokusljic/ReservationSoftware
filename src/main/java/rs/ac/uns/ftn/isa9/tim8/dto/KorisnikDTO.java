@@ -18,6 +18,8 @@ public class KorisnikDTO {
 	
 	protected Adresa adresa;
 	
+	protected boolean lozinkaPromjenjena;
+	
 	public KorisnikDTO() {
 		super();
 	}
@@ -31,6 +33,19 @@ public class KorisnikDTO {
 		this.lozinka = lozinka;
 		this.brojTelefona = brojTelefona;
 		this.adresa = adresa;
+	}
+	
+	public KorisnikDTO(Long id, String ime, String prezime, String email, String lozinka, String brojTelefona,
+			Adresa adresa, boolean lozinkaPromjenjena) {
+		super();
+		Id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.lozinka = lozinka;
+		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
 	}
 
 	public String getIme() {
@@ -88,6 +103,13 @@ public class KorisnikDTO {
 	public void setId(Long id) {
 		Id = id;
 	}
-	
+
+	public boolean isLozinkaPromjenjena() {
+		return lozinkaPromjenjena;
+	}
+
+	public void setLozinkaPromjenjena(boolean lozinkaPromjenjena) {
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+	}
 	
 }

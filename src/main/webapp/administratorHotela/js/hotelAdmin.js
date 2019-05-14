@@ -314,12 +314,21 @@ function korisnikInfo(){
 			if(data != null){
 				podaciAdmina = data;
 				prikaziPodatkeAdmina();
+				if(!podaciAdmina.lozinkaPromjenjena) {
+					izmjenaInicijalneLozinke();
+				}
 			}
 			else{
 				alert("nepostojeci korisnik");
 			}
 		},
 	});
+}
+
+function izmjenaInicijalneLozinke() {
+	$("#meni").hide();
+	$("#izmjenaInicijalneLozinkePoruka").show();
+	prikaziTab("tab-profil-lozinka");
 }
 
 function ucitajPodatkeHotela() {
@@ -494,6 +503,7 @@ function promjenaLozinke() {
 	var staraLozinka = $("#staraLozinka").val();
 	var novaLozinka = $("#novaLozinka").val();
 	var novaLozinka2 = $("#novaLozinka2").val();
+	var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
 
 	if (novaLozinka == ''){
 		alert("Niste unijeli novu lozinku");
@@ -515,10 +525,16 @@ function promjenaLozinke() {
 				return;
 			}
 			else{
-				setJwtToken("jwtToken", data.accessToken);
-				alert("Uspjesno ste izmjenili lozinku");	
+				setJwtToken(data.accessToken);
+				alert("Uspjesno ste izmjenili lozinku");
+				if(!lozinkaMijenjana) {
+					$("#izmjenaInicijalneLozinkePoruka").hide();
+					$("#meni").show();
+					prikaziTab("tab-sobe");
+					podaciAdmina.lozinkaPromjenjena = true;
+				}
 			}
-			
+			$("#forma_lozinka")[0].reset();
 		}
 	});
 }
