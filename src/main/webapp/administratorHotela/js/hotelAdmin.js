@@ -120,6 +120,18 @@ $(document).ready(function(e) {
 		izmjenaProfila();
 	});
 	
+	//ponistavanje izmjena profila
+	$("#ponistavanjeIzmjenaProfila").click(function(e) {
+		e.preventDefault();
+		prikaziPodatkeAdmina();
+	});
+	
+	//izmjena lozinke
+	$("#forma_lozinka").submit(function(e) {
+		e.preventDefault();
+		promjenaLozinke();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -475,6 +487,39 @@ function izmjenaProfila(){
 			podaciAdmina = response;
 			prikaziPodatkeAdmina();
 		},
+	});
+}
+
+function promjenaLozinke() {
+	var staraLozinka = $("#staraLozinka").val();
+	var novaLozinka = $("#novaLozinka").val();
+	var novaLozinka2 = $("#novaLozinka2").val();
+
+	if (novaLozinka == ''){
+		alert("Niste unijeli novu lozinku");
+		return;
+	}
+	
+	if (novaLozinka != novaLozinka2){
+		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		return;
+	}
+	
+	$.ajax({
+		type : 'PUT',
+		url : "../auth/changePassword/" + staraLozinka,
+		data : novaLozinka,
+		success : function(data) {
+			if (data == ''){
+				alert("Pogresna trenutna lozinka.");
+				return;
+			}
+			else{
+				setJwtToken("jwtToken", data.accessToken);
+				alert("Uspjesno ste izmjenili lozinku");	
+			}
+			
+		}
 	});
 }
 

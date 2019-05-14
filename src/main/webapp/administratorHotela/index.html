@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <ul class="tab-list">
                     	<li class="dropdown active" id ="stavkaUredjivanjeHotela">
-                    		<a class="tab-list__link" href="#" data-toggle="dropdown" id ="uredjivanjeHotela">Uređivanje hotela</a>
+                    		<a class="tab-list__link" data-toggle="dropdown" id ="uredjivanjeHotela">Uređivanje hotela</a>
                     		<ul class="dropdown-content">
                     			<li><a href="#" id ="sobe">Sobe</a></li>
                     			<li><a href="#" id ="dodatneUsluge">Dodatne usluge</a></li>
@@ -48,7 +48,7 @@
                             <a class="tab-list__link" href="#" id="izvjestaji">Izvještaji</a>
                         </li>
 						<li class="dropdown" id="stavkaProfilKorisnika">
-                            <a class="tab-list__link" href="#" id="profil_korisnika">Profil</a>
+                            <a class="tab-list__link" id="profil_korisnika">Profil</a>
                             <ul class="dropdown-content">
 								<li><a href="#" id ="izmjeni_podatke">Izmjeni podatke</a></li>
 								<li><a href="#" id ="promjeni_lozinku">Promjeni lozinku</a></li>
@@ -62,6 +62,7 @@
                     
                     	<!-- Rad sa sobama -->
                         <div class="tab-pane active" id="tab-sobe">
+                        	<h2 class="zaglavlje">Sobe hotela</h2>
 	                        <form method="POST" action="#" id="dodavanjeSobeForm">
 	                                <div class="input-group">
 	                                    <label class="label">Broj sobe:</label>
@@ -160,6 +161,7 @@
                         
                         <!-- Rad sa dodatnim uslugama -->
                         <div class="tab-pane" id="tab-dodatne-usluge">
+                        	<h2 class="zaglavlje">Dodatne usluge hotela</h2>
 	                        <form method="POST" action="#" id="dodavanjeDodatneUslugeForm">
 	                                <div class="input-group">
 	                                    <label class="label">Naziv:</label>
@@ -214,6 +216,7 @@
 							
 						<!-- Uredjivanje info stranice -->
                         <div class="tab-pane" id="tab-info-stranica">
+                        	<h2 class="zaglavlje">Info stranica hotela</h2>
 	                        <form method="POST" action="#" id="izmjenaInfoStraniceForm">
 	                        		<div class="row row-space">
 	                        			<div class="col-2">
@@ -255,16 +258,17 @@
                         
                         <!-- Rad sa brzim rezervacijama -->
                         <div class="tab-pane" id="tab-brze-rezervacije">
-                            <p>Brze rezervacije</p>
+                            <h2 class="zaglavlje">Brze rezervacije</h2>
                         </div>
                         
                         <!-- Izvjestaji -->
                         <div class="tab-pane" id="tab-izvjestaji">
-                            <p>Izvjestaji</p>
+                            <h2 class="zaglavlje">Izvjestaji</h2>
                         </div>
                         
 						<!-- Izmjena profila administratora -->
                         <div class="tab-pane" id="tab-profil-kor">
+                        	<h2 class="zaglavlje">Ažuriranje profila</h2>
                         	<form id = "forma_profil_korisnika">
 	                            <div class="input-group">
 	                                    <label class="label">E-mail:</label>
@@ -294,12 +298,20 @@
 	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
 	                                    <input class="input--style-2" type="text" required="required" id="adresaAdmina">
 	                                </div>
-	                                <button type="submit" class="btn btn-submit">Izmjeni</button>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Izmjeni"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaProfila">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
                                 </form>
                         	</div>
                         	
                         	<!-- Izmjena lozinke administratora hotela -->
                         	<div class="tab-pane" id="tab-profil-lozinka">
+                        		<h2 class="zaglavlje">Izmjena lozinke</h2>
                         		<form id = "forma_lozinka">
                         		    <div class="input-group">
 	                                    <label class="label">Trenutna:</label>
