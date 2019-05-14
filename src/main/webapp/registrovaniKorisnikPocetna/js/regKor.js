@@ -2,6 +2,7 @@ var aviokompanije = [];
 var hoteli = [];
 var rentACarServisi = [];
 var korisnik = null;
+//spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
 	
@@ -34,6 +35,40 @@ $(document).ready(function() {
 	$("#odjava").click(function(e) {
 		e.preventDefault();
 		odjava();
+	});
+	
+	$("#racSearchForm").submit(function(e) {
+		e.preventDefault();
+	   
+		let nazivLokacije = $("#racNaziv").val();
+		let dolazak = $("#input-start-rac").val();
+		let odlazak = $("#input-end-rac").val();
+		
+		let pretragaRac = {
+				nazivRacIliDestinacije: nazivLokacije,
+				datumDolaska: dolazak,
+				datumOdlaska: odlazak,
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/pretrazi",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(pretragaRac),
+			success: function(response) {
+				let tbody = $("#prikazRacServisa");
+				tbody.empty();
+				$.each(response, function(i, podatak) {
+
+					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+				});
+				if(response.length == 0) {
+					alert("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
+				}
+				$('#racSearchForm')[0].reset();
+			},
+		});
+		
 	});
 
 });

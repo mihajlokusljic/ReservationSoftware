@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,15 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
-import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
-import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -147,5 +144,19 @@ public class RentACarKontroler {
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
 		return new ResponseEntity<KorisnikDTO>(servisKorisnik.izmjeniAdminaRentACar(korisnik), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/pretrazi", method = RequestMethod.POST)
+	public ResponseEntity<?> pretragaRac(@RequestBody PretragaRacDTO kriterijumiPretrage) {	
+		Collection<Poslovnica> servisi = null;
+		try {
+			servisi = servis.pretraziRac(kriterijumiPretrage);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		return new ResponseEntity<Collection<Poslovnica> >(servisi, HttpStatus.OK);
+		
 	}
 }
