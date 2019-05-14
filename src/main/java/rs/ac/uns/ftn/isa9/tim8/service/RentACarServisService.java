@@ -480,7 +480,7 @@ public class RentACarServisService {
 		}
 		for (Vozilo vozilo : slobodnaVozila) {
 			if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
-					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika()){
+					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
 				vozilaZaRezervaciju.add(vozilo);
 			}
 		}

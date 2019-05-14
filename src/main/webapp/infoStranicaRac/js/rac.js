@@ -1,5 +1,6 @@
 let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
+let ukupno = 0;
 
 $(document).ready(function(e) {
 	
@@ -94,6 +95,14 @@ function pretragaVozila(){
 			
 	}
 	
+	if (_datumPreuzimanja != '' && _datumVracanja != ''){
+		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / 36e5;
+		/*var datetime1 = new Date('1970-01-01T' + _vrijemePreuzimanja + 'Z');
+		var datetime2 = new Date('1970-01-01T' + _vrijemeVracanja + 'Z');
+		ukupno = ukupno + Math.abs(Date.parse(datetime1) - Date.parse(datetime2)) / 36e5;*/
+	}
+	
+	
 	$.ajax({
 		type: "POST",
 		url: "../rentACar/pretraziVozila",
@@ -131,6 +140,7 @@ function prikaziVozila(vozila) {
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
+		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
 		prikaz.append(noviRed);
 	})
 }
