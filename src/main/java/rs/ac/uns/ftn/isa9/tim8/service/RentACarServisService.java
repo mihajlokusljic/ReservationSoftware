@@ -1,8 +1,13 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,11 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
+import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
@@ -316,5 +326,116 @@ public class RentACarServisService {
 
 		filijalaRepository.save(f);
 		return null;
+	}
+
+	public Collection<Poslovnica> pretraziRac(PretragaRacDTO kriterijumiPretrage) throws NevalidniPodaciException{
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			if (!kriterijumiPretrage.getDatumDolaska().equals("") && kriterijumiPretrage.getDatumDolaska() != null) {
+				pocetniDatum = df.parse(kriterijumiPretrage.getDatumDolaska());
+			}
+
+			if (!kriterijumiPretrage.getDatumOdlaska().equals("") && kriterijumiPretrage.getDatumOdlaska() != null) {
+				krajnjiDatum = df.parse(kriterijumiPretrage.getDatumOdlaska());
+			}
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		// inicijalno su svi servisi u rezultatu
+		Collection<RentACarServis> rezultat = this.rentACarRepository.findAll();
+		
+		if (kriterijumiPretrage.getNazivRacIliDestinacije().isEmpty() && pocetniDatum == null && krajnjiDatum == null) {
+			Collection<Poslovnica> p = new ArrayList<>();
+			for (RentACarServis r:rezultat) {
+				p.add(new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
+			}
+			
+			return p;
+		}
+		
+		// odbacujemo servise koji ne zadovoljavaju naziv ili lokaciju
+		Iterator<RentACarServis> it = rezultat.iterator();
+		RentACarServis tekuciRac;
+
+		while (it.hasNext()) {
+			tekuciRac = it.next();
+			if (!tekuciRac.getNaziv().toUpperCase()
+					.contains(kriterijumiPretrage.getNazivRacIliDestinacije().toUpperCase())
+					&& !tekuciRac.getAdresa().getPunaAdresa().toUpperCase()
+							.contains(kriterijumiPretrage.getNazivRacIliDestinacije().toUpperCase())) {
+				it.remove();
+			}
+		}
+	
+		
+		// odbacujemo servise koji ne sadrze nijedno vozilo
+		List<Vozilo> raspolozivaVozila;
+		it = rezultat.iterator();
+		boolean ukloniRac;
+		
+		while (it.hasNext()) {
+			tekuciRac = it.next();
+			ukloniRac = false;
+			raspolozivaVozila = this.slobodnaVozila(tekuciRac, pocetniDatum, krajnjiDatum);
+
+			if (raspolozivaVozila.size()==0) {
+				ukloniRac = true;
+			}
+			else {
+				ukloniRac = false;
+			}
+
+			if (ukloniRac) {
+				it.remove();
+			}
+		}
+		Collection<Poslovnica> p = new ArrayList<>();
+		for (RentACarServis r:rezultat) {
+			p.add(new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
+		}
+		
+		return p;
+	}
+
+	private List<Vozilo> slobodnaVozila(RentACarServis rac, Date pocetniDatum, Date krajnjiDatum) {
+		List<Vozilo> rezultat = new ArrayList<Vozilo>();
+		Date trenutniDatum = new Date();
+		boolean dodajVozilo = true;
+		
+		for (Vozilo voz : rac.getVozila()) {
+			
+			if (pocetniDatum == null || krajnjiDatum == null) {
+				rezultat.add(voz);
+				continue;
+			}	
+			
+			else if (trenutniDatum.after(pocetniDatum) || trenutniDatum.after(krajnjiDatum) || pocetniDatum.after(krajnjiDatum)) {
+				dodajVozilo = false;
+				break;
+			}
+			
+			for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+				
+							
+				if(!pocetniDatum.after(r.getDatumPreuzimanjaVozila()) && !r.getDatumVracanjaVozila().after(krajnjiDatum)) {
+					dodajVozilo = false;
+					break;
+				}
+				
+				else {
+					dodajVozilo = true;
+					break;
+				}
+			}
+			
+			if (dodajVozilo) {
+				rezultat.add(voz);
+			}
+		}
+		return rezultat;
+		
 	}
 }

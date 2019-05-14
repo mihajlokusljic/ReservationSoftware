@@ -33,7 +33,6 @@ public class Aviokompanija extends Poslovnica {
 	@Column(name = "cijena_prtljaga_komad", nullable = false)
 	protected double cijenaPrtljagaKomad;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Avion> avioni;
 

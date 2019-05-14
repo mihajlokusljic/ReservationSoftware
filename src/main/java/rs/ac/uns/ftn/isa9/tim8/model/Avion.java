@@ -37,6 +37,7 @@ public class Avion {
 	@OneToMany(mappedBy = "avion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Sjediste> sjedista;
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "aviokompanija_id")
 	protected Aviokompanija aviokompanija;

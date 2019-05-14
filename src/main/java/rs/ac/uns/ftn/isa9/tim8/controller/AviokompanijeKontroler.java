@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,8 +38,17 @@ public class AviokompanijeKontroler {
 		return new ResponseEntity<Collection<Aviokompanija>>(servis.dobaviAviokompanije(),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/dobavi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> dobaviAviokompaniju(@PathVariable("id") Long aviokompanijaId) {
+		try {
+			return new ResponseEntity<Aviokompanija>(servis.dobaviAviokompaniju(aviokompanijaId), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
-	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAviokompaniju(@RequestBody Aviokompanija novaAviokompanija) {
 		try {
 			return new ResponseEntity<Aviokompanija>(servis.dodajAviokompaniju(novaAviokompanija),HttpStatus.OK);
