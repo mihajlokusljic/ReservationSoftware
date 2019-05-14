@@ -17,18 +17,17 @@ import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 @RestController
 @RequestMapping(value = "/korisnik")
 public class KorisnikKontroler {
-	
+
 	@Autowired
 	protected KorisnikService korisnikService;
-	
+
 	@RequestMapping(value = "/getInfo", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> getUserData() {
 		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<KorisnikDTO>(
-				new KorisnikDTO(o.getId(),o.getIme(), o.getPrezime(), o.getEmail(), o.getLozinka(), o.getBrojTelefona(), o.getAdresa()),
-				HttpStatus.OK);
+		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
+				o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena()), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/izmjeniProfil", method = RequestMethod.PUT)
 	public ResponseEntity<?> izmjeniProfilKorisnika(@RequestBody KorisnikDTO noviPodaci) {
 		try {
@@ -37,6 +36,5 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
 
 }

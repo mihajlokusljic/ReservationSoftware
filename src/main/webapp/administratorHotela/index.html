@@ -32,7 +32,7 @@
         <div class="wrapper wrapper--w1050">
             <div class="card card-3">
                 <div class="card-body">
-                    <ul class="tab-list">
+                    <ul class="tab-list" id="meni">
                     	<li class="dropdown active" id ="stavkaUredjivanjeHotela">
                     		<a class="tab-list__link" data-toggle="dropdown" id ="uredjivanjeHotela">Uređivanje hotela</a>
                     		<ul class="dropdown-content">
@@ -312,9 +312,13 @@
                         	<!-- Izmjena lozinke administratora hotela -->
                         	<div class="tab-pane" id="tab-profil-lozinka">
                         		<h2 class="zaglavlje">Izmjena lozinke</h2>
+                        		<div id="izmjenaInicijalneLozinkePoruka" hidden="hidden">
+	                        		<h3 style="color: white">Molimo Vas da izmjenite inicijalnu lozinku prije nego što nastavite sa radom.</h3>
+	                        		<h3 style="color: white">&nbsp;</h3>
+                        		</div>
                         		<form id = "forma_lozinka">
                         		    <div class="input-group">
-	                                    <label class="label">Trenutna:</label>
+	                                    <label class="label">Trenutna lozinka:</label>
 	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
 	                                </div>	                                
 	                                <div class="input-group">    
