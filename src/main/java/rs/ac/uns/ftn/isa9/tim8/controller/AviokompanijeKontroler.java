@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
@@ -66,7 +67,12 @@ public class AviokompanijeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-
+	
+	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
+		return new ResponseEntity<KorisnikDTO>(servis.izmjeniProfilAdminaAviokompanije(korisnik), HttpStatus.OK);
+	}
 	
 	/*
 	 SecurityContextHolder - omogucuje koriscenje statickih metoda koje delegiraju izvrsenje instanci SecurityContextHolderStrategy. Svrha ove klase

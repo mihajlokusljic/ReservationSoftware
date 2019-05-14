@@ -67,6 +67,7 @@
                     	
                     	<!-- Lista aviokompanija -->
                     	<div class="tab-pane active" id="tab-aviokompanije">
+                    		
              				<div class="col-4">
                                   <div class="input-group">
                                       <label class = "label">Sortiraj po:</label>
@@ -132,34 +133,63 @@
                         
                         <!-- Lista RAC servisa -->
                     	<div class="tab-pane" id="tab-rac-servisi">
-                    		<div class="col-4">
-                                  <div class="input-group">
-                                      <label class = "label">Sortiraj po:</label>
-                                      <div class="rs-select2 js-select-simple select--no-search">
-                                          <select name="tip_vozila" id = "tip_vozila_input">
-                                              <option selected="selected">Nazivu</option>
-                                              <option>Adresi</option>
-                                          </select>
-                                          <div class="select-dropdown"></div>
-                                      </div>
-                                  </div>
-                             </div>
-                    		 <table>
-								<thead>
-									<tr class="table100-head">
-										<th class="column1">Slika</th>
-										<th class="column1">Naziv</th>
-										<th class="column1">Adresa</th>
-										<th class="column1">Promotivni opis</th>
-										<th class="column1">Ocjena</th>
-										<th class = "column1">Oznaka za pretragu</th>
-										<th class = "column1"></th>
-									</tr>
-								</thead>
-								<tbody id="prikazRacServisa">
-									
-								</tbody>
-							</table>
+	                  	  <form method="POST" action="#" id="racSearchForm" name="pretragaRacForma">
+                    	
+	                    	<div class="input-group">
+	                                    <label class="label">Odredište</label>
+	                                    <input class="input--style-2" type="text" name="address" placeholder="Naziv rent-a-car servisa ili lokacija" id="racNaziv">
+	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Datum dolaska</label>
+	                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-rac">
+	                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Datum odlaska</label>
+	                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-rac">
+	                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            <div class="row row-space">
+		                    		<div class="col-2">
+		                                  <div class="input-group">
+		                                      <label class = "label">Sortiraj po:</label>
+		                                      <div class="rs-select2 js-select-simple select--no-search">
+		                                          <select name="tip_vozila" id = "tip_vozila_input">
+		                                              <option selected="selected">Nazivu</option>
+		                                              <option>Adresi</option>
+		                                          </select>
+	<!-- 	                                          <div class="select-dropdown"></div> -->
+		                                      </div>
+		                                  </div>                                 	
+		                             </div>
+		                         </div>
+		                         <button class="btn-submit" type="submit">Pretraži</button>
+		                         <h1>&nbsp</h1>
+		                         
+	                    		 <table>
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Slika</th>
+											<th class="column1">Naziv</th>
+											<th class="column1">Adresa</th>
+											<th class="column1">Promotivni opis</th>
+											<th class="column1">Ocjena</th>
+											<th class = "column1">Oznaka za pretragu</th>
+											<th class = "column1"></th>
+										</tr>
+									</thead>
+									<tbody id="prikazRacServisa">
+										
+									</tbody>
+								</table>
+							</form>
                     	</div>
                     
                     	<!-- Istorija rezervacija -->
