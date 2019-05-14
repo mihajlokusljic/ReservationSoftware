@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
+import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
@@ -158,5 +162,23 @@ public class RentACarKontroler {
 		
 		return new ResponseEntity<Collection<Poslovnica> >(servisi, HttpStatus.OK);
 		
+	}
+	
+	@RequestMapping(value = "/dobavi/{idRac}", method = RequestMethod.GET)
+	public ResponseEntity<?> dobaviRac(@PathVariable("idRac") Long idRac) {
+		try {
+			return new ResponseEntity<RentACarServis>(servis.pronadjiServisPoId(idRac), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/pretraziVozila", method = RequestMethod.POST)
+	public ResponseEntity<?> pretraziVozilaServisa(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<Vozilo> >(this.servis.pretraziVozilaServisa(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 }

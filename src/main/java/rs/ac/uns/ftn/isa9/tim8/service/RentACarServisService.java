@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
@@ -438,4 +440,51 @@ public class RentACarServisService {
 		return rezultat;
 		
 	}
+	
+	public RentACarServis pronadjiServisPoId(Long idRac) throws NevalidniPodaciException {
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idRac);
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		return rac;
+	}
+
+	public Collection<Vozilo> pretraziVozilaServisa(PretragaVozilaDTO kriterijumiPretrage) throws NevalidniPodaciException{
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPretrage.getIdRac());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();		
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPreuzimanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumVracanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		List<Vozilo> slobodnaVozila = slobodnaVozila(rac, pocetniDatum, krajnjiDatum);
+		
+		List<Vozilo> vozilaZaRezervaciju = new ArrayList<Vozilo>();
+		if (slobodnaVozila.isEmpty()) {
+			return vozilaZaRezervaciju;
+		}
+		for (Vozilo vozilo : slobodnaVozila) {
+			if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
+					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika()){
+				vozilaZaRezervaciju.add(vozilo);
+			}
+		}
+		return vozilaZaRezervaciju;
+	}
+	
 }

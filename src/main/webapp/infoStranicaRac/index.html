@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colrolib Templates">
+    <meta name="author" content="Colrolib">
+    <meta name="keywords" content="Colrolib Templates">
+
+    <!-- Title Page-->
+    <title id="title">Rezervacija vozila</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    
+	
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+        <div class="wrapper wrapper--w1050">
+            <div class="card card-3">
+                <div class="card-body">
+                	<h1 id="racNaslov">Naziv rent-a-car servisa</h1>
+                
+                    <ul class="tab-list">
+                        <li class="tab-list__item active">
+                            <a class="tab-list__link" href="#tab-info" data-toggle="tab" id ="info">O nama</a>
+                        </li>
+						<li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-vozila" data-toggle="tab" id = "vozila">Vozila</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="../registrovaniKorisnikPocetna/index.html">Nazad na početnu stranicu</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                    
+                        <div class="tab-pane active" id="tab-info">
+	                        <div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaRac">
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv servisa:</label>
+			                                    <input class="input--style-2" type="text" id="nazivRac" readonly="readonly">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa:</label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" id="adresaRac" readonly="readonly">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Ocjena:</label>
+			                                    <input class="input--style-2" type="text" id="ocjenaRac" readonly="readonly">
+			                                </div>
+		                                </div>
+	                         </div>
+	                         <h2>&nbsp;</h2>
+	                         <div class="input-group">
+		                                    <label class="label">Promotivni opis:</label>
+		                                    <textarea rows="15" cols="10" id="opisRac" readonly="readonly"></textarea>
+		                     </div>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-vozila">
+	                        <form method="POST" action="#" id="pretragaVozilaForm">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum preuzimanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum vraćanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme preuzimanja vozila</label>
+                                            <input class="input--style-2" type="time" name="check-in" placeholder="--:--" id="input-start-time">
+                                            <i class="zmdi zmdi-timer input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme vraćanja vozila</label>
+                                            <input class="input--style-2" type="time" name="check-out" placeholder="--:--" id="input-end-time">
+                                            <i class="zmdi zmdi-timer input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                	<div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Mjesto preuzimanja vozila:</label>
+                                           <div class="rs-select2 js-select-simple select--no-search">
+                                               <select id="mjestoPreuzimanjaSelect">
+                                               </select>
+                                               <div class="select-dropdown"></div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Mjesto vraćanja vozila:</label>
+                                           <div class="rs-select2 js-select-simple select--no-search">
+                                               <select id="mjestoVracanjaSelect">
+                                               </select>
+                                               <div class="select-dropdown"></div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                	<div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Tip vozila:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="tipVozila" id = "tipVozilaSelect">
+                                                    <option value = "Automobil">Automobil</option>
+                                                    <option value = "Kombi">Kombi</option>
+                                                    <option value = "Motocikl">Motocikl</option>
+													<option value = "Minibus">Minibus</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj putnika:</label>
+                                            <input class="input--style-2" type="number" min = "1" id = "brojPutnikaInput" required="required">
+                                        </div>
+                                    </div>
+                                </div>	
+	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodna vozila"/>
+	                        </form>
+	                        <h1>&nbsp</h1>
+	                        <table hidden id="tabelaVozila">
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Naziv</th>
+										<th class="column1">Marka</th>
+										<th class="column1">Model</th>
+										<th class="column1">Godina proizvodnje</th>
+										<th class="column1">Broj sjedista</th>
+										<th class="column1">Tip vozila</th>
+										<th class="column1">Ocjena</th>
+										<th class="column1">Ukupna cijena</th>
+									</tr>
+								</thead>
+								<tbody id="prikazVozila">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-dodatne-usluge">
+	                        <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Naziv</th>
+										<th class = "column1">Opis</th>
+										<th class="column1">Cijena €</th>
+										<th class = "column1">Način plaćanja</th>
+									</tr>
+								</thead>
+								<tbody id="prikazUsluga">
+								</tbody>
+							</table>
+                        </div>
+							
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
+    <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/rac.js"></script>
+    <script src="js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->
