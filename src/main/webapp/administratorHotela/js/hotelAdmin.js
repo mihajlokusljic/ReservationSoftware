@@ -114,6 +114,12 @@ $(document).ready(function(e) {
 		$("#izmjenaSobeForm")[0].reset();
 	});
 	
+	//izmjena profila
+	$("#forma_profil_korisnika").submit(function(e){
+		e.preventDefault();
+		izmjenaProfila();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -295,7 +301,7 @@ function korisnikInfo(){
 		success: function(data){
 			if(data != null){
 				podaciAdmina = data;
-				$("#podaciAdmina").append(data.ime + " " + data.prezime);
+				prikaziPodatkeAdmina();
 			}
 			else{
 				alert("nepostojeci korisnik");
@@ -428,6 +434,50 @@ function brisanjeSobe(idSobe) {
 	});
 }
 
+function izmjenaProfila(){
+	
+	var imeAdmina = $("#imeAdmina").val();
+	if (imeAdmina == ''){
+		alert("Polje za unos imena ne moze biti prazno.");
+		return;
+	}
+	var prezimeAdmina = $("#prezimeAdmina").val();
+	if (prezimeAdmina == ''){
+		alert("Polje za unos prezimena ne moze biti prazno.");
+		return;
+	}
+	var brTelefonaAdmina = $("#brTelefonaAdmina").val();
+	if (brTelefonaAdmina == ''){
+		alert("Polje za unos broja telefona ne moze biti prazno.");
+		return;
+	}
+	var adresaAdmina = $("#adresaAdmina").val();
+	if (adresaAdmina == ''){
+		alert("Polje za unos adrese ne moze biti prazno.");
+		return;
+	}		
+
+	let admin = {
+			id: podaciAdmina.id,
+			email: podaciAdmina.email,
+			ime: imeAdmina,
+			prezime: prezimeAdmina,
+			brojTelefona: brTelefonaAdmina,
+			adresa: { punaAdresa : adresaAdmina }
+	};
+	$.ajax({
+		type:"PUT",
+		url:"../korisnik/izmjeniProfil",
+		contentType : "application/json; charset=utf-8",
+		data:JSON.stringify(admin),
+		success:function(response){
+			alert("Uspjesno ste izmjenili profil.");
+			podaciAdmina = response;
+			prikaziPodatkeAdmina();
+		},
+	});
+}
+
 function prikaziUsluge(usluge) {
 	$.each(usluge, function(i, usluga) {
 		prikaziUslugu(usluga);
@@ -449,6 +499,14 @@ function prikaziPodatkeHotela() {
 	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
 	$("#opisHotela").val(podaciHotela.promotivniOpis);
 	$("#slikaHotela").attr("src", defaultSlika);
+}
+
+function prikaziPodatkeAdmina() {
+	$("#emailAdmina").val(podaciAdmina.email);
+	$("#imeAdmina").val(podaciAdmina.ime);
+	$("#prezimeAdmina").val(podaciAdmina.prezime);
+	$("#brTelefonaAdmina").val(podaciAdmina.brojTelefona);
+	$("#adresaAdmina").val(podaciAdmina.adresa.punaAdresa);
 }
 
 function odjava() {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class KorisnikKontroler {
 	}
 	
 	@RequestMapping(value = "/izmjeniProfil", method = RequestMethod.PUT)
-	public ResponseEntity<?> izmjeniProfilKorisnika(KorisnikDTO noviPodaci) {
+	public ResponseEntity<?> izmjeniProfilKorisnika(@RequestBody KorisnikDTO noviPodaci) {
 		try {
 			return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniPorfilKorisnika(noviPodaci), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
