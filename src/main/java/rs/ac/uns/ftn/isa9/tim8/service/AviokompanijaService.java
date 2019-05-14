@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
@@ -47,7 +48,7 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
-	
+
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
 		Aviokompanija avio = aviokompanijaRepository.findOneByNaziv(novaAviokompanija.getNaziv());
@@ -134,21 +135,20 @@ public class AviokompanijaService {
 		if (destinacije.size() < 2) {
 			throw new NevalidniPodaciException("Ne postoje makar dvije destinacije definisane za datu aviokompaniju.");
 		}
-		
+
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 		Date datumPoletanjaAviona = null;
 		Date datumSletanjaAviona = null;
 		Date datumPovratkaAviona = null;
-		
+
 		try {
-			 datumPoletanjaAviona = df.parse(letDTO.getDatumPoletanja());
-			 datumSletanjaAviona = df.parse(letDTO.getDatumSletanja());
-			 datumPovratkaAviona = df.parse(letDTO.getDuzinaPutovanja());
+			datumPoletanjaAviona = df.parse(letDTO.getDatumPoletanja());
+			datumSletanjaAviona = df.parse(letDTO.getDatumSletanja());
+			datumPovratkaAviona = df.parse(letDTO.getDuzinaPutovanja());
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
-		
-		
+
 		if (datumSletanjaAviona.before(datumPoletanjaAviona)) {
 			throw new NevalidniPodaciException("Datum poletanja mora biti prije datuma sletanja");
 		}
@@ -215,7 +215,7 @@ public class AviokompanijaService {
 		let.setBrojLeta(letDTO.getBrojLeta());
 		let.setDatumPoletanja(datumPoletanjaAviona);
 		let.setDatumSletanja(datumSletanjaAviona);
-		let.setDuzinaPutovanja(datumPovratkaAviona);		
+		let.setDuzinaPutovanja(datumPovratkaAviona);
 		let.setCijenaKarte(letDTO.getCijenaKarte());
 		let.setPolaziste(polazna);
 		let.setOdrediste(odredisna);
@@ -375,7 +375,7 @@ public class AviokompanijaService {
 			throw new NevalidniPodaciException("Vec postoji aviokompanija sa zadatim nazivom.");
 		}
 	}
-	
+
 	public void validirajAdresu(Adresa adresa) throws NevalidniPodaciException {
 		if (adresa == null) {
 			throw new NevalidniPodaciException("Adresa hotela mora biti zadata.");
@@ -388,74 +388,75 @@ public class AviokompanijaService {
 			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
 		}
 	}
-	
+
 	public Aviokompanija izmjeniAviokompaniju(Aviokompanija noviPodaciZaAviokompaniju) throws NevalidniPodaciException {
-		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		Aviokompanija target = admin.getAviokompanija();
-		
+
 		if (target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao administrator aviokompanije.");
 		}
-		
+
 		if (noviPodaciZaAviokompaniju.getNaziv() == null) {
 			throw new NevalidniPodaciException("Naziv aviokompanije mora biti zadat.");
 		}
-		
+
 		if (!noviPodaciZaAviokompaniju.getNaziv().equals(target.getNaziv())) {
 			this.validirajAviokompaniju(noviPodaciZaAviokompaniju);
 			target.setNaziv(noviPodaciZaAviokompaniju.getNaziv());
 		}
-		
+
 		Adresa staraAdresa = null;
 		Adresa novaAdresa = noviPodaciZaAviokompaniju.getAdresa();
-		
+
 		if (novaAdresa == null) {
 			throw new NevalidniPodaciException("Adresa aviokompanije mora biti zadata.");
 		}
-		
+
 		if (!novaAdresa.getPunaAdresa().equals(target.getAdresa().getPunaAdresa())) {
 			validirajAdresu(novaAdresa);
 			staraAdresa = target.getAdresa();
 			target.setAdresa(novaAdresa);
 		}
-		
+
 		target.setPromotivniOpis(noviPodaciZaAviokompaniju.getPromotivniOpis());
 		this.aviokompanijaRepository.save(target);
-		
+
 		if (staraAdresa != null) {
 			// Oslobadjanje stare adrese
 			this.adresaRepository.delete(staraAdresa);
 		}
-		
+
 		return target;
-		
+
 	}
 
 	public KorisnikDTO izmjeniProfilAdminaAviokompanije(KorisnikDTO korisnik) {
 		Optional<Osoba> pretragaOsoba = korisnikRepository.findById(korisnik.getId());
-		
+
 		if (!pretragaOsoba.isPresent()) {
 			return null;
 		}
-		
+
 		Osoba o = pretragaOsoba.get();
-		
+
 		o.setIme(korisnik.getIme());
 		o.setPrezime(korisnik.getPrezime());
 		o.setBrojTelefona(korisnik.getBrojTelefona());
 		o.setAdresa(korisnik.getAdresa());
 		korisnikRepository.save(o);
 		return korisnik;
-		
+
 	}
-	
+
 	public Osoba vratiKorisnikaPoTokenu(String token) {
 		return korisnikRepository.findByToken(token);
 	}
 
 	public Aviokompanija dobaviAviokompaniju(Long aviokompanijaId) throws NevalidniPodaciException {
 		Optional<Aviokompanija> aviokompanijaSearch = this.aviokompanijaRepository.findById(aviokompanijaId);
-		if(!aviokompanijaSearch.isPresent()) {
+		if (!aviokompanijaSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em.");
 		}
 		return aviokompanijaSearch.get();
@@ -463,10 +464,35 @@ public class AviokompanijaService {
 
 	public Collection<Let> dobaviLetoveAviokompanije(Long aviokompanijaId) throws NevalidniPodaciException {
 		Optional<Aviokompanija> aviokompanijaSearch = this.aviokompanijaRepository.findById(aviokompanijaId);
-		if(!aviokompanijaSearch.isPresent()) {
+		if (!aviokompanijaSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em.");
 		}
 		return aviokompanijaSearch.get().getLetovi();
+	}
+
+	public Collection<Aviokompanija> pretraziAviokompanije(PretragaAviokompanijaDTO kriterijumPretrage)
+			throws NevalidniPodaciException {
+		// inicijalno su sve aviokompanije u rezultatu
+		Collection<Aviokompanija> rezultat = this.aviokompanijaRepository.findAll();
+		
+		if (kriterijumPretrage.getNazivAviokompanije().equals("")) {
+			return rezultat;
+		}
+		
+		// odbacujemo aviokompanije koje ne zadovoljavaju naziv u "contains" smislu
+		Iterator<Aviokompanija> it = rezultat.iterator();
+		Aviokompanija trenutnaAviokompanija;
+
+		while (it.hasNext()) {
+			trenutnaAviokompanija = it.next();
+
+			if (!trenutnaAviokompanija.getNaziv().toUpperCase()
+					.contains(kriterijumPretrage.getNazivAviokompanije().toUpperCase())) {
+				it.remove();
+			}
+		}
+
+		return rezultat;
 	}
 
 }
