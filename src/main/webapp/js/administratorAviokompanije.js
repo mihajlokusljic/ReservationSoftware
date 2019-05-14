@@ -77,7 +77,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		profilKorisnika();
 	});
 	
 	$("#promjeni_lozinku_tab").click(function(e){
@@ -89,7 +90,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
 		$("#tab-profilAviokompanije").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		promjeniLozinku();
 	});
 	
 	$("#profilAviokomp").click(function(e){
@@ -634,11 +636,11 @@ function popuniListuZaAvione(avioni) {
 }
 
 function profilKorisnika(){
-	$("#emailAdmina").val(korisnik.email);
-	$("#imeAdmina").val(korisnik.ime);
-	$("#prezimeAdmina").val(korisnik.prezime);
-	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
-	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
+	$("#emailAdmina").val(podaciAdmina.email);
+	$("#imeAdmina").val(podaciAdmina.ime);
+	$("#prezimeAdmina").val(podaciAdmina.prezime);
+	$("#brTelefonaAdmina").val(podaciAdmina.brojTelefona);
+	$("#adresaAdmina").val(podaciAdmina.adresa.punaAdresa);
 	
 	$("#forma_profil_korisnika").unbind().submit(function(e){
 		e.preventDefault();
@@ -664,11 +666,11 @@ function profilKorisnika(){
 		}		
 
 		let admin = {
-				id: korisnik.id,
+				id: podaciAdmina.id,
 				ime: imeAdmina,
-				prezime: korisnik.prezime,
-				email: korisnik.email,
-				lozinka: korisnik.lozinka,
+				prezime: podaciAdmina.prezime,
+				email: podaciAdmina.email,
+				lozinka: podaciAdmina.lozinka,
 				brojTelefona: brTelefonaAdmina,
 				adresa: { punaAdresa : adresaAdmina }
 		};
@@ -680,11 +682,11 @@ function profilKorisnika(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
-					alert("Izmjena nije uspjela");
+					alert("Izmjena nije uspjela.");
 				}
 				else{
-					alert("Uspjesno ste izmjenili profil.");
-					korisnik = response;
+					alert("Uspješno ste izmjenili profil.");
+					podaciAdmina = response;
 					profilKorisnika();
 				}
 				
