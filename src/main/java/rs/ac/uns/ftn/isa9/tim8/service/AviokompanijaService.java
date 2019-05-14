@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
@@ -22,9 +23,11 @@ import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
+import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
 
 @Service
@@ -42,6 +45,9 @@ public class AviokompanijaService {
 	@Autowired
 	protected AvionRepository avionRepository;
 
+	@Autowired
+	protected KorisnikRepository korisnikRepository;
+	
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
 		Aviokompanija avio = aviokompanijaRepository.findOneByNaziv(novaAviokompanija.getNaziv());
@@ -423,6 +429,28 @@ public class AviokompanijaService {
 		
 		return target;
 		
+	}
+
+	public KorisnikDTO izmjeniProfilAdminaAviokompanije(KorisnikDTO korisnik) {
+		Optional<Osoba> pretragaOsoba = korisnikRepository.findById(korisnik.getId());
+		
+		if (!pretragaOsoba.isPresent()) {
+			return null;
+		}
+		
+		Osoba o = pretragaOsoba.get();
+		
+		o.setIme(korisnik.getIme());
+		o.setPrezime(korisnik.getPrezime());
+		o.setBrojTelefona(korisnik.getBrojTelefona());
+		o.setAdresa(korisnik.getAdresa());
+		korisnikRepository.save(o);
+		return korisnik;
+		
+	}
+	
+	public Osoba vratiKorisnikaPoTokenu(String token) {
+		return korisnikRepository.findByToken(token);
 	}
 
 	public Aviokompanija dobaviAviokompaniju(Long aviokompanijaId) throws NevalidniPodaciException {

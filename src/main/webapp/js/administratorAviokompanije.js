@@ -20,6 +20,92 @@ $(document).ready(function() {
 	ucitajAvione();
 	ucitajLetove();
 	
+	$("#destinacije").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").show();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#avioni").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").show();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#letovi").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").show();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();	
+	});
+
+	$("#izvjestaj").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").show();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();	
+	});
+
+	$("#izmjeni_podatke_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").show();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();
+		profilKorisnika();
+	});
+	
+	$("#promjeni_lozinku_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").show();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-odjava").hide();
+		promjeniLozinku();
+	});
+	
+	$("#profilAviokomp").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").show();
+		$("#tab-odjava").hide();	
+	});
+	
 	$("#administratorAviokompanijeDestinacijeForm").submit(function(e) {
 		e.preventDefault();
 				
@@ -547,6 +633,106 @@ function popuniListuZaAvione(avioni) {
 				+ '</option>');
 	});
 	
+}
+
+function profilKorisnika(){
+	$("#emailAdmina").val(podaciAdmina.email);
+	$("#imeAdmina").val(podaciAdmina.ime);
+	$("#prezimeAdmina").val(podaciAdmina.prezime);
+	$("#brTelefonaAdmina").val(podaciAdmina.brojTelefona);
+	$("#adresaAdmina").val(podaciAdmina.adresa.punaAdresa);
+	
+	$("#forma_profil_korisnika").unbind().submit(function(e){
+		e.preventDefault();
+		var imeAdmina = $("#imeAdmina").val();
+		if (imeAdmina == ''){
+			alert("Polje za unos imena ne moze biti prazno.");
+			return;
+		}
+		var prezimeAdmina = $("#prezimeAdmina").val();
+		if (prezimeAdmina == ''){
+			alert("Polje za unos prezimena ne moze biti prazno.");
+			return;
+		}
+		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
+		if (brTelefonaAdmina == ''){
+			alert("Polje za unos broja telefona ne moze biti prazno.");
+			return;
+		}
+		var adresaAdmina = $("#adresaAdmina").val();
+		if (adresaAdmina == ''){
+			alert("Polje za unos adrese ne moze biti prazno.");
+			return;
+		}		
+
+		let admin = {
+				id: podaciAdmina.id,
+				ime: imeAdmina,
+				prezime: podaciAdmina.prezime,
+				email: podaciAdmina.email,
+				lozinka: podaciAdmina.lozinka,
+				brojTelefona: brTelefonaAdmina,
+				adresa: { punaAdresa : adresaAdmina }
+		};
+		$.ajax({
+			type:"POST",
+			url:"../aviokompanije/izmjeniProfilKorisnika",
+			contentType : "application/json; charset=utf-8",
+			data:JSON.stringify(admin),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success:function(response){
+				if (response == ''){
+					alert("Izmjena nije uspjela.");
+				}
+				else{
+					alert("Uspješno ste izmjenili profil.");
+					podaciAdmina = response;
+					profilKorisnika();
+				}
+				
+			},
+		});
+		
+	});
+}
+
+function promjeniLozinku(){
+	$("#forma_lozinka").unbind().submit(function(e){
+		e.preventDefault();
+		var staraLozinka = $("#staraLozinka").val();
+		var novaLozinka = $("#novaLozinka").val();
+		var novaLozinka2 = $("#novaLozinka2").val();
+
+		if (novaLozinka == ''){
+			alert("Niste unijeli novu lozinku");
+			return;
+		}
+		
+		if (novaLozinka != novaLozinka2){
+			alert("Greška. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			return;
+		}
+		
+		
+		$.ajax({
+			type : 'PUT',
+			url : "../auth/changePassword/" + staraLozinka,
+			headers : createAuthorizationTokenHeader("jwtToken"),
+			contentType : "application/json",
+			data : novaLozinka,
+			success : function(data) {
+				if (data == ''){
+					alert("Pogrešna trenutna lozinka.");
+					return;
+				}
+				else{
+					setJwtToken("jwtToken", data.accessToken);
+					alert("Uspjesno ste izmjenili lozinku");	
+				}
+				
+			}
+		});
+	});	
 }
 
 function odjava() {
