@@ -99,10 +99,8 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika) {
 	noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');
 	noviRed.append('<td class="column1">' + podatak.adresa.punaAdresa + '</td>');
-	noviRed.append('<td class="column6">' + podatak.promotivniOpis + '</td>');
 	noviRed.append('<td class="column1">' + ocjena + '</td>');
-	noviRed.append('<td class = "column1"><input type="checkbox" name="class" >');
-	noviRed.append('<td class="column1"><a href = "javascript:void(0)" class = "detaljan_prikaz" id = "' + podatak.id + '">Detaljan prikaz</a></td>');
+	noviRed.append('<td class="column1"><a href="../infoStranicaRac/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
 
 	tabelaZaPrikaz.append(noviRed);
 }
