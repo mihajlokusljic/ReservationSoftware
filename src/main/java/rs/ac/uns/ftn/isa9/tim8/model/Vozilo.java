@@ -55,6 +55,7 @@ public class Vozilo {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "rent_a_car_servis_id")
+	@JsonIgnore
 	protected RentACarServis rentACar;
 	
 	@Column(name = "broj_ocjena", nullable = false)

@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "rezervacija_vozila")
 public class RezervacijaVozila {
@@ -49,6 +51,7 @@ public class RezervacijaVozila {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rent_a_car_servis_id")
+	@JsonIgnore
 	protected RentACarServis rentACarServis;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
