@@ -502,23 +502,8 @@ public class AviokompanijaService {
 		return rezultat;
 	}
 
-	public void validirajUslugu(UslugaDTO novaUsluga) throws NevalidniPodaciException {
-		if (novaUsluga.getNaziv() == null || novaUsluga.getNaziv().equals("")) {
-			throw new NevalidniPodaciException("Naziv usluge mora biti zadat.");
-		}
-		if (novaUsluga.getCijena() < 0) {
-			throw new NevalidniPodaciException("Cijena usluge ne smije biti negativna.");
-		}
-		if (novaUsluga.getProcenatPopusta() < 0) {
-			throw new NevalidniPodaciException("Popust koji se ostvaruje uslugom ne smije biti negativan.");
-		}
-		if (NacinPlacanjaUsluge.getValue(novaUsluga.getNacinPlacanjaId()) == null) {
-			throw new NevalidniPodaciException("Nevalidan nacin placanja usluge.");
-		}
-	}
 
 	public Usluga dodajUsluguAviokompanije(UslugaDTO novaUsluga) throws NevalidniPodaciException {
-		validirajUslugu(novaUsluga);
 
 		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(novaUsluga.getIdPoslovnice());
 

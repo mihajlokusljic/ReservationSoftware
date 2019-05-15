@@ -65,6 +65,9 @@
 						<li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-profilAviokompanije" data-toggle="tab" id = "profilAviokomp">Profil aviokompanije</a>
                         </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id = "dodatneUsluge">Dodatne usluge</a>
+                        </li>
 						<li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
                         </li>
@@ -600,6 +603,41 @@
 	                                </div>
 	                        </form>
                         </div>
+                        
+                       	<div class="tab-pane" id="tab-dodatne-usluge">
+	                        <form method="POST" action="#" id="dodavanjeDodatneUslugeForm">
+	                                <div class="input-group">
+	                                    <label class="label">Tip prtljaga:</label>
+	                                    <input class="input--style-2" type="text" placeholder="Unesite naziv tipa prtljaga" required="required" id="nazivUslugeUnos">
+	                                </div>
+	                              	<div class="input-group">
+	                                    <label class="label">Cijena:</label>
+	                                   	<input class="input--style-2" type="number" min="0" step="0.01" placeholder="Unesite baznu cijunu usluge" required="required" id="cijenaUslugeUnos">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Procenat popusta:</label>
+	                                    <input class="input--style-2" type="number" min="0" max="100" placeholder="Unesite popust na ukupnu cijenu prtljaga koji se ostvaruje izborom ove usluge" required="required" id="popustUslugeUnos">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Detaljan opis usluge:</label>
+	                                    <textarea rows="10" cols="5" id="opisUslugeUnos"></textarea>
+	                                </div>
+	                                <input type="submit" class="btn btn-submit" value="Dodaj uslugu"/>
+	                        </form>
+	                        <h1>&nbsp</h1>
+	                        <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Tip prtljaga</th>
+										<th class="column6">Cijena</th>
+										<th class = "column1">Opis</th>
+									</tr>
+								</thead>
+								<tbody id="prikazUsluga">
+								</tbody>
+							</table>
+                        </div>
+                        
 						<div class="tab-pane" id="tab-odjava">
                             
                         </div>
