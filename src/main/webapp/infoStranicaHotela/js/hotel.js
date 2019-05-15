@@ -122,3 +122,28 @@ function prikaziSobe(sobe) {
 		prikaz.append(noviRed);
 	})
 }
+
+function inicijalizujMapu() {
+	var coords = [61.79, 34.36];
+	var myGeocoder = ymaps.geocode(podaciHotela.adresa.punaAdresa);
+	var myPlacemark = null;
+	myGeocoder.then(
+		    function (res) {
+		        //alert('Object coordinates:' + res.geoObjects.get(0).geometry.getCoordinates());
+				coords = res.geoObjects.get(0).geometry.getCoordinates();
+				var myPlacemark = new ymaps.Placemark(coords, {balloonContentBody: podaciHotela.naziv});
+				var myMap = new ymaps.Map('mapa', {
+			        center: coords,
+			        zoom: 16,
+			        controls: []
+			    });
+				myMap.geoObjects.add(myPlacemark);
+				myMap.controls.add('typeSelector');
+		    },
+		    function (err) {
+		        console.log('Error');
+		    }
+	);
+}
+
+ymaps.ready(inicijalizujMapu);

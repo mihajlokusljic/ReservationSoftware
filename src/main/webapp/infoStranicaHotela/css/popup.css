@@ -1,7 +1,6 @@
 /* Popup box BEGIN */
 .hover_bkgr_fricc{
     background:rgba(0,0,0,.4);
-    cursor:pointer;
     display:none;
     height:100%;
     position:fixed;
@@ -20,13 +19,12 @@
     box-shadow: 10px 10px 60px #555;
     display: inline-block;
     width: 80%;
-    height: auto;
-    min-height: 100px;
+    min-width: 200px;
+    height: 80%;
     vertical-align: middle;
-    width: 60%;
     position: relative;
     border-radius: 8px;
-    padding: 15px 5%;
+    padding: 15px;
 }
 .popupCloseButton {
     background-color: #fff;
@@ -50,9 +48,6 @@
 }
 .trigger_popup_fricc {
     cursor: pointer;
-    font-size: 20px;
-    margin: 20px;
     display: inline-block;
-    font-weight: bold;
 }
 /* Popup box BEGIN */
