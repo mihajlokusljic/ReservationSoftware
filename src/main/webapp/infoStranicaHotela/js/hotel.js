@@ -22,6 +22,7 @@ $(document).ready(function(e) {
 	
 	
 	ucitajPodatkeHotela();
+	ymaps.ready(inicijalizujMapu);
 	
 	$("#pretragaSobaForm").submit(function(e) {
 		e.preventDefault();
@@ -146,4 +147,3 @@ function inicijalizujMapu() {
 	);
 }
 
-ymaps.ready(inicijalizujMapu);

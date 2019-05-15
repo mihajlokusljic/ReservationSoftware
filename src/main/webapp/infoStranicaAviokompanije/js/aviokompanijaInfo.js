@@ -138,9 +138,8 @@ function ucitajPodatkeAviokompanije() {
 			prikaziPodatkeAviokompanije();
 			prikaziDestinacije();
 			prikaziAvione();
-			//ucitajLetove();
 			prikaziCjenovnikPrtljaga();
-			
+			ymaps.ready(inicijalizujMape);
 		},
 	});
 
@@ -242,4 +241,27 @@ function prikaziCjenovnikPrtljaga() {
 		noviRed.append('<td class="column1">' + prtljag.cijena + '</td>');
 		tabela.append(noviRed);
 	});
+}
+
+function inicijalizujMape() {
+	var coords = [61.79, 34.36];
+	var myGeocoder = ymaps.geocode(podaciAviokompanije.adresa.punaAdresa);
+	var myPlacemark = null;
+	myGeocoder.then(
+		    function (res) {
+		        //alert('Object coordinates:' + res.geoObjects.get(0).geometry.getCoordinates());
+				coords = res.geoObjects.get(0).geometry.getCoordinates();
+				var myPlacemark = new ymaps.Placemark(coords, {balloonContentBody: podaciAviokompanije.naziv});
+				var myMap = new ymaps.Map('mapa', {
+			        center: coords,
+			        zoom: 16,
+			        controls: []
+			    });
+				myMap.geoObjects.add(myPlacemark);
+				myMap.controls.add('typeSelector');
+		    },
+		    function (err) {
+		        console.log('Error');
+		    }
+	);
 }
