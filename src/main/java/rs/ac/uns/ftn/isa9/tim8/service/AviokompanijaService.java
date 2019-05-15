@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
@@ -24,12 +25,15 @@ import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
+import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
 public class AviokompanijaService {
@@ -48,6 +52,9 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
+
+	@Autowired
+	protected UslugeRepository uslugeRepository;
 
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
@@ -474,11 +481,11 @@ public class AviokompanijaService {
 			throws NevalidniPodaciException {
 		// inicijalno su sve aviokompanije u rezultatu
 		Collection<Aviokompanija> rezultat = this.aviokompanijaRepository.findAll();
-		
+
 		if (kriterijumPretrage.getNazivAviokompanije().equals("")) {
 			return rezultat;
 		}
-		
+
 		// odbacujemo aviokompanije koje ne zadovoljavaju naziv u "contains" smislu
 		Iterator<Aviokompanija> it = rezultat.iterator();
 		Aviokompanija trenutnaAviokompanija;
@@ -493,6 +500,50 @@ public class AviokompanijaService {
 		}
 
 		return rezultat;
+	}
+
+	public void validirajUslugu(UslugaDTO novaUsluga) throws NevalidniPodaciException {
+		if (novaUsluga.getNaziv() == null || novaUsluga.getNaziv().equals("")) {
+			throw new NevalidniPodaciException("Naziv usluge mora biti zadat.");
+		}
+		if (novaUsluga.getCijena() < 0) {
+			throw new NevalidniPodaciException("Cijena usluge ne smije biti negativna.");
+		}
+		if (novaUsluga.getProcenatPopusta() < 0) {
+			throw new NevalidniPodaciException("Popust koji se ostvaruje uslugom ne smije biti negativan.");
+		}
+		if (NacinPlacanjaUsluge.getValue(novaUsluga.getNacinPlacanjaId()) == null) {
+			throw new NevalidniPodaciException("Nevalidan nacin placanja usluge.");
+		}
+	}
+
+	public Usluga dodajUsluguAviokompanije(UslugaDTO novaUsluga) throws NevalidniPodaciException {
+		validirajUslugu(novaUsluga);
+
+		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(novaUsluga.getIdPoslovnice());
+
+		if (!aviokompanijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-jem.");
+		}
+
+		Aviokompanija aviokompanija = aviokompanijaSearch.get();
+		for (Usluga usluga : aviokompanija.getCjenovnikDodatnihUsluga()) {
+			if (usluga.getNaziv().equals(novaUsluga.getNaziv())) {
+				throw new NevalidniPodaciException("Vec postoji usluga sa zadatim tipom prtljaga.");
+			}
+		}
+
+		NacinPlacanjaUsluge nacinPlacanja = NacinPlacanjaUsluge.FIKSNO_PO_OSOBI;
+
+		Usluga usluga = new Usluga(novaUsluga.getNaziv(), novaUsluga.getCijena(), novaUsluga.getProcenatPopusta(),
+				nacinPlacanja, novaUsluga.getOpis(), aviokompanija);
+
+		aviokompanija.getCjenovnikDodatnihUsluga().add(usluga);
+		uslugeRepository.save(usluga);
+
+		aviokompanijaRepository.save(aviokompanija);
+
+		return usluga;
 	}
 
 }
