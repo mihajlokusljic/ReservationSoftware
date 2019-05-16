@@ -3,10 +3,8 @@ var korisnik = null;
 var filijale = null;
 
 $(document).ready(function() {
-	korisnikInfo();
 	ucitajPodatkeSistema();
-	dobaviSvaVozilaServisa();
-	ponudiFilijale();
+	korisnikInfo();
 	
 	$("#vozila").click(function(e){
 		e.preventDefault();
@@ -139,6 +137,13 @@ function korisnikInfo(){
 			if(data != null){
 				korisnik = data;
 				alert("Ulogovani ste kao administrator rent-a-car servisa: " + data.ime + " " + data.prezime );
+				if(!korisnik.lozinkaPromjenjena) {
+					izmjenaInicijalneLozinke();
+				}
+				else{
+					dobaviSvaVozilaServisa();
+					ponudiFilijale();
+				}
 			}
 			else{
 				alert("nepostojeci korisnik");
@@ -171,9 +176,10 @@ function ucitajPodatkeSistema(){
 }
 
 function dobaviSvaVozilaServisa(){
+	nazivServisa = rentACarServis.naziv;
 	$.ajax({
 		type: "GET",
-		url: "../rentACar/svaVozilaServisa/" + rentACarServis.naziv,
+		url: "../rentACar/svaVozilaServisa/" + nazivServisa,
 		dataType : "json",
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
@@ -733,7 +739,8 @@ function promjeniLozinku(){
 		var staraLozinka = $("#staraLozinka").val();
 		var novaLozinka = $("#novaLozinka").val();
 		var novaLozinka2 = $("#novaLozinka2").val();
-
+		var lozinkaMijenjana = korisnik.lozinkaPromjenjena;
+		
 		if (novaLozinka == ''){
 			alert("Niste unijeli novu lozinku");
 			return;
@@ -758,7 +765,15 @@ function promjeniLozinku(){
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspjesno ste izmjenili lozinku");	
+					alert("Uspjesno ste izmjenili lozinku");
+					if(!lozinkaMijenjana) {
+						$("#izmjenaInicijalneLozinkePoruka").hide();
+						$("#tab-profil-lozinka").hide();
+						$("#meni").show();					
+						korisnik.lozinkaPromjenjena = true;
+						dobaviSvaVozilaServisa();
+						ponudiFilijale();
+					}
 				}
 				
 			}
@@ -789,4 +804,12 @@ function ponudiFilijale(){
 		}
 	});
 
+}
+
+function izmjenaInicijalneLozinke() {
+	$("#tab-vozila").hide();
+	$("#meni").hide();
+	$("#izmjenaInicijalneLozinkePoruka").show();
+	$("#tab-profil-lozinka").show();
+	promjeniLozinku();
 }
