@@ -419,8 +419,13 @@ function dodajVozilo(){
 				broj_vrata:broj_vrata_v,
 				kilovati:0,
 				cijena_po_danu:cijena_v,
-				filijala: {id : filijala}
+//				filijala: {id : filijala}
 		};
+		
+		if (filijala != null) {
+			let f = { id: filijala};
+			vozilo.filijala = f;
+		}
 		
 		$.ajax({
 			type: "POST",

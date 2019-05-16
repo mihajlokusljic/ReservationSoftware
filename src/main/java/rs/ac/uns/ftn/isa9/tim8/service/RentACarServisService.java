@@ -123,21 +123,33 @@ public class RentACarServisService {
 			return "Ne postoji servis sa unijetim nazivom.";
 		}		
 		
-		Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+		boolean postojiFilijala = true;
+		Filijala filijala = null;
 		
-		if (!pretragaFilijala.isPresent()) {
-			return "Nevalidan id";
+		if (vozilo.getFilijala() == null) {
+			postojiFilijala = false;
 		}
-		
-		Filijala filijala = pretragaFilijala.get();
-		
-		filijala.setBrojVozila(filijala.getBrojVozila()+1);
+		if (postojiFilijala == true) {
+			Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+			
+			if (!pretragaFilijala.isPresent()) {
+				return "Nevalidan id";
+			}
+			
+			filijala = pretragaFilijala.get();
+			filijala.setBrojVozila(filijala.getBrojVozila()+1);
+
+		}
+				
 		vozilo.setRentACar(rentACar);
 		vozilo.setId(null);
 		vozilo.setFilijala(filijala);
 		rentACar.getVozila().add(vozilo);
 		rentACarRepository.save(rentACar);
-		filijalaRepository.save(filijala);
+		if (postojiFilijala) {
+			filijalaRepository.save(filijala);		
+		}
+	
 		
 		return null;
 	}
@@ -235,6 +247,9 @@ public class RentACarServisService {
 			filijala.setBrojVozila(filijala.getBrojVozila()+1);
 			voz.setFilijala(filijala);
 			filijalaRepository.save(filijala);
+		}
+		else if (vozilo.getFilijala().isEmpty()) {
+			voz.setFilijala(filijala);
 		}
 		else if (vozilo.getFilijala() != voz.getFilijala().getAdresa().getPunaAdresa()) {
 			Filijala fil = filijalaRepository.findOneByAdresa(voz.getFilijala().getAdresa());
