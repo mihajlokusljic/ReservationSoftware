@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 
@@ -17,7 +21,7 @@ public class KorisnikService {
 
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
-	
+
 	@Autowired
 	protected AdresaRepository adresaRepository;
 
@@ -28,33 +32,33 @@ public class KorisnikService {
 		} catch (Exception e) {
 			throw new NevalidniPodaciException("Niste ulogovani.");
 		}
-		if(noviPodaci.getIme() == null || noviPodaci.getPrezime() == null) {
+		if (noviPodaci.getIme() == null || noviPodaci.getPrezime() == null) {
 			throw new NevalidniPodaciException("Ime i prezime moraju biti zadati.");
 		}
-		if(noviPodaci.getIme().equals("") || noviPodaci.getPrezime().equals("")) {
+		if (noviPodaci.getIme().equals("") || noviPodaci.getPrezime().equals("")) {
 			throw new NevalidniPodaciException("Ime i prezime moraju biti zadati.");
 		}
-		if(noviPodaci.getAdresa() == null) {
+		if (noviPodaci.getAdresa() == null) {
 			throw new NevalidniPodaciException("Adresa mora biti zadata.");
 		}
-		if(noviPodaci.getAdresa().getPunaAdresa().equals("")) {
+		if (noviPodaci.getAdresa().getPunaAdresa().equals("")) {
 			throw new NevalidniPodaciException("Adresa mora biti zadata.");
 		}
-		
+
 		o.setIme(noviPodaci.getIme());
 		o.setPrezime(noviPodaci.getPrezime());
 		o.setBrojTelefona(noviPodaci.getBrojTelefona());
 		Adresa staraAdresa = null;
-		if(!noviPodaci.getAdresa().getPunaAdresa().equals(o.getAdresa().getPunaAdresa())) {
+		if (!noviPodaci.getAdresa().getPunaAdresa().equals(o.getAdresa().getPunaAdresa())) {
 			staraAdresa = o.getAdresa();
 			Adresa a = this.adresaRepository.findOneByPunaAdresa(noviPodaci.getAdresa().getPunaAdresa());
-			if(a != null) {
+			if (a != null) {
 				throw new NevalidniPodaciException("Zadata adresa je vec zauzeta.");
 			}
 			o.setAdresa(noviPodaci.getAdresa());
 		}
 		korisnikRepository.save(o);
-		if(staraAdresa != null) {
+		if (staraAdresa != null) {
 			adresaRepository.delete(staraAdresa);
 		}
 		return noviPodaci;
@@ -96,5 +100,26 @@ public class KorisnikService {
 		o.setBrojTelefona(korisnik.getBrojTelefona());
 		o.setAdresa(korisnik.getAdresa());
 		korisnikRepository.save(o);
-		return korisnik;	}
+		return korisnik;
+	}
+
+	public Collection<PretragaPrijateljaDTO> dobaviPrijatelje(Long korisnikId) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
+
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
+		}
+
+		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		PretragaPrijateljaDTO dtoObj = null;
+		Collection<PretragaPrijateljaDTO> prijatelji = new HashSet<PretragaPrijateljaDTO>();
+
+		for (RegistrovanKorisnik prijatelj : registrovaniKor.getPrijatelji()) {
+			dtoObj = new PretragaPrijateljaDTO(prijatelj.getId(), prijatelj.getIme(), prijatelj.getPrezime());
+			prijatelji.add(dtoObj);
+		}
+		
+		return prijatelji;
+	}
+
 }

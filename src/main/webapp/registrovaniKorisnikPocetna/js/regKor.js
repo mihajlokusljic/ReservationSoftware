@@ -46,11 +46,13 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
 	});
 	
 	$("#hoteliT").click(function(e){
@@ -59,12 +61,14 @@ $(document).ready(function() {
 		$("#tab-hoteli").show();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
-	});
+		});
 	
 	$("#rentacarT").click(function(e){
 		e.preventDefault();
@@ -72,12 +76,14 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").show();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
-	});
+		});
 	
 	$("#rezervacijeT").click(function(e){
 		e.preventDefault();
@@ -85,25 +91,59 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").show();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
-	});
+		});
 	
-	$("#prijateljiT").click(function(e){
+	$("#pregled_prijatelja_tab").click(function(e){
 		e.preventDefault();
 		$("#tab-aviokompanije").hide();
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").show();
+		$("#pregled-prijatelja-tab").show();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
-	});
+		});
+
+	$("#dodaj_prijatelje_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").show();
+		$("#zahtjevi-prijateljstva-tab").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+		});
+	
+	$("#zahtjevi_prijateljstva_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").show();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+		});
 	
 	$("#pozivniceT").click(function(e){
 		e.preventDefault();
@@ -111,7 +151,9 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").show();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
@@ -124,7 +166,9 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
@@ -138,7 +182,9 @@ $(document).ready(function() {
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
 		$("#tab-rezervacije").hide();
-		$("#tab-prijatelji").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
@@ -179,7 +225,7 @@ $(document).ready(function() {
 		});
 		
 	});
-
+	
 });
 
 function korisnikInfo(){
@@ -329,6 +375,22 @@ function promjeniLozinku(){
 			}
 		});
 	});	
+}
+
+function prikaziPrijatelje(prijatelji) {
+	$.each(prijatelji, function(i, prijatelj) {
+		prikaziPrijatelja(prijatelj);
+	})
+}
+
+function prikaziPrijatelja(prijatelj) {
+	let prijateljiTabela = $("#pregledPrijateljaRows");
+	let noviRed = $("<tr></tr>");
+	noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
+	"</td>");	
+	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
+	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
+	prijateljiTabela.append(noviRed);
 }
 
 function odjava() {

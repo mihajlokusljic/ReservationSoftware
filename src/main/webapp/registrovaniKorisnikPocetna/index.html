@@ -52,6 +52,7 @@
                        	<li class="dropdown">
 	                    	<a class="tab-list__link" href="#tab-prijatelji" data-toggle="dropdown" id = "prijateljiT">Prijatelji</a>
 	                        	<ul class="dropdown-content">
+	                       			<li><a href="#" id = "pregled_prijatelja_tab">Pregled prijatelja</a></li>
 									<li><a href="#" id = "dodaj_prijatelje_tab">Dodaj prijatelje</a></li>
 								  	<li><a href="#" id = "zahtjevi_prijateljstva_tab">Zahtjevi za prijateljstvo</a></li>
 								</ul>
@@ -200,9 +201,38 @@
                     	</div>
                     	
                     	<!-- Lista prijatelja -->
-                    	<div class="tab-pane" id="tab-prijatelji">
-                    		Prijatelji
-                    	</div>
+                        <div class="tab-pane" id="pregled-prijatelja-tab">
+                  			<form method="POST" action="#" id="pregledPrijateljaForm" name="pregledPrijateljaForma">
+                                <div class="input-group">
+                                    <label class="label">Ime i prezime</label>
+                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite ime i prezime prijatelja" id="pregledPrijateljaSearch">
+                                </div>
+                                <button class="btn-submit" type="submit">Pretraži</button>
+                            </form>
+                            
+                            <h1>&nbsp</h1>
+                            
+                            <!-- Tabela za prikaz prijatelja -->
+                            <table>
+							<thead>
+							<tr class="table100-head">
+								<th class="column1">Slika</th>
+								<th class="column1">Ime</th>
+								<th class="column1">Prezime</th>
+							</tr>
+							</thead>
+						<tbody id="pregledPrijateljaRows">
+						</tbody>
+							</table>
+                     	</div>
+                    	
+                    	<div class="tab-pane" id="dodaj-prijatelje-tab">
+                    	DODAJ PRIJATELJE
+                     	</div>
+                     	
+                    	<div class="tab-pane" id="zahtjevi-prijateljstva-tab">
+                    	zahtjevi_prijateljstva_tab
+                     	</div>
                     	
                     	<!-- Pozivnice -->
                     	<div class="tab-pane" id="tab-pozivnice">
