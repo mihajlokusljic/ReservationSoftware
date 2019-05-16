@@ -2,6 +2,10 @@ let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAd
 let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
 let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let mapaAviokompanije = null;
+let mapaHotela = null;
+let mapaRacServisa = null;
+let zoomLevel = 14;
 
 $(document).ready(function(e) {
 	
@@ -132,6 +136,8 @@ function dodavanjeAviokompanije() {
 function dodavanjeHotela() {
 	let _naziv = $("#nazivHotela").val();
 	let _adresa = $("#adresaHotela").val();
+	let _lat = $("#latitudaHotela").val();
+	let _long = $("#longitudaHotela").val();
 	let _opis = $("#promotivniOpisHotela").val();
 	
 	if(_naziv == "") {
@@ -139,9 +145,18 @@ function dodavanjeHotela() {
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju hotela na mapi.");
+		return;
+	}
+	
 	let hotel = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis
 	};
 	
@@ -154,6 +169,8 @@ function dodavanjeHotela() {
 			let selekcioniMeni = $("#hotelAdminaSelect");
 			prikazi(response, tabelaHotela, selekcioniMeni, "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
 			alert("Hotel je uspjesno dodat.");
+			$("#dodavanjeHotelaForm")[0].reset();
+			mapaHotela.geoObjects.removeAll();
 		},
 	});
 }
@@ -287,3 +304,27 @@ function odjava() {
 	removeJwtToken();
 	window.location.replace(pocetnaStrana);
 }
+
+function inicijalizujMape() {
+	let belgradeCoords = [44.7866, 20.4489];
+	mapaHotela = new ymaps.Map('hotelMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaHotela.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaHotela.geoObjects.removeAll();
+		mapaHotela.geoObjects.add(placemark);
+		$("#latitudaHotela").val(coords[0]);
+		$("#longitudaHotela").val(coords[1]);
+	});
+	
+	mapaHotela.controls.add('geolocationControl');
+	mapaHotela.controls.add('typeSelector');
+	mapaHotela.controls.add('zoomControl');
+}
+
+ymaps.ready(inicijalizujMape);
