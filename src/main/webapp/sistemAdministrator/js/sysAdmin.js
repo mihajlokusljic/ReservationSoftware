@@ -4,7 +4,6 @@ let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let mapaAviokompanije = null;
 let mapaHotela = null;
-let mapaRacServisa = null;
 let zoomLevel = 14;
 
 $(document).ready(function(e) {
@@ -104,6 +103,8 @@ function prikaziIzborPoslovnice(idPoslovnice) {
 function dodavanjeAviokompanije() {
 	let _naziv = $("#nazivAviokompanije").val();
 	let _adresa = $("#adresaAviokompanije").val();
+	let _lat = $("#latitudaAviokompanije").val();
+	let _long = $("#longitudaAviokompanije").val();
 	let _opis = $("#opisAviokompanije").val();
 	
 	if(_naziv == "") {
@@ -113,7 +114,11 @@ function dodavanjeAviokompanije() {
 	
 	let aviokompanija = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis,
 			destinacije: [],
 			letovi: [],
@@ -129,6 +134,8 @@ function dodavanjeAviokompanije() {
 			let selekcioniMeni = $("#aviokompanijaAdminaSelect");
 			prikazi(response, tabelaAviokompanija, selekcioniMeni, "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
 			alert("Aviokompanija je uspjesno dodata.");
+			$("#dodavanjeAviokompanijeForm")[0].reset();
+			mapaAviokompanije.geoObjects.removeAll();
 		},
 	});
 }
@@ -325,6 +332,25 @@ function inicijalizujMape() {
 	mapaHotela.controls.add('geolocationControl');
 	mapaHotela.controls.add('typeSelector');
 	mapaHotela.controls.add('zoomControl');
+	
+	mapaAviokompanije = new ymaps.Map('aviokompanijaMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaAviokompanije.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaAviokompanije.geoObjects.removeAll();
+		mapaAviokompanije.geoObjects.add(placemark);
+		$("#latitudaAviokompanije").val(coords[0]);
+		$("#longitudaAviokompanije").val(coords[1]);
+	});
+	
+	mapaAviokompanije.controls.add('geolocationControl');
+	mapaAviokompanije.controls.add('typeSelector');
+	mapaAviokompanije.controls.add('zoomControl');
 }
 
 ymaps.ready(inicijalizujMape);
