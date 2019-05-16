@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;;
 
@@ -76,6 +78,16 @@ public class AviokompanijeKontroler {
 	public ResponseEntity<?> pretragaAviokompanija(@RequestBody PretragaAviokompanijaDTO kriterijumPretrage) {
 		try {
 			return new ResponseEntity<Collection<Aviokompanija> >(servis.pretraziAviokompanije(kriterijumPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/dodajUslugu", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	public ResponseEntity<?> dodajUsluguAviokompanije(@RequestBody UslugaDTO novaUsluga) {
+		try {
+			return new ResponseEntity<Usluga>(servis.dodajUsluguAviokompanije(novaUsluga), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}

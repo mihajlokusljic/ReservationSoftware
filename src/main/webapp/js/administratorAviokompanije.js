@@ -29,6 +29,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
 	});
 	
@@ -41,6 +42,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
 	});
 	
@@ -53,6 +55,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
 	});
 
@@ -65,6 +68,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
 	});
 
@@ -77,6 +81,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
 		profilKorisnika();
 	});
@@ -90,6 +95,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
 		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
 		promjeniLozinku();
 	});
@@ -103,8 +109,27 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").show();
+		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
 	});
+	
+	$("#dodatneUsluge").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").show();
+		$("#tab-odjava").hide();	
+	});
+	
+	$("#dodavanjeDodatneUslugeForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeUsluge();
+	})
 	
 	$("#administratorAviokompanijeDestinacijeForm").submit(function(e) {
 		e.preventDefault();
@@ -727,12 +752,58 @@ function promjeniLozinku(){
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspjesno ste izmjenili lozinku");	
+					alert("Uspješno ste izmjenili lozinku");	
 				}
 				
 			}
 		});
 	});	
+}
+
+function dodavanjeUsluge() {
+	let idAviokompanije = aviokompanija.id;
+	let nazivUsluge = $("#nazivUslugeUnos").val();
+	let cijenaUsluge = $("#cijenaUslugeUnos").val();
+	let popustUsluge = $("#popustUslugeUnos").val();
+	let opisUsluge = $("#opisUslugeUnos").val();
+	if(opisUsluge == undefined) {
+		opisUsluge = "";
+	}
+	
+	let novaUsluga = {
+		idPoslovnice: idAviokompanije,
+		naziv: nazivUsluge,
+		cijena: cijenaUsluge,
+		procenatPopusta: popustUsluge,
+		opis: opisUsluge
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: "../aviokompanije/dodajUslugu",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(novaUsluga),
+		success: function(response) {
+			aviokompanija.cjenovnikDodatnihUsluga.push(response);
+			prikaziUslugu(response);
+			 $('#dodavanjeDodatneUslugeForm')[0].reset();
+		},
+	});
+}
+
+function prikaziUsluge(usluge) {
+	$.each(usluge, function(i, usluga) {
+		prikaziUslugu(usluga);
+	})
+}
+
+function prikaziUslugu(usluga) {
+	let uslugeTabela = $("#prikazUsluga");
+	let noviRed = $("<tr></tr>");
+	noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+	noviRed.append('<td class="column6">' + usluga.cijena + '</td>');
+	noviRed.append('<td class="column1">' + usluga.opis + '</td>');
+	uslugeTabela.append(noviRed);
 }
 
 function odjava() {
