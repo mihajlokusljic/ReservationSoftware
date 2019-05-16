@@ -4,7 +4,8 @@ let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
 let tabovi = ["tab-sobe", "tab-dodatne-usluge", "tab-info-stranica", "tab-brze-rezervacije", "tab-izvjestaji", "tab-profil-kor", "tab-profil-lozinka"];
-
+let mapaHotela = null;
+let zoomLevel = 17;
 
 $(document).ready(function(e) {
 	
@@ -72,7 +73,7 @@ $(document).ready(function(e) {
 	
 	//ucitavanja podataka hotela za koji administrator radi
 	ucitajPodatkeHotela();
-	
+	ymaps.ready(inicijalizujMapu);
 	
 	//dodavanje sobe
 	$("#dodavanjeSobeForm").submit(function(e) {
@@ -98,6 +99,8 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		$("#izmjenaInfoStraniceForm")[0].reset();
 		prikaziPodatkeHotela();
+		postaviMarker([podaciHotela.adresa.latituda, podaciHotela.adresa.longituda]);
+		mapaHotela.setZoom(zoomLevel);
 	});
 	
 	//izmjena podataka sobe
@@ -275,10 +278,17 @@ function dodavanjeUsluge() {
 function izmjenaInfoStranice() {
 	let _naziv = $("#nazivHotela").val();
 	let _adresa = $("#adresaHotela").val();
+	let _lat = $("#latitudaHotela").val();
+	let _long = $("#longitudaHotela").val();
 	let _opis = $("#opisHotela").val();
 	
 	if(_naziv == "") {
 		alert("Naziv aviokompanije mora biti zadat.");
+		return;
+	}
+	
+	if(_lat == "" || _long == "") {
+		alert("Morate zadati lokaciju na mapi (kliknite na link u polju adresa)");
 		return;
 	}
 	
@@ -289,7 +299,11 @@ function izmjenaInfoStranice() {
 	
 	let hotel = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis
 	};
 	
@@ -335,6 +349,7 @@ function ucitajPodatkeHotela() {
 	$.ajax({
 		type: "GET",
 		url: "../hoteli/administriraniHotel",
+		async: false,
 		success: function(response) {
 			if(response != null) {
 				podaciHotela = response;
@@ -558,6 +573,8 @@ function prikaziUslugu(usluga) {
 function prikaziPodatkeHotela() {
 	$("#nazivHotela").val(podaciHotela.naziv);
 	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
+	$("#latitudaHotela").val(podaciHotela.adresa.latituda);
+	$("#longitudaHotela").val(podaciHotela.adresa.longituda);
 	$("#opisHotela").val(podaciHotela.promotivniOpis);
 	$("#slikaHotela").attr("src", defaultSlika);
 }
@@ -573,4 +590,31 @@ function prikaziPodatkeAdmina() {
 function odjava() {
 	removeJwtToken();
 	window.location.replace(pocetnaStrana);
+}
+
+function postaviMarker(koordinate) {
+	var placemark = new ymaps.Placemark(koordinate, {balloonContentBody: podaciHotela.naziv});
+	mapaHotela.geoObjects.removeAll();
+	mapaHotela.geoObjects.add(placemark);
+	mapaHotela.setCenter(koordinate);
+}
+
+function inicijalizujMapu() {
+	var coords = [podaciHotela.adresa.latituda, podaciHotela.adresa.longituda];
+	mapaHotela = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	mapaHotela.controls.add('geolocationControl');
+	mapaHotela.controls.add('typeSelector');
+	mapaHotela.controls.add('zoomControl');
+	postaviMarker(coords);
+	
+	mapaHotela.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(coords);
+		$("#latitudaHotela").val(coords[0]);
+		$("#longitudaHotela").val(coords[1]);
+	});
 }

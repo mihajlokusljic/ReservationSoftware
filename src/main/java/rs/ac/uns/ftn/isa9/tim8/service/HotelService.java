@@ -97,6 +97,8 @@ public class HotelService {
 		if (novaAdresa == null) {
 			throw new NevalidniPodaciException("Adresa hotela mora biti zadata.");
 		}
+		target.getAdresa().setLatituda(novaAdresa.getLatituda());
+		target.getAdresa().setLongituda(novaAdresa.getLongituda());
 		if (!novaAdresa.getPunaAdresa().equals(target.getAdresa().getPunaAdresa())) {
 			validirajAdresu(novaAdresa);
 			staraAdresa = target.getAdresa();

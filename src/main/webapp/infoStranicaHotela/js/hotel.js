@@ -1,5 +1,6 @@
 let podaciHotela = null;
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
+let zoomLevel = 17;
 
 
 $(document).ready(function(e) {
@@ -125,7 +126,7 @@ function prikaziSobe(sobe) {
 }
 
 function inicijalizujMapu() {
-	var coords = [61.79, 34.36];
+	var coords = [44.7866, 20.4489];
 	var myGeocoder = ymaps.geocode(podaciHotela.adresa.punaAdresa);
 	var myPlacemark = null;
 	myGeocoder.then(
@@ -135,7 +136,7 @@ function inicijalizujMapu() {
 				var myPlacemark = new ymaps.Placemark(coords, {balloonContentBody: podaciHotela.naziv});
 				var myMap = new ymaps.Map('mapa', {
 			        center: coords,
-			        zoom: 16,
+			        zoom: zoomLevel,
 			        controls: []
 			    });
 				myMap.geoObjects.add(myPlacemark);
