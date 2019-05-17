@@ -1,8 +1,12 @@
 $(document).ready(function (e) {
-    $(".trigger_popup_fricc").click(function(){
-       $('.hover_bkgr_fricc').show();
-    });
-    $('.popupCloseButton').click(function(){
-        $('.hover_bkgr_fricc').hide();
-    });
+	registerWindowHandlers();
 });
+
+function registerWindowHandlers() {
+	$(".trigger_popup_fricc").click(function(){
+	       $('.hover_bkgr_fricc').show();
+	    });
+	    $('.popupCloseButton').click(function(){
+	        $('.hover_bkgr_fricc').hide();
+	});
+}

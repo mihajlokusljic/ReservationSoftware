@@ -86,8 +86,9 @@
 			                                </div>
 			                                <div class="input-group">
 			                                    <label class="label">Adresa:</label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
 			                                    <input class="input--style-2" type="text" id="adresaAviokompanije" readonly="readonly">
-			                              		<a class="trigger_popup_fricc" data-toggle="tooltip" title="Prikaži na mapi"><i class="material-icons">map</i></a>
+			                              		<a class="trigger_popup_fricc" id="lokacijaAviokompanijePrikaz">Prikaži na mapi</a>
 			                                </div>
 			                                <div class="input-group">
 			                                    <label class="label">Ocjena:</label>
@@ -110,6 +111,7 @@
 									<th class="column3">Slika</th>
 									<th class="column3">Naziv</th>
 									<th class="column3">Adresa</th>
+									<th class="column3">Lokacija</th>
 								</tr>
 							</thead>
 							<tbody id = "prikazDestinacija">
@@ -228,10 +230,10 @@
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
-    <script src="js/popup.js"></script>
     
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
     <script type="text/javascript" src="js/aviokompanijaInfo.js"></script>
     <script src="js/global.js"></script>
 
