@@ -1,6 +1,7 @@
 let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
+let korisnikId = null;
 
 $(document).ready(function(e) {
 	
@@ -35,6 +36,8 @@ function ucitajPodatkeRac() {
 	var params_parser = new URLSearchParams(parametri);
 	
 	var id = params_parser.get("id");
+	var kor =  params_parser.get("korisnik");
+	korisnikId = kor;
 	
 	$.ajax({
 		type: "GET",
@@ -144,4 +147,38 @@ function prikaziVozila(vozila) {
 		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		prikaz.append(noviRed);
 	})
+	
+	$(".rezervacija").click(function(e){
+		e.preventDefault();
+		let vozilo = vozila[e.target.id];
+		
+		let rezervacijaVozila = {
+				rezervisanoVozilo : vozilo,
+				mjestoPreuzimanjaVozila : {id : $("#mjestoPreuzimanjaSelect").val()},
+				datumPreuzimanjaVozila : Date.parse($("#input-start").val()),
+				mjestoVracanjaVozila : {id : $("#mjestoVracanjaSelect").val()},
+			    datumVracanjaVozila : Date.parse($("#input-end").val()),
+			    cijena : ukupno*vozilo.cijena_po_danu,
+			    rentACarServis : podaciRac,
+			    putnik : {id : korisnikId} ,
+			    putovanje : null
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/rezervisiVozilo",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacijaVozila),
+			success: function(response) {
+				if(response == '') {
+					alert("Uspjesno ste rezervisali vozilo.");
+				//	return;
+				}
+				else{
+					alert (response);
+				}
+			},
+		});
+		
+	});
 }

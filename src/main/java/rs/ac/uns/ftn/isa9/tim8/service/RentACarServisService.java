@@ -501,5 +501,10 @@ public class RentACarServisService {
 		}
 		return vozilaZaRezervaciju;
 	}
+
+	public String rezervisiVozilo(RezervacijaVozila rezervacija) throws NevalidniPodaciException{
+		// TODO Auto-generated method stub
+		return "Proba";
+	}
 	
 }
