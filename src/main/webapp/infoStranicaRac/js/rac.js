@@ -134,7 +134,7 @@ function pretragaVozila(){
 	}
 	
 	if (_datumPreuzimanja != '' && _datumVracanja != ''){
-		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / 36e5;
+		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);
 		/*var datetime1 = new Date('1970-01-01T' + _vrijemePreuzimanja + 'Z');
 		var datetime2 = new Date('1970-01-01T' + _vrijemeVracanja + 'Z');
 		ukupno = ukupno + Math.abs(Date.parse(datetime1) - Date.parse(datetime2)) / 36e5;*/
@@ -205,7 +205,8 @@ function prikaziVozila(vozila) {
 			success: function(response) {
 				if(response == '') {
 					alert("Uspjesno ste rezervisali vozilo.");
-				//	return;
+					location.reload(true);
+					return;
 				}
 				else{
 					alert (response);

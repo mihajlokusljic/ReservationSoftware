@@ -500,6 +500,9 @@ public class RentACarServisService {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
 		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
 		List<Vozilo> slobodnaVozila = slobodnaVozila(rac, pocetniDatum, krajnjiDatum);
 		
 		List<Vozilo> vozilaZaRezervaciju = new ArrayList<Vozilo>();
