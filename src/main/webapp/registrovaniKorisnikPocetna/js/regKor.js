@@ -3,6 +3,7 @@ var aviokompanije = [];
 var hoteli = [];
 var rentACarServisi = [];
 var korisnik = null;
+var prijatelji = [];
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -112,7 +113,10 @@ $(document).ready(function() {
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		
+		
+		
 		});
 
 	$("#dodaj_prijatelje_tab").click(function(e){
