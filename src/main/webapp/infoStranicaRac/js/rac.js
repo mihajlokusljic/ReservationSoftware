@@ -120,6 +120,11 @@ function pretragaVozila(){
 	
 	let _brojPutnika = $("#brojPutnikaInput").val();
 	let _tipVozila = $("#tipVozilaSelect").val();
+	
+	let _minCijena = $("#minCijena").val();
+	let _maxCijena = $("#maxCijena").val();
+	
+	
 	let pretragaVozila = {
 			idRac : podaciRac.id,
 			datumPreuzimanja : _datumPreuzimanja,
@@ -129,10 +134,17 @@ function pretragaVozila(){
 			idMjestoPreuzimanja: _mjestoPreuzimanja,
 			idMjestoVracanja: _mjestoVracanja,
 			tipVozila: _tipVozila,
-			brojPutnika: _brojPutnika
+			brojPutnika: _brojPutnika,
 			
 	}
 	
+	if (_minCijena != ''){
+		pretragaVozila.minimalnaCijenaPoDanu = _minCijena;
+	}
+	if (_maxCijena != ''){
+		pretragaVozila.maksimalnaCijenaPoDanu = _maxCijena;
+
+	}
 	if (_datumPreuzimanja != '' && _datumVracanja != ''){
 		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);
 		/*var datetime1 = new Date('1970-01-01T' + _vrijemePreuzimanja + 'Z');
@@ -148,7 +160,7 @@ function pretragaVozila(){
 		data: JSON.stringify(pretragaVozila),
 		success: function(response) {
 			if(response.length == 0) {
-				alert("Ne postoji ni jedno slobodno vozilo za dati vremenski period.");
+				alert("Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.");
 			}
 			prikaziVozila(response);
 		},

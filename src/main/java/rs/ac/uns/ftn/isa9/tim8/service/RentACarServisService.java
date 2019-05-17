@@ -510,9 +510,35 @@ public class RentACarServisService {
 			return vozilaZaRezervaciju;
 		}
 		for (Vozilo vozilo : slobodnaVozila) {
+			
+			if (vozilo.getFilijala() == null) {
+				continue;
+			}
+			
 			if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
 					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
-				vozilaZaRezervaciju.add(vozilo);
+				
+				
+				if (kriterijumiPretrage.getMinimalnaCijenaPoDanu() != null && kriterijumiPretrage.getMaksimalnaCijenaPoDanu()!= null) {
+					if (vozilo.getCijena_po_danu() >= kriterijumiPretrage.getMinimalnaCijenaPoDanu() && vozilo.getCijena_po_danu() <= kriterijumiPretrage.getMaksimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else if (kriterijumiPretrage.getMinimalnaCijenaPoDanu() != null) {
+					if (vozilo.getCijena_po_danu() >= kriterijumiPretrage.getMinimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else if (kriterijumiPretrage.getMaksimalnaCijenaPoDanu() != null) {
+					if (vozilo.getCijena_po_danu() <= kriterijumiPretrage.getMaksimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else {
+					vozilaZaRezervaciju.add(vozilo);
+				}
+
+				
 			}
 		}
 		return vozilaZaRezervaciju;
