@@ -114,7 +114,6 @@ function pretragaVozila(){
 		success: function(response) {
 			if(response.length == 0) {
 				alert("Ne postoji ni jedno slobodno vozilo za dati vremenski period.");
-				return;
 			}
 			prikaziVozila(response);
 		},
@@ -151,22 +150,21 @@ function prikaziVozila(vozila) {
 	$(".rezervacija").click(function(e){
 		e.preventDefault();
 		let vozilo = vozila[e.target.id];
-		
+				
 		let rezervacijaVozila = {
 				rezervisanoVozilo : vozilo,
-				mjestoPreuzimanjaVozila : {id : $("#mjestoPreuzimanjaSelect").val()},
+				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaSelect").val(),
 				datumPreuzimanjaVozila : Date.parse($("#input-start").val()),
-				mjestoVracanjaVozila : {id : $("#mjestoVracanjaSelect").val()},
+				mjestoVracanjaVozila : $("#mjestoVracanjaSelect").val(),
 			    datumVracanjaVozila : Date.parse($("#input-end").val()),
 			    cijena : ukupno*vozilo.cijena_po_danu,
-			    rentACarServis : podaciRac,
-			    putnik : {id : korisnikId} ,
+			    putnik : korisnikId ,
 			    putovanje : null
 		}
 		
 		$.ajax({
 			type: "POST",
-			url: "../rentACar/rezervisiVozilo",
+			url: "../rentACar/rezervisiVozilo/" + podaciRac.id,
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(rezervacijaVozila),
 			success: function(response) {
