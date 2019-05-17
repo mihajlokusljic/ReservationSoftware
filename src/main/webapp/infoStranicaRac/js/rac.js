@@ -1,6 +1,9 @@
 let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
+let mapa = null;
+let zoomLevel = 17;
+
 
 $(document).ready(function(e) {
 	
@@ -26,6 +29,12 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		pretragaVozila();
 	})
+	
+	//prikazivanje lokacije sjedista RAC servisa
+	$("#lokacijaRacServisaPrikaz").click(function(e) {
+		e.preventDefault();
+		postaviMarker([podaciRac.adresa.latituda, podaciRac.adresa.longituda]);
+	});
 });
 
 
@@ -62,9 +71,35 @@ function ucitajPodatkeRac() {
 				$("#mjestoPreuzimanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 				$("#mjestoVracanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 			});
+			ymaps.ready(inicijalizujMape);
+			prikaziFilijale();
 		},
 	});
 
+}
+
+function prikaziFilijale() {
+	let tabela = $("#prikazFilijala");
+	tabela.empty();
+	
+	$.each(podaciRac.filijale, function(i, filijala) {
+		let noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + filijala.adresa.punaAdresa + '</td>');
+		noviRed.append('<td class="column1"><a class="trigger_popup_fricc prikazFil" id="fil' + i + '">Prikaži na mapi</a></td>');
+		tabela.append(noviRed);
+	});
+	
+	registerWindowHandlers(); //omogucuje otvaranje prozora (popup.js)
+	
+	//prikazivanje lokacije izabrane filijale na mapi
+	$(".prikazFil").click(function(e) {
+		e.preventDefault();
+		let index = e.target.id.substring(3); //id je oblika "fil<indeks u kolekciji filijala>"
+		index = parseInt(index);
+		let adresa = podaciRac.filijale[index].adresa;
+		postaviMarker([adresa.latituda, adresa.longituda]);
+	});
+	
 }
 
 function pretragaVozila(){
@@ -143,4 +178,22 @@ function prikaziVozila(vozila) {
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
 		prikaz.append(noviRed);
 	})
+}
+
+function postaviMarker(koordinate) {
+	var placemark = new ymaps.Placemark(koordinate);
+	mapa.setCenter(koordinate, zoomLevel);
+	mapa.geoObjects.removeAll();
+	mapa.geoObjects.add(placemark);
+}
+
+function inicijalizujMape() {
+	var coords = [podaciRac.adresa.latituda, podaciRac.adresa.longituda];
+	mapa = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	mapa.controls.add('typeSelector');
+	mapa.controls.add('zoomControl');
 }

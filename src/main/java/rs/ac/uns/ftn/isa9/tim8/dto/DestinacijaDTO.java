@@ -1,18 +1,20 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
+import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+
 public class DestinacijaDTO {
 	protected String naziv;
-	protected String punaAdresa;
+	protected Adresa adresa;
 	protected Long idAviokompanije;
 
 	public DestinacijaDTO() {
 		super();
 	}
 
-	public DestinacijaDTO(String naziv, String punaAdresa, Long idAviokompanije) {
+	public DestinacijaDTO(String naziv, Adresa adresa, Long idAviokompanije) {
 		super();
 		this.naziv = naziv;
-		this.punaAdresa = punaAdresa;
+		this.adresa = adresa;
 		this.idAviokompanije = idAviokompanije;
 	}
 
@@ -24,12 +26,12 @@ public class DestinacijaDTO {
 		this.naziv = naziv;
 	}
 
-	public String getPunaAdresa() {
-		return punaAdresa;
+	public Adresa getAdresa() {
+		return adresa;
 	}
 
-	public void setPunaAdresa(String punaAdresa) {
-		this.punaAdresa = punaAdresa;
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
 	}
 
 	public Long getIdAviokompanije() {

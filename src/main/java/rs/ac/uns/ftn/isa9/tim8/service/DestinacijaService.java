@@ -51,9 +51,9 @@ public class DestinacijaService {
 		
 		Aviokompanija aviokompanija = aviokompanijaSearch.get();
 		
-		Adresa a = adresaRepository.findOneByPunaAdresa(destinacijaDTO.getPunaAdresa());
+		Adresa a = adresaRepository.findOneByPunaAdresa(destinacijaDTO.getAdresa().getPunaAdresa());
 		if (a == null) {
-			a = new Adresa(destinacijaDTO.getPunaAdresa());
+			a = destinacijaDTO.getAdresa();
 		} else {
 			throw new NevalidniPodaciException("Ne mogu postojati dvije destinacije na istoj adresi.");
 		}
