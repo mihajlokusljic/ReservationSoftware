@@ -1260,6 +1260,7 @@ tbody tr:hover {
 
 .dropdown-content {
   display: none;
+  list-style-type: none;
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
