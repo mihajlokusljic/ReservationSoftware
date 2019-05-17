@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
@@ -21,6 +22,8 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
@@ -502,6 +505,31 @@ public class RentACarServisService {
 			}
 		}
 		return vozilaZaRezervaciju;
+	}
+	
+	public void validirajAdresu(Adresa adresa) throws NevalidniPodaciException {
+		if (adresa == null) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		if (adresa.getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		Adresa zauzimaAdresu = adresaRepository.findOneByPunaAdresa(adresa.getPunaAdresa());
+		if (zauzimaAdresu != null) {
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
+		}
+	}
+
+	public Filijala dodajFilijalu(Adresa adresaFilijale) throws NevalidniPodaciException {
+		validirajAdresu(adresaFilijale);
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis target = admin.getRentACarServis();
+		Filijala novaFilijala = new Filijala(adresaFilijale);
+		novaFilijala.setRentACar(target);
+		target.getFilijale().add(novaFilijala);
+		filijalaRepository.save(novaFilijala);
+		rentACarRepository.save(target);
+		return novaFilijala;
 	}
 	
 }
