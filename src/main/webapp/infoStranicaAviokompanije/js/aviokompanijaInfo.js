@@ -3,8 +3,9 @@ let defaultSlika = "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/
 let defaultSlikaDestinacije = "https://static1.squarespace.com/static/57b9b98a29687f1ef5c622df/t/5b78746dc2241b4f57afadf6/1534620788911/zurich+best+view?format=1500w";
 let defaultSlikaAviona = "https://upload.wikimedia.org/wikipedia/commons/4/40/Pan_Am_Boeing_747-121_N732PA_Bidini.jpg";
 let stavkeMenija = ["info", "pregledaj", "brzeRezervacije"];
+let mapa = null;
 let tabovi = ["tab-info", "tab-destinacije", "tab-avioni", "tab-letovi", "tab-prtljag", "tab-brze-rezervacije"];
-
+let zoomLevel = 17;
 
 $(document).ready(function(e) {
 	
@@ -24,6 +25,7 @@ $(document).ready(function(e) {
 		}
 	});
 	
+	//reakcije na dogadjaje klika na naviogacionom baru
 	$("#info").click(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("info");
@@ -63,6 +65,12 @@ $(document).ready(function(e) {
 	$("#pretragaLetovaForm").submit(function(e) {
 		e.preventDefault();
 		pretragaLetova();
+	});
+	
+	//prikazivanje lokacije avokompanije
+	$("#lokacijaAviokompanijePrikaz").click(function(e) {
+		e.preventDefault();
+		postaviMarker([podaciAviokompanije.adresa.latituda, podaciAviokompanije.adresa.longituda]);
 	});
 	
 	ucitajPodatkeAviokompanije();
@@ -138,9 +146,8 @@ function ucitajPodatkeAviokompanije() {
 			prikaziPodatkeAviokompanije();
 			prikaziDestinacije();
 			prikaziAvione();
-			//ucitajLetove();
 			prikaziCjenovnikPrtljaga();
-			
+			ymaps.ready(inicijalizujMape);
 		},
 	});
 
@@ -172,8 +179,20 @@ function prikaziDestinacije() {
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column3"><img src="' + defaultSlikaDestinacije + '" alt="Greska pri učitavanju slike"/></td>');
 		noviRed.append('<td class="column3">' + destinacija.nazivDestinacije + '</td>');
-		noviRed.append('<td class="column3">' + destinacija.adresa.punaAdresa + '</td>');
+		noviRed.append('<td class="column3">' + destinacija.adresa.punaAdresa + '<a class="trigger_popup_fricc" id="dst' + i + '">Prikaži na mapi</a></td>');
+		noviRed.append('<td class="column3"><a class="trigger_popup_fricc showDst" id="dst' + i + '">Prikaži na mapi</a></td>');
 		tabela.append(noviRed);
+	});
+	
+	registerWindowHandlers();
+	
+	//prikazivanje lokacije izabrane destinacije na mapi
+	$(".showDst").click(function(e) {
+		e.preventDefault();
+		let index = e.target.id.substring(3); //id je oblika "dst<indeks u kolekciji destinacija>"
+		index = parseInt(index);
+		let adresa = podaciAviokompanije.destinacije[index].adresa;
+		postaviMarker([adresa.latituda, adresa.longituda]);
 	});
 }
 
@@ -242,4 +261,22 @@ function prikaziCjenovnikPrtljaga() {
 		noviRed.append('<td class="column1">' + prtljag.cijena + '</td>');
 		tabela.append(noviRed);
 	});
+}
+
+function postaviMarker(koordinate) {
+	var placemark = new ymaps.Placemark(koordinate);
+	mapa.setCenter(koordinate, zoomLevel);
+	mapa.geoObjects.removeAll();
+	mapa.geoObjects.add(placemark);
+}
+
+function inicijalizujMape() {
+	var coords = [podaciAviokompanije.adresa.latituda, podaciAviokompanije.adresa.longituda];
+	mapa = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	mapa.controls.add('typeSelector');
+	mapa.controls.add('zoomControl');
 }

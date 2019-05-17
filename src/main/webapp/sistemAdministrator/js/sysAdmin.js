@@ -2,6 +2,10 @@ let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAd
 let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
 let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
+let mapaAviokompanije = null;
+let mapaHotela = null;
+let mapaRacServisa = null;
+let zoomLevel = 14;
 
 $(document).ready(function(e) {
 	
@@ -100,6 +104,8 @@ function prikaziIzborPoslovnice(idPoslovnice) {
 function dodavanjeAviokompanije() {
 	let _naziv = $("#nazivAviokompanije").val();
 	let _adresa = $("#adresaAviokompanije").val();
+	let _lat = $("#latitudaAviokompanije").val();
+	let _long = $("#longitudaAviokompanije").val();
 	let _opis = $("#opisAviokompanije").val();
 	
 	if(_naziv == "") {
@@ -107,9 +113,18 @@ function dodavanjeAviokompanije() {
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju aviokompanije na mapi.");
+		return;
+	}
+	
 	let aviokompanija = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis,
 			destinacije: [],
 			letovi: [],
@@ -125,6 +140,8 @@ function dodavanjeAviokompanije() {
 			let selekcioniMeni = $("#aviokompanijaAdminaSelect");
 			prikazi(response, tabelaAviokompanija, selekcioniMeni, "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
 			alert("Aviokompanija je uspjesno dodata.");
+			$("#dodavanjeAviokompanijeForm")[0].reset();
+			mapaAviokompanije.geoObjects.removeAll();
 		},
 	});
 }
@@ -132,6 +149,8 @@ function dodavanjeAviokompanije() {
 function dodavanjeHotela() {
 	let _naziv = $("#nazivHotela").val();
 	let _adresa = $("#adresaHotela").val();
+	let _lat = $("#latitudaHotela").val();
+	let _long = $("#longitudaHotela").val();
 	let _opis = $("#promotivniOpisHotela").val();
 	
 	if(_naziv == "") {
@@ -139,9 +158,18 @@ function dodavanjeHotela() {
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju hotela na mapi.");
+		return;
+	}
+	
 	let hotel = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis
 	};
 	
@@ -154,6 +182,8 @@ function dodavanjeHotela() {
 			let selekcioniMeni = $("#hotelAdminaSelect");
 			prikazi(response, tabelaHotela, selekcioniMeni, "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
 			alert("Hotel je uspjesno dodat.");
+			$("#dodavanjeHotelaForm")[0].reset();
+			mapaHotela.geoObjects.removeAll();
 		},
 	});
 }
@@ -162,15 +192,26 @@ function dodavanjeRacServisa() {
 	let _naziv = $("#nazivRacServisa").val();
 	let _adresa = $("#adresaRacServisa").val();
 	let _opis = $("#opisRacServisa").val();
+	let _lat = $("#latitudaRacServisa").val();
+	let _long = $("#longitudaRacServisa").val();
 	
 	if(_naziv == "") {
 		alert("Naziv rent-a-car servisa mora biti zadat.");
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju rent-a-car servisa na mapi.");
+		return;
+	}
+	
 	let racServis = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis
 	};
 	
@@ -183,6 +224,8 @@ function dodavanjeRacServisa() {
 			let selekcioniMeni = $("#racServisAdminaSelect");
 			prikazi(response, tabelaRacServisa, selekcioniMeni, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
 			alert("Rent-a-car servis je uspjesno dodat.");
+			$("#dodavanjeRacServisaForm")[0].reset();
+			mapaRacServisa.geoObjects.removeAll();
 		},
 	});
 }
@@ -287,3 +330,65 @@ function odjava() {
 	removeJwtToken();
 	window.location.replace(pocetnaStrana);
 }
+
+function inicijalizujMape() {
+	let belgradeCoords = [44.7866, 20.4489];
+	mapaHotela = new ymaps.Map('hotelMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaHotela.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaHotela.geoObjects.removeAll();
+		mapaHotela.geoObjects.add(placemark);
+		$("#latitudaHotela").val(coords[0]);
+		$("#longitudaHotela").val(coords[1]);
+	});
+	
+	mapaHotela.controls.add('geolocationControl');
+	mapaHotela.controls.add('typeSelector');
+	mapaHotela.controls.add('zoomControl');
+	
+	mapaAviokompanije = new ymaps.Map('aviokompanijaMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaAviokompanije.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaAviokompanije.geoObjects.removeAll();
+		mapaAviokompanije.geoObjects.add(placemark);
+		$("#latitudaAviokompanije").val(coords[0]);
+		$("#longitudaAviokompanije").val(coords[1]);
+	});
+	
+	mapaAviokompanije.controls.add('geolocationControl');
+	mapaAviokompanije.controls.add('typeSelector');
+	mapaAviokompanije.controls.add('zoomControl');
+	
+	mapaRacServisa = new ymaps.Map('racMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaRacServisa.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaRacServisa.geoObjects.removeAll();
+		mapaRacServisa.geoObjects.add(placemark);
+		$("#latitudaRacServisa").val(coords[0]);
+		$("#longitudaRacServisa").val(coords[1]);
+	});
+	
+	mapaRacServisa.controls.add('geolocationControl');
+	mapaRacServisa.controls.add('typeSelector');
+	mapaRacServisa.controls.add('zoomControl');
+}
+
+ymaps.ready(inicijalizujMape);

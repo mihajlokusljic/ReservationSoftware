@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
@@ -22,6 +23,8 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
@@ -163,6 +166,8 @@ public class RentACarServisService {
 	
 	public String izmjeniRentACarServis(RentACarServis rentACar) {
 		RentACarServis rentACarStari = rentACarRepository.findOneByNaziv(rentACar.getNaziv());
+		rentACarStari.getAdresa().setLatituda(rentACar.getAdresa().getLatituda());
+		rentACarStari.getAdresa().setLongituda(rentACar.getAdresa().getLongituda());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());		
 		if (adresa != null) {
 			
@@ -326,7 +331,7 @@ public class RentACarServisService {
 		return null;
 	}
 	
-	public String izmjeniFilijalu( Long idFilijale, String novLokacija) {
+	public String izmjeniFilijalu( Long idFilijale, String novLokacija, Adresa novaAdresa) {
 		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
 		
 		if (!pretragaFilijale.isPresent()) {
@@ -334,10 +339,13 @@ public class RentACarServisService {
 		}
 		
 		Filijala f = pretragaFilijale.get();
-		
+		f.getAdresa().setLatituda(novaAdresa.getLatituda());
+		f.getAdresa().setLongituda(novaAdresa.getLongituda()); //uvijek dozvoljavamo izmjenu geolokacije
 		Adresa a = adresaRepository.findOneByPunaAdresa(novLokacija);
 		if (a != null) {
-			return "Zauzeta adresa";
+			if(!novLokacija.equals(f.getAdresa().getPunaAdresa())) {
+				return "Zauzeta adresa"; //ako nova lokacija vec postoji i ne odgovara adresi date filijale
+			}
 		}
 		f.getAdresa().setPunaAdresa(novLokacija);
 		List<Vozilo> vozila = voziloRepository.findAllByFilijala(f);
@@ -568,6 +576,39 @@ public class RentACarServisService {
 	
 		
 		return null;
+	}
+	
+	public void validirajAdresu(Adresa adresa) throws NevalidniPodaciException {
+		if (adresa == null) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		if (adresa.getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		Adresa zauzimaAdresu = adresaRepository.findOneByPunaAdresa(adresa.getPunaAdresa());
+		if (zauzimaAdresu != null) {
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
+		}
+	}
+
+	public Filijala dodajFilijalu(Adresa adresaFilijale) throws NevalidniPodaciException {
+		validirajAdresu(adresaFilijale);
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis target = admin.getRentACarServis();
+		Filijala novaFilijala = new Filijala(adresaFilijale);
+		novaFilijala.setRentACar(target);
+		target.getFilijale().add(novaFilijala);
+		filijalaRepository.save(novaFilijala);
+		rentACarRepository.save(target);
+		return novaFilijala;
+	}
+
+	public Adresa adresaFilijale(Long idFilijale) throws NevalidniPodaciException {
+		Optional<Filijala> filijalaSearch = filijalaRepository.findById(idFilijale);
+		if(!filijalaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji filijala sa zadatim id-em.");
+		}
+		return filijalaSearch.get().getAdresa();
 	}
 	
 }

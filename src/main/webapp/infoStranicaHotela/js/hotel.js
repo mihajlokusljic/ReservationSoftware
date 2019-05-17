@@ -1,5 +1,6 @@
 let podaciHotela = null;
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
+let zoomLevel = 17;
 
 
 $(document).ready(function(e) {
@@ -22,6 +23,7 @@ $(document).ready(function(e) {
 	
 	
 	ucitajPodatkeHotela();
+	ymaps.ready(inicijalizujMapu);
 	
 	$("#pretragaSobaForm").submit(function(e) {
 		e.preventDefault();
@@ -39,36 +41,41 @@ function ucitajPodatkeHotela() {
 	$.ajax({
 		type: "GET",
 		url: "../hoteli/dobavi/" + id,
+		async: false,
 		success: function(response) {
 			podaciHotela = response;
-			$("#slikaHotela").attr("src", defaultSlika);
-			$("#title").html(response.naziv);
-			$("#hotelNaslov").html(response.naziv);
-			$("#nazivHotela").val(response.naziv);
-			$("#adresaHotela").val(response.adresa.punaAdresa);
-			let sumaOcjena = response.sumaOcjena;
-			sumaOcjena = parseFloat(sumaOcjena);
-			let brOcjena = response.brojOcjena;
-			brOcjena = parseInt(brOcjena);
-			if(brOcjena > 0) {
-				$("#ocjenaHotela").val(sumaOcjena / brOcjena);
-			} else {
-				$("#ocjenaHotela").val("Nema ocjena");
-			}
-			$("#opisHotela").val(response.promotivniOpis);
-			
-			let tabelaUsluga = $("#prikazUsluga");
-			$.each(response.cjenovnikDodatnihUsluga, function(i, usluga) {
-				let noviRed = $("<tr></tr>");
-				noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
-				noviRed.append('<td class="column1">' + usluga.opis + '</td>');
-				noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
-				noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
-				tabelaUsluga.append(noviRed);
-			});
+			prikaziPodatkeHotela();
 		},
 	});
 
+}
+
+function prikaziPodatkeHotela() {
+	$("#slikaHotela").attr("src", defaultSlika);
+	$("#title").html(podaciHotela.naziv);
+	$("#hotelNaslov").html(podaciHotela.naziv);
+	$("#nazivHotela").val(podaciHotela.naziv);
+	$("#adresaHotela").val(podaciHotela.adresa.punaAdresa);
+	let sumaOcjena = podaciHotela.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = podaciHotela.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		$("#ocjenaHotela").val(sumaOcjena / brOcjena);
+	} else {
+		$("#ocjenaHotela").val("Nema ocjena");
+	}
+	$("#opisHotela").val(podaciHotela.promotivniOpis);
+	
+	let tabelaUsluga = $("#prikazUsluga");
+	$.each(podaciHotela.cjenovnikDodatnihUsluga, function(i, usluga) {
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+		noviRed.append('<td class="column1">' + usluga.opis + '</td>');
+		noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
+		noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
+		tabelaUsluga.append(noviRed);
+	});
 }
 
 function pretragaSoba() {
@@ -122,3 +129,17 @@ function prikaziSobe(sobe) {
 		prikaz.append(noviRed);
 	})
 }
+
+function inicijalizujMapu() {
+	var coords = [podaciHotela.adresa.latituda, podaciHotela.adresa.longituda];
+	var myPlacemark = new ymaps.Placemark(coords, {balloonContentBody: podaciHotela.naziv});
+	var myMap = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	myMap.geoObjects.add(myPlacemark);
+	myMap.controls.add('typeSelector');
+	myMap.controls.add('zoomControl');
+}
+

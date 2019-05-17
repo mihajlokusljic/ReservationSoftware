@@ -13,8 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Klasa koja cuva potrebne informacije o adresi radi
- * njenog prikaza na mapi.
- * Napomena: u tekucoj verziji aplikacije cuva samo punu adresu kao String.*/
+ * njenog prikaza na mapi. */
 
 @Entity
 @Table(name = "adresa")
@@ -31,13 +30,34 @@ public class Adresa implements Serializable {
 	@Column(name = "puna_adresa", nullable = false)
 	protected String punaAdresa;
 	
+	@Column(name = "latituda", nullable = true)
+	protected Double latituda;
+	
+	@Column(name = "longituda", nullable = true)
+	protected Double longituda;
+	
 	public Adresa() {
 		super();
 	}
-
+	
 	public Adresa(String punaAdresa) {
 		super();
 		this.punaAdresa = punaAdresa;
+	}
+
+	public Adresa(String punaAdresa, Double latituda, Double longituda) {
+		super();
+		this.punaAdresa = punaAdresa;
+		this.latituda = latituda;
+		this.longituda = longituda;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public String getPunaAdresa() {
@@ -48,14 +68,20 @@ public class Adresa implements Serializable {
 		this.punaAdresa = punaAdresa;
 	}
 
-	
-
-	public Long getId() {
-		return Id;
+	public Double getLatituda() {
+		return latituda;
 	}
 
-	public void setId(Long id) {
-		Id = id;
+	public void setLatituda(Double latituda) {
+		this.latituda = latituda;
+	}
+
+	public Double getLongituda() {
+		return longituda;
+	}
+
+	public void setLongituda(Double longituda) {
+		this.longituda = longituda;
 	}
 
 	public static long getSerialversionuid() {
@@ -78,6 +104,5 @@ public class Adresa implements Serializable {
 			return false;
 		}
 	}
-	
 	
 }

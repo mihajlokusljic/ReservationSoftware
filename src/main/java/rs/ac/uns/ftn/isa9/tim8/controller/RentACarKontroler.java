@@ -21,6 +21,8 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
+import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
@@ -118,10 +120,29 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> dodajFilijalu(@RequestBody Adresa adresaFilijale) {
+		try {
+			return new ResponseEntity<Filijala>(servis.dodajFilijalu(adresaFilijale), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/dobaviFilijale/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<?> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/adresaFilijale/{idFilijale}", method = RequestMethod.GET)
+	public ResponseEntity<?> adresaFilijale(@PathVariable("idFilijale") Long idFilijale) {
+		try {
+			return new ResponseEntity<Adresa>(servis.adresaFilijale(idFilijale), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@RequestMapping(value = "/ukloniFilijalu/{idFilijale}", method = RequestMethod.GET)
@@ -130,10 +151,11 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.GET)
+	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.PUT)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
-	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, @PathVariable("novaLokacija") String novaLokacija) {
-		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, 
+			@PathVariable("novaLokacija") String novaLokacija, @RequestBody Adresa novaAdresa) {
+		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija, novaAdresa),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/podaciOServisu", method = RequestMethod.GET)
