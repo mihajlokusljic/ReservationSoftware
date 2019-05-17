@@ -134,16 +134,26 @@ public class RentACarKontroler {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/adresaFilijale/{idFilijale}", method = RequestMethod.GET)
+	public ResponseEntity<?> adresaFilijale(@PathVariable("idFilijale") Long idFilijale) {
+		try {
+			return new ResponseEntity<Adresa>(servis.adresaFilijale(idFilijale), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/ukloniFilijalu/{idFilijale}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> ukloniFilijalu(@PathVariable("idFilijale") String idFilijale) {
 		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.GET)
+	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.PUT)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
-	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, @PathVariable("novaLokacija") String novaLokacija) {
-		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, 
+			@PathVariable("novaLokacija") String novaLokacija, @RequestBody Adresa novaAdresa) {
+		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija, novaAdresa),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/podaciOServisu", method = RequestMethod.GET)

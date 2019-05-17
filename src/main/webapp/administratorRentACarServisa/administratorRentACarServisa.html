@@ -304,17 +304,22 @@
 									<label class="label">Naziv lokacije:</label>
 									<input class="input--style-2" id = "adresa_filijale_nova" type="text" required="required">
 									<i class="zmdi zmdi-pin input-group-symbol"></i>
-	
 								</div>
-								<div class="input-group">
-									<label class="label">Dužina:</label>
-									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
-								</div>
-								<div class="input-group">
-									<label class="label">Širina:</label>
-									<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
-								</div>
-								<button type="submit" class="btn btn-submit">Izmjeni</button>
+								
+								<div class="input-group input-group-map">
+                                    <label class="label">Označite lokaciju filijale klikom na mapi:</label>
+                                    <div class="mapa" id="izmjenaFilijaleMapa"></div>
+                                    <input type="text" id="latitudaFilijaleIzmjena" hidden="hidden">
+                                    <input type="text" id="longitudaFilijaleIzmjena" hidden="hidden">
+                                </div>
+								<div class="row row-space">
+                                    <div class="col-2">
+                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
+                                    </div>
+                                    <div class="col-2">
+                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaFilijale">Odustani</button>
+                                    </div>
+	                            </div>
 							</form>
 						</div>
 						

@@ -4,6 +4,7 @@ var filijale = null;
 var defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 var mapaRacServisa = null;
 var mapaFilijaleDodavanje = null;
+var mapaFilijaleIzmjena = null;
 var zoomLevel = 17;
 
 $(document).ready(function() {
@@ -146,6 +147,13 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").show();
 		dodajFilijalu();
+	});
+	
+	$("#ponistavanjeIzmjenaFilijale").click(function(e) {
+		e.preventDefault();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-filijala").show();
 	});
 	
 	$("#odjava").click(function(e){
@@ -536,6 +544,17 @@ function prikazFilijala(filijale){
 		let filijala = filijale[e.target.id];
 
 		$("#adresa_filijale_nova").val(filijala.punaAdresa);
+		$.ajax({
+			type : "GET",
+			url : "../rentACar/adresaFilijale/" + filijala.id,
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success : function(adresa){
+				$("#latitudaFilijaleIzmjena").val(adresa.latituda);
+				$("#longitudaFilijaleIzmjena").val(adresa.longituda);
+				postaviMarker(mapaFilijaleIzmjena, [adresa.latituda, adresa.longituda]);
+				mapaFilijaleIzmjena.setZoom(zoomLevel);
+			},
+		});
 		
 		$("#forma_izmjeni_filijalu").unbind().submit(function(e){
 			e.preventDefault();
@@ -544,9 +563,23 @@ function prikazFilijala(filijale){
 				alert("Ne mozete unijeti praznu lokaciju.");
 				return;
 			}
+			let _lat = $("#latitudaFilijaleIzmjena").val();
+			let _long = $("#longitudaFilijaleIzmjena").val();
+			if(_lat == "" || _long == "") {
+				alert("Morate označiti lokaciju filijale na mapi.");
+				return;
+			}
+			
+			let novaAdresa = {
+					punaAdresa: nova_lokacija,
+					latituda: _lat,
+					longituda: _long
+			};
+			
 			$.ajax({
-				type : "GET",
+				type : "PUT",
 				url : "../rentACar/izmjeniFilijalu/" + filijala.id + "/" + nova_lokacija,
+				data: JSON.stringify(novaAdresa),
 				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(response){
 					if (response != ''){
@@ -917,6 +950,23 @@ function inicijalizujMape() {
 		postaviMarker(mapaFilijaleDodavanje, coords);
 		$("#latitudaFilijaleDodavanje").val(coords[0]);
 		$("#longitudaFilijaleDodavanje").val(coords[1]);
+	});
+	
+	mapaFilijaleIzmjena = new ymaps.Map('izmjenaFilijaleMapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaFilijaleIzmjena.controls.add('geolocationControl');
+	mapaFilijaleIzmjena.controls.add('typeSelector');
+	mapaFilijaleIzmjena.controls.add('zoomControl');
+	
+	mapaFilijaleIzmjena.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(mapaFilijaleIzmjena, coords);
+		$("#latitudaFilijaleIzmjena").val(coords[0]);
+		$("#longitudaFilijaleIzmjena").val(coords[1]);
 	});
 	
 }

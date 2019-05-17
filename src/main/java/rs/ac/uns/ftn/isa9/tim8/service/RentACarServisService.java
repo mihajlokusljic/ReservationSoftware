@@ -324,7 +324,7 @@ public class RentACarServisService {
 		return null;
 	}
 	
-	public String izmjeniFilijalu( Long idFilijale, String novLokacija) {
+	public String izmjeniFilijalu( Long idFilijale, String novLokacija, Adresa novaAdresa) {
 		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
 		
 		if (!pretragaFilijale.isPresent()) {
@@ -332,10 +332,13 @@ public class RentACarServisService {
 		}
 		
 		Filijala f = pretragaFilijale.get();
-		
+		f.getAdresa().setLatituda(novaAdresa.getLatituda());
+		f.getAdresa().setLongituda(novaAdresa.getLongituda()); //uvijek dozvoljavamo izmjenu geolokacije
 		Adresa a = adresaRepository.findOneByPunaAdresa(novLokacija);
 		if (a != null) {
-			return "Zauzeta adresa";
+			if(!novLokacija.equals(f.getAdresa().getPunaAdresa())) {
+				return "Zauzeta adresa"; //ako nova lokacija vec postoji i ne odgovara adresi date filijale
+			}
 		}
 		f.getAdresa().setPunaAdresa(novLokacija);
 		List<Vozilo> vozila = voziloRepository.findAllByFilijala(f);
@@ -530,6 +533,14 @@ public class RentACarServisService {
 		filijalaRepository.save(novaFilijala);
 		rentACarRepository.save(target);
 		return novaFilijala;
+	}
+
+	public Adresa adresaFilijale(Long idFilijale) throws NevalidniPodaciException {
+		Optional<Filijala> filijalaSearch = filijalaRepository.findById(idFilijale);
+		if(!filijalaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji filijala sa zadatim id-em.");
+		}
+		return filijalaSearch.get().getAdresa();
 	}
 	
 }
