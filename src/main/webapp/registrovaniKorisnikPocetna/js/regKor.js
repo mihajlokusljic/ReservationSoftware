@@ -226,7 +226,7 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');
 	noviRed.append('<td class="column1">' + podatak.adresa.punaAdresa + '</td>');
 	noviRed.append('<td class="column1">' + ocjena + '</td>');
-	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
+	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '&korisnik='+ korisnik.id + '">Pogledaj detalje</a></td>');
 
 	tabelaZaPrikaz.append(noviRed);
 }

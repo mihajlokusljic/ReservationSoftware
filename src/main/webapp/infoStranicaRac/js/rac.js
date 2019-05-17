@@ -1,6 +1,7 @@
 let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
+let korisnikId = null;
 let mapa = null;
 let zoomLevel = 17;
 
@@ -44,6 +45,8 @@ function ucitajPodatkeRac() {
 	var params_parser = new URLSearchParams(parametri);
 	
 	var id = params_parser.get("id");
+	var kor =  params_parser.get("korisnik");
+	korisnikId = kor;
 	
 	$.ajax({
 		type: "GET",
@@ -146,7 +149,6 @@ function pretragaVozila(){
 		success: function(response) {
 			if(response.length == 0) {
 				alert("Ne postoji ni jedno slobodno vozilo za dati vremenski period.");
-				return;
 			}
 			prikaziVozila(response);
 		},
@@ -176,9 +178,44 @@ function prikaziVozila(vozila) {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		prikaz.append(noviRed);
 	})
+	
+	$(".rezervacija").click(function(e){
+		e.preventDefault();
+		let vozilo = vozila[e.target.id];
+				
+		let rezervacijaVozila = {
+				rezervisanoVozilo : vozilo,
+				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaSelect").val(),
+				datumPreuzimanjaVozila : Date.parse($("#input-start").val()),
+				mjestoVracanjaVozila : $("#mjestoVracanjaSelect").val(),
+			    datumVracanjaVozila : Date.parse($("#input-end").val()),
+			    cijena : ukupno*vozilo.cijena_po_danu,
+			    putnik : korisnikId ,
+			    putovanje : null
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/rezervisiVozilo/" + podaciRac.id,
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacijaVozila),
+			success: function(response) {
+				if(response == '') {
+					alert("Uspjesno ste rezervisali vozilo.");
+				//	return;
+				}
+				else{
+					alert (response);
+				}
+			},
+		});
+		
+	});
 }
+
 
 function postaviMarker(koordinate) {
 	var placemark = new ymaps.Placemark(koordinate);
