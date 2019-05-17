@@ -4,6 +4,7 @@ let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let mapaAviokompanije = null;
 let mapaHotela = null;
+let mapaRacServisa = null;
 let zoomLevel = 14;
 
 $(document).ready(function(e) {
@@ -112,6 +113,11 @@ function dodavanjeAviokompanije() {
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju aviokompanije na mapi.");
+		return;
+	}
+	
 	let aviokompanija = {
 			naziv: _naziv, 
 			adresa: { 
@@ -186,15 +192,26 @@ function dodavanjeRacServisa() {
 	let _naziv = $("#nazivRacServisa").val();
 	let _adresa = $("#adresaRacServisa").val();
 	let _opis = $("#opisRacServisa").val();
+	let _lat = $("#latitudaRacServisa").val();
+	let _long = $("#longitudaRacServisa").val();
 	
 	if(_naziv == "") {
 		alert("Naziv rent-a-car servisa mora biti zadat.");
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate označiti lokaciju rent-a-car servisa na mapi.");
+		return;
+	}
+	
 	let racServis = {
 			naziv: _naziv, 
-			adresa: { punaAdresa : _adresa }, 
+			adresa: { 
+				punaAdresa: _adresa,
+				latituda: _lat,
+				longituda: _long
+			}, 
 			promotivniOpis: _opis
 	};
 	
@@ -207,6 +224,8 @@ function dodavanjeRacServisa() {
 			let selekcioniMeni = $("#racServisAdminaSelect");
 			prikazi(response, tabelaRacServisa, selekcioniMeni, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
 			alert("Rent-a-car servis je uspjesno dodat.");
+			$("#dodavanjeRacServisaForm")[0].reset();
+			mapaRacServisa.geoObjects.removeAll();
 		},
 	});
 }
@@ -351,6 +370,25 @@ function inicijalizujMape() {
 	mapaAviokompanije.controls.add('geolocationControl');
 	mapaAviokompanije.controls.add('typeSelector');
 	mapaAviokompanije.controls.add('zoomControl');
+	
+	mapaRacServisa = new ymaps.Map('racMapa', {
+        center: belgradeCoords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaRacServisa.events.add('click', function(e) {
+		var coords = e.get('coords');
+		var placemark = new ymaps.Placemark(coords);
+		mapaRacServisa.geoObjects.removeAll();
+		mapaRacServisa.geoObjects.add(placemark);
+		$("#latitudaRacServisa").val(coords[0]);
+		$("#longitudaRacServisa").val(coords[1]);
+	});
+	
+	mapaRacServisa.controls.add('geolocationControl');
+	mapaRacServisa.controls.add('typeSelector');
+	mapaRacServisa.controls.add('zoomControl');
 }
 
 ymaps.ready(inicijalizujMape);

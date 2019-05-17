@@ -156,6 +156,8 @@ public class RentACarServisService {
 	
 	public String izmjeniRentACarServis(RentACarServis rentACar) {
 		RentACarServis rentACarStari = rentACarRepository.findOneByNaziv(rentACar.getNaziv());
+		rentACarStari.getAdresa().setLatituda(rentACar.getAdresa().getLatituda());
+		rentACarStari.getAdresa().setLongituda(rentACar.getAdresa().getLongituda());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());		
 		if (adresa != null) {
 			

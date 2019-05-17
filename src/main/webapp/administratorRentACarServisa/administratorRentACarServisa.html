@@ -17,6 +17,9 @@
 	<!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    
+    <!-- Popup window -->
+    <link href="css/popup.css" rel="stylesheet" media="all">
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
@@ -34,6 +37,15 @@
     <script src="vendor/datepicker/daterangepicker.js"></script>
 	
 	    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
+	    	<!-- Mapa za prikaz adrese -->
+			<div class="hover_bkgr_fricc">
+				<span class="helper"></span>
+				    <div>
+				        <div class="popupCloseButton">X</div>
+				        <div style="width: 100%; height: 100%;" id="mapa"></div>
+				    </div>
+			</div>
+			
         	<div class="wrapper wrapper--w1050">
             	<div class="card card-3">
                 	<div class="card-body">
@@ -308,39 +320,49 @@
 								<button type="submit" class="btn btn-submit">Izmjeni</button>
 							</form>
 						</div>
+						
 						<div class="tab-pane" id="tab-profil-servisa">
-							<form id = "profil_servisa_forma">
-		
-	                            <div class="input-group">
-									<label class="label">Naziv servisa:</label>
-									<input class="input--style-2" id = "profil_servisa_naziv" type="text" readonly>
-								</div>													
-								<div class="input-group">
-									<label class="label">Lokacija</label>
-									<input class="input--style-2" id = "profil_servisa_adresa" type="text">
-								</div>
-								<div class="row row-space">
-	
+	                        <form method="POST" action="#" id="profil_servisa_forma">
+	                        		<div class="row row-space">
+	                        			<div class="col-2">
+	                        				<img alt="Doslo je do greške pri učitavaju slike" src="" id="slikaRacServisa">
+	                        				<div class="input-group">
+			                                    <label class="label">Izmjena profilne slike hotela (u izradi):</label>
+			                                    <input class="input--style-2" type="file" id="novaSlikaUpload">
+			                                </div>
+	                        			</div>
+	                        			<div class="col-2">
+	                        				<h3>&nbsp;</h3>
+			                                <div class="input-group">
+			                                    <label class="label">Naziv rent-a-car servisa:</label>
+			                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite naziv hotela" required="required" readonly="readonly" id="profil_servisa_naziv">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Adresa:</label>
+			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+			                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="profil_servisa_adresa">
+			                                    <a class="trigger_popup_fricc">Izmjeni lokaciju na mapi</a>
+			                                    <input type="text" hidden="hidden" id="latitudaServisa">
+			                                    <input type="text" hidden="hidden" id="longitudaServisa">
+			                                </div>
+		                                </div>
+	                                </div>
+	                                <h2>&nbsp;</h2>
+	                                <div class="input-group">
+	                                    <label class="label">Promotivni opis:</label>
+	                                    <textarea rows="15" cols="10" placeholder="Unesite promotivni opis hotela" required="required" id="profil_servisa_opis"></textarea>
+	                                </div>
+	                                <div class="row row-space">
 	                                    <div class="col-2">
-	                                        <div class="input-group">
-												<label class="label">Dužina:</label>
-												<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
-											</div>
+	                                    	<input type="submit" class="btn btn-submit" value="Potvrdi izmjene"/>
 	                                    </div>
-										<div class="col-2">
-	                                        <div class="input-group">
-												<label class="label">Širina:</label>
-												<input class="input--style-2" type="number" step = "0.0001" value = "0" required="required">
-											</div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaRacServisa">Poništi izmjene</button>
 	                                    </div>
-	                            </div>
-								<div class="input-group">
-									<label class="label">Opis:</label>
-									<input class="input--style-2" id = "profil_servisa_opis" type="text" >
-								</div>
-								<button type="submit" class="btn btn-submit">Izmjeni</button>
-							</form>
+	                                </div>
+	                        </form>
                         </div>
+                        
                         <div class="tab-pane" id="tab-profil-kor">
                         	<form id = "forma_profil_korisnika">
 	                            <div class="input-group">
@@ -401,6 +423,11 @@
             	</div>
         	</div>
         </div>    
+	
+	<!-- Popup window -->
+    <script type="text/javascript" src="js/popup.js"></script>
+    <!-- Yandex maps -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=1b646e0c-0691-4643-b29c-f34cbe4be5c8" type="text/javascript"></script>
 	
     <!-- Main JS-->
     <script src="js/global.js"></script>

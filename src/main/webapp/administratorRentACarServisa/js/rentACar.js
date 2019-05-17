@@ -1,9 +1,13 @@
 var rentACarServis = null;
 var korisnik = null;
 var filijale = null;
+var defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
+var mapaRacServisa = null;
+var zoomLevel = 17;
 
 $(document).ready(function() {
 	ucitajPodatkeSistema();
+	ymaps.ready(inicijalizujMape);
 	korisnikInfo();
 	
 	$("#vozila").click(function(e){
@@ -42,6 +46,7 @@ $(document).ready(function() {
 		dobaviSveFilijale();
 	
 	});
+	
 	$("#profil_servisa").click(function(e){
 		e.preventDefault();
 		$("#tab-profil-servisa").show();
@@ -58,6 +63,12 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 
 		profilServisa();
+	});
+	
+	$("#ponistavanjeIzmjenaRacServisa").click(function(e) {
+		e.preventDefault();
+		prikaziPodatkeServisa();
+		postaviMarker(mapaRacServisa, [rentACarServis.adresa.latituda, rentACarServis.adresa.longituda]);
 	});
 	
 	$("#izmjeni_podatke_tab").click(function(e){
@@ -162,6 +173,7 @@ function ucitajPodatkeSistema(){
 		type : 'GET',
 		url : "../rentACar/podaciOServisu",
 		dataType : "json",
+		async: false,
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(data){
 			if(data != null){
@@ -616,10 +628,17 @@ function prikazFilijalaOdabranogServisa(){
 
 }
 
-function profilServisa(){
+function prikaziPodatkeServisa() {
 	$("#profil_servisa_naziv").val(rentACarServis.naziv);
 	$("#profil_servisa_adresa").val(rentACarServis.adresa.punaAdresa);
 	$("#profil_servisa_opis").val(rentACarServis.promotivniOpis);
+	$("#slikaRacServisa").attr("src", defaultSlika);
+	$("#latitudaServisa").val(rentACarServis.adresa.latituda);
+	$("#longitudaServisa").val(rentACarServis.adresa.longituda);
+}
+
+function profilServisa(){
+	prikaziPodatkeServisa();
 	
 	$("#profil_servisa_forma").unbind().submit(function(e){
 		e.preventDefault();
@@ -629,14 +648,27 @@ function profilServisa(){
 			alert("Polje za unos adrese servisa ne moze biti prazno.");
 			return;
 		}
+		var _lat = $("#latitudaServisa").val();
+		var _long = $("#longitudaServisa").val();
+		
+		if(_lat == "" || _long == "") {
+			alert("Morate zadati lokaciju rent-a-car servisa na mapi.");
+			return;
+		}
+		
 		var opis = $("#profil_servisa_opis").val();
 		if (opis == ''){
 			alert("Polje za unos promotivnog opisa servisa ne moze biti prazno.");
 			return;
 		}
+		
 		let racServis = {
 				naziv: naziv_serv, 
-				adresa: { punaAdresa : adresa }, 
+				adresa: { 
+					punaAdresa: adresa,
+					latituda: _lat,
+					longituda: _long
+				}, 
 				promotivniOpis: opis,
 				sumaOcjena: 0,
 				brojOcjena: 0,
@@ -812,4 +844,52 @@ function izmjenaInicijalneLozinke() {
 	$("#izmjenaInicijalneLozinkePoruka").show();
 	$("#tab-profil-lozinka").show();
 	promjeniLozinku();
+}
+
+function postaviMarker(mapa, koordinate) {
+	var placemark = new ymaps.Placemark(koordinate);
+	mapa.geoObjects.removeAll();
+	mapa.geoObjects.add(placemark);
+	mapa.setCenter(koordinate);
+}
+
+function inicijalizujMape() {
+	var coords = [rentACarServis.adresa.latituda, rentACarServis.adresa.longituda];
+	mapaRacServisa = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaRacServisa.controls.add('geolocationControl');
+	mapaRacServisa.controls.add('typeSelector');
+	mapaRacServisa.controls.add('zoomControl');
+	postaviMarker(mapaRacServisa, coords);
+	
+	mapaRacServisa.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(mapaRacServisa, coords);
+		$("#latitudaServisa").val(coords[0]);
+		$("#longitudaServisa").val(coords[1]);
+	});
+	
+	/*
+	coords = [44.7866, 20.4489];
+	mapaDestinacije = new ymaps.Map('destinacijaMapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaDestinacije.controls.add('geolocationControl');
+	mapaDestinacije.controls.add('typeSelector');
+	mapaDestinacije.controls.add('zoomControl');
+	
+	mapaDestinacije.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(mapaDestinacije, coords);
+		$("#latitudaDestinacije").val(coords[0]);
+		$("#longitudaDestinacije").val(coords[1]);
+	});
+	*/
 }
