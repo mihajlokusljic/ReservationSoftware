@@ -25,9 +25,22 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+    
+    <!-- Popup window -->
+    <link href="css/popup.css" rel="stylesheet" media="all">
+    
 </head>
 
 <body>
+	<!-- Mapa za prikaz adrese -->
+	<div class="hover_bkgr_fricc">
+		<span class="helper"></span>
+		    <div>
+		        <div class="popupCloseButton">X</div>
+		        <div style="width: 100%; height: 100%;" id="mapa"></div>
+		    </div>
+	</div>
+	
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
         <div class="wrapper wrapper--w1050">
             <div class="card card-3">
@@ -43,6 +56,9 @@
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-filijale" data-toggle="tab" id ="filijale">Filijale</a>
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="../registrovaniKorisnikPocetna/index.html">Nazad na početnu stranicu</a>
@@ -65,6 +81,7 @@
 			                                    <label class="label">Adresa:</label>
 			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
 			                                    <input class="input--style-2" type="text" id="adresaRac" readonly="readonly">
+			          			                <a class="trigger_popup_fricc" id="lokacijaRacServisaPrikaz">Prikaži na mapi</a>
 			                                </div>
 			                                <div class="input-group">
 			                                    <label class="label">Ocjena:</label>
@@ -192,6 +209,19 @@
 								</tbody>
 							</table>
                         </div>
+                        
+                        <div class="tab-pane" id="tab-filijale">
+								<table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Adresa</th>
+										<th class = "column1">Lokacija</th>
+									</tr>
+								</thead>
+								<tbody id="prikazFilijala">
+								</tbody>
+							</table>
+                        </div>
 							
                     </div>
                 </div>
@@ -208,6 +238,11 @@
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
+    
+    <!-- Popup window -->
+    <script type="text/javascript" src="js/popup.js"></script>
+    <!-- Yandex maps -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=1b646e0c-0691-4643-b29c-f34cbe4be5c8" type="text/javascript"></script>
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
