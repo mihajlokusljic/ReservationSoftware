@@ -62,14 +62,12 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/dodajVozilo/{imeRacServisa}", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> dodajNovoVozilo(@PathVariable("imeRacServisa") String nazivServisa,@RequestBody Vozilo vozilo) {
-		System.out.println("Filijala id " + vozilo.getFilijala().getId());
 		return new ResponseEntity<String>(servis.dodajVozilo(nazivServisa, vozilo),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/svaVozilaServisa/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
  	public ResponseEntity<?> svaVozila(@PathVariable("nazivServisa") String nazivServisa){
-		System.out.println(nazivServisa);
 		if (servis.servisPostoji(nazivServisa) == false) {
 			return new ResponseEntity<String>("Servis koji ste unijeli ne postoji.",HttpStatus.OK);
 		}
