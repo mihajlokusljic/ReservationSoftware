@@ -40,42 +40,46 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
 	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
-		return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniProfilRegistrovanogKorisnika(korisnik), HttpStatus.OK);
+		return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniProfilRegistrovanogKorisnika(korisnik),
+				HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/dobaviSvePrijatelje", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> dobaviPrijatelje(@RequestBody Long korisnikId) {
 		try {
-		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviPrijatelje(korisnikId),HttpStatus.OK);
+			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviPrijatelje(korisnikId),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dobaviKorisnikeZaDodavanjePrijatelja", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> dobaviKorisnikeZaPrijateljstvo(@RequestBody Long korisnikId) {
 		try {
-		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviKorisnikeZaPrijateljstvo(korisnikId),HttpStatus.OK);
+			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(
+					korisnikService.dobaviKorisnikeZaPrijateljstvo(korisnikId), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dobaviZahtjeveZaPrijateljstvo", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> dobaviZahtjeveZaPrijateljstvo(@RequestBody Long korisnikId) {
 		try {
-		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviZahtjeveZaPrijateljstvo(korisnikId),HttpStatus.OK);
+			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(
+					korisnikService.dobaviZahtjeveZaPrijateljstvo(korisnikId), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dodajPrijatelja", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> dodajPrijatelja(Long korisnikId, Long primalacId) {
@@ -85,17 +89,18 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/prihvatiZahtjevZaPrijateljstvo", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) {
 		try {
-			return new ResponseEntity<Boolean>(korisnikService.prihvatiZahtjevZaPrijateljstvo(idZahtjeva), HttpStatus.OK);
+			return new ResponseEntity<Boolean>(korisnikService.prihvatiZahtjevZaPrijateljstvo(idZahtjeva),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/odbijZahtjevZaPrijateljstvo", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> odbijZahtjevZaPrijateljstvo(Long idZahtjeva) {
@@ -105,5 +110,16 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
+	@RequestMapping(value = "/daLiJeZahtjevVecPoslat", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> daLiJeZahtjevVecPoslat(Long idZahtjeva, Long idPosiljaoca, Long idPrimaoca) {
+		try {
+			return new ResponseEntity<Boolean>(
+					korisnikService.daLiJeZahtjevVecPoslat(idZahtjeva, idPosiljaoca, idPrimaoca), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+
 }

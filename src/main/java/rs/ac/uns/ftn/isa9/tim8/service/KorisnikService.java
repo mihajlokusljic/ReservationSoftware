@@ -250,4 +250,10 @@ public class KorisnikService {
 		return zahtjeviZaPrijateljstvo;
 	}
 
+	public Boolean daLiJeZahtjevVecPoslat(Long idZahtjeva, Long idPosiljaoca, Long idPrimaoca) {
+		Optional<ZahtjevZaPrijateljstvo> zahtjeviPretraga = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
+		
+		return null;
+	}
+
 }

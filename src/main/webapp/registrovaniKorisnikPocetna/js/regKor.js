@@ -412,6 +412,7 @@ function promjeniLozinku(){
 }
 
 function prikaziPrijatelje(prijatelji) {
+	$("#pregledPrijateljaRows").empty();
 	$.each(prijatelji, function(i, prijatelj) {
 		prikaziPrijatelja(prijatelj);
 	})
@@ -421,9 +422,13 @@ function prikaziPrijatelja(prijatelj) {
 	let prijateljiTabela = $("#pregledPrijateljaRows");
 	let noviRed = $("<tr></tr>");
 	noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
-	"</td>");	
+	"</td>");
+	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
+	noviRed.append('<td class="column1"><button class="btn-submit obrisiPrijateljaClass" type="button" id="pgp' + prijatelj.id + 
+			'">' + '></button>❌</td>');
+	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
 }
 
@@ -442,7 +447,7 @@ function prikaziKorisnikaZaPrijateljstvo(prijatelj) {
 	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
-	noviRed.append('<td class="column1"><button class="btn-submit dodajPrijateljaClass" type="button" id="' 
+	noviRed.append('<td class="column1"><button class="btn-submit dodajPrijateljaClass" type="button" id="dpt' 
 			+ prijatelj.id + '">Dodaj prijatelja</button></td>');
 	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
@@ -463,9 +468,9 @@ function prikaziKorisnikaKojiJeZatrazioPrijateljstvo(prijatelj) {
 	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
-	noviRed.append('<td class="column1"><button class="btn-submit prihvatiPrijateljstvoClass" type="button" id="' 
+	noviRed.append('<td class="column1"><button class="btn-submit prihvatiPrijateljstvoClass" type="button" id="zpp' 
 			+ prijatelj.id + '">✔️</button></td>');
-	noviRed.append('<td class="column1"><button class="btn-submit odbijPrijateljstvoClass" type="button" id="' 
+	noviRed.append('<td class="column1"><button class="btn-submit odbijPrijateljstvoClass" type="button" id="zpo' 
 			+ prijatelj.id + '">❌</button></td>');
 	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
