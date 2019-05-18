@@ -34,6 +34,9 @@ $(document).ready(function() {
 	//ucitavanje rent-a-car servisa
 	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 	
+	
+	ucitajRezervacije();
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -334,4 +337,61 @@ function promjeniLozinku(){
 function odjava() {
 	removeJwtToken();
 	window.location.replace("../pocetnaStranica/index.html");
+}
+
+function ucitajRezervacije(){
+	ucitajRezervisaneLetove();
+	ucitajRezervisaneSobe();
+	ucitajRezervisanaVozila();
+}
+
+function ucitajRezervisaneLetove(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisaniLetovi",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			alert(data.length);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
+}
+
+function ucitajRezervisaneSobe(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisaneSobe",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			alert(data.length);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
+}
+
+function ucitajRezervisanaVozila(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisanaVozila",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			alert(data.length);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
 }

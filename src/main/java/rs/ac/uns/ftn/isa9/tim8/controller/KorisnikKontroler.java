@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
@@ -42,5 +50,26 @@ public class KorisnikKontroler {
 	public ResponseEntity<?> izmjeniKorisnika(@RequestBody KorisnikDTO korisnik) {
 		return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniProfilRegistrovanogKorisnika(korisnik), HttpStatus.OK);
 	}
-
+	
+	@RequestMapping(value = "/rezervisanaVozila", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisanaVozila() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<RezervacijaVozila>>(korisnikService.vratiRezervacijeVozila(regKor), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/rezervisaniLetovi", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisaniLetovi() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<RezervacijaSjedista>>(korisnikService.vratiRezervacijeLetova(regKor), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/rezervisaneSobe", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisaneSobe() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<RezervacijaSobe>>(korisnikService.vratiRezervacijeSoba(regKor), HttpStatus.OK);
+	}
 }
