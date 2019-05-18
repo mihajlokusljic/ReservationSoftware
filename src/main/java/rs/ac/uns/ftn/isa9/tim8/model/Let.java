@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -70,6 +72,7 @@ public class Let {
 	protected Set<RezervacijaSjedista> rezervacije;
 
 	@Column(name = "cijena_karte", nullable = true)
+	@ColumnDefault("0")
 	protected double cijenaKarte;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "let")

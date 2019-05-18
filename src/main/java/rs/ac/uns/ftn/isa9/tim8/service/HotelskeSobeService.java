@@ -196,7 +196,7 @@ public class HotelskeSobeService {
 		}
 		ArrayList<HotelskaSoba> rezultat = new ArrayList<HotelskaSoba>();
 		for(HotelskaSoba s : hotel.getSobe()) {
-			if(!this.sobaJeRezervisana(s, pocetniDatum, krajnjiDatum)) {
+			if(!this.sobaJeRezervisana(s, pocetniDatum, krajnjiDatum) && !this.sobaJeNaBrzojRezervaciji(s, pocetniDatum, krajnjiDatum)) {
 				rezultat.add(s);
 			}
 		}
@@ -238,8 +238,15 @@ public class HotelskeSobeService {
 			throw new NevalidniPodaciException("Data soba se vec nalazi na brzoj rezervaciji u zadatom vremenskom periodu");
 		}
 		BrzaRezervacijaSoba brs = new BrzaRezervacijaSoba(datumDolaska, datumOdlaska, 0, 0, new HashSet<Usluga>(), target);
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		brs.setBaznaCijena(brojNocenja * target.getCijena());
 		this.brzeRezervacijeRepository.save(brs);
 		novaRezervacija.setId(brs.getId());
+		novaRezervacija.setCijenaBoravka(brs.getBaznaCijena());
 		return novaRezervacija;
 	}
 

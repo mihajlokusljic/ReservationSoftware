@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -26,7 +28,8 @@ public class Usluga {
 	protected String naziv;
 	
 	@Column(name = "cijena", nullable = false)
-	protected double cijena;
+	@ColumnDefault("0")
+	protected double cijena = 0;
 	
 	//odredjuje procenat popusta na ukupnu cijenu usluga poslovnice koji donosi ova usluga
 	@Column(name = "procenat_popusta", nullable = false)

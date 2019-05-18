@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "rezervacija_sobe")
 public class RezervacijaSobe {
@@ -33,6 +35,7 @@ public class RezervacijaSobe {
 	protected Date datumOdlaska;
 	
 	@Column(name = "cijena", nullable = false)
+	@ColumnDefault("0")
 	protected double cijena;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

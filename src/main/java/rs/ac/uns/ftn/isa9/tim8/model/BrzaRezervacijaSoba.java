@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "brza_rezervacija_soba")
 public class BrzaRezervacijaSoba {
@@ -35,6 +37,7 @@ public class BrzaRezervacijaSoba {
 	protected Date datumOdlaska;
 	
 	@Column(name = "bazna_cijena", nullable = false)
+	@ColumnDefault("0")
 	protected double baznaCijena;
 	
 	@Column(name = "procenat_popusta", nullable = false)
