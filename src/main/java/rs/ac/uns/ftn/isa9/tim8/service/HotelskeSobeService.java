@@ -6,18 +6,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
+import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelskaSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijeSobaRepository;
@@ -33,6 +38,9 @@ public class HotelskeSobeService {
 	
 	@Autowired
 	RezervacijeSobaRepository rezervacijeRepository;
+	
+	@Autowired
+	BrzeRezervacijeSobaRepository brzeRezervacijeRepository;
 
 	public HotelskaSoba dodajSobuHotelu(DodavanjeSobeDTO podaci) throws NevalidniPodaciException {
 		Optional<Hotel> hotelSearch = this.hoteliRepository.findById(podaci.getIdHotela());
@@ -141,6 +149,18 @@ public class HotelskeSobeService {
 		return false;
 	}
 	
+	public boolean sobaJeNaBrzojRezervaciji(HotelskaSoba soba, Date pocetniDatum, Date krajnjiDatum) {
+		if(pocetniDatum == null || krajnjiDatum == null) {
+			return false;
+		}
+		for(BrzaRezervacijaSoba r : this.brzeRezervacijeRepository.findAllBySobaZaRezervaciju(soba)) {
+			if(!pocetniDatum.after(r.getDatumOdlaska()) && !r.getDatumDolaska().after(krajnjiDatum)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean sobaJeTrenutnoRezervisana(HotelskaSoba soba) {
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		String trenutniDatumStr = df.format(new Date());
@@ -181,6 +201,46 @@ public class HotelskeSobeService {
 			}
 		}
 		return rezultat;
+	}
+
+	public BrzaRezervacijaSobeDTO dodajBrzuRezervaciju(BrzaRezervacijaSobeDTO novaRezervacija) throws NevalidniPodaciException {
+		Optional<HotelskaSoba> sobaSearch = this.sobeRepository.findById(novaRezervacija.getIdSobe());
+		if(!sobaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadata soba.");
+		}
+		HotelskaSoba target = sobaSearch.get();
+		AdministratorHotela admin = (AdministratorHotela) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Hotel administriraniHotel = admin.getHotel();
+		if(!target.getHotel().getId().equals(administriraniHotel.getId())) {
+			throw new NevalidniPodaciException("Niste ulogovani kao ovlascen administrator za dati hotel");
+		}
+		Date datumDolaska = null;
+		Date datumOdlaska = null;
+		Date danasnjiDatum = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			datumDolaska = df.parse(novaRezervacija.getDatumDolaska());
+			datumOdlaska = df.parse(novaRezervacija.getDatumOdlaska());
+			danasnjiDatum = df.parse(df.format(new Date()));
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		if(datumDolaska.before(danasnjiDatum) || datumOdlaska.before(danasnjiDatum)) {
+			throw new NevalidniPodaciException("Datumi ne smiju biti u proslosti.");
+		}
+		if(datumOdlaska.before(datumDolaska)) {
+			throw new NevalidniPodaciException("Datum odlaska ne moze biti prije datuma dolaska");
+		}
+		if(sobaJeRezervisana(target, datumDolaska, datumOdlaska)) {
+			throw new NevalidniPodaciException("Data soba je rezervisana u zadatom vremenskom periodu.");
+		}
+		if(sobaJeNaBrzojRezervaciji(target, datumDolaska, datumOdlaska)) {
+			throw new NevalidniPodaciException("Data soba se vec nalazi na brzoj rezervaciji u zadatom vremenskom periodu");
+		}
+		BrzaRezervacijaSoba brs = new BrzaRezervacijaSoba(datumDolaska, datumOdlaska, 0, 0, new HashSet<Usluga>(), target);
+		this.brzeRezervacijeRepository.save(brs);
+		novaRezervacija.setId(brs.getId());
+		return novaRezervacija;
 	}
 
 }
