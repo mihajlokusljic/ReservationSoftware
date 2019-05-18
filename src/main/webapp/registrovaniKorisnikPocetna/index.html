@@ -227,8 +227,31 @@
                      	</div>
                     	
                     	<div class="tab-pane" id="dodaj-prijatelje-tab">
-                    	DODAJ PRIJATELJE
-                     	</div>
+                  			<form method="POST" action="#" id="dodavanjePrijateljaForm" name="dodavanjePrijateljaForma">
+                                <div class="input-group">
+                                    <label class="label">Ime i prezime</label>
+                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite ime i prezime" id="dodavanjePrijateljaSearch">
+                                </div>
+                                <button class="btn-submit" type="submit">Pretraži</button>
+                            </form>
+                            
+                            <h1>&nbsp</h1>
+                            
+                            <!-- Tabela za prikaz osoba koje je moguće dodati kao prijatelje -->
+                            <table>
+							<thead>
+							<tr class="table100-head">
+								<th class="column1">Slika</th>
+								<th class="column1">Ime</th>
+								<th class="column1">Prezime</th>
+								<th class="column1">Akcija</th>
+								
+							</tr>
+							</thead>
+						<tbody id="dodavanjePrijateljaRows">
+						</tbody>
+							</table>                     	
+						</div>
                      	
                     	<div class="tab-pane" id="zahtjevi-prijateljstva-tab">
                     	zahtjevi_prijateljstva_tab
