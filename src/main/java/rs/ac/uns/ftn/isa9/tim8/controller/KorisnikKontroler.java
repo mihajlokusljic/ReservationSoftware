@@ -46,7 +46,7 @@ public class KorisnikKontroler {
 		return new ResponseEntity<KorisnikDTO>(korisnikService.izmjeniProfilRegistrovanogKorisnika(korisnik), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/dobaviSvePrijatelje", method = RequestMethod.GET)
+	@RequestMapping(value = "/dobaviSvePrijatelje", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> dobaviPrijatelje(@RequestBody Long korisnikId) {
 		try {
@@ -61,6 +61,16 @@ public class KorisnikKontroler {
 	public ResponseEntity<?> dobaviKorisnikeZaPrijateljstvo(@RequestBody Long korisnikId) {
 		try {
 		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviKorisnikeZaPrijateljstvo(korisnikId),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/dobaviZahtjeveZaPrijateljstvo", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> dobaviZahtjeveZaPrijateljstvo(@RequestBody Long korisnikId) {
+		try {
+		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviZahtjeveZaPrijateljstvo(korisnikId),HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}

@@ -30,7 +30,7 @@ public class KorisnikService {
 
 	@Autowired
 	protected ZahtjevZaPrijateljstvoRepository zahtjevZaPrijateljstvoRepository;
-	
+
 	public KorisnikDTO izmjeniPorfilKorisnika(KorisnikDTO noviPodaci) throws NevalidniPodaciException {
 		Osoba o;
 		try {
@@ -127,14 +127,15 @@ public class KorisnikService {
 
 		return prijatelji;
 	}
-	
-	public Collection<PretragaPrijateljaDTO> dobaviKorisnikeZaPrijateljstvo(Long korisnikId) throws NevalidniPodaciException {
+
+	public Collection<PretragaPrijateljaDTO> dobaviKorisnikeZaPrijateljstvo(Long korisnikId)
+			throws NevalidniPodaciException {
 		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
 
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
 		}
-		
+
 		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
 		PretragaPrijateljaDTO dtoObj = null;
 		List<Osoba> korisnici = korisnikRepository.findAll();
@@ -160,7 +161,7 @@ public class KorisnikService {
 		}
 		return false;
 	}
-	
+
 	public Boolean dodajPrijatelja(Long korisnikId, Long primalacId) throws NevalidniPodaciException {
 		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
 
@@ -177,56 +178,76 @@ public class KorisnikService {
 		}
 
 		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
-		
+
 		ZahtjevZaPrijateljstvo zahtjevZaPrijateljstvo = new ZahtjevZaPrijateljstvo(false, posiljalac, primalac);
 		primalac.getPrimljeniZahtjevi().add(zahtjevZaPrijateljstvo);
-		
-		
+
 		zahtjevZaPrijateljstvoRepository.save(zahtjevZaPrijateljstvo);
 		korisnikRepository.save(primalac);
-		
+
 		return true;
 	}
 
 	public Boolean prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
 		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
-		
+
 		if (!pretragaZahtjeva.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
 		}
-		
+
 		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
-		
+
 		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
-		
+
 		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
-		
+
 		zahtjev.getPrimalac().getPrijatelji().add(zahtjev.getPosiljalac());
 		zahtjev.getPosiljalac().getPrijatelji().add(zahtjev.getPrimalac());
-		
+
 		korisnikRepository.save(zahtjev.getPrimalac());
 		korisnikRepository.save(zahtjev.getPosiljalac());
-		
+
 		return true;
 	}
 
 	public Boolean odbijZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
 		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
-		
+
 		if (!pretragaZahtjeva.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
 		}
 
 		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
-		
+
 		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
-		
+
 		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
-		
+
 		korisnikRepository.save(zahtjev.getPrimalac());
 		korisnikRepository.save(zahtjev.getPosiljalac());
 
 		return true;
+	}
+
+	public Collection<PretragaPrijateljaDTO> dobaviZahtjeveZaPrijateljstvo(Long korisnikId)
+			throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
+
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
+		}
+
+		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		PretragaPrijateljaDTO dtoObj = null;
+		Collection<PretragaPrijateljaDTO> zahtjeviZaPrijateljstvo = new HashSet<PretragaPrijateljaDTO>();
+
+		for (ZahtjevZaPrijateljstvo sviZahtjevi : registrovaniKor.getPrimljeniZahtjevi()) {
+			dtoObj = new PretragaPrijateljaDTO(sviZahtjevi.getPosiljalac().getId(),
+					sviZahtjevi.getPosiljalac().getIme(), sviZahtjevi.getPosiljalac().getPrezime());
+			zahtjeviZaPrijateljstvo.add(dtoObj);
+		}
+
+		return zahtjeviZaPrijateljstvo;
 	}
 
 }
