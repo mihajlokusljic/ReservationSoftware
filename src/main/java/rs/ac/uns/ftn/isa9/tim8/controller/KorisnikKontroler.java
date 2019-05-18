@@ -48,9 +48,19 @@ public class KorisnikKontroler {
 	
 	@RequestMapping(value = "/dobaviSvePrijatelje", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> dobaviPrijatelje(Long korisnikId) {
+	public ResponseEntity<?> dobaviPrijatelje(@RequestBody Long korisnikId) {
 		try {
 		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviPrijatelje(korisnikId),HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/dobaviKorisnikeZaDodavanjePrijatelja", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> dobaviKorisnikeZaPrijateljstvo(@RequestBody Long korisnikId) {
+		try {
+		return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.dobaviKorisnikeZaPrijateljstvo(korisnikId),HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}

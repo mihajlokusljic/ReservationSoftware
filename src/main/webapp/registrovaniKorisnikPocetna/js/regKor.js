@@ -114,9 +114,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
-		
-		
-		
+				
 		});
 
 	$("#dodaj_prijatelje_tab").click(function(e){
@@ -132,7 +130,18 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+
+		$.ajax({
+			type: "POST",
+			url : "../korisnik/dobaviKorisnikeZaDodavanjePrijatelja",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(korisnik.id),
+			success: function(response) {
+				prikaziKorisnikeZaPrijateljstvo(response);
+			},
 		});
+		
+	});
 	
 	$("#zahtjevi_prijateljstva_tab").click(function(e){
 		e.preventDefault();
@@ -394,6 +403,27 @@ function prikaziPrijatelja(prijatelj) {
 	"</td>");	
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
+	prijateljiTabela.append(noviRed);
+}
+
+function prikaziKorisnikeZaPrijateljstvo(prijatelji) {
+	$("#dodavanjePrijateljaRows").empty();
+	$.each(prijatelji, function(i, prijatelj) {
+		prikaziKorisnikaZaPrijateljstvo(prijatelj);
+	})
+}
+
+function prikaziKorisnikaZaPrijateljstvo(prijatelj) {
+	let prijateljiTabela = $("#dodavanjePrijateljaRows");
+	let noviRed = $("<tr></tr>");
+	noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
+	"</td>");
+	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
+	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
+	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
+	noviRed.append('<td class="column1"><button class="btn-submit dodajPrijateljaClass" type="button" id="' 
+			+ prijatelj.id + '">Dodaj prijatelja</button></td>');
+	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
 }
 

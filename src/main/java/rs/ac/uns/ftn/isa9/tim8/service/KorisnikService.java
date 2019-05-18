@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +127,40 @@ public class KorisnikService {
 
 		return prijatelji;
 	}
+	
+	public Collection<PretragaPrijateljaDTO> dobaviKorisnikeZaPrijateljstvo(Long korisnikId) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
 
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
+		}
+		
+		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		PretragaPrijateljaDTO dtoObj = null;
+		List<Osoba> korisnici = korisnikRepository.findAll();
+		Collection<PretragaPrijateljaDTO> nisuPrijatelji = new HashSet<PretragaPrijateljaDTO>();
+
+		for (Osoba korisnik : korisnici) {
+			if (korisnik instanceof RegistrovanKorisnik) {
+				RegistrovanKorisnik regKor = (RegistrovanKorisnik) korisnik;
+				if (!daLiSuPrijatelji(registrovaniKor, regKor)) {
+					dtoObj = new PretragaPrijateljaDTO(regKor.getId(), regKor.getIme(), regKor.getPrezime());
+					nisuPrijatelji.add(dtoObj);
+				}
+			}
+		}
+		return nisuPrijatelji;
+	}
+
+	public Boolean daLiSuPrijatelji(RegistrovanKorisnik prviKorisnik, RegistrovanKorisnik drugiKorisnik) {
+		for (RegistrovanKorisnik prijatelj : prviKorisnik.getPrijatelji()) {
+			if (prijatelj.getEmail().equalsIgnoreCase(drugiKorisnik.getEmail())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Boolean dodajPrijatelja(Long korisnikId, Long primalacId) throws NevalidniPodaciException {
 		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
 
