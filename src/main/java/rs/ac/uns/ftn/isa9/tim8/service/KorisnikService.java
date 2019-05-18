@@ -13,8 +13,10 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.ZahtjevZaPrijateljstvo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.ZahtjevZaPrijateljstvoRepository;
 
 @Service
 public class KorisnikService {
@@ -25,6 +27,9 @@ public class KorisnikService {
 	@Autowired
 	protected AdresaRepository adresaRepository;
 
+	@Autowired
+	protected ZahtjevZaPrijateljstvoRepository zahtjevZaPrijateljstvoRepository;
+	
 	public KorisnikDTO izmjeniPorfilKorisnika(KorisnikDTO noviPodaci) throws NevalidniPodaciException {
 		Osoba o;
 		try {
@@ -118,8 +123,76 @@ public class KorisnikService {
 			dtoObj = new PretragaPrijateljaDTO(prijatelj.getId(), prijatelj.getIme(), prijatelj.getPrezime());
 			prijatelji.add(dtoObj);
 		}
-		
+
 		return prijatelji;
+	}
+
+	public Boolean dodajPrijatelja(Long korisnikId, Long primalacId) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
+
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
+		}
+
+		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+
+		pretragaKonkretnogKorisnika = korisnikRepository.findById(primalacId);
+
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takva osoba u sistemu za slanje zahtjeva za prijateljstvo.");
+		}
+
+		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		
+		ZahtjevZaPrijateljstvo zahtjevZaPrijateljstvo = new ZahtjevZaPrijateljstvo(false, posiljalac, primalac);
+		primalac.getPrimljeniZahtjevi().add(zahtjevZaPrijateljstvo);
+		
+		
+		zahtjevZaPrijateljstvoRepository.save(zahtjevZaPrijateljstvo);
+		korisnikRepository.save(primalac);
+		
+		return true;
+	}
+
+	public Boolean prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
+		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
+		
+		if (!pretragaZahtjeva.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
+		}
+		
+		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
+		
+		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
+		
+		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
+		
+		zahtjev.getPrimalac().getPrijatelji().add(zahtjev.getPosiljalac());
+		zahtjev.getPosiljalac().getPrijatelji().add(zahtjev.getPrimalac());
+		
+		korisnikRepository.save(zahtjev.getPrimalac());
+		korisnikRepository.save(zahtjev.getPosiljalac());
+		
+		return true;
+	}
+
+	public Boolean odbijZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
+		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
+		
+		if (!pretragaZahtjeva.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
+		}
+
+		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
+		
+		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
+		
+		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
+		
+		korisnikRepository.save(zahtjev.getPrimalac());
+		korisnikRepository.save(zahtjev.getPosiljalac());
+
+		return true;
 	}
 
 }

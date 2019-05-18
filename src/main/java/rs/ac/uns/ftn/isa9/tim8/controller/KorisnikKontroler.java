@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
-import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
-import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
@@ -58,5 +55,35 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-
+	
+	@RequestMapping(value = "/dodajPrijatelja", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> dodajPrijatelja(Long korisnikId, Long primalacId) {
+		try {
+			return new ResponseEntity<Boolean>(korisnikService.dodajPrijatelja(korisnikId, primalacId), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/prihvatiZahtjevZaPrijateljstvo", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) {
+		try {
+			return new ResponseEntity<Boolean>(korisnikService.prihvatiZahtjevZaPrijateljstvo(idZahtjeva), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/odbijZahtjevZaPrijateljstvo", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> odbijZahtjevZaPrijateljstvo(Long idZahtjeva) {
+		try {
+			return new ResponseEntity<Boolean>(korisnikService.odbijZahtjevZaPrijateljstvo(idZahtjeva), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
 }
