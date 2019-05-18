@@ -160,6 +160,7 @@ h2 {
 
 h3 {
   font-size: 24px;
+  color: white;
 }
 
 h4 {
@@ -1304,4 +1305,3 @@ tbody tr:hover {
 .dropdown-content a:hover {background-color: #ddd;}
 
 .dropdown:hover .dropdown-content {display: block;}
-
