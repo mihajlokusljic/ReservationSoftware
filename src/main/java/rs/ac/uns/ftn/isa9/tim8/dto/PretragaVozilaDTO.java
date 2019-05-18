@@ -12,11 +12,15 @@ public class PretragaVozilaDTO {
 	protected Long idMjestoVracanja;
 	protected String tipVozila;
 	protected int brojPutnika;
+	protected Integer minimalnaCijenaPoDanu;
+	protected Integer maksimalnaCijenaPoDanu;
 	
 	
+
+
 	public PretragaVozilaDTO(Long idRac, String datumPreuzimanja, String datumVracanja, String vrijemePreuzimanja,
-			String vrijemeVracanja, Long idMjestoPreuzimanja, Long idMjestoVracanja, String tipVozila,
-			int brojPutnika) {
+			String vrijemeVracanja, Long idMjestoPreuzimanja, Long idMjestoVracanja, String tipVozila, int brojPutnika,
+			Integer minimalnaCijenaPoDanu, Integer maksimalnaCijenaPoDanu) {
 		super();
 		this.idRac = idRac;
 		this.datumPreuzimanja = datumPreuzimanja;
@@ -27,6 +31,8 @@ public class PretragaVozilaDTO {
 		this.idMjestoVracanja = idMjestoVracanja;
 		this.tipVozila = tipVozila;
 		this.brojPutnika = brojPutnika;
+		this.minimalnaCijenaPoDanu = minimalnaCijenaPoDanu;
+		this.maksimalnaCijenaPoDanu = maksimalnaCijenaPoDanu;
 	}
 
 	public PretragaVozilaDTO() {
@@ -103,6 +109,22 @@ public class PretragaVozilaDTO {
 
 	public void setBrojPutnika(int brojPutnika) {
 		this.brojPutnika = brojPutnika;
+	}
+
+	public Integer getMinimalnaCijenaPoDanu() {
+		return minimalnaCijenaPoDanu;
+	}
+
+	public void setMinimalnaCijenaPoDanu(Integer minimalnaCijenaPoDanu) {
+		this.minimalnaCijenaPoDanu = minimalnaCijenaPoDanu;
+	}
+
+	public Integer getMaksimalnaCijenaPoDanu() {
+		return maksimalnaCijenaPoDanu;
+	}
+
+	public void setMaksimalnaCijenaPoDanu(Integer maksimalnaCijenaPoDanu) {
+		this.maksimalnaCijenaPoDanu = maksimalnaCijenaPoDanu;
 	}
 		
 	
