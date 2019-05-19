@@ -6,6 +6,7 @@ var mapaRacServisa = null;
 var mapaFilijaleDodavanje = null;
 var mapaFilijaleIzmjena = null;
 var zoomLevel = 17;
+let stavkeMenija = ["stavka_vozila", "stavka_filijale", "stavka_brze_rezervacije", "stavka_profil_servisa", "stavka_profil_korisnika", "stavka_izvjestaj", "stavka_odjava"];
 
 $(document).ready(function() {
 	
@@ -92,6 +93,7 @@ $(document).ready(function() {
 	
 	$("#izmjeni_podatke_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("stavka_profil_korisnika");
 		$("#tab-profil-kor").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profil-servisa").hide();
@@ -108,6 +110,7 @@ $(document).ready(function() {
 	
 	$("#promjeni_lozinku_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("stavka_profil_korisnika");
 		$("#tab-profil-lozinka").show();
 		$("#tab-profil-kor").hide();
 		$("#tab-profil-servisa").hide();
@@ -154,6 +157,58 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-filijala").show();
+	});
+	
+	$("#dodavanjeBrzeRezervacije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_brze_rezervacije");
+		$("#tab-brze-rezervacije-dodavanje").show();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+	});
+	
+	$("#pregledanjeBrzihRezervacija").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaBrzeRezervacije");
+		$("#tab-brze-rezervacije-pregledanje").show();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+
+	});
+	
+	//prikaz koraka za dodavanje brze rezervacije
+	$("#izborVozilaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#izborVozilaBrzeRezervacijeBtn").is(":checked")) {
+			$("#izborVozilaBrzeRezervacije").show();
+			$("#definisanjePopustaBrzeRezervacije").hide();
+		}
+	});
+	
+	$("#definisanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#definisanjePopustaBrzeRezervacijeBtn").is(":checked")) {
+			$("#definisanjePopustaBrzeRezervacije").show();
+			$("#izborVozilaBrzeRezervacije").hide();
+		}
 	});
 	
 	$("#odjava").click(function(e){
@@ -969,4 +1024,14 @@ function inicijalizujMape() {
 		$("#longitudaFilijaleIzmjena").val(coords[1]);
 	});
 	
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
 }
