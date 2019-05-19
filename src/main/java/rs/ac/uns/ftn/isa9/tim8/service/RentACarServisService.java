@@ -71,7 +71,7 @@ public class RentACarServisService {
 			return null;
 		}
 		for( RentACarServis r : rentACarLista) {
-			Poslovnica p = new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
+			Poslovnica p = new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
 			p.setId(r.getId());
 			servisi.add(p);
 		}
@@ -382,7 +382,7 @@ public class RentACarServisService {
 		if (kriterijumiPretrage.getNazivRacIliDestinacije().isEmpty() && pocetniDatum == null && krajnjiDatum == null) {
 			Collection<Poslovnica> p = new ArrayList<>();
 			for (RentACarServis r:rezultat) {
-				p.add(new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
+				p.add(new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
 			}
 			
 			return p;
@@ -426,7 +426,7 @@ public class RentACarServisService {
 		}
 		Collection<Poslovnica> p = new ArrayList<>();
 		for (RentACarServis r:rezultat) {
-			p.add(new Poslovnica(r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
+			p.add(new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
 		}
 		
 		return p;
