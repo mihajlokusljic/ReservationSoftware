@@ -34,7 +34,7 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
 	});
 	
 	$("#avioni").click(function(e){
@@ -88,6 +88,7 @@ $(document).ready(function() {
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
 		profilKorisnika();
+		aktivirajStavkuMenija("#profilKorisnickiTab");
 	});
 	
 	$("#promjeni_lozinku_tab").click(function(e){
@@ -836,6 +837,16 @@ function prikaziUslugu(usluga) {
 	noviRed.append('<td class="column6">' + usluga.cijena + '</td>');
 	noviRed.append('<td class="column1">' + usluga.opis + '</td>');
 	uslugeTabela.append(noviRed);
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
 }
 
 function odjava() {

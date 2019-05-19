@@ -3,28 +3,31 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 
 public class KorisnikDTO {
-	
+
 	protected Long Id;
-	
+
 	protected String ime;
-	
+
 	protected String prezime;
-	
+
 	protected String email;
-	
+
 	protected String lozinka;
 
 	protected String brojTelefona;
-	
+
 	protected Adresa adresa;
-	
+
 	protected boolean lozinkaPromjenjena;
-	
+
+	protected int brojZahtjevaZaPrijateljstvo;
+
 	public KorisnikDTO() {
 		super();
 	}
 
-	public KorisnikDTO(Long Id, String ime, String prezime, String email, String lozinka, String brojTelefona, Adresa adresa) {
+	public KorisnikDTO(Long Id, String ime, String prezime, String email, String lozinka, String brojTelefona,
+			Adresa adresa) {
 		super();
 		this.Id = Id;
 		this.ime = ime;
@@ -34,7 +37,7 @@ public class KorisnikDTO {
 		this.brojTelefona = brojTelefona;
 		this.adresa = adresa;
 	}
-	
+
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String lozinka, String brojTelefona,
 			Adresa adresa, boolean lozinkaPromjenjena) {
 		super();
@@ -46,6 +49,20 @@ public class KorisnikDTO {
 		this.brojTelefona = brojTelefona;
 		this.adresa = adresa;
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
+	}
+
+	public KorisnikDTO(Long id, String ime, String prezime, String email, String lozinka, String brojTelefona,
+			Adresa adresa, boolean lozinkaPromjenjena, int brojZahtjevaZaPrijateljstvo) {
+		super();
+		Id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.lozinka = lozinka;
+		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+		this.brojZahtjevaZaPrijateljstvo = brojZahtjevaZaPrijateljstvo;
 	}
 
 	public String getIme() {
@@ -111,5 +128,13 @@ public class KorisnikDTO {
 	public void setLozinkaPromjenjena(boolean lozinkaPromjenjena) {
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
 	}
-	
+
+	public int getBrojZahtjevaZaPrijateljstvo() {
+		return brojZahtjevaZaPrijateljstvo;
+	}
+
+	public void setBrojZahtjevaZaPrijateljstvo(int brojZahtjevaZaPrijateljstvo) {
+		this.brojZahtjevaZaPrijateljstvo = brojZahtjevaZaPrijateljstvo;
+	}
+
 }

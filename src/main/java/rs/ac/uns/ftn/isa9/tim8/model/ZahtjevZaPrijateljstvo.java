@@ -23,22 +23,37 @@ public class ZahtjevZaPrijateljstvo {
 	@Column(name = "potvrdjen")
 	protected boolean potvrdjen;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "primalac_id")
 	protected RegistrovanKorisnik primalac;
-	
+
 	public ZahtjevZaPrijateljstvo() {
 		super();
 	}
 
-	public ZahtjevZaPrijateljstvo(boolean potvrdjen, RegistrovanKorisnik posiljalac) {
+	public ZahtjevZaPrijateljstvo(RegistrovanKorisnik posiljalac, RegistrovanKorisnik primalac) {
+		super();
+		this.posiljalac = posiljalac;
+		this.primalac = primalac;
+	}
+
+	public ZahtjevZaPrijateljstvo(boolean potvrdjen, RegistrovanKorisnik posiljalac, RegistrovanKorisnik primalac) {
 		super();
 		this.potvrdjen = potvrdjen;
 		this.posiljalac = posiljalac;
+		this.primalac = primalac;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public boolean isPotvrdjen() {
@@ -57,15 +72,14 @@ public class ZahtjevZaPrijateljstvo {
 		this.posiljalac = posiljalac;
 	}
 
-	public Long getId() {
-		return Id;
+	public RegistrovanKorisnik getPrimalac() {
+		return primalac;
 	}
 
-	public void setId(Long id) {
-		this.Id = id;
+	public void setPrimalac(RegistrovanKorisnik primalac) {
+		this.primalac = primalac;
 	}
-	
-	
+
 	
 	
 }
