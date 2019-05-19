@@ -160,6 +160,8 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
 		
+		$("#pregledPrijateljaSearch").val("");
+		
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviSvePrijatelje",
@@ -169,7 +171,7 @@ $(document).ready(function() {
 				prikaziPrijatelje(response);
 			},
 		});
-		
+				
 		});
 
 	$("#dodaj_prijatelje_tab").click(function(e){
@@ -186,16 +188,22 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
 
+		$("#dodavanjePrijateljaSearch").val("");
+
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviKorisnikeZaDodavanjePrijatelja",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(korisnik.id),
+			async: false,
 			success: function(response) {
 				prikaziKorisnikeZaPrijateljstvo(response);
 			},
 		});
 		
+		$("#dodavanjePrijateljaRows").empty();
+
+				
 	});
 	
 	$("#zahtjevi_prijateljstva_tab").click(function(e){
@@ -300,6 +308,54 @@ $(document).ready(function() {
 					alert("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
 				}
 				$('#racSearchForm')[0].reset();
+			},
+		});
+		
+	});
+	
+	$("#dodavanjePrijateljaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let imePrezimeInput = $("#dodavanjePrijateljaSearch").val();
+		
+		let filtriranjePrijateljaDTO = {
+				idKorisnika : korisnik.id,
+				imePrezime: imePrezimeInput,
+				pregledPrijatelja: false
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../korisnik/pretraziPrijatelje",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(filtriranjePrijateljaDTO),
+			success: function(response) {
+				prikaziKorisnikeZaPrijateljstvo(response);
+				return;
+			},
+		});
+		
+	});
+	
+	$("#pregledPrijateljaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let imePrezimeInput = $("#pregledPrijateljaSearch").val();
+		
+		let filtriranjePrijateljaDTO = {
+				idKorisnika : korisnik.id,
+				imePrezime: imePrezimeInput,
+				pregledPrijatelja: true
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../korisnik/pretraziPrijatelje",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(filtriranjePrijateljaDTO),
+			success: function(response) {
+				prikaziPrijatelje(response);
+				return;
 			},
 		});
 		
@@ -530,6 +586,7 @@ function prikaziKorisnikeZaPrijateljstvo(prijatelji) {
 			url : "../korisnik/dodajPrijatelja",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+			async: false,
 			success: function(response) {
 				if (response == true) {
 					alert("Zahtjev je uspješno poslat.");
