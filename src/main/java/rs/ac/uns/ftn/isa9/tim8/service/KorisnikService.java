@@ -197,45 +197,73 @@ public class KorisnikService {
 		return true;
 	}
 
-	public Boolean prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
-		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
-
-		if (!pretragaZahtjeva.isPresent()) {
-			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
+	public Boolean prihvatiZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
+		
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav posiljalac.");
+		}
+		
+		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		
+		pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
+		
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav primalac.");
 		}
 
-		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
+		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		
+		for (ZahtjevZaPrijateljstvo zahtjev : zahtjevZaPrijateljstvoRepository.findAll()) {
+			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail()) &&
+					zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
+				zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
 
-		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
+				zahtjevZaPrijateljstvoRepository.delete(zahtjev);
 
-		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
+				zahtjev.getPrimalac().getPrijatelji().add(zahtjev.getPosiljalac());
+				zahtjev.getPosiljalac().getPrijatelji().add(zahtjev.getPrimalac());
 
-		zahtjev.getPrimalac().getPrijatelji().add(zahtjev.getPosiljalac());
-		zahtjev.getPosiljalac().getPrijatelji().add(zahtjev.getPrimalac());
+				korisnikRepository.save(zahtjev.getPrimalac());
+				korisnikRepository.save(zahtjev.getPosiljalac());
 
-		korisnikRepository.save(zahtjev.getPrimalac());
-		korisnikRepository.save(zahtjev.getPosiljalac());
-
-		return true;
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public Boolean odbijZahtjevZaPrijateljstvo(Long idZahtjeva) throws NevalidniPodaciException {
-		Optional<ZahtjevZaPrijateljstvo> pretragaZahtjeva = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
-
-		if (!pretragaZahtjeva.isPresent()) {
-			throw new NevalidniPodaciException("Ne postoji takav zahtjev.");
+	public Boolean odbijZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
+		
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav posiljalac.");
+		}
+		
+		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		
+		pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
+		
+		if (!pretragaKonkretnogKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji takav primalac.");
 		}
 
-		ZahtjevZaPrijateljstvo zahtjev = pretragaZahtjeva.get();
+		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
+		
+		for (ZahtjevZaPrijateljstvo zahtjev : zahtjevZaPrijateljstvoRepository.findAll()) {
+			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail()) &&
+					zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
+				zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
 
-		zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
+				zahtjevZaPrijateljstvoRepository.delete(zahtjev);
 
-		zahtjevZaPrijateljstvoRepository.delete(zahtjev);
+				korisnikRepository.save(zahtjev.getPrimalac());
+				korisnikRepository.save(zahtjev.getPosiljalac());
 
-		korisnikRepository.save(zahtjev.getPrimalac());
-		korisnikRepository.save(zahtjev.getPosiljalac());
-
-		return true;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Collection<PretragaPrijateljaDTO> dobaviZahtjeveZaPrijateljstvo(Long korisnikId)

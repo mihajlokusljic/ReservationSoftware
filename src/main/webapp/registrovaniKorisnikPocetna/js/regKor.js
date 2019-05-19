@@ -568,6 +568,53 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 				posiljalacId : korisnik.id,
 				primalacId : idPrijatelja
 		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../korisnik/prihvatiZahtjevZaPrijateljstvo",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+			async : false,
+			success: function(response) {
+				if (response == true) {
+				alert("Uspješno prihvaćen zahtjev za prijateljstvo.");
+				return;
+				} else {
+					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
+	});
+	
+	$(".odbijPrijateljstvoClass").click(function(e) {
+		e.preventDefault();
+		var idPrijatelja = e.target.id.substring(3);
+		idPrijatelja = parseInt(idPrijatelja);
+		
+		var zahtjevZaPrijateljstvoDTO = {
+				posiljalacId : korisnik.id,
+				primalacId : idPrijatelja
+		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../korisnik/odbijZahtjevZaPrijateljstvo",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+			async : false,
+			success: function(response) {
+				if (response == true) {
+				alert("Uspješno odbijen zahtjev za prijateljstvo.");
+				return;
+				} else {
+					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
 	});
 	
 }

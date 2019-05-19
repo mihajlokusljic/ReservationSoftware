@@ -23,11 +23,11 @@ public class ZahtjevZaPrijateljstvo {
 	@Column(name = "potvrdjen")
 	protected boolean potvrdjen;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "primalac_id")
 	protected RegistrovanKorisnik primalac;
 
