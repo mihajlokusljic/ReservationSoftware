@@ -163,7 +163,7 @@ public class RentACarKontroler {
 	public ResponseEntity<Poslovnica> podaciOServisu() {
 		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<Poslovnica>(
-				new Poslovnica(admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
+				new Poslovnica(admin.getRentACarServis().getId(),admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
 				HttpStatus.OK);
 	}
 	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
@@ -213,4 +213,13 @@ public class RentACarKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/pretraziZaBrzuRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> pretraziVozilaZaBrzuRezervaciju(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<Vozilo> >(this.servis.pretraziVozilazaBrzuRezervaciju(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }

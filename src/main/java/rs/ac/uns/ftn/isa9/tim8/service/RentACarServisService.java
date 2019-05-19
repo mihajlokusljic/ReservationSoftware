@@ -436,34 +436,39 @@ public class RentACarServisService {
 		List<Vozilo> rezultat = new ArrayList<Vozilo>();
 		Date trenutniDatum = new Date();
 		boolean dodajVozilo = true;
+		boolean datumNull = false;
 		
+		if (pocetniDatum == null || krajnjiDatum == null) {
+			datumNull = true;
+		}
+		
+		else if (trenutniDatum.compareTo(pocetniDatum) > 0  || trenutniDatum.compareTo(krajnjiDatum) > 0 || pocetniDatum.compareTo(krajnjiDatum) > 0) {
+			return rezultat;
+		}
 		
 		for (Vozilo voz : rac.getVozila()) {
-			
-			if (pocetniDatum == null || krajnjiDatum == null) {
-				rezultat.add(voz);
-				continue;
-			}	
-			
-			else if (trenutniDatum.compareTo(pocetniDatum) > 0  || trenutniDatum.compareTo(krajnjiDatum) > 0 || pocetniDatum.compareTo(krajnjiDatum) > 0) {
-				dodajVozilo = false;
-				break;
+			if (datumNull == true) {
+				dodajVozilo = true;
 			}
-			
-			for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+			else {
+				for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+										
+					if (pocetniDatum.compareTo(r.getDatumVracanjaVozila()) < 0 && krajnjiDatum.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+						dodajVozilo = false;
+						break;
+					}				
+					else {
+						dodajVozilo = true;
+					}
 				
-				if (pocetniDatum.compareTo(r.getDatumVracanjaVozila()) < 0 && krajnjiDatum.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
-					dodajVozilo = false;
-					break;
-				}				
-				else {
-					dodajVozilo = true;
 				}
 			}
-			
+							
 			if (dodajVozilo) {
 				rezultat.add(voz);
+				
 			}
+			dodajVozilo = true;
 		}
 		return rezultat;
 		
@@ -638,6 +643,35 @@ public class RentACarServisService {
 			throw new NevalidniPodaciException("Ne postoji filijala sa zadatim id-em.");
 		}
 		return filijalaSearch.get().getAdresa();
+	}
+
+	public Collection<Vozilo> pretraziVozilazaBrzuRezervaciju(PretragaVozilaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPretrage.getIdRac());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();		
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPreuzimanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumVracanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
+		List<Vozilo> slobodnaVozila = slobodnaVozila(rac, pocetniDatum, krajnjiDatum);
+		
+		
+		return slobodnaVozila;
 	}
 	
 }

@@ -211,6 +211,18 @@ $(document).ready(function() {
 		}
 	});
 	
+	//pretraga vozila za brzu rezervaciju
+	$("#pretragaVozilaForm").submit(function(e) {
+		e.preventDefault();
+		pretraziSlobodnaVozila();
+	});
+	
+	//zadavanje vozila za brze rezervacije
+	$("#zadajVoziloBrzeRezervacijeBtn").click(function (e) {
+		e.preventDefault();
+		zadajVoziloBrzeRez();
+	});
+	
 	$("#odjava").click(function(e){
 		e.preventDefault();
 		odjava();
@@ -1034,4 +1046,66 @@ function aktivirajStavkuMenija(idStavke) {
 			$("#" + stavkeMenija[i]).removeClass("active");
 		}
 	}
+}
+
+function pretraziSlobodnaVozila(){
+	let _datumDolaska = $("#input-start").val();
+	let _datumOdlaska = $("#input-end").val();
+	
+	let pretragaVozila = {
+		idRac: rentACarServis.id,
+		datumPreuzimanja: _datumDolaska,
+		datumVracanja: _datumOdlaska
+	};
+	
+	$.ajax({
+		type : 'POST',
+		url : "../rentACar/pretraziZaBrzuRezervaciju",
+		data : JSON.stringify(pretragaVozila),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success : function(data) {
+			if(data.length > 0) {
+				$("#vozilaBrzeRezervacije").show();
+				prikaziVozilaZaBrzuRezervaciju(data);
+			} else {
+				alert("Nema slobodnih vozila u zadatom periodu.");
+			}
+		}
+	});
+}
+
+function prikaziVozilaZaBrzuRezervaciju(vozila){	
+	
+	let prikaz = $("#prikazVozilaBrzeRezervacije");
+	prikaz.empty();
+	
+	
+	$.each(vozila, function(i, vozilo) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + vozilo.naziv + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.marka + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.model + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.tip_vozila + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.godina_proizvodnje + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.cijena_po_danu + '</td>');
+		
+		let sumaOcjena = vozilo.sumaOcjena;
+		sumaOcjena = parseFloat(sumaOcjena);
+		let brOcjena = vozilo.brojOcjena;
+		brOcjena = parseInt(brOcjena);
+		if(brOcjena > 0) {
+			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+		} else {
+			noviRed.append('<td class="column1">Nema ocjena</td>');
+		}
+		noviRed.append('<td class="column1"><input type="radio" name="voziloBrzaRez" class="voziloBrzaRez" id="vbr' + vozilo.id + '"></td></tr>');
+		
+		
+		prikaz.append(noviRed);
+	})
+}
+
+function zadajVoziloBrzeRez(){
+	
 }
