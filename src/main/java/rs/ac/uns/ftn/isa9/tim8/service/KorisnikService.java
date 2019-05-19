@@ -1,36 +1,37 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
-import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.FiltriranjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
-import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
-import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
-import rs.ac.uns.ftn.isa9.tim8.model.ZahtjevZaPrijateljstvo;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
+import rs.ac.uns.ftn.isa9.tim8.model.ZahtjevZaPrijateljstvo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
-import rs.ac.uns.ftn.isa9.tim8.repository.ZahtjevZaPrijateljstvoRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaVozilaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.Rezervacija_sjedistaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijeSobaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.ZahtjevZaPrijateljstvoRepository;
 
 @Service
 public class KorisnikService {
@@ -40,13 +41,13 @@ public class KorisnikService {
 
 	@Autowired
 	protected AdresaRepository adresaRepository;
-	
+
 	@Autowired
 	protected RezervacijaVozilaRepository rezervacijaVozilaRepository;
-	
+
 	@Autowired
 	protected Rezervacija_sjedistaRepository rezervacijeSjedistaRepository;
-	
+
 	@Autowired
 	protected RezervacijeSobaRepository rezervacijeSobaRepository;
 
@@ -157,7 +158,8 @@ public class KorisnikService {
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
 		}
-		// od registrovanog korisnika u primljenim zahtjevima za prijateljstvo nema korisnika kojeg hos doadti
+		// od registrovanog korisnika u primljenim zahtjevima za prijateljstvo nema
+		// korisnika kojeg hos doadti
 		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
 		PretragaPrijateljaDTO dtoObj = null;
 		List<Osoba> korisnici = korisnikRepository.findAll();
@@ -177,7 +179,7 @@ public class KorisnikService {
 				}
 			}
 		}
-		
+
 		return nisuPrijatelji;
 	}
 
@@ -218,26 +220,28 @@ public class KorisnikService {
 		return true;
 	}
 
-	public Boolean prihvatiZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO) throws NevalidniPodaciException {
-		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
-		
+	public Boolean prihvatiZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO)
+			throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository
+				.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
+
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav posiljalac.");
 		}
-		
+
 		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
-		
+
 		pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
-		
+
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav primalac.");
 		}
 
 		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
-		
+
 		for (ZahtjevZaPrijateljstvo zahtjev : zahtjevZaPrijateljstvoRepository.findAll()) {
-			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail()) &&
-					zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
+			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail())
+					&& zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
 				zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
 
 				zahtjevZaPrijateljstvoRepository.delete(zahtjev);
@@ -254,26 +258,28 @@ public class KorisnikService {
 		return false;
 	}
 
-	public Boolean odbijZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO) throws NevalidniPodaciException {
-		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
-		
+	public Boolean odbijZahtjevZaPrijateljstvo(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO)
+			throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository
+				.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
+
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav posiljalac.");
 		}
-		
+
 		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
-		
+
 		pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
-		
+
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takav primalac.");
 		}
 
 		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
-		
+
 		for (ZahtjevZaPrijateljstvo zahtjev : zahtjevZaPrijateljstvoRepository.findAll()) {
-			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail()) &&
-					zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
+			if (zahtjev.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail())
+					&& zahtjev.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())) {
 				zahtjev.getPrimalac().getPrimljeniZahtjevi().remove(zahtjev);
 
 				zahtjevZaPrijateljstvoRepository.delete(zahtjev);
@@ -338,29 +344,30 @@ public class KorisnikService {
 		return false;
 	}
 
-	public Boolean uklanjanjePrijatelja(UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO) throws NevalidniPodaciException {
+	public Boolean uklanjanjePrijatelja(UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO)
+			throws NevalidniPodaciException {
 		Optional<Osoba> pretragaKorisnika = korisnikRepository.findById(uklanjanjePrijateljaDTO.getKorisnikId());
-		
+
 		if (!pretragaKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji korisnik sa zadatim id-jem.");
 		}
-		
+
 		RegistrovanKorisnik korisnikKojiBrise = (RegistrovanKorisnik) pretragaKorisnika.get();
-		
+
 		pretragaKorisnika = korisnikRepository.findById(uklanjanjePrijateljaDTO.getPrijateljZaUklonitiId());
-		
+
 		if (!pretragaKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji korisnik za obrisati sa zadatim id-jem.");
 		}
-		
+
 		RegistrovanKorisnik korisnikZaObrisati = (RegistrovanKorisnik) pretragaKorisnika.get();
 
 		korisnikKojiBrise.getPrijatelji().remove(korisnikZaObrisati);
 		korisnikZaObrisati.getPrijatelji().remove(korisnikKojiBrise);
-		
+
 		korisnikRepository.save(korisnikKojiBrise);
 		korisnikRepository.save(korisnikZaObrisati);
-		
+
 		return true;
 	}
 
@@ -375,15 +382,15 @@ public class KorisnikService {
 		RegistrovanKorisnik registrovaniKorisnik = (RegistrovanKorisnik) o;
 		Collection<RezervacijaVozila> rezVozila = rezervacijaVozilaRepository.findAllByPutnik(registrovaniKorisnik);
 		Collection<PrikazRezVozilaDTO> rezVozilaDTO = new ArrayList<>();
-		
+
 		for (RezervacijaVozila rv : rezVozila) {
-			rezVozilaDTO.add(new PrikazRezVozilaDTO(rv.getId(), rv.getRentACarServis().getNaziv(), rv.getRezervisanoVozilo(),
-					rv.getCijena(), rv.getMjestoPreuzimanjaVozila().getAdresa().getPunaAdresa(), rv.getMjestoVracanjaVozila().getAdresa().getPunaAdresa(),
-					rv.getDatumPreuzimanjaVozila(), rv.getDatumVracanjaVozila()));
+			rezVozilaDTO.add(
+					new PrikazRezVozilaDTO(rv.getId(), rv.getRentACarServis().getNaziv(), rv.getRezervisanoVozilo(),
+							rv.getCijena(), rv.getMjestoPreuzimanjaVozila().getAdresa().getPunaAdresa(),
+							rv.getMjestoVracanjaVozila().getAdresa().getPunaAdresa(), rv.getDatumPreuzimanjaVozila(),
+							rv.getDatumVracanjaVozila()));
 		}
 
-		
-		
 		return rezVozilaDTO;
 	}
 
@@ -396,15 +403,17 @@ public class KorisnikService {
 
 		Osoba o = pretragaOsoba.get();
 		RegistrovanKorisnik registrovaniKorisnik = (RegistrovanKorisnik) o;
-		Collection<RezervacijaSjedista> rezSjediste = rezervacijeSjedistaRepository.findAllByPutnik(registrovaniKorisnik);
+		Collection<RezervacijaSjedista> rezSjediste = rezervacijeSjedistaRepository
+				.findAllByPutnik(registrovaniKorisnik);
 		Collection<PrikazRezSjedistaDTO> rezSjedistaDTO = new ArrayList<>();
-		
+
 		for (RezervacijaSjedista rs : rezSjediste) {
-			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getAviokompanija().getNaziv(), rs.getLet().getBrojLeta(),
-					rs.getCijena(), rs.getSjediste(), rs.getLet().getPolaziste().getNazivDestinacije(), rs.getLet().getOdrediste().getNazivDestinacije(),
+			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getAviokompanija().getNaziv(),
+					rs.getLet().getBrojLeta(), rs.getCijena(), rs.getSjediste(),
+					rs.getLet().getPolaziste().getNazivDestinacije(), rs.getLet().getOdrediste().getNazivDestinacije(),
 					rs.getLet().getDatumPoletanja(), rs.getLet().getDatumSletanja()));
 		}
-		
+
 		return rezSjedistaDTO;
 	}
 
@@ -419,14 +428,101 @@ public class KorisnikService {
 		RegistrovanKorisnik registrovaniKorisnik = (RegistrovanKorisnik) o;
 		Collection<RezervacijaSobe> rezSoba = rezervacijeSobaRepository.findAllByPutnik(registrovaniKorisnik);
 		Collection<PrikazRezSobeDTO> rezSobeDTO = new ArrayList<>();
-		
+
 		for (RezervacijaSobe rs : rezSoba) {
-			rezSobeDTO.add(new PrikazRezSobeDTO(rs.getId(), rs.getRezervisanaSoba().getHotel().getNaziv(), rs.getRezervisanaSoba().getBrojSobe(),
-					rs.getRezervisanaSoba().getBrojKreveta(), rs.getCijena(), rs.getDatumDolaska(), rs.getDatumOdlaska()));
+			rezSobeDTO.add(new PrikazRezSobeDTO(rs.getId(), rs.getRezervisanaSoba().getHotel().getNaziv(),
+					rs.getRezervisanaSoba().getBrojSobe(), rs.getRezervisanaSoba().getBrojKreveta(), rs.getCijena(),
+					rs.getDatumDolaska(), rs.getDatumOdlaska()));
 		}
-		
+
 		return rezSobeDTO;
 	}
-	
-	
+
+	public Collection<PretragaPrijateljaDTO> pretragaPrijatelja(FiltriranjePrijateljaDTO filtriranjePrijateljaDTO)
+			throws NevalidniPodaciException {
+		if (filtriranjePrijateljaDTO.getPregledPrijatelja()) {
+			Optional<Osoba> pretragaOsoba = korisnikRepository.findById(filtriranjePrijateljaDTO.getIdKorisnika());
+
+			if (!pretragaOsoba.isPresent()) {
+				throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-jem");
+			}
+
+			RegistrovanKorisnik tekuciKorisnik = (RegistrovanKorisnik) pretragaOsoba.get();
+
+			Collection<PretragaPrijateljaDTO> prijateljiFilter = new HashSet<PretragaPrijateljaDTO>();
+
+			for (RegistrovanKorisnik korisnik : tekuciKorisnik.getPrijatelji()) {
+				prijateljiFilter
+						.add(new PretragaPrijateljaDTO(korisnik.getId(), korisnik.getIme(), korisnik.getPrezime()));
+			}
+
+			if (filtriranjePrijateljaDTO.getImePrezime().equals("")) {
+				return prijateljiFilter;
+			}
+
+			Iterator<PretragaPrijateljaDTO> it = prijateljiFilter.iterator();
+			PretragaPrijateljaDTO trenutniPrijatelj;
+
+			while (it.hasNext()) {
+				trenutniPrijatelj = it.next();
+
+				String trenutniPrijateljStr = trenutniPrijatelj.getIme() + " " + trenutniPrijatelj.getPrezime();
+
+				if (!trenutniPrijateljStr.toUpperCase()
+						.contains(filtriranjePrijateljaDTO.getImePrezime().toUpperCase())) {
+					it.remove();
+				}
+			}
+			return prijateljiFilter;
+
+		} else {
+			// Dodavanje prijatelja
+
+			Optional<Osoba> pretragaOsoba = korisnikRepository.findById(filtriranjePrijateljaDTO.getIdKorisnika());
+
+			if (!pretragaOsoba.isPresent()) {
+				throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-jem");
+			}
+
+			RegistrovanKorisnik tekuciKorisnik = (RegistrovanKorisnik) pretragaOsoba.get();
+
+			Collection<PretragaPrijateljaDTO> potencijalniPrijateljiFilter = new HashSet<PretragaPrijateljaDTO>();
+
+			for (Osoba korisnik : korisnikRepository.findAll()) {
+				if (korisnik instanceof RegistrovanKorisnik) {
+					RegistrovanKorisnik regKor = (RegistrovanKorisnik) korisnik;
+					ZahtjevZaPrijateljstvoDTO zahtjevDTO = new ZahtjevZaPrijateljstvoDTO(regKor.getId(),
+							tekuciKorisnik.getId());
+					if (!daLiSuPrijatelji(regKor, tekuciKorisnik)
+							&& !regKor.getEmail().equalsIgnoreCase(tekuciKorisnik.getEmail())
+							&& !daLiJeZahtjevVecPoslat(zahtjevDTO)) {
+						potencijalniPrijateljiFilter.add(
+								new PretragaPrijateljaDTO(korisnik.getId(), korisnik.getIme(), korisnik.getPrezime()));
+					}
+				}
+
+			}
+
+			if (filtriranjePrijateljaDTO.getImePrezime().equals("")) {
+				return potencijalniPrijateljiFilter;
+			}
+
+			Iterator<PretragaPrijateljaDTO> it = potencijalniPrijateljiFilter.iterator();
+			PretragaPrijateljaDTO trenutniPrijatelj;
+
+			while (it.hasNext()) {
+				trenutniPrijatelj = it.next();
+
+				String trenutniPrijateljStr = trenutniPrijatelj.getIme() + " " + trenutniPrijatelj.getPrezime();
+
+				if (!trenutniPrijateljStr.toUpperCase()
+						.contains(filtriranjePrijateljaDTO.getImePrezime().toUpperCase())) {
+					it.remove();
+				}
+			}
+			return potencijalniPrijateljiFilter;
+		}
+
+	}
+
 }
