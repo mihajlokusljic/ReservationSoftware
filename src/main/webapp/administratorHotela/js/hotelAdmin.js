@@ -703,7 +703,12 @@ function pretraziSobeZaSlobodnuRezervaciju() {
 		url : "../hotelskeSobe/pretrazi",
 		data : JSON.stringify(pretragaSoba),
 		success : function(sobe) {
-			prikaziSobeZaBrzuRezervaciju(sobe);
+			if(sobe.length > 0) {
+				$("#sobeBrzeRezervacije").show();
+				prikaziSobeZaBrzuRezervaciju(sobe);
+			} else {
+				alert("Nema slobodnih soba u zadatom periodu.");
+			}
 		}
 	});
 }
@@ -803,6 +808,26 @@ function azurirajCijeneBrzeRezervacije() {
 	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(cijenaSaPopustom);
 }
 
+function resetBrzeRezervacijeView() {
+	$("#izborSobeBrzeRezervacije").show();
+	$("#izborDodatnihUslugaBrzeRezervacije").hide();
+	$("#definisanjePopustaBrzeRezervacije").hide();
+	$("#izborSobeBrzeRezervacijeBtn")[0].checked = true;
+	$("#izborDodatnihUslugaBrzeRezervacijeBtn")[0].checked = false;
+	$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
+	$("#sobeBrzeRezervacije").hide();
+	$("#prikazSobaBrzeRezervacije").empty();
+	$("#pretragaSobaForm")[0].reset();
+	let uslugeIzborBtns = $(".uslugaBrzaRezBtn");
+	$.each(uslugeIzborBtns, function(i, btn) {
+		btn.checked = false;
+	});
+	$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(0);
+	$("#procenatPopustaBrzeRezervacije").val(0);
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(0);
+	prikaziTab("tab-brze-rezervacije-pregledanje");
+}
+
 function zadavanjePopustaBrzeRezervacije() {
 	if(tekucaBrzaRezervacija == null) {
 		alert("Morate izabrati sobu i dodatne usluge.");
@@ -816,13 +841,7 @@ function zadavanjePopustaBrzeRezervacije() {
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = null;
 			alert("Usješno ste definisali popust za brzu rezervaciju.");
-			$("#izborSobeBrzeRezervacije").show();
-			$("#izborDodatnihUslugaBrzeRezervacije").hide();
-			$("#definisanjePopustaBrzeRezervacije").hide();
-			$("#izborSobeBrzeRezervacijeBtn")[0].checked = true;
-			$("#izborDodatnihUslugaBrzeRezervacijeBtn")[0].checked = false;
-			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
-			prikaziTab("tab-brze-rezervacije-pregledanje");			
+			resetBrzeRezervacijeView();			
 		}
 	});
 }
