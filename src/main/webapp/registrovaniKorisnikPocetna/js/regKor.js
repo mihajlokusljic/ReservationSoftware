@@ -481,7 +481,7 @@ function prikaziPrijatelje(prijatelji) {
 			async : false,
 			success: function(response) {
 				if (response == true) {
-				alert("Uspješno uklonjen korisnik iz liste prijatelja.");
+				alert("Uspješno uklonjen korisnik iz liste prijatelja.");	
 				return;
 				} else {
 					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
@@ -612,6 +612,17 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 			success: function(response) {
 				if (response == true) {
 				alert("Uspješno prihvaćen zahtjev za prijateljstvo.");
+				
+				$.ajax({
+					type: "POST",
+					url : "../korisnik/dobaviKorisnikeZaDodavanjePrijatelja",
+					contentType : "application/json; charset=utf-8",
+					data: JSON.stringify(korisnik.id),
+					success: function(response) {
+						prikaziKorisnikeZaPrijateljstvo(response);
+					},
+				});
+				
 				return;
 				} else {
 					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");

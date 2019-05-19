@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.FiltriranjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSobeDTO;
@@ -139,6 +140,18 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping(value = "/pretraziPrijatelje", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> pretraziPrijatelje(
+			@RequestBody FiltriranjePrijateljaDTO filtriranjePrijateljaDTO) {
+		try {
+			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.pretragaPrijatelja(filtriranjePrijateljaDTO),
+					HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
 
 	@RequestMapping(value = "/daLiJeZahtjevVecPoslat", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
@@ -151,7 +164,6 @@ public class KorisnikKontroler {
 		}
 	}
 
-	
 	@RequestMapping(value = "/rezervisanaVozila", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervisanaVozila() {
