@@ -24,7 +24,7 @@ public class ZahtjevZaPrijateljstvo {
 	protected boolean potvrdjen;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
+	@JoinColumn(name = "posiljalac_id", referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

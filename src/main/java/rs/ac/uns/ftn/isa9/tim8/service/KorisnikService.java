@@ -491,8 +491,11 @@ public class KorisnikService {
 			for (Osoba korisnik : korisnikRepository.findAll()) {
 				if (korisnik instanceof RegistrovanKorisnik) {
 					RegistrovanKorisnik regKor = (RegistrovanKorisnik) korisnik;
+					ZahtjevZaPrijateljstvoDTO zahtjevDTO = new ZahtjevZaPrijateljstvoDTO(regKor.getId(),
+							tekuciKorisnik.getId());
 					if (!daLiSuPrijatelji(regKor, tekuciKorisnik)
-							&& !regKor.getEmail().equalsIgnoreCase(tekuciKorisnik.getEmail())) {
+							&& !regKor.getEmail().equalsIgnoreCase(tekuciKorisnik.getEmail())
+							&& !daLiJeZahtjevVecPoslat(zahtjevDTO)) {
 						potencijalniPrijateljiFilter.add(
 								new PretragaPrijateljaDTO(korisnik.getId(), korisnik.getIme(), korisnik.getPrezime()));
 					}
