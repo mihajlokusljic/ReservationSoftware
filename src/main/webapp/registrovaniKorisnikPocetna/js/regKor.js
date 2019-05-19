@@ -457,7 +457,37 @@ function prikaziPrijatelje(prijatelji) {
 	$("#pregledPrijateljaRows").empty();
 	$.each(prijatelji, function(i, prijatelj) {
 		prikaziPrijatelja(prijatelj);
-	})
+	});
+	
+	$(".obrisiPrijateljaClass").click(function(e) {
+		e.preventDefault();
+		var prijateljZaBrisanjeId = e.target.id.substring(3);
+		prijateljZaBrisanjeId = parseInt(prijateljZaBrisanjeId);
+		
+		var uklanjanjePrijateljaDTO = {
+				korisnikId : korisnik.id,
+				prijateljZaUklonitiId : prijateljZaBrisanjeId
+		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../korisnik/ukloniPrijatelja",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(uklanjanjePrijateljaDTO),
+			async : false,
+			success: function(response) {
+				if (response == true) {
+				alert("Uspješno uklonjen korisnik iz liste prijatelja.");
+				return;
+				} else {
+					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
+	});
+	
 }
 
 function prikaziPrijatelja(prijatelj) {
@@ -469,7 +499,7 @@ function prikaziPrijatelja(prijatelj) {
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
 	noviRed.append('<td class="column1"><button class="btn-submit obrisiPrijateljaClass" type="button" id="pgp' + prijatelj.id + 
-			'">' + '></button>❌</td>');
+			'">' + '❌ </button></td>');
 	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
 }

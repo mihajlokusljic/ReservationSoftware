@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
@@ -315,6 +316,32 @@ public class KorisnikService {
 		}
 
 		return false;
+	}
+
+	public Boolean uklanjanjePrijatelja(UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO) throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKorisnika = korisnikRepository.findById(uklanjanjePrijateljaDTO.getKorisnikId());
+		
+		if (!pretragaKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik sa zadatim id-jem.");
+		}
+		
+		RegistrovanKorisnik korisnikKojiBrise = (RegistrovanKorisnik) pretragaKorisnika.get();
+		
+		pretragaKorisnika = korisnikRepository.findById(uklanjanjePrijateljaDTO.getPrijateljZaUklonitiId());
+		
+		if (!pretragaKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik za obrisati sa zadatim id-jem.");
+		}
+		
+		RegistrovanKorisnik korisnikZaObrisati = (RegistrovanKorisnik) pretragaKorisnika.get();
+
+		korisnikKojiBrise.getPrijatelji().remove(korisnikZaObrisati);
+		korisnikZaObrisati.getPrijatelji().remove(korisnikKojiBrise);
+		
+		korisnikRepository.save(korisnikKojiBrise);
+		korisnikRepository.save(korisnikZaObrisati);
+		
+		return true;
 	}
 
 }

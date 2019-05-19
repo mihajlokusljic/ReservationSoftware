@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
@@ -117,6 +118,18 @@ public class KorisnikKontroler {
 			@RequestBody ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvo) {
 		try {
 			return new ResponseEntity<Boolean>(korisnikService.odbijZahtjevZaPrijateljstvo(zahtjevZaPrijateljstvo),
+					HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/ukloniPrijatelja", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> ukloniPrijatelja(
+			@RequestBody UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO) {
+		try {
+			return new ResponseEntity<Boolean>(korisnikService.uklanjanjePrijatelja(uklanjanjePrijateljaDTO),
 					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
