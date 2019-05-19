@@ -43,5 +43,15 @@ public class RezervacijeSobaKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/zadajPopustBrzojRezervaciji", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+	public ResponseEntity<?> zadajPopustBrzeRezervacije(@RequestBody BrzaRezervacijaSobeDTO brzaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaSobeDTO>(rezervacijeServis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }

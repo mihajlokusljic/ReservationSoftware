@@ -70,4 +70,27 @@ public class RezervacijeSobaService {
 		return brzaRezervacija;
 	}
 
+	public BrzaRezervacijaSobeDTO zadajPopustBrzeRezervacije(BrzaRezervacijaSobeDTO brzaRezervacija) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSoba> rezervacijaSearch = brzeRezervacijeRepository.findById(brzaRezervacija.getId());
+		if(!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadata brza rezervacija.");
+		}
+		BrzaRezervacijaSoba rez = rezervacijaSearch.get();
+		AdministratorHotela admin = (AdministratorHotela) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Hotel administriraniHotel = admin.getHotel();
+		if(!rez.getSobaZaRezervaciju().getHotel().getId().equals(administriraniHotel.getId())) {
+			throw new NevalidniPodaciException("Niste ulogovani kao ovlascen administrator za datu rezervaciju.");
+		}
+		int popust = brzaRezervacija.getProcenatPopusta();
+		if(popust < 0) {
+			throw new NevalidniPodaciException("Popust ne može biti negativan.");
+		}
+		if(popust > 100) {
+			throw new NevalidniPodaciException("Popust ne može biti veći od 100%.");
+		}
+		rez.setProcenatPopusta(popust);
+		brzeRezervacijeRepository.save(rez);
+		return brzaRezervacija;
+	}
+
 }

@@ -351,7 +351,20 @@
                             </div>
                             
                             <div id="definisanjePopustaBrzeRezervacije" hidden="hidden">
-                            	<h2 class="zaglavlje">Zadaj popust</h2>
+                            	<div class="input-group">
+                                    <label class="label">Ukupna cijena boravka (sa dodatnim uslugama i njihovim popustima):</label>
+                                    <input class="input--style-2" type="text" name="origin" readonly="readonly" id="ukupnaCijenaBezPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Procenat popusta:</label>
+                                    <input class="input--style-2" type="number" min="0" max="100" value="0" required="required" placeholder="Unesite procenat popusta" id="procenatPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Ukupna cijena boravka (sa zadatim popustom):</label>
+                                    <input class="input--style-2" type="text" readonly="readonly" id="ukupnaCijenaSaPopustomBrzeRezervacije">
+                                </div>
+                                <p style="color: white;">*Napomena: konačna cijena rezervacije zavisi od broja poena korisnika koji je rezerviše</p>
+                                <button  class="btn btn-submit" id="zadavanjePopustaBrzeRezervacijeBtn">Potvrdi i završi</button>
                             </div>
                             
                             

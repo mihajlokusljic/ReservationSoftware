@@ -186,6 +186,18 @@ $(document).ready(function(e) {
 		zadajDodatneUsluge();
 	});
 	
+	//izmjena procenta popusta kod brzih rezervacija
+	$("#procenatPopustaBrzeRezervacije").change(function(e) {
+		e.preventDefault();
+		azurirajCijeneBrzeRezervacije();
+	});
+	
+	//zadavanje procenta popusta kod brzih rezervacija
+	$("#zadavanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		zadavanjePopustaBrzeRezervacije();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -762,12 +774,55 @@ function zadajDodatneUsluge() {
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = responseBrzaRez;
 			alert("Usješno ste definisali dodatne usluge za brzu rezervaciju.");
+			$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.cijenaBoravka);
+			$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.cijenaBoravka);
 			$("#definisanjePopustaBrzeRezervacije").show();
 			$("#izborSobeBrzeRezervacije").hide();
 			$("#izborDodatnihUslugaBrzeRezervacije").hide();
 			$("#izborSobeBrzeRezervacijeBtn")[0].checked = false;
 			$("#izborDodatnihUslugaBrzeRezervacijeBtn")[0].checked = false;
 			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = true;
+		}
+	});
+}
+
+function azurirajCijeneBrzeRezervacije() {
+	if(tekucaBrzaRezervacija == null) {
+		return;
+	}
+	let procenatPopusta = $("#procenatPopustaBrzeRezervacije").val();
+	procenatPopusta = parseFloat(procenatPopusta);
+	if(isNaN(procenatPopusta)) {
+		return;
+	}
+	if(procenatPopusta < 0 || procenatPopusta > 100) {
+		return;
+	}
+	let popust = tekucaBrzaRezervacija.cijenaBoravka * procenatPopusta / 100;
+	let cijenaSaPopustom = tekucaBrzaRezervacija.cijenaBoravka - popust;
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(cijenaSaPopustom);
+}
+
+function zadavanjePopustaBrzeRezervacije() {
+	if(tekucaBrzaRezervacija == null) {
+		alert("Morate izabrati sobu i dodatne usluge.");
+	}
+	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
+	tekucaBrzaRezervacija.procenatPopusta = popustProc;
+	$.ajax({
+		type : 'POST',
+		url : "../rezervacijeSoba/zadajPopustBrzojRezervaciji",
+		data : JSON.stringify(tekucaBrzaRezervacija),
+		success : function(responseBrzaRez) {
+			tekucaBrzaRezervacija = null;
+			alert("Usješno ste definisali popust za brzu rezervaciju.");
+			$("#izborSobeBrzeRezervacije").show();
+			$("#izborDodatnihUslugaBrzeRezervacije").hide();
+			$("#definisanjePopustaBrzeRezervacije").hide();
+			$("#izborSobeBrzeRezervacijeBtn")[0].checked = true;
+			$("#izborDodatnihUslugaBrzeRezervacijeBtn")[0].checked = false;
+			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
+			prikaziTab("tab-brze-rezervacije-pregledanje");			
 		}
 	});
 }
