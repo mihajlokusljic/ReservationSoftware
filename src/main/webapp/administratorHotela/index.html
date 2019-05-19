@@ -54,7 +54,11 @@
                     		</ul>
                     	</li>
                         <li class="dropdown" id="stavkaBrzeRezervacije">
-                            <a class="tab-list__link" href="#" id="brzeRezervacije">Brze rezervacije</a>
+                            <a class="tab-list__link" data-toggle="dropdown" id ="brzeRezervacije" >Brze rezervacije</a>
+                            <ul class="dropdown-content">
+                    			<li><a href="#" id ="dodavanjeBrzeRezervacije">Dodavanje</a></li>
+                    			<li><a href="#" id ="pregledanjeBrzihRezervacija">Pregledanje</a></li>
+                    		</ul>
                         </li>
                         <li class="dropdown" id="stavkaIzvjestaji">
                             <a class="tab-list__link" href="#" id="izvjestaji">Izvještaji</a>
@@ -272,8 +276,104 @@
                         
                         
                         <!-- Rad sa brzim rezervacijama -->
-                        <div class="tab-pane" id="tab-brze-rezervacije">
-                            <h2 class="zaglavlje">Brze rezervacije</h2>
+                        <div class="tab-pane" id="tab-brze-rezervacije-dodavanje">
+                            <h2 class="zaglavlje">Dodavanje brze rezervacije</h2>
+                            <div class="radio-row">
+                                <label class="radio-container m-r-45">1: Zadajte vremenski period i izaberite sobu
+                                    <input type="radio" name="class" checked="checked" id="izborSobeBrzeRezervacijeBtn">
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                                <label class="radio-container m-r-45">2: Izaberite dodatne usluge
+                                    <input type="radio" name="class" id="izborDodatnihUslugaBrzeRezervacijeBtn">
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                                <label class="radio-container m-r-45">3: Zadajte popust
+                                    <input type="radio" name="class" id="definisanjePopustaBrzeRezervacijeBtn">
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                            </div>
+                            <p>&nbsp</p>
+                            
+                            <div id="izborSobeBrzeRezervacije">
+                            	<form method="POST" action="#" id="pretragaSobaForm">
+	                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum dolaska</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum odlaska</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                	</div>
+	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodne sobe"/>
+	                        		</form>
+	                        		<h1>&nbsp</h1>
+	                        		<div id="sobeBrzeRezervacije" hidden="hidden">
+			                        <table id="tabelaSobeBrzeRezervacije">
+										<thead>
+											<tr class="table100-head">
+												<th class="column1">Broj sobe</th>
+												<th class="column1">Broj kreveta</th>
+												<th class="column1">Cijena noćenja</th>
+												<th class="column1">Sprat</th>
+												<th class="column1">Red</th>
+												<th class="column1">Kolona</th>
+												<th class="column1">Ocjena</th>
+												<th class="column1">Izabrana</th>
+											</tr>
+										</thead>
+										<tbody id="prikazSobaBrzeRezervacije">
+										</tbody>
+									</table>
+									<button class="btn btn-submit" id="zadajSobuBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
+									</div>
+                            </div>
+                            
+                            <div id="izborDodatnihUslugaBrzeRezervacije" hidden="hidden">
+                            	<table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Naziv</th>
+										<th class="column6">Cijena</th>
+										<th class = "column1">Način plaćanja</th>
+										<th class = "column1">Izabrana</th>
+									</tr>
+								</thead>
+								<tbody id="prikazUslugaBrzeRezervacije">
+								</tbody>
+								</table>
+								<button class="btn btn-submit" id="zadajDodatneUslugeBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
+                            </div>
+                            
+                            <div id="definisanjePopustaBrzeRezervacije" hidden="hidden">
+                            	<div class="input-group">
+                                    <label class="label">Ukupna cijena boravka (sa dodatnim uslugama i njihovim popustima):</label>
+                                    <input class="input--style-2" type="text" name="origin" readonly="readonly" id="ukupnaCijenaBezPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Procenat popusta:</label>
+                                    <input class="input--style-2" type="number" min="0" max="100" value="0" required="required" placeholder="Unesite procenat popusta" id="procenatPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Ukupna cijena boravka (sa zadatim popustom):</label>
+                                    <input class="input--style-2" type="text" readonly="readonly" id="ukupnaCijenaSaPopustomBrzeRezervacije">
+                                </div>
+                                <p style="color: white;">*Napomena: konačna cijena rezervacije zavisi od broja poena korisnika koji je rezerviše</p>
+                                <button  class="btn btn-submit" id="zadavanjePopustaBrzeRezervacijeBtn">Potvrdi i završi</button>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-brze-rezervacije-pregledanje">
+                            <h2 class="zaglavlje">Pregledanje brzih rezervacija</h2>
                         </div>
                         
                         <!-- Izvjestaji -->

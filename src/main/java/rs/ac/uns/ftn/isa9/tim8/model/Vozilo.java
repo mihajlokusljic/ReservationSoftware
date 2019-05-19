@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -47,6 +49,7 @@ public class Vozilo {
     protected int kilovati;
 	
 	@Column(name = "cijena_po_danu", nullable = false)
+	@ColumnDefault("0")
     protected int cijena_po_danu;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)

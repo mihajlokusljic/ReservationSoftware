@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "hotelska_soba")
 public class HotelskaSoba {
@@ -38,7 +40,8 @@ public class HotelskaSoba {
 	protected int kolona;
 
 	@Column(name = "cijena", nullable = false)
-	protected double cijena;
+	@ColumnDefault("0")
+	protected double cijena = 0;
 
 	// @ManyToMany(fetch = FetchType.LAZY)
 	// protected Set<RezervacijaSobe> rezervacije;

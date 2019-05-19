@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Table(name = "cjenovnik_leta")
 public class CjenovnikLeta {
@@ -27,6 +29,7 @@ public class CjenovnikLeta {
 	protected Segment segment;
 
 	@Column(name = "cijena_leta", nullable = false)
+	@ColumnDefault("0")
 	protected double cijena;
 
 	public CjenovnikLeta() {
