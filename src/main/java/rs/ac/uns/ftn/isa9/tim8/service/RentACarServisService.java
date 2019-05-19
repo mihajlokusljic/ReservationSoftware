@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
@@ -751,5 +752,28 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 			}
 		}
 		return false;
+	}
+
+	public BrzaRezervacijaVozilaDTO zadajPopustBrzeRezervacije(BrzaRezervacijaVozilaDTO brzaRezervacija) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaVozila> rezervacijaSearch = brzaRezervacijaVozilaRepository.findById(brzaRezervacija.getIdBrzeRezervacije());
+		if(!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadata brza rezervacija.");
+		}
+		BrzaRezervacijaVozila rez = rezervacijaSearch.get();
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis administriraniServis = admin.getRentACarServis();
+		if(!rez.getVozilo().getRentACar().getId().equals(administriraniServis.getId())) {
+			throw new NevalidniPodaciException("Niste ulogovani kao ovlascen administrator za datu rezervaciju.");
+		}
+		int popust = brzaRezervacija.getProcenatPopusta();
+		if(popust < 0) {
+			throw new NevalidniPodaciException("Popust ne može biti negativan.");
+		}
+		if(popust > 100) {
+			throw new NevalidniPodaciException("Popust ne može biti veći od 100%.");
+		}
+		rez.setProcenatPopusta(popust);
+		brzaRezervacijaVozilaRepository.save(rez);
+		return brzaRezervacija;
 	}
 }

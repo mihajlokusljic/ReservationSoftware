@@ -235,4 +235,14 @@ public class RentACarKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/zadajPopustBrzojRezervaciji", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> zadajPopustBrzeRezervacije(@RequestBody BrzaRezervacijaVozilaDTO brzaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaVozilaDTO>(servis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }
