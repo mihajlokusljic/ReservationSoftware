@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
@@ -222,4 +224,15 @@ public class RentACarKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/dodajBrzuRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> dodajBrzuRezervaciju(@RequestBody BrzaRezervacijaVozilaDTO novaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaVozilaDTO>(servis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

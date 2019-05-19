@@ -43,6 +43,8 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-vozila").show();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		dobaviSvaVozilaServisa();
 		ponudiFilijale();
 
@@ -62,7 +64,8 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
-
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		dobaviSveFilijale();
 	
 	});
@@ -81,7 +84,8 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
-
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		profilServisa();
 	});
 	
@@ -105,6 +109,8 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		profilKorisnika();
 	})
 	
@@ -122,6 +128,8 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		promjeniLozinku();
 	})
 	$("#dodaj_vozilo_dugme").click(function(e){
@@ -1107,5 +1115,44 @@ function prikaziVozilaZaBrzuRezervaciju(vozila){
 }
 
 function zadajVoziloBrzeRez(){
+	let _datumPreuzimanja = $("#input-start").val();
+	let _datumVracanja = $("#input-end").val();
+	let _idVozila = -1;
+	let voziloIzabrano = false;
 	
+	let brzeVozilaRezBtns = $(".voziloBrzaRez");
+	$.each(brzeVozilaRezBtns, function(i, btn) {
+		if(btn.checked) {
+			voziloIzabrano = true;
+			_idVozila = btn.id.substring(3); //ime dugmeta je tipa "sbr<id sobe>"
+			
+			let brzaRezervacija = {
+				idVozila: _idVozila,
+				datumPreuzimanjaVozila: Date.parse(_datumPreuzimanja),
+				datumVracanjaVozila: Date.parse(_datumVracanja),
+				baznaCijena: 0,
+				procenatPopusta: 0
+			};
+			
+			$.ajax({
+				type : 'POST',
+				url : "../rentACar/dodajBrzuRezervaciju",
+				data : JSON.stringify(brzaRezervacija),
+				headers: createAuthorizationTokenHeader("jwtToken"),
+				success : function(responseBrzaRez) {
+					tekucaBrzaRezervacija = responseBrzaRez;
+					alert("Vozilo je uspješno dodato na brzu rezervaciju.");
+					$("#izborVozilaBrzeRezervacije").hide();
+					$("#definisanjePopustaBrzeRezervacije").show();
+					$("#izborSobeBrzeRezervacijeBtn")[0].checked = false;
+					$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
+				}
+			});
+			return;
+		}
+	});
+	if(!voziloIzabrano) {
+		alert("Morate izabrati vozilo za brzu rezervaciju.");
+	}
 }
+

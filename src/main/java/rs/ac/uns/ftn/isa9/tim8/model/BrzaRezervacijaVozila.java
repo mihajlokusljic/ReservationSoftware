@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -45,10 +46,38 @@ public class BrzaRezervacijaVozila {
 	
 	@Column(name = "procenat_popusta", nullable = false)
 	protected int procenatPopusta;
+	
+	public BrzaRezervacijaVozila(Long id, Vozilo vozilo, Date datumPreuzimanjaVozila, Date datumVracanjaVozila,
+			double cijena, int procenatPopusta) {
+		super();
+		Id = id;
+		this.vozilo = vozilo;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.procenatPopusta = procenatPopusta;
+	}
+	
+	
+	
+	public BrzaRezervacijaVozila(Vozilo vozilo, Date datumPreuzimanjaVozila, Date datumVracanjaVozila, double cijena,
+			int procenatPopusta) {
+		super();
+		this.vozilo = vozilo;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.procenatPopusta = procenatPopusta;
+	}
+
+
 
 	public BrzaRezervacijaVozila() {
 		super();
 	}
+
+
+
 
 	public Date getDatumPreuzimanjaVozila() {
 		return datumPreuzimanjaVozila;
@@ -81,6 +110,23 @@ public class BrzaRezervacijaVozila {
 	public void setId(Long id) {
 		this.Id = id;
 	}
+
+	public Vozilo getVozilo() {
+		return vozilo;
+	}
+
+	public void setVozilo(Vozilo vozilo) {
+		this.vozilo = vozilo;
+	}
+
+	public int getProcenatPopusta() {
+		return procenatPopusta;
+	}
+
+	public void setProcenatPopusta(int procenatPopusta) {
+		this.procenatPopusta = procenatPopusta;
+	}
+	
 	
 	
 }
