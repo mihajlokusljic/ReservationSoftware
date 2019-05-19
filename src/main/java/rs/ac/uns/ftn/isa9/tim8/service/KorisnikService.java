@@ -136,16 +136,21 @@ public class KorisnikService {
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
 		}
-
+		// od registrovanog korisnika u primljenim zahtjevima za prijateljstvo nema korisnika kojeg hos doadti
 		RegistrovanKorisnik registrovaniKor = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
 		PretragaPrijateljaDTO dtoObj = null;
 		List<Osoba> korisnici = korisnikRepository.findAll();
 		Collection<PretragaPrijateljaDTO> nisuPrijatelji = new HashSet<PretragaPrijateljaDTO>();
 
-		for (Osoba korisnik : korisnici) {
+		A: for (Osoba korisnik : korisnici) {
 			if (korisnik instanceof RegistrovanKorisnik) {
 				RegistrovanKorisnik regKor = (RegistrovanKorisnik) korisnik;
 				if (!daLiSuPrijatelji(registrovaniKor, regKor) && regKor.getId() != registrovaniKor.getId()) {
+					for (ZahtjevZaPrijateljstvo zahtjevZaPr : registrovaniKor.getPrimljeniZahtjevi()) {
+						if (zahtjevZaPr.getPosiljalac().getEmail().equalsIgnoreCase(regKor.getEmail())) {
+							continue A;
+						}
+					}
 					dtoObj = new PretragaPrijateljaDTO(regKor.getId(), regKor.getIme(), regKor.getPrezime());
 					nisuPrijatelji.add(dtoObj);
 				}

@@ -557,7 +557,19 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 	$("#zahtjeviZaPrijateljstvoRows").empty();
 	$.each(prijatelji, function(i, prijatelj) {
 		prikaziKorisnikaKojiJeZatrazioPrijateljstvo(prijatelj);
-	})
+	});
+	
+	$(".prihvatiPrijateljstvoClass").click(function(e) {
+		e.preventDefault();
+		var idPrijatelja = e.target.id.substring(3);
+		idPrijatelja = parseInt(idPrijatelja);
+		
+		var zahtjevZaPrijateljstvoDTO = {
+				posiljalacId : korisnik.id,
+				primalacId : idPrijatelja
+		};
+	});
+	
 }
 
 function prikaziKorisnikaKojiJeZatrazioPrijateljstvo(prijatelj) {
