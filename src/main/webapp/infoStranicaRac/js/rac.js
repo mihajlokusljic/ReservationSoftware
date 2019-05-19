@@ -37,9 +37,15 @@ $(document).ready(function(e) {
 		postaviMarker([podaciRac.adresa.latituda, podaciRac.adresa.longituda]);
 	});
 	
-//	$("#vratiNaPocetnu").click(function(e){
-//		e.preventDefault
-//	});
+	$("#vratiNaPocetnu").click(function(e){
+		e.preventDefault();
+		if (korisnikId != null){
+			window.location.replace("../registrovaniKorisnikPocetna/index.html");
+		}
+		else{
+			window.location.replace("../pocetnaStranica/index.html");
+		}
+	});
 });
 
 
