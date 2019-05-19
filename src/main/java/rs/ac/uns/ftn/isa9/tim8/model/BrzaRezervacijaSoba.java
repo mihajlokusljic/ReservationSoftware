@@ -11,11 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "brza_rezervacija_soba")
@@ -33,28 +36,55 @@ public class BrzaRezervacijaSoba {
 	@Temporal(TemporalType.DATE)
 	protected Date datumOdlaska;
 	
-	@Column(name = "cijena", nullable = false)
-	protected double cijena;
+	@Column(name = "bazna_cijena", nullable = false)
+	@ColumnDefault("0")
+	protected double baznaCijena;
 	
-//	@OneToMany(mappedBy = "brzaRezervacijaSobe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	protected Set<Usluga> dodatneUsluge;
+	@Column(name = "procenat_popusta", nullable = false)
+	protected int procenatPopusta;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+		name = "brza_rezervacija_sobe_usluge",
+		joinColumns = { @JoinColumn(name = "brza_rezervacija_sobe_id") },
+		inverseJoinColumns = { @JoinColumn(name = "usluga_id") }
+	)
+	protected Set<Usluga> dodatneUsluge;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "soba_id", referencedColumnName = "id")
 	protected HotelskaSoba sobaZaRezervaciju;
 	
 	public BrzaRezervacijaSoba() {
 		super();
 	}
+	
+	public long izracunajBrojNocenja() {
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		return brojNocenja;
+	}
 
-	public BrzaRezervacijaSoba(Date datumDolaska, Date datumOdlaska, double cijena, 
-			HotelskaSoba sobaZaRezervaciju) {
+	public BrzaRezervacijaSoba(Date datumDolaska, Date datumOdlaska, double baznaCijena, int procenatPopusta,
+			Set<Usluga> dodatneUsluge, HotelskaSoba sobaZaRezervaciju) {
 		super();
 		this.datumDolaska = datumDolaska;
 		this.datumOdlaska = datumOdlaska;
-		this.cijena = cijena;
-		//this.dodatneUsluge = dodatneUsluge;
+		this.baznaCijena = baznaCijena;
+		this.procenatPopusta = procenatPopusta;
+		this.dodatneUsluge = dodatneUsluge;
 		this.sobaZaRezervaciju = sobaZaRezervaciju;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public Date getDatumDolaska() {
@@ -73,20 +103,28 @@ public class BrzaRezervacijaSoba {
 		this.datumOdlaska = datumOdlaska;
 	}
 
-	public double getCijena() {
-		return cijena;
+	public double getBaznaCijena() {
+		return baznaCijena;
 	}
 
-	public void setCijena(double cijena) {
-		this.cijena = cijena;
+	public void setBaznaCijena(double baznaCijena) {
+		this.baznaCijena = baznaCijena;
 	}
 
-	public Long getId() {
-		return Id;
+	public int getProcenatPopusta() {
+		return procenatPopusta;
 	}
 
-	public void setId(Long id) {
-		this.Id = id;
+	public void setProcenatPopusta(int procenatPopusta) {
+		this.procenatPopusta = procenatPopusta;
+	}
+
+	public Set<Usluga> getDodatneUsluge() {
+		return dodatneUsluge;
+	}
+
+	public void setDodatneUsluge(Set<Usluga> dodatneUsluge) {
+		this.dodatneUsluge = dodatneUsluge;
 	}
 
 	public HotelskaSoba getSobaZaRezervaciju() {
@@ -96,16 +134,5 @@ public class BrzaRezervacijaSoba {
 	public void setSobaZaRezervaciju(HotelskaSoba sobaZaRezervaciju) {
 		this.sobaZaRezervaciju = sobaZaRezervaciju;
 	}
-
-	/*public Set<Usluga> getDodatneUsluge() {
-		return dodatneUsluge;
-	}
-
-	public void setDodatneUsluge(Set<Usluga> dodatneUsluge) {
-		this.dodatneUsluge = dodatneUsluge;
-	}*/
-
-	
-	
 	
 }

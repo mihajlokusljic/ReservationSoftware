@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -47,6 +49,7 @@ public class RezervacijaVozila {
 	protected Date datumVracanjaVozila;
 	
 	@Column(name = "cijena", nullable = false)
+	@ColumnDefault("0")
 	protected double cijena;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
