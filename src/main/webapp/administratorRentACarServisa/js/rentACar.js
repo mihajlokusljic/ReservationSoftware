@@ -187,6 +187,7 @@ $(document).ready(function() {
 	
 	$("#pregledanjeBrzihRezervacija").click(function(e) {
 		e.preventDefault();
+		vratiSveBrzeRezervacije();
 		aktivirajStavkuMenija("stavkaBrzeRezervacije");
 		$("#tab-brze-rezervacije-pregledanje").show();
 		$("#tab-brze-rezervacije-dodavanje").hide();
@@ -1184,7 +1185,7 @@ function zadavanjePopustaBrzeRezervacije(){
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = null;
 			alert("Usješno ste definisali popust za brzu rezervaciju.");
-			resetBrzeRezervacijeView();			
+			resetBrzeRezervacijeView();	
 		}
 	});
 }
@@ -1204,7 +1205,10 @@ function resetBrzeRezervacijeView() {
 	$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(0);
 	$("#procenatPopustaBrzeRezervacije").val(0);
 	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(0);
-	prikaziTab("tab-brze-rezervacije-pregledanje");
+	$("#tab-brze-rezervacije-pregledanje").show();
+	$("#izborVozilaBrzeRezervacije").hide();
+	$("#tab-brze-rezervacije-dodavanje").hide();
+	vratiSveBrzeRezervacije();
 }
 
 function azurirajCijeneBrzeRezervacije(){
@@ -1222,4 +1226,39 @@ function azurirajCijeneBrzeRezervacije(){
 	let popust = tekucaBrzaRezervacija.baznaCijena * procenatPopusta / 100;
 	let cijenaSaPopustom = tekucaBrzaRezervacija.baznaCijena - popust;
 	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(cijenaSaPopustom);
+}
+
+function vratiSveBrzeRezervacije(){
+	let idServisa = rentACarServis.id;
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/dobaviBrzeRezervacije/" + idServisa,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikaziBrzeRez(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+}
+
+
+
+function prikaziBrzeRez(brzeRez){
+	let prikaz = $("#prikazBrzeRezervacije");
+	prikaz.empty();
+	
+	$.each(brzeRez, function(i, br) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + br.nazivVozila + '</td>');
+		noviRed.append('<td class="column1">' + br.nazivServisa + '</td>');
+		noviRed.append('<td class="column1">' + br.pocetniDatum + '</td>');
+		noviRed.append('<td class="column1">' + br.krajnjiDatum + '</td>');
+		noviRed.append('<td class="column1">' + br.punaCijena + '</td>');
+		noviRed.append('<td class="column1">' + br.cijenaSaPopustom + '</td>');
+		
+		prikaz.append(noviRed);
+	})
 }

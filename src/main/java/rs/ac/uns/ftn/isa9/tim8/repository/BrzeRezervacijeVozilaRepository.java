@@ -10,6 +10,5 @@ import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 public interface BrzeRezervacijeVozilaRepository extends JpaRepository<BrzaRezervacijaVozila, Long>{
 	
 	public Collection<BrzaRezervacijaVozila> findAllByVozilo(Vozilo voziloZaRezervaciju);
-
 	
 }

@@ -23,6 +23,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
@@ -775,5 +776,47 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		rez.setProcenatPopusta(popust);
 		brzaRezervacijaVozilaRepository.save(rez);
 		return brzaRezervacija;
+	}
+
+
+	public PrikazBrzeRezVozilaDTO vratiZaPrikaz(BrzaRezervacijaVozilaDTO brzaRezervacija) throws NevalidniPodaciException {
+		
+		Optional<Vozilo> searchVozilo = voziloRepository.findById(brzaRezervacija.getIdVozila());
+		if (!searchVozilo.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji vozilo.");
+
+		}
+		Vozilo vozilo = searchVozilo.get();
+		
+		double punaCijena = brzaRezervacija.getBaznaCijena();
+		
+		double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta()*punaCijena/100;
+		return new PrikazBrzeRezVozilaDTO(brzaRezervacija.getIdBrzeRezervacije(), vozilo.getNaziv(), vozilo.getRentACar().getNaziv(), 
+				brzaRezervacija.getDatumPreuzimanjaVozila(), brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom);
+	}
+
+	public Collection<PrikazBrzeRezVozilaDTO> vratiBrzeZaPrikaz(Long idServisa) throws NevalidniPodaciException{
+		
+		RentACarServis rac = pronadjiServisPoId(idServisa);
+		
+		Collection<Vozilo> vozilaServisa = voziloRepository.findAllByRentACar(rac);
+		
+		if (vozilaServisa.isEmpty()) {
+			return null;
+		}
+		
+		Collection<PrikazBrzeRezVozilaDTO> brzeRezDTO = new ArrayList<>();
+		for (Vozilo voz : vozilaServisa) {
+			for(BrzaRezervacijaVozila brzaRezervacija : brzaRezervacijaVozilaRepository.findAllByVozilo(voz)) {
+				double punaCijena = brzaRezervacija.getCijena();
+				
+				double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta()*punaCijena/100;
+				brzeRezDTO.add(new PrikazBrzeRezVozilaDTO(brzaRezervacija.getId(), voz.getNaziv(), voz.getRentACar().getNaziv(), 
+						brzaRezervacija.getDatumPreuzimanjaVozila(), brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom));
+			}
+		}
+		
+		
+		return brzeRezDTO;
 	}
 }
