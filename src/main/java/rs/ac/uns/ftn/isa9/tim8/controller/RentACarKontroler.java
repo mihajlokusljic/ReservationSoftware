@@ -18,12 +18,16 @@ import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
+import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
@@ -62,14 +66,12 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/dodajVozilo/{imeRacServisa}", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<String> dodajNovoVozilo(@PathVariable("imeRacServisa") String nazivServisa,@RequestBody Vozilo vozilo) {
-		System.out.println("Filijala id " + vozilo.getFilijala().getId());
 		return new ResponseEntity<String>(servis.dodajVozilo(nazivServisa, vozilo),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/svaVozilaServisa/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
  	public ResponseEntity<?> svaVozila(@PathVariable("nazivServisa") String nazivServisa){
-		System.out.println(nazivServisa);
 		if (servis.servisPostoji(nazivServisa) == false) {
 			return new ResponseEntity<String>("Servis koji ste unijeli ne postoji.",HttpStatus.OK);
 		}
@@ -118,10 +120,29 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> dodajFilijalu(@RequestBody Adresa adresaFilijale) {
+		try {
+			return new ResponseEntity<Filijala>(servis.dodajFilijalu(adresaFilijale), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "/dobaviFilijale/{nazivServisa}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<?> dobaviFilijale(@PathVariable("nazivServisa") String nazivServisa) {
 		return new ResponseEntity<Collection<FilijalaDTO>>(servis.vratiFilijale(nazivServisa),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/adresaFilijale/{idFilijale}", method = RequestMethod.GET)
+	public ResponseEntity<?> adresaFilijale(@PathVariable("idFilijale") Long idFilijale) {
+		try {
+			return new ResponseEntity<Adresa>(servis.adresaFilijale(idFilijale), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@RequestMapping(value = "/ukloniFilijalu/{idFilijale}", method = RequestMethod.GET)
@@ -130,10 +151,11 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.ukloniFilijalu(Long.parseLong(idFilijale)),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.GET)
+	@RequestMapping(value = "/izmjeniFilijalu/{idFilijale}/{novaLokacija}", method = RequestMethod.PUT)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
-	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, @PathVariable("novaLokacija") String novaLokacija) {
-		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija),HttpStatus.OK);
+	public ResponseEntity<String> izmjeniFilijalu(@PathVariable("idFilijale") String idFilijale, 
+			@PathVariable("novaLokacija") String novaLokacija, @RequestBody Adresa novaAdresa) {
+		return new ResponseEntity<String>(servis.izmjeniFilijalu(Long.parseLong(idFilijale), novaLokacija, novaAdresa),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/podaciOServisu", method = RequestMethod.GET)
@@ -181,4 +203,14 @@ public class RentACarKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/rezervisiVozilo/{idServisa}", method = RequestMethod.POST)
+	public ResponseEntity<?> rezervacijaVozila(@PathVariable("idServisa") String idServisa,@RequestBody RezervacijaVozilaDTO rezervacija) {
+		try {
+			return new ResponseEntity<String>(this.servis.rezervisiVozilo(rezervacija,Long.parseLong(idServisa)), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

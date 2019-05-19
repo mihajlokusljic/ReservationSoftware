@@ -76,6 +76,9 @@ $(document).ready(function() {
 	//ucitavanje rent-a-car servisa
 	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 	
+	
+	ucitajRezervacije();
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -139,8 +142,9 @@ $(document).ready(function() {
 		$("#tab-pozivnice").hide();
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
-		});
+		$("#tab-odjava").hide();
+		ucitajRezervacije();
+	});
 	
 	$("#pregled_prijatelja_tab").click(function(e){
 		e.preventDefault();
@@ -348,7 +352,7 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');
 	noviRed.append('<td class="column1">' + podatak.adresa.punaAdresa + '</td>');
 	noviRed.append('<td class="column1">' + ocjena + '</td>');
-	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '">Pogledaj detalje</a></td>');
+	noviRed.append('<td class="column1"><a href="../' + infoStranica+'/index.html?id=' + podatak.id + '&korisnik='+ korisnik.id + '">Pogledaj detalje</a></td>');
 
 	tabelaZaPrikaz.append(noviRed);
 }
@@ -669,3 +673,119 @@ function odjava() {
 	removeJwtToken();
 	window.location.replace("../pocetnaStranica/index.html");
 }
+
+function ucitajRezervacije(){
+	ucitajRezervisaneLetove();
+	ucitajRezervisaneSobe();
+	ucitajRezervisanaVozila();
+}
+
+function ucitajRezervisaneLetove(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisaniLetovi",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			prikaziRezervisaneLetove(data);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
+}
+
+function ucitajRezervisaneSobe(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisaneSobe",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			prikaziRezervisaneSobe(data);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
+}
+
+function ucitajRezervisanaVozila(){
+	$.ajax({
+		type : 'GET',
+		url : "../korisnik/rezervisanaVozila",
+		dataType : "json",
+		async: false,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(data){
+			prikaziRezVozila(data);
+		},
+		async: false,
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR: " + textStatus);
+		}
+	});
+}
+
+function prikaziRezVozila(vozila){
+	let tabela = $("#prikazRezervisanihVozila");
+	tabela.empty();
+	
+	$.each(vozila, function(i, vozilo) {
+		let noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + vozilo.nazivServisa + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.rezervisanoVozilo.naziv + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.cijena + '</td>');		
+		noviRed.append('<td class="column1">' + vozilo.mjestoPreuzimanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.mjestoVracanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + vozilo.id + '">Otkaži rezervaciju</a></td></tr>')
+
+		tabela.append(noviRed);
+	});
+}
+
+function prikaziRezervisaneLetove(rezLetova){
+	
+	let tabela = $("#prikazRezervisanihLetova");
+	tabela.empty();
+	
+	$.each(rezLetova, function(i, rLet) {
+		let noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + rLet.nazivAviokompanije + '</td>');
+		noviRed.append('<td class="column1">' + rLet.brojLeta + '</td>');
+		noviRed.append('<td class="column1">' + rLet.cijena + '</td>');		
+		noviRed.append('<td class="column1">' + rLet.sjediste.red + '/' + rLet.sjediste.kolona +  '</td>');
+		noviRed.append('<td class="column1">' + rLet.destinacijaPolaska + '</td>');
+		noviRed.append('<td class="column1">' + rLet.destinacijaDolaska + '</td>');
+		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
+		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rLet.id + '">Otkaži rezervaciju</a></td></tr>')
+
+		tabela.append(noviRed);
+	});
+}
+
+function prikaziRezervisaneSobe(rezSoba){
+	let tabela = $("#prikazRezervisanihSoba");
+	tabela.empty();
+	
+	$.each(rezSoba, function(i, rSoba) {
+		let noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + rSoba.nazivHotela + '</td>');
+		noviRed.append('<td class="column1">' + rSoba.brojSobe + '</td>');
+		noviRed.append('<td class="column1">' + rSoba.brojKreveta + '</td>');		
+		noviRed.append('<td class="column1">' + rSoba.cijena + '</td>');
+		noviRed.append('<td class="column1">' + rSoba.datumDolaksa + '</td>');
+		noviRed.append('<td class="column1">' + rSoba.datumOdlaksa + '</td>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rSoba.id + '">Otkaži rezervaciju</a></td></tr>')
+
+		tabela.append(noviRed);
+	});
+}
+

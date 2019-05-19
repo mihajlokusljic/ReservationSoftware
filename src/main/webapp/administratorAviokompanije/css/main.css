@@ -1,3 +1,17 @@
+/* ==========================================================================
+   Mape
+   ========================================================================== */
+div.mapa {
+	width: 100%;
+	height: auto;
+	min-width: 400px;
+	min-height: 400px;
+	margin: 10px;
+}
+
+div.input-group-map {
+	padding-left: 9px;
+}
 
 /* ==========================================================================
    #GRID
@@ -156,6 +170,9 @@ h6 {
 img {
   max-width: 100%;
   height: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 10px;
 }
 
 a {

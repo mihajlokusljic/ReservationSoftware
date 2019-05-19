@@ -25,6 +25,10 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+    
+    <!-- Yandex maps -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=1b646e0c-0691-4643-b29c-f34cbe4be5c8" type="text/javascript"></script>
+    
 </head>
 
 <body>
@@ -35,9 +39,6 @@
                     <ul class="tab-list">
                         <li class="tab-list__item active">
                             <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab" id = "aviokompanije">Aviokompanije</a>
-                        </li>
-						<li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab-dodaj-aviokompaniju" data-toggle="tab" id = "vozila"></a>
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-hoteli" data-toggle="tab" id = "hoteli">Hoteli</a>
@@ -67,6 +68,12 @@
                                     <label class="label">Adresa:</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
                                     <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu aviokompanije" required="required" id="adresaAviokompanije">
+                                </div>
+                                <div class="input-group input-group-map">
+                                    <label class="label">Označite lokaciju aviokompanije klikom na mapi:</label>
+                                    <div class="mapa" id="aviokompanijaMapa"></div>
+                                    <input type="text" id="latitudaAviokompanije" hidden="hidden">
+                                    <input type="text" id="longitudaAviokompanije" hidden="hidden">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
@@ -98,7 +105,13 @@
                                 <div class="input-group">
                                     <label class="label">Adresa:</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
-                                    <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu hotela" required="required" id="adresaHotela">
+                                    <input class="input--style-2" type="text" name="destination" placeholder="Unesite adresu hotela" required="required" id="adresaHotela">
+                                </div>
+                                <div class="input-group input-group-map">
+                                    <label class="label">Označite lokaciju hotela klikom na mapi:</label>
+                                    <div class="mapa" id="hotelMapa"></div>
+                                    <input type="text" id="latitudaHotela" hidden="hidden">
+                                    <input type="text" id="longitudaHotela" hidden="hidden">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
@@ -132,6 +145,12 @@
                                     <label class="label">Adresa:</label>
                                     <i class="zmdi zmdi-pin input-group-symbol"></i>
                                     <input class="input--style-2" type="text" name="destination" placeholder="Izaberite adresu rent-a-car servisa" required="required" id="adresaRacServisa">
+                                </div>
+                                <div class="input-group input-group-map">
+                                    <label class="label">Označite lokaciju rent-a-car servisa klikom na mapi:</label>
+                                    <div class="mapa" id="racMapa"></div>
+                                    <input type="text" id="latitudaRacServisa" hidden="hidden">
+                                    <input type="text" id="longitudaRacServisa" hidden="hidden">
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>

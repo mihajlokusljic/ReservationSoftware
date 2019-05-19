@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
@@ -147,4 +151,26 @@ public class KorisnikKontroler {
 		}
 	}
 
+	
+	@RequestMapping(value = "/rezervisanaVozila", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisanaVozila() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezVozilaDTO>>(korisnikService.vratiRezervacijeVozila(regKor), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/rezervisaniLetovi", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisaniLetovi() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezSjedistaDTO>>(korisnikService.vratiRezervacijeLetova(regKor), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/rezervisaneSobe", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> rezervisaneSobe() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezSobeDTO>>(korisnikService.vratiRezervacijeSoba(regKor), HttpStatus.OK);
+	}
 }

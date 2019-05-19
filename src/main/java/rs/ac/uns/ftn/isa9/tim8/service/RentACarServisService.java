@@ -14,24 +14,31 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
+import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Poslovnica;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.FilijalaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaVozilaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.VoziloRepository;
@@ -53,6 +60,9 @@ public class RentACarServisService {
 	
 	@Autowired
 	protected FilijalaRepository filijalaRepository;
+	
+	@Autowired
+	protected KorisnikRepository korisnikRepository;
 	
 	public Collection<Poslovnica> dobaviRentACarServise() {
 		Collection<RentACarServis> rentACarLista = rentACarRepository.findAll();
@@ -123,27 +133,41 @@ public class RentACarServisService {
 			return "Ne postoji servis sa unijetim nazivom.";
 		}		
 		
-		Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+		boolean postojiFilijala = true;
+		Filijala filijala = null;
 		
-		if (!pretragaFilijala.isPresent()) {
-			return "Nevalidan id";
+		if (vozilo.getFilijala() == null) {
+			postojiFilijala = false;
 		}
-		
-		Filijala filijala = pretragaFilijala.get();
-		
-		filijala.setBrojVozila(filijala.getBrojVozila()+1);
+		if (postojiFilijala == true) {
+			Optional<Filijala> pretragaFilijala = filijalaRepository.findById(vozilo.getFilijala().getId());
+			
+			if (!pretragaFilijala.isPresent()) {
+				return "Nevalidan id";
+			}
+			
+			filijala = pretragaFilijala.get();
+			filijala.setBrojVozila(filijala.getBrojVozila()+1);
+
+		}
+				
 		vozilo.setRentACar(rentACar);
 		vozilo.setId(null);
 		vozilo.setFilijala(filijala);
 		rentACar.getVozila().add(vozilo);
 		rentACarRepository.save(rentACar);
-		filijalaRepository.save(filijala);
+		if (postojiFilijala) {
+			filijalaRepository.save(filijala);		
+		}
+	
 		
 		return null;
 	}
 	
 	public String izmjeniRentACarServis(RentACarServis rentACar) {
 		RentACarServis rentACarStari = rentACarRepository.findOneByNaziv(rentACar.getNaziv());
+		rentACarStari.getAdresa().setLatituda(rentACar.getAdresa().getLatituda());
+		rentACarStari.getAdresa().setLongituda(rentACar.getAdresa().getLongituda());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());		
 		if (adresa != null) {
 			
@@ -236,6 +260,9 @@ public class RentACarServisService {
 			voz.setFilijala(filijala);
 			filijalaRepository.save(filijala);
 		}
+		else if (vozilo.getFilijala().isEmpty()) {
+			voz.setFilijala(filijala);
+		}
 		else if (vozilo.getFilijala() != voz.getFilijala().getAdresa().getPunaAdresa()) {
 			Filijala fil = filijalaRepository.findOneByAdresa(voz.getFilijala().getAdresa());
 			fil.setBrojVozila(fil.getBrojVozila()-1);
@@ -304,7 +331,7 @@ public class RentACarServisService {
 		return null;
 	}
 	
-	public String izmjeniFilijalu( Long idFilijale, String novLokacija) {
+	public String izmjeniFilijalu( Long idFilijale, String novLokacija, Adresa novaAdresa) {
 		Optional<Filijala> pretragaFilijale = filijalaRepository.findById(idFilijale);
 		
 		if (!pretragaFilijale.isPresent()) {
@@ -312,10 +339,13 @@ public class RentACarServisService {
 		}
 		
 		Filijala f = pretragaFilijale.get();
-		
+		f.getAdresa().setLatituda(novaAdresa.getLatituda());
+		f.getAdresa().setLongituda(novaAdresa.getLongituda()); //uvijek dozvoljavamo izmjenu geolokacije
 		Adresa a = adresaRepository.findOneByPunaAdresa(novLokacija);
 		if (a != null) {
-			return "Zauzeta adresa";
+			if(!novLokacija.equals(f.getAdresa().getPunaAdresa())) {
+				return "Zauzeta adresa"; //ako nova lokacija vec postoji i ne odgovara adresi date filijale
+			}
 		}
 		f.getAdresa().setPunaAdresa(novLokacija);
 		List<Vozilo> vozila = voziloRepository.findAllByFilijala(f);
@@ -407,6 +437,7 @@ public class RentACarServisService {
 		Date trenutniDatum = new Date();
 		boolean dodajVozilo = true;
 		
+		
 		for (Vozilo voz : rac.getVozila()) {
 			
 			if (pocetniDatum == null || krajnjiDatum == null) {
@@ -414,22 +445,19 @@ public class RentACarServisService {
 				continue;
 			}	
 			
-			else if (trenutniDatum.after(pocetniDatum) || trenutniDatum.after(krajnjiDatum) || pocetniDatum.after(krajnjiDatum)) {
+			else if (trenutniDatum.compareTo(pocetniDatum) > 0  || trenutniDatum.compareTo(krajnjiDatum) > 0 || pocetniDatum.compareTo(krajnjiDatum) > 0) {
 				dodajVozilo = false;
 				break;
 			}
 			
 			for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
 				
-							
-				if(!pocetniDatum.after(r.getDatumPreuzimanjaVozila()) && !r.getDatumVracanjaVozila().after(krajnjiDatum)) {
+				if (pocetniDatum.compareTo(r.getDatumVracanjaVozila()) < 0 && krajnjiDatum.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
 					dodajVozilo = false;
 					break;
-				}
-				
+				}				
 				else {
 					dodajVozilo = true;
-					break;
 				}
 			}
 			
@@ -472,6 +500,9 @@ public class RentACarServisService {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
 		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
 		List<Vozilo> slobodnaVozila = slobodnaVozila(rac, pocetniDatum, krajnjiDatum);
 		
 		List<Vozilo> vozilaZaRezervaciju = new ArrayList<Vozilo>();
@@ -479,12 +510,134 @@ public class RentACarServisService {
 			return vozilaZaRezervaciju;
 		}
 		for (Vozilo vozilo : slobodnaVozila) {
+			
+			if (vozilo.getFilijala() == null) {
+				continue;
+			}
+			
 			if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
 					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
-				vozilaZaRezervaciju.add(vozilo);
+				
+				
+				if (kriterijumiPretrage.getMinimalnaCijenaPoDanu() != null && kriterijumiPretrage.getMaksimalnaCijenaPoDanu()!= null) {
+					if (vozilo.getCijena_po_danu() >= kriterijumiPretrage.getMinimalnaCijenaPoDanu() && vozilo.getCijena_po_danu() <= kriterijumiPretrage.getMaksimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else if (kriterijumiPretrage.getMinimalnaCijenaPoDanu() != null) {
+					if (vozilo.getCijena_po_danu() >= kriterijumiPretrage.getMinimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else if (kriterijumiPretrage.getMaksimalnaCijenaPoDanu() != null) {
+					if (vozilo.getCijena_po_danu() <= kriterijumiPretrage.getMaksimalnaCijenaPoDanu()) {
+						vozilaZaRezervaciju.add(vozilo);
+					}
+				}
+				else {
+					vozilaZaRezervaciju.add(vozilo);
+				}
+
+				
 			}
 		}
 		return vozilaZaRezervaciju;
+	}
+
+	public String rezervisiVozilo(RezervacijaVozilaDTO rezervacijaDTO, Long idServisa) throws NevalidniPodaciException{
+		// TODO Auto-generated method stub
+		
+		RezervacijaVozila rezervacija = new RezervacijaVozila();
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Optional<Osoba> pretragaKor = korisnikRepository.findById(rezervacijaDTO.getPutnik());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		Osoba regKor = pretragaKor.get();
+		
+		rezervacija.setRentACarServis(rac);
+		rezervacija.setPutnik((RegistrovanKorisnik) regKor);
+		rezervacija.setCijena(rezervacijaDTO.getCijena());
+		rezervacija.setDatumPreuzimanjaVozila(rezervacijaDTO.getDatumPreuzimanjaVozila());
+		rezervacija.setDatumVracanjaVozila(rezervacijaDTO.getDatumVracanjaVozila());
+		
+		Optional<Filijala> adresa1 = filijalaRepository.findById(rezervacijaDTO.getMjestoPreuzimanjaVozila());
+		if (!adresa1.isPresent()) {
+			throw new NevalidniPodaciException("Nevalidna filijala");
+		}
+		
+		Filijala mjestoPreuzimanja = adresa1.get();
+		
+		Optional<Filijala> adresa2 = filijalaRepository.findById(rezervacijaDTO.getMjestoVracanjaVozila());
+		if (!adresa2.isPresent()) {
+			throw new NevalidniPodaciException("Nevalidna filijala");
+		}
+		
+		Filijala mjestoVracanja = adresa2.get();
+		
+		Optional<Vozilo> rezervisano = voziloRepository.findById(rezervacijaDTO.getRezervisanoVozilo().getId());
+		if (!rezervisano.isPresent()) {
+			throw new NevalidniPodaciException("Nevalidno vozilo");
+		}
+		
+		Vozilo  vozilo = rezervisano.get();
+		
+		rezervacija.setMjestoPreuzimanjaVozila(mjestoPreuzimanja);
+		rezervacija.setMjestoVracanjaVozila(mjestoVracanja);
+		rezervacija.setRezervisanoVozilo(vozilo);
+		rezervacija.setPutovanje(rezervacijaDTO.getPutovanje());
+		
+		rac.getRezervisanaVozila().add(rezervacija);
+		
+		korisnikRepository.save(regKor);
+		rentACarRepository.save(rac);
+		rezervacijaVozilaRepository.save(rezervacija);
+		
+	
+		
+		return null;
+	}
+	
+	public void validirajAdresu(Adresa adresa) throws NevalidniPodaciException {
+		if (adresa == null) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		if (adresa.getPunaAdresa().equals("")) {
+			throw new NevalidniPodaciException("Adresa mora biti zadata.");
+		}
+		Adresa zauzimaAdresu = adresaRepository.findOneByPunaAdresa(adresa.getPunaAdresa());
+		if (zauzimaAdresu != null) {
+			throw new NevalidniPodaciException("Vec postoji poslovnica na zadatoj adresi");
+		}
+	}
+
+	public Filijala dodajFilijalu(Adresa adresaFilijale) throws NevalidniPodaciException {
+		validirajAdresu(adresaFilijale);
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis target = admin.getRentACarServis();
+		Filijala novaFilijala = new Filijala(adresaFilijale);
+		novaFilijala.setRentACar(target);
+		target.getFilijale().add(novaFilijala);
+		filijalaRepository.save(novaFilijala);
+		rentACarRepository.save(target);
+		return novaFilijala;
+	}
+
+	public Adresa adresaFilijale(Long idFilijale) throws NevalidniPodaciException {
+		Optional<Filijala> filijalaSearch = filijalaRepository.findById(idFilijale);
+		if(!filijalaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji filijala sa zadatim id-em.");
+		}
+		return filijalaSearch.get().getAdresa();
 	}
 	
 }

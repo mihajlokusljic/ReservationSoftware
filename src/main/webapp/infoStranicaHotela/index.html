@@ -21,13 +21,30 @@
     <!-- Vendor CSS-->
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Popup window -->
+    <link href="css/popup.css" rel="stylesheet" media="all">
     
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+    
+    <!-- Yandex maps -->
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=1b646e0c-0691-4643-b29c-f34cbe4be5c8" type="text/javascript"></script>
 </head>
 
 <body>
+	<!-- Mapa za prikaz adrese -->
+	<div class="hover_bkgr_fricc">
+		<span class="helper"></span>
+		    <div>
+		        <div class="popupCloseButton">X</div>
+		        <div style="width: 100%; height: 100%;" id="mapa"></div>
+		    </div>
+	</div>
+	
+							
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
         <div class="wrapper wrapper--w1050">
             <div class="card card-3">
@@ -65,6 +82,7 @@
 			                                    <label class="label">Adresa:</label>
 			                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
 			                                    <input class="input--style-2" type="text" id="adresaHotela" readonly="readonly">
+			                                    <a class="trigger_popup_fricc">Prikaži na mapi</a>
 			                                </div>
 			                                <div class="input-group">
 			                                    <label class="label">Ocjena:</label>
@@ -147,6 +165,7 @@
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
+    <script src="js/popup.js"></script>
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>

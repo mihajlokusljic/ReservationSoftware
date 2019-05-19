@@ -3,6 +3,9 @@ var aviokompanija = null;
 var podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let podrazumjevana_slika = "https://assets.nst.com.my/images/articles/PELANCARAN_SARAWAK_AIRCRAFT_LIVERsdjvsdjfjdfjfbgbfjdggfhY_1549092511.jpg";
+let mapaAviokompanije = null;
+let mapaDestinacije = null;
+let zoomLevel = 17;
 
 $(document).ready(function() {
 	
@@ -16,6 +19,7 @@ $(document).ready(function() {
 	korisnikInfo();
 	
 	ucitajPodatkeSistema();
+	ymaps.ready(inicijalizujMape);
 	ucitajDestinacije();
 	ucitajAvione();
 	ucitajLetove();
@@ -137,10 +141,21 @@ $(document).ready(function() {
 				
 		let naziv_destinacije = $("#destinacijeNazivDestinacije").val();		
 		let puna_adresa = $("#destinacijePunaAdresa").val();
+		let _lat = $("#latitudaDestinacije").val();
+		let _long = $("#longitudaDestinacije").val();
+		
+		if(_lat == "" || _long == "") {
+			alert("Morate zadati lokaciju na mapi.");
+			return;
+		}
 		
 		let novaDestinacija = {
 			naziv : naziv_destinacije,
-			punaAdresa : puna_adresa,
+			adresa : {
+				punaAdresa: puna_adresa,
+				latituda: _lat,
+				longituda: _long
+			},
 			idAviokompanije : aviokompanija.id
 		};
 		
@@ -166,6 +181,8 @@ $(document).ready(function() {
 					alert("Destinacija je uspješno dodata.");
 					prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
 					popuniListuZaDestinaciju(response);
+					$("#administratorAviokompanijeDestinacijeForm")[0].reset();
+					mapaDestinacije.geoObjects.removeAll();
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -386,6 +403,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$("#izmjenaInfoStraniceAviokompanijeForm")[0].reset();
 		prikaziPodatkeAviokompanije();
+		postaviMarker(mapaAviokompanije, [aviokompanija.adresa.latituda, aviokompanija.adresa.longituda]);
 	});
 	
 	$("#odjava").click(function(e) {
@@ -418,6 +436,7 @@ function ucitajPodatkeSistema() {
 	$.ajax({
 		type : 'GET',
 		url : "../destinacije/podaciOServisu",
+		async: false,
 		dataType : "json",
 		success: function(data){
 			if(data != null){
@@ -475,6 +494,8 @@ function ucitajLetove() {
 function izmjenaInfoStraniceAviokompanije() {
 	let _naziv = $("#nazivAviokompanijeInfoStranica").val();
 	let _adresa = $("#adresaAviokompanijeInfoStranica").val();
+	let _lat = $("#latitudaAviokompanije").val();
+	let _long = $("#longitudaAviokompanije").val();
 	let _opis = $("#promotivniOpisAviokompanijeInfoStranica").val();
 	
 	if (_naziv == "") {
@@ -487,8 +508,17 @@ function izmjenaInfoStraniceAviokompanije() {
 		return;
 	}
 	
+	if(_lat == "" || _long == "") {
+		alert("Morate zadati lokaciju na mapi.");
+		return;
+	}
+	
 	let izmjena_aviokompanija = {
-			adresa : {punaAdresa : _adresa},
+			adresa : {
+				punaAdresa : _adresa,
+				latituda: _lat,
+				longituda: _long
+			},
 			naziv : _naziv,
 			promotivniOpis : _opis
 	};
@@ -510,6 +540,8 @@ function prikaziPodatkeAviokompanije() {
 	$("#adresaAviokompanijeInfoStranica").val(aviokompanija.adresa.punaAdresa);
 	$("#promotivniOpisAviokompanijeInfoStranica").val(aviokompanija.promotivniOpis);
 	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
+	$("#latitudaAviokompanije").val(aviokompanija.adresa.latituda);
+	$("#longitudaAviokompanije").val(aviokompanija.adresa.longituda);
 	
 }
 
@@ -820,4 +852,50 @@ function aktivirajStavkuMenija(idStavke) {
 function odjava() {
 	removeJwtToken();
 	window.location.replace(pocetnaStrana);
+}
+
+function postaviMarker(mapa, koordinate) {
+	var placemark = new ymaps.Placemark(koordinate);
+	mapa.geoObjects.removeAll();
+	mapa.geoObjects.add(placemark);
+	mapa.setCenter(koordinate);
+}
+
+function inicijalizujMape() {
+	var coords = [aviokompanija.adresa.latituda, aviokompanija.adresa.longituda];
+	mapaAviokompanije = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaAviokompanije.controls.add('geolocationControl');
+	mapaAviokompanije.controls.add('typeSelector');
+	mapaAviokompanije.controls.add('zoomControl');
+	postaviMarker(mapaAviokompanije, coords);
+	
+	mapaAviokompanije.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(mapaAviokompanije, coords);
+		$("#latitudaAviokompanije").val(coords[0]);
+		$("#longitudaAviokompanije").val(coords[1]);
+	});
+	
+	coords = [44.7866, 20.4489];
+	mapaDestinacije = new ymaps.Map('destinacijaMapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	
+	mapaDestinacije.controls.add('geolocationControl');
+	mapaDestinacije.controls.add('typeSelector');
+	mapaDestinacije.controls.add('zoomControl');
+	
+	mapaDestinacije.events.add('click', function(e) {
+		var coords = e.get('coords');
+		postaviMarker(mapaDestinacije, coords);
+		$("#latitudaDestinacije").val(coords[0]);
+		$("#longitudaDestinacije").val(coords[1]);
+	});
 }

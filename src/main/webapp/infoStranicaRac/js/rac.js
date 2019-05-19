@@ -1,6 +1,10 @@
 let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
+let korisnikId = null;
+let mapa = null;
+let zoomLevel = 17;
+
 
 $(document).ready(function(e) {
 	
@@ -26,6 +30,12 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		pretragaVozila();
 	})
+	
+	//prikazivanje lokacije sjedista RAC servisa
+	$("#lokacijaRacServisaPrikaz").click(function(e) {
+		e.preventDefault();
+		postaviMarker([podaciRac.adresa.latituda, podaciRac.adresa.longituda]);
+	});
 });
 
 
@@ -35,6 +45,8 @@ function ucitajPodatkeRac() {
 	var params_parser = new URLSearchParams(parametri);
 	
 	var id = params_parser.get("id");
+	var kor =  params_parser.get("korisnik");
+	korisnikId = kor;
 	
 	$.ajax({
 		type: "GET",
@@ -62,9 +74,35 @@ function ucitajPodatkeRac() {
 				$("#mjestoPreuzimanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 				$("#mjestoVracanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 			});
+			ymaps.ready(inicijalizujMape);
+			prikaziFilijale();
 		},
 	});
 
+}
+
+function prikaziFilijale() {
+	let tabela = $("#prikazFilijala");
+	tabela.empty();
+	
+	$.each(podaciRac.filijale, function(i, filijala) {
+		let noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + filijala.adresa.punaAdresa + '</td>');
+		noviRed.append('<td class="column1"><a class="trigger_popup_fricc prikazFil" id="fil' + i + '">Prikaži na mapi</a></td>');
+		tabela.append(noviRed);
+	});
+	
+	registerWindowHandlers(); //omogucuje otvaranje prozora (popup.js)
+	
+	//prikazivanje lokacije izabrane filijale na mapi
+	$(".prikazFil").click(function(e) {
+		e.preventDefault();
+		let index = e.target.id.substring(3); //id je oblika "fil<indeks u kolekciji filijala>"
+		index = parseInt(index);
+		let adresa = podaciRac.filijale[index].adresa;
+		postaviMarker([adresa.latituda, adresa.longituda]);
+	});
+	
 }
 
 function pretragaVozila(){
@@ -82,6 +120,11 @@ function pretragaVozila(){
 	
 	let _brojPutnika = $("#brojPutnikaInput").val();
 	let _tipVozila = $("#tipVozilaSelect").val();
+	
+	let _minCijena = $("#minCijena").val();
+	let _maxCijena = $("#maxCijena").val();
+	
+	
 	let pretragaVozila = {
 			idRac : podaciRac.id,
 			datumPreuzimanja : _datumPreuzimanja,
@@ -91,12 +134,19 @@ function pretragaVozila(){
 			idMjestoPreuzimanja: _mjestoPreuzimanja,
 			idMjestoVracanja: _mjestoVracanja,
 			tipVozila: _tipVozila,
-			brojPutnika: _brojPutnika
+			brojPutnika: _brojPutnika,
 			
 	}
 	
+	if (_minCijena != ''){
+		pretragaVozila.minimalnaCijenaPoDanu = _minCijena;
+	}
+	if (_maxCijena != ''){
+		pretragaVozila.maksimalnaCijenaPoDanu = _maxCijena;
+
+	}
 	if (_datumPreuzimanja != '' && _datumVracanja != ''){
-		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / 36e5;
+		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);
 		/*var datetime1 = new Date('1970-01-01T' + _vrijemePreuzimanja + 'Z');
 		var datetime2 = new Date('1970-01-01T' + _vrijemeVracanja + 'Z');
 		ukupno = ukupno + Math.abs(Date.parse(datetime1) - Date.parse(datetime2)) / 36e5;*/
@@ -110,8 +160,7 @@ function pretragaVozila(){
 		data: JSON.stringify(pretragaVozila),
 		success: function(response) {
 			if(response.length == 0) {
-				alert("Ne postoji ni jedno slobodno vozilo za dati vremenski period.");
-				return;
+				alert("Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.");
 			}
 			prikaziVozila(response);
 		},
@@ -141,6 +190,60 @@ function prikaziVozila(vozila) {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		prikaz.append(noviRed);
 	})
+	
+	$(".rezervacija").click(function(e){
+		e.preventDefault();
+		let vozilo = vozila[e.target.id];
+				
+		let rezervacijaVozila = {
+				rezervisanoVozilo : vozilo,
+				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaSelect").val(),
+				datumPreuzimanjaVozila : Date.parse($("#input-start").val()),
+				mjestoVracanjaVozila : $("#mjestoVracanjaSelect").val(),
+			    datumVracanjaVozila : Date.parse($("#input-end").val()),
+			    cijena : ukupno*vozilo.cijena_po_danu,
+			    putnik : korisnikId ,
+			    putovanje : null
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/rezervisiVozilo/" + podaciRac.id,
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacijaVozila),
+			success: function(response) {
+				if(response == '') {
+					alert("Uspjesno ste rezervisali vozilo.");
+					location.reload(true);
+					return;
+				}
+				else{
+					alert (response);
+				}
+			},
+		});
+		
+	});
+}
+
+
+function postaviMarker(koordinate) {
+	var placemark = new ymaps.Placemark(koordinate);
+	mapa.setCenter(koordinate, zoomLevel);
+	mapa.geoObjects.removeAll();
+	mapa.geoObjects.add(placemark);
+}
+
+function inicijalizujMape() {
+	var coords = [podaciRac.adresa.latituda, podaciRac.adresa.longituda];
+	mapa = new ymaps.Map('mapa', {
+        center: coords,
+        zoom: zoomLevel,
+        controls: []
+    });
+	mapa.controls.add('typeSelector');
+	mapa.controls.add('zoomControl');
 }

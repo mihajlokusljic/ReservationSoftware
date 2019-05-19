@@ -421,6 +421,8 @@ public class AviokompanijaService {
 			throw new NevalidniPodaciException("Adresa aviokompanije mora biti zadata.");
 		}
 
+		target.getAdresa().setLatituda(novaAdresa.getLatituda());
+		target.getAdresa().setLongituda(novaAdresa.getLongituda());
 		if (!novaAdresa.getPunaAdresa().equals(target.getAdresa().getPunaAdresa())) {
 			validirajAdresu(novaAdresa);
 			staraAdresa = target.getAdresa();
