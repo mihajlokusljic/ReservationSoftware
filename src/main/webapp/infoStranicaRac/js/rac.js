@@ -36,6 +36,10 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		postaviMarker([podaciRac.adresa.latituda, podaciRac.adresa.longituda]);
 	});
+	
+//	$("#vratiNaPocetnu").click(function(e){
+//		e.preventDefault
+//	});
 });
 
 
@@ -190,7 +194,10 @@ function prikaziVozila(vozila) {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+		if (korisnikId != null){
+			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+		}
+		
 		prikaz.append(noviRed);
 	})
 	
