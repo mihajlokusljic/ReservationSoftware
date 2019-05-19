@@ -1,6 +1,7 @@
 let podaciAdmina = null;
 let podaciHotela = null;
 let tekucaBrzaRezervacija = null;
+let brzeRezervacije = [];
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
@@ -408,6 +409,34 @@ function izmjenaInicijalneLozinke() {
 	prikaziTab("tab-profil-lozinka");
 }
 
+function prikaziBrzuRezervaciju(tabela, rezervacija) {
+	let noviRed = $('<tr></tr>');
+	noviRed.append('<td class="column1">' + rezervacija.datumDolaska + '</td>');
+	noviRed.append('<td class="column1">' + rezervacija.datumOdlaska + '</td>');
+	noviRed.append('<td class="column1">' + rezervacija.baznaCijena + '</td>');
+	noviRed.append('<td class="column1">' + rezervacija.procenatPopusta + '%</td>');
+	let popust = rezervacija.baznaCijena * rezervacija.procenatPopusta / 100.0;
+	let cijenaSaPopustom = rezervacija.baznaCijena - popust;
+	noviRed.append('<td class="column1">' + cijenaSaPopustom + '</td>');
+	let soba = rezervacija.sobaZaRezervaciju;
+	noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
+	if(soba.brojOcjena > 0) {
+		noviRed.append('<td class="column1">' + soba.sumaOcjena / soba.brojOcjena + '</td>');
+	} else {
+		noviRed.append('<td class="column1">Nema ocjena</td>');
+	}
+	noviRed.append('<td class="column6"><a href="#" class="brzaRezervacijaDetalji" id="br' + rezervacija.id + '">Detalji</a></td>');
+	tabela.append(noviRed);
+}
+
+function prikaziBrzeRezervacije(rezervacije) {
+	let tabela = $("#prikazBrzihRezervacija");
+	tabela.empty();
+	$.each(rezervacije, function(i, brzaRezervacija) {
+		prikaziBrzuRezervaciju(tabela, brzaRezervacija);
+	});
+}
+
 function ucitajPodatkeHotela() {
 	$.ajax({
 		type: "GET",
@@ -419,6 +448,19 @@ function ucitajPodatkeHotela() {
 				ucitajSobehotela();
 				prikaziUsluge(podaciHotela.cjenovnikDodatnihUsluga);
 				prikaziPodatkeHotela();
+			}
+		},
+	});
+	
+	//ucitavanje brzih rezervaicija hotela
+	$.ajax({
+		type: "GET",
+		url: "../rezervacijeSoba/sveBrzeRezervacijeHotela/" + podaciHotela.id,
+		async: false,
+		success: function(response) {
+			if(response != null) {
+				brzeRezervacije = response;
+				prikaziBrzeRezervacije(response);
 			}
 		},
 	});
@@ -840,6 +882,8 @@ function zadavanjePopustaBrzeRezervacije() {
 		data : JSON.stringify(tekucaBrzaRezervacija),
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = null;
+			brzeRezervacije.push(responseBrzaRez);
+			prikaziBrzeRezervacije(brzeRezervacije);
 			alert("Usješno ste definisali popust za brzu rezervaciju.");
 			resetBrzeRezervacijeView();			
 		}
