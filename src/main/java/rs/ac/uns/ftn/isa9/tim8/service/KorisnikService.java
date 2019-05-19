@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
@@ -144,12 +145,13 @@ public class KorisnikService {
 		for (Osoba korisnik : korisnici) {
 			if (korisnik instanceof RegistrovanKorisnik) {
 				RegistrovanKorisnik regKor = (RegistrovanKorisnik) korisnik;
-				if (!daLiSuPrijatelji(registrovaniKor, regKor)) {
+				if (!daLiSuPrijatelji(registrovaniKor, regKor) && regKor.getId() != registrovaniKor.getId()) {
 					dtoObj = new PretragaPrijateljaDTO(regKor.getId(), regKor.getIme(), regKor.getPrezime());
 					nisuPrijatelji.add(dtoObj);
 				}
 			}
 		}
+		
 		return nisuPrijatelji;
 	}
 
@@ -162,8 +164,10 @@ public class KorisnikService {
 		return false;
 	}
 
-	public Boolean dodajPrijatelja(Long korisnikId, Long primalacId) throws NevalidniPodaciException {
-		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository.findById(korisnikId);
+	public Boolean dodajPrijatelja(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO)
+			throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKonkretnogKorisnika = korisnikRepository
+				.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
 
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Korisnik nije ulogovan.");
@@ -171,7 +175,7 @@ public class KorisnikService {
 
 		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKonkretnogKorisnika.get();
 
-		pretragaKonkretnogKorisnika = korisnikRepository.findById(primalacId);
+		pretragaKonkretnogKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
 
 		if (!pretragaKonkretnogKorisnika.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji takva osoba u sistemu za slanje zahtjeva za prijateljstvo.");
@@ -250,10 +254,34 @@ public class KorisnikService {
 		return zahtjeviZaPrijateljstvo;
 	}
 
-	public Boolean daLiJeZahtjevVecPoslat(Long idZahtjeva, Long idPosiljaoca, Long idPrimaoca) {
-		Optional<ZahtjevZaPrijateljstvo> zahtjeviPretraga = zahtjevZaPrijateljstvoRepository.findById(idZahtjeva);
-		
-		return null;
+	public Boolean daLiJeZahtjevVecPoslat(ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvoDTO)
+			throws NevalidniPodaciException {
+		Optional<Osoba> pretragaKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPosiljalacId());
+
+		if (!pretragaKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji posiljalac.");
+		}
+
+		RegistrovanKorisnik posiljalac = (RegistrovanKorisnik) pretragaKorisnika.get();
+
+		pretragaKorisnika = korisnikRepository.findById(zahtjevZaPrijateljstvoDTO.getPrimalacId());
+
+		if (!pretragaKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji primalac");
+		}
+
+		RegistrovanKorisnik primalac = (RegistrovanKorisnik) pretragaKorisnika.get();
+
+		List<ZahtjevZaPrijateljstvo> zahtjevi = zahtjevZaPrijateljstvoRepository.findAll();
+
+		for (ZahtjevZaPrijateljstvo zzp : zahtjevi) {
+			if (zzp.getPosiljalac().getEmail().equalsIgnoreCase(posiljalac.getEmail())
+					&& zzp.getPrimalac().getEmail().equalsIgnoreCase(primalac.getEmail())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

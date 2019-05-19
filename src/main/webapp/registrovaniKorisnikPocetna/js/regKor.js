@@ -4,6 +4,7 @@ var hoteli = [];
 var rentACarServisi = [];
 var korisnik = null;
 var prijatelji = [];
+var broj_zahtjeva_za_prijateljstvo = 0;
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -25,6 +26,46 @@ $(document).ready(function() {
 	});
 	
 	korisnikInfo();
+	
+	broj_zahtjeva_za_prijateljstvo = korisnik.brojZahtjevaZaPrijateljstvo;
+	switch (broj_zahtjeva_za_prijateljstvo) {
+	case 0:
+		$("#brojZahtjevaZaPrijateljstvo").append("0️⃣");
+		break;
+	case 1:
+		$("#brojZahtjevaZaPrijateljstvo").append("1️⃣ ");
+		break;
+	case 2:
+		$("#brojZahtjevaZaPrijateljstvo").append("2️⃣");
+		break;
+	case 3:
+		$("#brojZahtjevaZaPrijateljstvo").append("3️⃣");
+		break;
+	case 4:
+		$("#brojZahtjevaZaPrijateljstvo").append("4️⃣");
+		break;
+	case 5:
+		$("#brojZahtjevaZaPrijateljstvo").append("5️⃣");
+		break;
+	case 6:
+		$("#brojZahtjevaZaPrijateljstvo").append("6️⃣");
+		break;
+	case 7:
+		$("#brojZahtjevaZaPrijateljstvo").append("7️⃣");
+		break;
+	case 8:
+		$("#brojZahtjevaZaPrijateljstvo").append("8️⃣");
+		break;
+	case 9:
+		$("#brojZahtjevaZaPrijateljstvo").append("9️⃣");
+		break;
+	case 10:
+		$("#brojZahtjevaZaPrijateljstvo").append("🔟");
+		break;
+	default:
+		$("#brojZahtjevaZaPrijateljstvo").append("🔟➕");
+		break;
+	};
 	
 	//ucitavanje aviokompanija
 	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
@@ -268,6 +309,7 @@ function korisnikInfo(){
 		type : 'GET',
 		url : "../korisnik/getInfo",
 		dataType : "json",
+		async : false,
 		success: function(data){
 			if(data != null){
 				korisnik = data;
@@ -434,9 +476,41 @@ function prikaziPrijatelja(prijatelj) {
 
 function prikaziKorisnikeZaPrijateljstvo(prijatelji) {
 	$("#dodavanjePrijateljaRows").empty();
+	
 	$.each(prijatelji, function(i, prijatelj) {
 		prikaziKorisnikaZaPrijateljstvo(prijatelj);
-	})
+	});
+	
+	$(".dodajPrijateljaClass").click(function(e) {
+		e.preventDefault();
+		var idPotencijalnogPrijatelja = e.target.id.substring(3);
+		idPotencijalnogPrijatelja = parseInt(idPotencijalnogPrijatelja);
+		
+		var zahtjevZaPrijateljstvoDTO = {
+				posiljalacId: korisnik.id,
+				primalacId : idPotencijalnogPrijatelja
+		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../korisnik/dodajPrijatelja",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+			success: function(response) {
+				if (response == true) {
+					alert("Zahtjev je uspješno poslat.");
+					$("#dpt" + idPotencijalnogPrijatelja).attr("disabled", "disabled");
+					$("#dpt" + idPotencijalnogPrijatelja).empty();
+					$("#dpt" + idPotencijalnogPrijatelja).append("Poslat zahtjev ✔️");
+					return;
+				} else {
+					alert("Došlo je do greške prilikom slanja zahtjeva. Molimo pričekajte i pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
+	});
 }
 
 function prikaziKorisnikaZaPrijateljstvo(prijatelj) {
@@ -447,10 +521,36 @@ function prikaziKorisnikaZaPrijateljstvo(prijatelj) {
 	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 	noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
-	noviRed.append('<td class="column1"><button class="btn-submit dodajPrijateljaClass" type="button" id="dpt' 
-			+ prijatelj.id + '">Dodaj prijatelja</button></td>');
+	
+	var poslatZahtjevBool = null;
+	
+	var zahtjevZaPrijateljstvoDTO = {
+			posiljalacId: korisnik.id,
+			primalacId : prijatelj.id
+	};
+	
+	$.ajax({
+		type: "POST",
+		url : "../korisnik/daLiJeZahtjevVecPoslat",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+		async : false,
+		success: function(response) {
+			poslatZahtjevBool = response;
+		},
+	});
+	
+	if (poslatZahtjevBool) {
+	noviRed.append('<td class="column1"><button class="btn-submit poslatZahtjev" type="button" disabled id="zjvp' 
+			+ prijatelj.id + '">Poslat zahtjev ✔️</button></td>');
+	} else {
+		noviRed.append('<td class="column1"><button class="btn-submit dodajPrijateljaClass" type="button" id="dpt' 
+				+ prijatelj.id + '">Dodaj prijatelja</button></td>');		
+	}
+	
 	noviRed.append('<td class="column6"></td>');
 	prijateljiTabela.append(noviRed);
+	
 }
 
 function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {

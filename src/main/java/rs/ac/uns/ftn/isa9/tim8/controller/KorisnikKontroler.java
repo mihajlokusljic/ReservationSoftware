@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.service.KorisnikService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 
@@ -28,8 +30,15 @@ public class KorisnikKontroler {
 	@RequestMapping(value = "/getInfo", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> getUserData() {
 		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
-				o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena()), HttpStatus.OK);
+		if (o instanceof RegistrovanKorisnik) {
+			o = (RegistrovanKorisnik) o;
+			return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
+					o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena(),
+					((RegistrovanKorisnik) o).getPrimljeniZahtjevi().size()), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
+					o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena()), HttpStatus.OK);
+		}
 	}
 
 	@RequestMapping(value = "/izmjeniProfil", method = RequestMethod.PUT)
@@ -82,9 +91,9 @@ public class KorisnikKontroler {
 
 	@RequestMapping(value = "/dodajPrijatelja", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> dodajPrijatelja(Long korisnikId, Long primalacId) {
+	public ResponseEntity<?> dodajPrijatelja(@RequestBody ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvo) {
 		try {
-			return new ResponseEntity<Boolean>(korisnikService.dodajPrijatelja(korisnikId, primalacId), HttpStatus.OK);
+			return new ResponseEntity<Boolean>(korisnikService.dodajPrijatelja(zahtjevZaPrijateljstvo), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
@@ -92,7 +101,7 @@ public class KorisnikKontroler {
 
 	@RequestMapping(value = "/prihvatiZahtjevZaPrijateljstvo", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> prihvatiZahtjevZaPrijateljstvo(Long idZahtjeva) {
+	public ResponseEntity<?> prihvatiZahtjevZaPrijateljstvo(@RequestBody Long idZahtjeva) {
 		try {
 			return new ResponseEntity<Boolean>(korisnikService.prihvatiZahtjevZaPrijateljstvo(idZahtjeva),
 					HttpStatus.OK);
@@ -103,7 +112,7 @@ public class KorisnikKontroler {
 
 	@RequestMapping(value = "/odbijZahtjevZaPrijateljstvo", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> odbijZahtjevZaPrijateljstvo(Long idZahtjeva) {
+	public ResponseEntity<?> odbijZahtjevZaPrijateljstvo(@RequestBody Long idZahtjeva) {
 		try {
 			return new ResponseEntity<Boolean>(korisnikService.odbijZahtjevZaPrijateljstvo(idZahtjeva), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
@@ -113,10 +122,10 @@ public class KorisnikKontroler {
 
 	@RequestMapping(value = "/daLiJeZahtjevVecPoslat", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> daLiJeZahtjevVecPoslat(Long idZahtjeva, Long idPosiljaoca, Long idPrimaoca) {
+	public ResponseEntity<?> daLiJeZahtjevVecPoslat(@RequestBody ZahtjevZaPrijateljstvoDTO zahtjevZaPrijateljstvo) {
 		try {
-			return new ResponseEntity<Boolean>(
-					korisnikService.daLiJeZahtjevVecPoslat(idZahtjeva, idPosiljaoca, idPrimaoca), HttpStatus.OK);
+			return new ResponseEntity<Boolean>(korisnikService.daLiJeZahtjevVecPoslat(zahtjevZaPrijateljstvo),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
