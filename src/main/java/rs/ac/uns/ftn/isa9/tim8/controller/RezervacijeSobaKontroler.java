@@ -19,7 +19,7 @@ import rs.ac.uns.ftn.isa9.tim8.service.RezervacijeSobaService;
 public class RezervacijeSobaKontroler {
 	
 	@Autowired
-	protected RezervacijeSobaService servis;
+	protected RezervacijeSobaService rezervacijeServis;
 	
 	@Autowired
 	protected HotelskeSobeService sobeServis;
@@ -29,6 +29,16 @@ public class RezervacijeSobaKontroler {
 	public ResponseEntity<?> dodajBrzuRezervaciju(@RequestBody BrzaRezervacijaSobeDTO novaRezervacija) {
 		try {
 			return new ResponseEntity<BrzaRezervacijaSobeDTO>(sobeServis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/dodajUslugeBrzojRezervaciji", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+	public ResponseEntity<?> dodajUslugeBrzeRezervacije(@RequestBody BrzaRezervacijaSobeDTO brzaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaSobeDTO>(rezervacijeServis.dodajUslugeBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

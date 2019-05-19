@@ -58,6 +58,15 @@ public class BrzaRezervacijaSoba {
 	public BrzaRezervacijaSoba() {
 		super();
 	}
+	
+	public long izracunajBrojNocenja() {
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		return brojNocenja;
+	}
 
 	public BrzaRezervacijaSoba(Date datumDolaska, Date datumOdlaska, double baznaCijena, int procenatPopusta,
 			Set<Usluga> dodatneUsluge, HotelskaSoba sobaZaRezervaciju) {

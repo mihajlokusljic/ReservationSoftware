@@ -180,6 +180,12 @@ $(document).ready(function(e) {
 		zadajSobuBrzeRez();
 	});
 	
+	//zadavanje dodatnih usluga i prelazak na zadavanje popusta
+	$("#zadajDodatneUslugeBrzeRezervacijeBtn").click(function (e) {
+		e.preventDefault();
+		zadajDodatneUsluge();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -617,6 +623,15 @@ function prikaziUslugu(usluga) {
 	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
 	noviRed.append('<td class="column5"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
 	uslugeTabela.append(noviRed);
+	
+	let uslugeBrzeRezervacijeTabela = $("#prikazUslugaBrzeRezervacije");
+	noviRed = $("<tr></tr>");
+	noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+	noviRed.append('<td class="column6">' + usluga.cijena + '</td>');
+	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
+	noviRed.append('<td class="column5"><input type="checkbox" class="uslugaBrzaRezBtn" id="ubr' + usluga.id + '"/></td>');
+	uslugeBrzeRezervacijeTabela.append(noviRed);
+
 }
 
 function prikaziPodatkeHotela() {
@@ -723,6 +738,38 @@ function zadajSobuBrzeRez() {
 	if(!sobaIzabrana) {
 		alert("Morate izabrati sobu za brzu rezervaciju.");
 	}
+}
+
+function zadajDodatneUsluge() {
+	if(tekucaBrzaRezervacija == null) {
+		alert("Morate zadati sobu za brzu rezervaciju u koraku 1");
+		return;
+	}
+	let uslugeIzborBtns = $(".uslugaBrzaRezBtn");
+	let uslugaId = -1;
+	tekucaBrzaRezervacija.dodatneUslugeIds = [];
+	$.each(uslugeIzborBtns, function(i, btn) {
+		if(btn.checked) {
+			uslugaId = btn.id.substring(3);
+			tekucaBrzaRezervacija.dodatneUslugeIds.push(uslugaId);
+		}
+	});
+	//slanje zahtjeva za dodavanje dodatnih usluga
+	$.ajax({
+		type : 'POST',
+		url : "../rezervacijeSoba/dodajUslugeBrzojRezervaciji",
+		data : JSON.stringify(tekucaBrzaRezervacija),
+		success : function(responseBrzaRez) {
+			tekucaBrzaRezervacija = responseBrzaRez;
+			alert("Usješno ste definisali dodatne usluge za brzu rezervaciju.");
+			$("#definisanjePopustaBrzeRezervacije").show();
+			$("#izborSobeBrzeRezervacije").hide();
+			$("#izborDodatnihUslugaBrzeRezervacije").hide();
+			$("#izborSobeBrzeRezervacijeBtn")[0].checked = false;
+			$("#izborDodatnihUslugaBrzeRezervacijeBtn")[0].checked = false;
+			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = true;
+		}
+	});
 }
 
 function odjava() {
