@@ -353,9 +353,42 @@ function prikaziVozilaSaPopustom(rezVozila) {
 		}
 		noviRed.append('<td class="column1">' + cijenaSaPopustom + '</td>');
 		if (korisnikId != null){
-			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "brzaRezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		}
 		
 		prikaz.append(noviRed);
-	})
+	});
+	$(".brzaRezervacija").click(function(e){
+		e.preventDefault();
+		let brzaRez = rezVozila[e.target.id];
+		cijenaSaPopustom = ukupno*brzaRez.vozilo.cijena_po_danu - ukupno*brzaRez.vozilo.cijena_po_danu*brzaRez.procenatPopusta/100 ;		
+		let rezervacijaVozila = {
+				rezervisanoVozilo : brzaRez.vozilo,
+				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaPopustSelect").val(),
+				datumPreuzimanjaVozila : Date.parse($("#input-start-2").val()),
+				mjestoVracanjaVozila : $("#mjestoVracanjaPopustSelect").val(),
+			    datumVracanjaVozila : Date.parse($("#input-end-2").val()),
+			    cijena : cijenaSaPopustom,
+			    putnik : korisnikId ,
+			    putovanje : null
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/rezervisiVozilo/" + podaciRac.id,
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacijaVozila),
+			success: function(response) {
+				if(response == '') {
+					alert("Uspjesno ste rezervisali vozilo.");
+					location.reload(true);
+					return;
+				}
+				else{
+					alert (response);
+				}
+			},
+		});
+		
+	});
 }

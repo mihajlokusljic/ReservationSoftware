@@ -530,6 +530,10 @@ public class RentACarServisService {
 				continue;
 			}
 			
+			if (voziloJeNaBrzojRezervaciji(vozilo, pocetniDatum, krajnjiDatum)){
+				continue;
+			}
+			
 			if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
 					 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
 				
