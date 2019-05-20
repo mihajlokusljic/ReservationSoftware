@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -28,20 +29,12 @@ public class BrzaRezervacijaVozila {
 	protected Long Id;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "rezervisano_vozilo_id", referencedColumnName = "id")
-	protected Vozilo rezervisanoVozilo;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "mjesto_preuzimanja_vozila", referencedColumnName = "id")
-	protected Filijala mjestoPreuzimanjaVozila;
+	@JoinColumn(name = "vozilo_id", referencedColumnName = "id")
+	protected Vozilo vozilo;
 	
 	@Column(name = "datum_preuzimanja_vozila", nullable = false)
 	@Temporal(TemporalType.DATE)
 	protected Date datumPreuzimanjaVozila;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "mjesto_vracanja_vozila", referencedColumnName = "id")
-	protected Filijala mjestoVracanjaVozila;
 	
 	@Column(name = "datum_vracanja_vozila", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -50,39 +43,41 @@ public class BrzaRezervacijaVozila {
 	@Column(name = "cijena", nullable = false)
 	@ColumnDefault("0")
 	protected double cijena;
+	
+	@Column(name = "procenat_popusta", nullable = false)
+	protected int procenatPopusta;
+	
+	public BrzaRezervacijaVozila(Long id, Vozilo vozilo, Date datumPreuzimanjaVozila, Date datumVracanjaVozila,
+			double cijena, int procenatPopusta) {
+		super();
+		Id = id;
+		this.vozilo = vozilo;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.procenatPopusta = procenatPopusta;
+	}
+	
+	
+	
+	public BrzaRezervacijaVozila(Vozilo vozilo, Date datumPreuzimanjaVozila, Date datumVracanjaVozila, double cijena,
+			int procenatPopusta) {
+		super();
+		this.vozilo = vozilo;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.procenatPopusta = procenatPopusta;
+	}
+
+
 
 	public BrzaRezervacijaVozila() {
 		super();
 	}
 
-	public BrzaRezervacijaVozila(Vozilo vozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
-			Filijala mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena) {
-		super();
-		this.rezervisanoVozilo = vozilo;
-		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
-		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
-		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
-		this.datumVracanjaVozila = datumVracanjaVozila;
-		this.cijena = cijena;
-	}
 
-	
 
-	public Vozilo getRezervisanoVozilo() {
-		return rezervisanoVozilo;
-	}
-
-	public void setRezervisanoVozilo(Vozilo rezervisanoVozilo) {
-		this.rezervisanoVozilo = rezervisanoVozilo;
-	}
-
-	public Filijala getMjestoPreuzimanjaVozila() {
-		return mjestoPreuzimanjaVozila;
-	}
-
-	public void setMjestoPreuzimanjaVozila(Filijala mjestoPreuzimanjaVozila) {
-		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
-	}
 
 	public Date getDatumPreuzimanjaVozila() {
 		return datumPreuzimanjaVozila;
@@ -90,14 +85,6 @@ public class BrzaRezervacijaVozila {
 
 	public void setDatumPreuzimanjaVozila(Date datumPreuzimanjaVozila) {
 		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
-	}
-
-	public Filijala getMjestoVracanjaVozila() {
-		return mjestoVracanjaVozila;
-	}
-
-	public void setMjestoVracanjaVozila(Filijala mjestoVracanjaVozila) {
-		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
 	}
 
 	public Date getDatumVracanjaVozila() {
@@ -123,6 +110,23 @@ public class BrzaRezervacijaVozila {
 	public void setId(Long id) {
 		this.Id = id;
 	}
+
+	public Vozilo getVozilo() {
+		return vozilo;
+	}
+
+	public void setVozilo(Vozilo vozilo) {
+		this.vozilo = vozilo;
+	}
+
+	public int getProcenatPopusta() {
+		return procenatPopusta;
+	}
+
+	public void setProcenatPopusta(int procenatPopusta) {
+		this.procenatPopusta = procenatPopusta;
+	}
+	
 	
 	
 }

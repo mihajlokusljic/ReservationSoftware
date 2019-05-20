@@ -6,6 +6,7 @@ var mapaRacServisa = null;
 var mapaFilijaleDodavanje = null;
 var mapaFilijaleIzmjena = null;
 var zoomLevel = 17;
+let stavkeMenija = ["stavka_vozila", "stavka_filijale", "stavka_brze_rezervacije", "stavka_profil_servisa", "stavka_profil_korisnika", "stavka_izvjestaj", "stavka_odjava"];
 
 $(document).ready(function() {
 	
@@ -42,6 +43,8 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-vozila").show();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		dobaviSvaVozilaServisa();
 		ponudiFilijale();
 
@@ -61,7 +64,8 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
-
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		dobaviSveFilijale();
 	
 	});
@@ -80,7 +84,8 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-profil-lozinka").hide();
-
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		profilServisa();
 	});
 	
@@ -92,6 +97,7 @@ $(document).ready(function() {
 	
 	$("#izmjeni_podatke_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("stavka_profil_korisnika");
 		$("#tab-profil-kor").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profil-servisa").hide();
@@ -103,11 +109,14 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		profilKorisnika();
 	})
 	
 	$("#promjeni_lozinku_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("stavka_profil_korisnika");
 		$("#tab-profil-lozinka").show();
 		$("#tab-profil-kor").hide();
 		$("#tab-profil-servisa").hide();
@@ -119,6 +128,8 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		promjeniLozinku();
 	})
 	$("#dodaj_vozilo_dugme").click(function(e){
@@ -155,6 +166,83 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-filijala").show();
 	});
+	
+	$("#dodavanjeBrzeRezervacije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_brze_rezervacije");
+		$("#tab-brze-rezervacije-dodavanje").show();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+	});
+	
+	$("#pregledanjeBrzihRezervacija").click(function(e) {
+		e.preventDefault();
+		vratiSveBrzeRezervacije();
+		aktivirajStavkuMenija("stavkaBrzeRezervacije");
+		$("#tab-brze-rezervacije-pregledanje").show();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+
+	});
+	
+	//prikaz koraka za dodavanje brze rezervacije
+	$("#izborVozilaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#izborVozilaBrzeRezervacijeBtn").is(":checked")) {
+			$("#izborVozilaBrzeRezervacije").show();
+			$("#definisanjePopustaBrzeRezervacije").hide();
+		}
+	});
+	
+	$("#definisanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#definisanjePopustaBrzeRezervacijeBtn").is(":checked")) {
+			$("#definisanjePopustaBrzeRezervacije").show();
+			$("#izborVozilaBrzeRezervacije").hide();
+		}
+	});
+	
+	//pretraga vozila za brzu rezervaciju
+	$("#pretragaVozilaForm").submit(function(e) {
+		e.preventDefault();
+		pretraziSlobodnaVozila();
+	});
+	
+	//zadavanje vozila za brze rezervacije
+	$("#zadajVoziloBrzeRezervacijeBtn").click(function (e) {
+		e.preventDefault();
+		zadajVoziloBrzeRez();
+	});
+	//izmjena procenta popusta kod brzih rezervacija
+	$("#procenatPopustaBrzeRezervacije").change(function(e) {
+		e.preventDefault();
+		azurirajCijeneBrzeRezervacije();
+	});
+	//zadavanje procenta popusta kod brzih rezervacija
+	$("#zadavanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		zadavanjePopustaBrzeRezervacije();
+	});
+	
+	
 	
 	$("#odjava").click(function(e){
 		e.preventDefault();
@@ -969,4 +1057,208 @@ function inicijalizujMape() {
 		$("#longitudaFilijaleIzmjena").val(coords[1]);
 	});
 	
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
+}
+
+function pretraziSlobodnaVozila(){
+	let _datumDolaska = $("#input-start").val();
+	let _datumOdlaska = $("#input-end").val();
+	
+	let pretragaVozila = {
+		idRac: rentACarServis.id,
+		datumPreuzimanja: _datumDolaska,
+		datumVracanja: _datumOdlaska
+	};
+	
+	$.ajax({
+		type : 'POST',
+		url : "../rentACar/pretraziZaBrzuRezervaciju",
+		data : JSON.stringify(pretragaVozila),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success : function(data) {
+			if(data.length > 0) {
+				$("#vozilaBrzeRezervacije").show();
+				prikaziVozilaZaBrzuRezervaciju(data);
+			} else {
+				alert("Nema slobodnih vozila u zadatom periodu.");
+			}
+		}
+	});
+}
+
+function prikaziVozilaZaBrzuRezervaciju(vozila){	
+	
+	let prikaz = $("#prikazVozilaBrzeRezervacije");
+	prikaz.empty();
+	
+	
+	$.each(vozila, function(i, vozilo) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + vozilo.naziv + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.marka + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.model + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.tip_vozila + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.godina_proizvodnje + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.cijena_po_danu + '</td>');
+		
+		let sumaOcjena = vozilo.sumaOcjena;
+		sumaOcjena = parseFloat(sumaOcjena);
+		let brOcjena = vozilo.brojOcjena;
+		brOcjena = parseInt(brOcjena);
+		if(brOcjena > 0) {
+			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+		} else {
+			noviRed.append('<td class="column1">Nema ocjena</td>');
+		}
+		noviRed.append('<td class="column1"><input type="radio" name="voziloBrzaRez" class="voziloBrzaRez" id="vbr' + vozilo.id + '"></td></tr>');
+		
+		
+		prikaz.append(noviRed);
+	})
+}
+
+function zadajVoziloBrzeRez(){
+	let _datumPreuzimanja = $("#input-start").val();
+	let _datumVracanja = $("#input-end").val();
+	let _idVozila = -1;
+	let voziloIzabrano = false;
+	
+	let brzeVozilaRezBtns = $(".voziloBrzaRez");
+	$.each(brzeVozilaRezBtns, function(i, btn) {
+		if(btn.checked) {
+			voziloIzabrano = true;
+			_idVozila = btn.id.substring(3); //ime dugmeta je tipa "sbr<id sobe>"
+			
+			let brzaRezervacija = {
+				idVozila: _idVozila,
+				datumPreuzimanjaVozila: Date.parse(_datumPreuzimanja),
+				datumVracanjaVozila: Date.parse(_datumVracanja),
+				baznaCijena: 0,
+				procenatPopusta: 0
+			};
+			
+			$.ajax({
+				type : 'POST',
+				url : "../rentACar/dodajBrzuRezervaciju",
+				data : JSON.stringify(brzaRezervacija),
+				headers: createAuthorizationTokenHeader("jwtToken"),
+				success : function(responseBrzaRez) {
+					tekucaBrzaRezervacija = responseBrzaRez;
+					alert("Vozilo je uspješno dodato na brzu rezervaciju.");
+					$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.baznaCijena);
+					$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.baznaCijena);
+					$("#izborVozilaBrzeRezervacije").hide();
+					$("#definisanjePopustaBrzeRezervacije").show();
+					$("#izborVozilaBrzeRezervacijeBtn")[0].checked = false;
+					$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = true;
+				}
+			});
+			return;
+		}
+	});
+	if(!voziloIzabrano) {
+		alert("Morate izabrati vozilo za brzu rezervaciju.");
+	}
+}
+
+function zadavanjePopustaBrzeRezervacije(){
+	if(tekucaBrzaRezervacija == null) {
+		alert("Morate izabrati vozilo.");
+	}
+	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
+	tekucaBrzaRezervacija.procenatPopusta = popustProc;
+	$.ajax({
+		type : 'POST',
+		url : "../rentACar/zadajPopustBrzojRezervaciji",
+		data : JSON.stringify(tekucaBrzaRezervacija),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success : function(responseBrzaRez) {
+			tekucaBrzaRezervacija = null;
+			alert("Usješno ste definisali popust za brzu rezervaciju.");
+			resetBrzeRezervacijeView();	
+		}
+	});
+}
+
+function resetBrzeRezervacijeView() {
+	$("#izborVozilaBrzeRezervacije").show();
+	$("#definisanjePopustaBrzeRezervacije").hide();
+	$("#izborVozilaBrzeRezervacijeBtn")[0].checked = true;
+	$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
+	$("#vozilaBrzeRezervacije").hide();
+	$("#prikazVozilaBrzeRezervacije").empty();
+	$("#pretragaVozilaForm")[0].reset();
+	let uslugeIzborBtns = $(".uslugaBrzaRezBtn");
+	$.each(uslugeIzborBtns, function(i, btn) {
+		btn.checked = false;
+	});
+	$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(0);
+	$("#procenatPopustaBrzeRezervacije").val(0);
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(0);
+	$("#tab-brze-rezervacije-pregledanje").show();
+	$("#izborVozilaBrzeRezervacije").hide();
+	$("#tab-brze-rezervacije-dodavanje").hide();
+	vratiSveBrzeRezervacije();
+}
+
+function azurirajCijeneBrzeRezervacije(){
+	if(tekucaBrzaRezervacija == null) {
+		return;
+	}
+	let procenatPopusta = $("#procenatPopustaBrzeRezervacije").val();
+	procenatPopusta = parseFloat(procenatPopusta);
+	if(isNaN(procenatPopusta)) {
+		return;
+	}
+	if(procenatPopusta < 0 || procenatPopusta > 100) {
+		return;
+	}
+	let popust = tekucaBrzaRezervacija.baznaCijena * procenatPopusta / 100;
+	let cijenaSaPopustom = tekucaBrzaRezervacija.baznaCijena - popust;
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(cijenaSaPopustom);
+}
+
+function vratiSveBrzeRezervacije(){
+	let idServisa = rentACarServis.id;
+	$.ajax({
+		type: "GET",
+		url: "../rentACar/dobaviBrzeRezervacije/" + idServisa,
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikaziBrzeRez(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+}
+
+
+
+function prikaziBrzeRez(brzeRez){
+	let prikaz = $("#prikazBrzeRezervacije");
+	prikaz.empty();
+	
+	$.each(brzeRez, function(i, br) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + br.nazivVozila + '</td>');
+		noviRed.append('<td class="column1">' + br.nazivServisa + '</td>');
+		noviRed.append('<td class="column1">' + br.pocetniDatum + '</td>');
+		noviRed.append('<td class="column1">' + br.krajnjiDatum + '</td>');
+		noviRed.append('<td class="column1">' + br.punaCijena + '</td>');
+		noviRed.append('<td class="column1">' + br.cijenaSaPopustom + '</td>');
+		
+		prikaz.append(noviRed);
+	})
 }

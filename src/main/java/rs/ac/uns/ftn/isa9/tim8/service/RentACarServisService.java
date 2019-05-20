@@ -17,15 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
@@ -35,8 +40,10 @@ import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
+import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeVozilaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.FilijalaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RentACarRepository;
@@ -63,6 +70,9 @@ public class RentACarServisService {
 	
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
+	
+	@Autowired
+	protected BrzeRezervacijeVozilaRepository brzaRezervacijaVozilaRepository;
 	
 	public Collection<Poslovnica> dobaviRentACarServise() {
 		Collection<RentACarServis> rentACarLista = rentACarRepository.findAll();
@@ -436,34 +446,39 @@ public class RentACarServisService {
 		List<Vozilo> rezultat = new ArrayList<Vozilo>();
 		Date trenutniDatum = new Date();
 		boolean dodajVozilo = true;
+		boolean datumNull = false;
 		
+		if (pocetniDatum == null || krajnjiDatum == null) {
+			datumNull = true;
+		}
+		
+		else if (trenutniDatum.compareTo(pocetniDatum) > 0  || trenutniDatum.compareTo(krajnjiDatum) > 0 || pocetniDatum.compareTo(krajnjiDatum) > 0) {
+			return rezultat;
+		}
 		
 		for (Vozilo voz : rac.getVozila()) {
-			
-			if (pocetniDatum == null || krajnjiDatum == null) {
-				rezultat.add(voz);
-				continue;
-			}	
-			
-			else if (trenutniDatum.compareTo(pocetniDatum) > 0  || trenutniDatum.compareTo(krajnjiDatum) > 0 || pocetniDatum.compareTo(krajnjiDatum) > 0) {
-				dodajVozilo = false;
-				break;
+			if (datumNull == true) {
+				dodajVozilo = true;
 			}
-			
-			for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+			else {
+				for(RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+										
+					if (pocetniDatum.compareTo(r.getDatumVracanjaVozila()) < 0 && krajnjiDatum.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+						dodajVozilo = false;
+						break;
+					}				
+					else {
+						dodajVozilo = true;
+					}
 				
-				if (pocetniDatum.compareTo(r.getDatumVracanjaVozila()) < 0 && krajnjiDatum.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
-					dodajVozilo = false;
-					break;
-				}				
-				else {
-					dodajVozilo = true;
 				}
 			}
-			
+							
 			if (dodajVozilo) {
 				rezultat.add(voz);
+				
 			}
+			dodajVozilo = true;
 		}
 		return rezultat;
 		
@@ -512,6 +527,10 @@ public class RentACarServisService {
 		for (Vozilo vozilo : slobodnaVozila) {
 			
 			if (vozilo.getFilijala() == null) {
+				continue;
+			}
+			
+			if (voziloJeNaBrzojRezervaciji(vozilo, pocetniDatum, krajnjiDatum)){
 				continue;
 			}
 			
@@ -639,5 +658,238 @@ public class RentACarServisService {
 		}
 		return filijalaSearch.get().getAdresa();
 	}
+
+	public Collection<Vozilo> pretraziVozilazaBrzuRezervaciju(PretragaVozilaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPretrage.getIdRac());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();		
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPreuzimanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumVracanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
+		List<Vozilo> slobodnaVozila = slobodnaVozila(rac, pocetniDatum, krajnjiDatum);
+		
+		
+		return slobodnaVozila;
+	}
+
+	public BrzaRezervacijaVozilaDTO dodajBrzuRezervaciju(BrzaRezervacijaVozilaDTO novaRezervacija) throws NevalidniPodaciException {
+		Optional<Vozilo> voziloSearch = voziloRepository.findById(novaRezervacija.getIdVozila());
+		if(!voziloSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadato vozilo.");
+		}
+		Vozilo target = voziloSearch.get();
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis administriraniRac = admin.getRentACarServis();
+		if(!target.getRentACar().getId().equals(administriraniRac.getId())) {
+			throw new NevalidniPodaciException("Niste ulogovani kao ovlascen administrator za dati rent a car servis");
+		}
+		Date datumPreuzimanja = null;
+		Date datumVracanja = null;
+		Date danasnjiDatum = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			datumPreuzimanja = novaRezervacija.getDatumPreuzimanjaVozila();
+			datumVracanja = novaRezervacija.getDatumVracanjaVozila();
+			danasnjiDatum = df.parse(df.format(new Date()));
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		if(datumPreuzimanja.before(danasnjiDatum) || datumVracanja.before(danasnjiDatum)) {
+			throw new NevalidniPodaciException("Datumi ne smiju biti u proslosti.");
+		}
+		if(datumVracanja.before(datumPreuzimanja)) {
+			throw new NevalidniPodaciException("Datum vraćanja ne moze biti prije datuma preuzimanja");
+		}
+		if(voziloJeRezervisano(target, datumPreuzimanja, datumVracanja)) {
+			throw new NevalidniPodaciException("Dato vozilo je rezervisano u zadatom vremenskom periodu.");
+		}
+		if(voziloJeNaBrzojRezervaciji(target, datumPreuzimanja, datumVracanja)) {
+			throw new NevalidniPodaciException("Dato vozilo se vec nalazi na brzoj rezervaciji u zadatom vremenskom periodu");
+		}
+		BrzaRezervacijaVozila brv = new BrzaRezervacijaVozila(target,datumPreuzimanja,datumVracanja,0,0);
+		long diff = datumVracanja.getTime() - datumPreuzimanja.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		brv.setCijena(brojNocenja * target.getCijena_po_danu());
+		brzaRezervacijaVozilaRepository.save(brv);
+		novaRezervacija.setIdBrzeRezervacije(brv.getId());
+		novaRezervacija.setBaznaCijena(brv.getCijena());
+		return novaRezervacija;
+	}
 	
+	public boolean voziloJeRezervisano(Vozilo vozilo, Date datumP, Date datumV) {
+		if(datumP == null || datumV == null) {
+			return false;
+		}
+		for(RezervacijaVozila r : rezervacijaVozilaRepository.findAllByRezervisanoVozilo(vozilo)) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean voziloJeNaBrzojRezervaciji(Vozilo vozilo, Date datumP, Date datumV) {
+		if(datumP == null || datumV == null) {
+			return false;
+		}
+		for(BrzaRezervacijaVozila r : brzaRezervacijaVozilaRepository.findAllByVozilo(vozilo)) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public BrzaRezervacijaVozilaDTO zadajPopustBrzeRezervacije(BrzaRezervacijaVozilaDTO brzaRezervacija) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaVozila> rezervacijaSearch = brzaRezervacijaVozilaRepository.findById(brzaRezervacija.getIdBrzeRezervacije());
+		if(!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadata brza rezervacija.");
+		}
+		BrzaRezervacijaVozila rez = rezervacijaSearch.get();
+		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		RentACarServis administriraniServis = admin.getRentACarServis();
+		if(!rez.getVozilo().getRentACar().getId().equals(administriraniServis.getId())) {
+			throw new NevalidniPodaciException("Niste ulogovani kao ovlascen administrator za datu rezervaciju.");
+		}
+		int popust = brzaRezervacija.getProcenatPopusta();
+		if(popust < 0) {
+			throw new NevalidniPodaciException("Popust ne može biti negativan.");
+		}
+		if(popust > 100) {
+			throw new NevalidniPodaciException("Popust ne može biti veći od 100%.");
+		}
+		rez.setProcenatPopusta(popust);
+		brzaRezervacijaVozilaRepository.save(rez);
+		return brzaRezervacija;
+	}
+
+
+	public PrikazBrzeRezVozilaDTO vratiZaPrikaz(BrzaRezervacijaVozilaDTO brzaRezervacija) throws NevalidniPodaciException {
+		
+		Optional<Vozilo> searchVozilo = voziloRepository.findById(brzaRezervacija.getIdVozila());
+		if (!searchVozilo.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji vozilo.");
+
+		}
+		Vozilo vozilo = searchVozilo.get();
+		
+		double punaCijena = brzaRezervacija.getBaznaCijena();
+		
+		double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta()*punaCijena/100;
+		return new PrikazBrzeRezVozilaDTO(brzaRezervacija.getIdBrzeRezervacije(), vozilo.getNaziv(), vozilo.getRentACar().getNaziv(), 
+				brzaRezervacija.getDatumPreuzimanjaVozila(), brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom);
+	}
+
+	public Collection<PrikazBrzeRezVozilaDTO> vratiBrzeZaPrikaz(Long idServisa) throws NevalidniPodaciException{
+		
+		RentACarServis rac = pronadjiServisPoId(idServisa);
+		
+		Collection<Vozilo> vozilaServisa = voziloRepository.findAllByRentACar(rac);
+		
+		if (vozilaServisa.isEmpty()) {
+			return null;
+		}
+		
+		Collection<PrikazBrzeRezVozilaDTO> brzeRezDTO = new ArrayList<>();
+		for (Vozilo voz : vozilaServisa) {
+			for(BrzaRezervacijaVozila brzaRezervacija : brzaRezervacijaVozilaRepository.findAllByVozilo(voz)) {
+				double punaCijena = brzaRezervacija.getCijena();
+				
+				double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta()*punaCijena/100;
+				brzeRezDTO.add(new PrikazBrzeRezVozilaDTO(brzaRezervacija.getId(), voz.getNaziv(), voz.getRentACar().getNaziv(), 
+						brzaRezervacija.getDatumPreuzimanjaVozila(), brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom));
+			}
+		}
+		
+		
+		return brzeRezDTO;
+	}
+
+	public Collection<BrzaRezervacijaVozila> pretraziVozilaSaPopustom(PretragaVozilaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPretrage.getIdRac());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();		
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPreuzimanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumVracanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
+		Collection<Vozilo> svaVozila = voziloRepository.findAllByRentACar(rac);
+		
+		List<BrzaRezervacijaVozila> brzeRezervacije = new ArrayList<BrzaRezervacijaVozila>();
+		if (svaVozila.isEmpty()) {
+			return brzeRezervacije;
+		}
+		for (Vozilo vozilo : svaVozila) {
+			
+			if (vozilo.getFilijala() == null) {
+				continue;
+			}
+			if (voziloJeNaBrzojRezervaciji(vozilo, pocetniDatum, krajnjiDatum) && !voziloJeRezervisano(vozilo, pocetniDatum, krajnjiDatum)) {
+				
+				Collection<BrzaRezervacijaVozila> sveBrzeRez = vratiBrzeRezervacijePoDatumu(vozilo, pocetniDatum, krajnjiDatum);
+				
+				System.out.println("Brze rez vozila: " + sveBrzeRez.size());
+				
+				if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
+						 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
+					
+					System.out.println("proslo");
+					brzeRezervacije.addAll(sveBrzeRez);
+
+					
+				}
+			}
+			
+		}
+		
+		return brzeRezervacije;
+	}
+	
+	public Collection<BrzaRezervacijaVozila> vratiBrzeRezervacijePoDatumu(Vozilo vozilo, Date datumP, Date datumV){
+		
+		Collection<BrzaRezervacijaVozila> brzeRez = new ArrayList<>();
+		
+		for(BrzaRezervacijaVozila r : brzaRezervacijaVozilaRepository.findAllByVozilo(vozilo)) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+				brzeRez.add(r);
+			}
+		}
+		
+		return brzeRez;
+	}
 }

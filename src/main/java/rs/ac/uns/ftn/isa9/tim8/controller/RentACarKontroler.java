@@ -13,15 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
@@ -163,7 +167,7 @@ public class RentACarKontroler {
 	public ResponseEntity<Poslovnica> podaciOServisu() {
 		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<Poslovnica>(
-				new Poslovnica(admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
+				new Poslovnica(admin.getRentACarServis().getId(),admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
 				HttpStatus.OK);
 	}
 	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
@@ -213,4 +217,52 @@ public class RentACarKontroler {
 		}
 	}
 	
+	@RequestMapping(value = "/pretraziZaBrzuRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> pretraziVozilaZaBrzuRezervaciju(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<Vozilo> >(this.servis.pretraziVozilazaBrzuRezervaciju(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/dodajBrzuRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> dodajBrzuRezervaciju(@RequestBody BrzaRezervacijaVozilaDTO novaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaVozilaDTO>(servis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/zadajPopustBrzojRezervaciji", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> zadajPopustBrzeRezervacije(@RequestBody BrzaRezervacijaVozilaDTO brzaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaVozilaDTO>(servis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/dobaviBrzeRezervacije/{idServisa}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> vratiBrzeZaPrikaz(@PathVariable("idServisa") Long idServisa) {
+		try {
+			return new ResponseEntity<Collection<PrikazBrzeRezVozilaDTO>>(servis.vratiBrzeZaPrikaz(idServisa), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/pretraziVozilaSaPopustom", method = RequestMethod.POST)
+	public ResponseEntity<?> pretraziVozilaSaPopustom(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<BrzaRezervacijaVozila> >(this.servis.pretraziVozilaSaPopustom(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }
