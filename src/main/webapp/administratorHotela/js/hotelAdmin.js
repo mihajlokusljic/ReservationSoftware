@@ -199,7 +199,7 @@ $(document).ready(function(e) {
 		zadavanjePopustaBrzeRezervacije();
 	});
 	
-	//zatvaranje detaljnog prikaza dodatne usluge
+	//zatvaranje detaljnog prikaza brze rezervacije
 	$("#zatvoriDetaljanPrikazBrzeRezBtn").click(function(e) {
 		e.preventDefault();
 		$("#detaljanPrikazBrzeRez").hide();

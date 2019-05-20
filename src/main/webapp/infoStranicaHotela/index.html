@@ -56,7 +56,10 @@
                             <a class="tab-list__link" href="#tab-info" data-toggle="tab" id ="info">O nama</a>
                         </li>
 						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-sobe" data-toggle="tab" id = "sobe">Sobe</a>
+                            <a class="tab-list__link" href="#tab-sobe" data-toggle="tab" id="sobe">Sobe</a>
+                        </li>
+                        <li class="tab-list__item">
+                            <a class="tab-list__link" href="#tab-brze-rezervacije" data-toggle="tab" id="sobe">Sobe na popustu</a>
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
@@ -66,7 +69,7 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                    
+                    	<!-- Osnovne informacije hotela -->
                         <div class="tab-pane active" id="tab-info">
 	                        <div class="row row-space">
 	                        			<div class="col-2">
@@ -97,6 +100,7 @@
 		                     </div>
                         </div>
                         
+                        <!-- Pretraga soba -->
                         <div class="tab-pane" id="tab-sobe">
 	                        <form method="POST" action="#" id="pretragaSobaForm">
 	                                <div class="row row-space">
@@ -135,6 +139,113 @@
 							</table>
                         </div>
                         
+                        <!-- Pretraga soba na brzoj rezervaciji -->
+                        <div class="tab-pane" id="tab-brze-rezervacije">
+                        	<div id="sveBrzeRezervacije">
+                        		<form method="POST" action="#" id="pretragaBrzihRezervacijaForm">
+	                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum dolaska</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-1">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum odlaska</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-1">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+	                                </div>
+		                                <input type="submit" class="btn btn-submit" value="Pretraži sobe na popustu"/>
+		                        </form>
+		                        <h2>&nbsp;</h2>
+	                            <table id="tabelaBrzeRezervacije" hidden="hidden">
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Datum dolaska</th>
+											<th class="column1">Datum odlaska</th>
+											<th class="column1">Originalna cijena</th>
+											<th class = "column1">Procenat popusta</th>
+											<th class = "column1">Cijna sa popustom</th>
+											<th class = "column1">Broj kreveta u sobi</th>
+											<th class = "column1">Ocjena sobe</th>
+											<th class = "column6" colspan="3">Akcije</th>
+										</tr>
+									</thead>
+									<tbody id="prikazBrzihRezervacija">
+									</tbody>
+								</table>
+							</div>
+							<!-- Detaljan prikaz brze rezervacije -->
+								<div id="detaljanPrikazBrzeRez" hidden="hidden">
+									<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum dolaska</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="datumDolaskaBrzaRez">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum odlaska</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="datumOdlaskaBrzaRez">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                	</div>
+									<div class="input-group">
+	                                    <label class="label">Broj sobe:</label>
+	                                    <input class="input--style-2" type="number" min="1" readonly="readonly" id="brojSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Ocjena sobe:</label>
+	                                    <input class="input--style-2" type="text" readonly="readonly" id="ocjenaSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Sprat:</label>
+	                                    <input class="input--style-2" type="number" min="0" readonly="readonly" id="spratSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj kreveta u sobi:</label>
+	                                    <input class="input--style-2" type="number" min="0" readonly="readonly" id="brKrevetaSobeBrzaRez">
+	                                </div>
+	                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Početna cijena:</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="pocetnaCijenaBrzaRez">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena s popustom:</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="cijenaSaPopsutomBrzaRez">
+                                        </div>
+                                    </div>
+                                	</div>
+	                                <h2 class="zaglavlje">Dodatne usluge:</h2>
+	                                <table>
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Naziv</th>
+											<th class="column6">Cijena</th>
+											<th class = "column1">Način plaćanja</th>
+											<th class = "column1">Opis</th>
+										</tr>
+									</thead>
+									<tbody id="prikazUslugaBrzeRezDetalji">
+									</tbody>
+								</table>
+								<button  class="btn btn-submit" id="zatvoriDetaljanPrikazBrzeRezBtn">Nazad</button>
+								</div>
+                        
+                        </div>
+                        
+                        <!-- Prikaz dodatnih usluga -->
                         <div class="tab-pane" id="tab-dodatne-usluge">
 	                        <table>
 								<thead>
