@@ -21,8 +21,8 @@ $(document).ready(function() {
 		e.preventDefault();
 	   
 		let nazivLokacije = $("#racNaziv").val();
-		let dolazak = $("#input-start-rac").val();
-		let odlazak = $("#input-end-rac").val();
+		let dolazak = $("#input-start-2").val();
+		let odlazak = $("#input-end-2").val();
 		
 		let pretragaRac = {
 				nazivRacIliDestinacije: nazivLokacije,
