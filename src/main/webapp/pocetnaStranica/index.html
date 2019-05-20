@@ -25,6 +25,8 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+   	<link rel="stylesheet" href="../sorttable/sorttable.css">
+    
 </head>
 
 <body>
@@ -71,7 +73,7 @@
                             <!-- Tabela za prikaz pretrazenih aviokompanija -->
                             <table>
 						<thead>
-							<tr class="table100-head">
+							<tr class="table100-head" class = "sortable">
 								<th class="column1">Slika</th>
 								<th class="column1">Naziv</th>
 								<th class="column1">Adresa</th>
@@ -149,7 +151,7 @@
                             <h1>&nbsp</h1>
                             
                             <!-- Tabela za prikaz pretrazenih hotela -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column1">Slika</th>
@@ -207,7 +209,7 @@
 		                         <button class="btn-submit" type="submit">Pretraži</button>
 		                         <h1>&nbsp</h1>
 		                         
-	                    		 <table>
+	                    		 <table class = "sortable">
 									<thead>
 										<tr class="table100-head">
 											<th class="column1">Slika</th>
@@ -298,7 +300,7 @@
                             </form>
                             <h1>&nbsp</h1>
                             <!-- Tabela za prikaz letova -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column2">Rbr</th>
@@ -341,6 +343,8 @@
     <script type="text/javascript" src="js/pretragaLetova.js"></script>
    	<script type="text/javascript" src="js/pretragaAviokompanija.js"></script>
    	<script type="text/javascript" src="js/pretragaVozila.js"></script>
+	<script type="text/javascript" src="../sorttable/sorttable.js"></script>
+   	
    	
     
     <script src="js/global.js"></script>
