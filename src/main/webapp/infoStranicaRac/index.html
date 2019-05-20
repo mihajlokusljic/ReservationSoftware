@@ -216,14 +216,14 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum preuzimanja vozila</label>
-                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-popust">
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum vraćanja vozila</label>
-                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-popust">
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
                                     </div>
@@ -288,22 +288,27 @@
                                         </div>
                                     </div>
                                 </div>	
-                                <div class = "row row-space">
-                                	<div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Minimalna cijena (Opciono):</label>
-                                            <input class="input--style-2" type="number" min = "1" id = "minCijenaPopust" >
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Maksimalna cijena (Opciono):</label>
-                                            <input class="input--style-2" type="number" min = "1" id = "maxCijenaPopust" >
-                                        </div>
-                                    </div>
-                                </div>
 	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodna vozila"/>
 	                        </form>
+	                         <h1>&nbsp</h1>
+	                        <table hidden id="tabelaVozilaSaPopustom">
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Naziv</th>
+										<th class="column1">Marka</th>
+										<th class="column1">Model</th>
+										<th class="column1">Godina proizvodnje</th>
+										<th class="column1">Broj sjedista</th>
+										<th class="column1">Tip vozila</th>
+										<th class="column1">Ocjena</th>
+										<th class="column1">Cijena bez popusta</th>
+										<th class="column1">Cijena sa popustom</th>
+										<th class="column1"></th>
+									</tr>
+								</thead>
+								<tbody id="prikazVozilaSaPopustom">
+								</tbody>
+							</table>
                         </div>
                         
                         <div class="tab-pane" id="tab-filijale">

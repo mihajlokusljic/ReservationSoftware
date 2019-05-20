@@ -25,6 +25,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Filijala;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
@@ -251,6 +252,15 @@ public class RentACarKontroler {
 	public ResponseEntity<?> vratiBrzeZaPrikaz(@PathVariable("idServisa") Long idServisa) {
 		try {
 			return new ResponseEntity<Collection<PrikazBrzeRezVozilaDTO>>(servis.vratiBrzeZaPrikaz(idServisa), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/pretraziVozilaSaPopustom", method = RequestMethod.POST)
+	public ResponseEntity<?> pretraziVozilaSaPopustom(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+		try {
+			return new ResponseEntity<Collection<BrzaRezervacijaVozila> >(this.servis.pretraziVozilaSaPopustom(kriterijumiPretrage), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

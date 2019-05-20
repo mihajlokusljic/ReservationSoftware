@@ -819,4 +819,73 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		
 		return brzeRezDTO;
 	}
+
+	public Collection<BrzaRezervacijaVozila> pretraziVozilaSaPopustom(PretragaVozilaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPretrage.getIdRac());
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();		
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPreuzimanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumVracanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
+		if (pocetniDatum.compareTo(krajnjiDatum) == 0) {
+			throw new NevalidniPodaciException("Između datuma preuzimanja i datuma vraćanja vozila mora biti barem jedan dan razlike.");
+		}
+		Collection<Vozilo> svaVozila = voziloRepository.findAllByRentACar(rac);
+		
+		List<BrzaRezervacijaVozila> brzeRezervacije = new ArrayList<BrzaRezervacijaVozila>();
+		if (svaVozila.isEmpty()) {
+			return brzeRezervacije;
+		}
+		for (Vozilo vozilo : svaVozila) {
+			
+			if (vozilo.getFilijala() == null) {
+				continue;
+			}
+			if (voziloJeNaBrzojRezervaciji(vozilo, pocetniDatum, krajnjiDatum) && !voziloJeRezervisano(vozilo, pocetniDatum, krajnjiDatum)) {
+				
+				Collection<BrzaRezervacijaVozila> sveBrzeRez = vratiBrzeRezervacijePoDatumu(vozilo, pocetniDatum, krajnjiDatum);
+				
+				System.out.println("Brze rez vozila: " + sveBrzeRez.size());
+				
+				if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
+						 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
+					
+					System.out.println("proslo");
+					brzeRezervacije.addAll(sveBrzeRez);
+
+					
+				}
+			}
+			
+		}
+		
+		return brzeRezervacije;
+	}
+	
+	public Collection<BrzaRezervacijaVozila> vratiBrzeRezervacijePoDatumu(Vozilo vozilo, Date datumP, Date datumV){
+		
+		Collection<BrzaRezervacijaVozila> brzeRez = new ArrayList<>();
+		
+		for(BrzaRezervacijaVozila r : brzaRezervacijaVozilaRepository.findAllByVozilo(vozilo)) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+				brzeRez.add(r);
+			}
+		}
+		
+		return brzeRez;
+	}
 }
