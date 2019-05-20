@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
@@ -531,6 +532,12 @@ public class AviokompanijaService {
 		aviokompanijaRepository.save(aviokompanija);
 
 		return usluga;
+	}
+
+	public BrzaRezervacijaKarteDTO dodajBrzuRezervaciju(BrzaRezervacijaKarteDTO novaRezervacija) {
+		
+		
+		return null;
 	}
 
 }

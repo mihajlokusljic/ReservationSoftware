@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
-import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;;
@@ -88,6 +88,16 @@ public class AviokompanijeKontroler {
 	public ResponseEntity<?> dodajUsluguAviokompanije(@RequestBody UslugaDTO novaUsluga) {
 		try {
 			return new ResponseEntity<Usluga>(servis.dodajUsluguAviokompanije(novaUsluga), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/dodajBrzuRezervacijuKarte", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	public ResponseEntity<?> dodajBrzuRezervacijuKarte(@RequestBody BrzaRezervacijaKarteDTO novaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaKarteDTO>(servis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
