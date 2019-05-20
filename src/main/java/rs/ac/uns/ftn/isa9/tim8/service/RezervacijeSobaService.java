@@ -17,14 +17,21 @@ import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
+import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.PutovanjeRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaSobeRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
 public class RezervacijeSobaService {
 
+	@Autowired
+	protected RezervacijaSobeRepository rezervacijeRepository;
+	
 	@Autowired
 	protected BrzeRezervacijeSobaRepository brzeRezervacijeRepository;
 
@@ -33,6 +40,9 @@ public class RezervacijeSobaService {
 
 	@Autowired
 	protected UslugeRepository uslugeRepository;
+	
+	@Autowired
+	protected PutovanjeRepository putovanjeRepository;
 
 	public BrzaRezervacijaSobeDTO dodajUslugeBrzeRezervacije(BrzaRezervacijaSobeDTO brzaRezervacija)
 			throws NevalidniPodaciException {
@@ -171,6 +181,37 @@ public class RezervacijeSobaService {
 			}
 		}
 		return rezultat;
+	}
+
+	public String izvrsiBrzuRezervaciju(Long idBrzeRezervacije, Long idPutovanja) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSoba> rezervacijaSearch = brzeRezervacijeRepository.findById(idBrzeRezervacije);
+		if(!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji zadata brza rezervacija.");
+		}
+		BrzaRezervacijaSoba brzaRez = rezervacijaSearch.get();
+		Putovanje putovanje = null;
+		if(idPutovanja != null) {
+			Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
+			if(!putovanjeSearch.isPresent()) {
+				throw new NevalidniPodaciException("Ne postoji zadato putovanje.");
+			}
+			putovanje = putovanjeSearch.get();
+		}
+		double popust = brzaRez.getBaznaCijena() * brzaRez.getProcenatPopusta() / 100.0;
+		double cijena = brzaRez.getBaznaCijena() - popust;
+		RezervacijaSobe rezervacija = new RezervacijaSobe(brzaRez.getDatumDolaska(), brzaRez.getDatumOdlaska(), cijena, brzaRez.getSobaZaRezervaciju());
+		if (putovanje != null) {
+			putovanje.getRezervacijeSoba().add(rezervacija);
+			for (Usluga dodatnaUsluga : brzaRez.getDodatneUsluge()) {
+				putovanje.getDodatneUsluge().add(dodatnaUsluga);
+			} 
+		}
+		brzeRezervacijeRepository.delete(brzaRez);
+		rezervacijeRepository.save(rezervacija);
+		if (putovanje != null) {
+			putovanjeRepository.save(putovanje);
+		}
+		return "Uspjesno ste rezervisali sobu.";
 	}
 
 }

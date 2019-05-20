@@ -456,7 +456,7 @@ function detaljanPrikazBrzeRez(idRez) {
 	$("#datumDolaskaBrzaRez").val(brzaRez.datumDolaska);
 	$("#datumOdlaskaBrzaRez").val(brzaRez.datumOdlaska);
 	let soba = brzaRez.sobaZaRezervaciju;
-	$("#brojSobeBrzaRez").val(soba.brojKreveta);
+	$("#brojSobeBrzaRez").val(soba.brojSobe);
 	if(soba.brojOcjena > 0) {
 		let ocjena = soba.sumaOcjena / soba.brojOcjena;
 		$("#ocjenaSobeBrzaRez").val(ocjena);

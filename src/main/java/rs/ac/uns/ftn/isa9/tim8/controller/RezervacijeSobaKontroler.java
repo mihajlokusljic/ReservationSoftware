@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeBrzeRezervacijeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelskeSobeService;
@@ -22,56 +23,71 @@ import rs.ac.uns.ftn.isa9.tim8.service.RezervacijeSobaService;
 @RestController
 @RequestMapping(value = "/rezervacijeSoba")
 public class RezervacijeSobaKontroler {
-	
+
 	@Autowired
 	protected RezervacijeSobaService rezervacijeServis;
-	
+
 	@Autowired
 	protected HotelskeSobeService sobeServis;
-	
+
 	@RequestMapping(value = "/dodajBrzuRezervaciju", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorHotela')")
 	public ResponseEntity<?> dodajBrzuRezervaciju(@RequestBody BrzaRezervacijaSobeDTO novaRezervacija) {
 		try {
-			return new ResponseEntity<BrzaRezervacijaSobeDTO>(sobeServis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
+			return new ResponseEntity<BrzaRezervacijaSobeDTO>(sobeServis.dodajBrzuRezervaciju(novaRezervacija),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dodajUslugeBrzojRezervaciji", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorHotela')")
 	public ResponseEntity<?> dodajUslugeBrzeRezervacije(@RequestBody BrzaRezervacijaSobeDTO brzaRezervacija) {
 		try {
-			return new ResponseEntity<BrzaRezervacijaSobeDTO>(rezervacijeServis.dodajUslugeBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
+			return new ResponseEntity<BrzaRezervacijaSobeDTO>(
+					rezervacijeServis.dodajUslugeBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/zadajPopustBrzojRezervaciji", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorHotela')")
 	public ResponseEntity<?> zadajPopustBrzeRezervacije(@RequestBody BrzaRezervacijaSobeDTO brzaRezervacija) {
 		try {
-			return new ResponseEntity<BrzaRezervacijaSoba>(rezervacijeServis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
+			return new ResponseEntity<BrzaRezervacijaSoba>(
+					rezervacijeServis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/sveBrzeRezervacijeHotela/{idHotela}", method = RequestMethod.GET)
 	public ResponseEntity<?> dobaviSveBrzeRezervacijeZaHotel(@PathVariable("idHotela") Long idHotela) {
 		try {
-			return new ResponseEntity<Collection<BrzaRezervacijaSoba> >(rezervacijeServis.dobaviSveBrzeRezervacijeZaHotel(idHotela), HttpStatus.OK);
+			return new ResponseEntity<Collection<BrzaRezervacijaSoba>>(
+					rezervacijeServis.dobaviSveBrzeRezervacijeZaHotel(idHotela), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/pretragaBrzihRezervacijaSoba", method = RequestMethod.POST)
 	public ResponseEntity<?> pretraziBrzeRezervacijeSoba(@RequestBody PretragaSobaDTO kriterijumiPretrage) {
 		try {
-			return new ResponseEntity<Collection<BrzaRezervacijaSoba> >(rezervacijeServis.pretraziBrzeRezervacijeSoba(kriterijumiPretrage), HttpStatus.OK);
+			return new ResponseEntity<Collection<BrzaRezervacijaSoba>>(
+					rezervacijeServis.pretraziBrzeRezervacijeSoba(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(value = "/izvrsiBrzuRezervaciju", method = RequestMethod.POST)
+	public ResponseEntity<?> izvrsiBrzuRezervaciju(@RequestBody IzvrsavanjeBrzeRezervacijeSobeDTO podaciRezervacije) {
+		try {
+			return new ResponseEntity<String>(rezervacijeServis.izvrsiBrzuRezervaciju(
+					podaciRezervacije.getIdBrzeRezervacije(), podaciRezervacije.getIdPutovanja()), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

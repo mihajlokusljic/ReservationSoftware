@@ -213,7 +213,7 @@ function prikaziBrzeRezervacije(brzeRezervacije) {
 	let brzeRezRows = $("#prikazBrzihRezervacija");
 	brzeRezRows.empty();
 	$.each(brzeRezervacije, function(i, rezervacija) {
-		let noviRed = $('<tr></tr>');
+		let noviRed = $('<tr id="brzaRez' + rezervacija.id + '"></tr>');
 		noviRed.append('<td class="column1">' + rezervacija.datumDolaska + '</td>');
 		noviRed.append('<td class="column1">' + rezervacija.datumOdlaska + '</td>');
 		noviRed.append('<td class="column1">' + rezervacija.baznaCijena + '</td>');
@@ -244,6 +244,29 @@ function prikaziBrzeRezervacije(brzeRezervacije) {
 		let idRez = e.target.id.substring(3); //id je oblika "brd<id brze rezervacije>"
 		detaljanPrikazBrzeRez(idRez);
 	});
+	
+	$(".brzaRezervacija").click(function(e) {
+		e.preventDefault();
+		let idRez = e.target.id.substring(2); //id je oblika "brd<id brze rezervacije>"
+		rezervisanjeBrzeRezervacije(idRez);
+	});
+}
+
+function rezervisanjeBrzeRezervacije(idRez) {
+	let podaciRez = {
+			idBrzeRezervacije: idRez,
+			idPutovanja: idPutovanja
+	};
+	$.ajax({
+		type: "POST",
+		url: "../rezervacijeSoba/izvrsiBrzuRezervaciju",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(podaciRez),
+		success: function(response) {
+			$("#brzaRez" + idRez).remove();
+			alert(response);
+		},
+	});
 }
 
 function detaljanPrikazBrzeRez(idRez) {
@@ -254,7 +277,7 @@ function detaljanPrikazBrzeRez(idRez) {
 	$("#datumDolaskaBrzaRez").val(brzaRez.datumDolaska);
 	$("#datumOdlaskaBrzaRez").val(brzaRez.datumOdlaska);
 	let soba = brzaRez.sobaZaRezervaciju;
-	$("#brojSobeBrzaRez").val(soba.brojKreveta);
+	$("#brojSobeBrzaRez").val(soba.brojSobe);
 	if(soba.brojOcjena > 0) {
 		let ocjena = soba.sumaOcjena / soba.brojOcjena;
 		$("#ocjenaSobeBrzaRez").val(ocjena);

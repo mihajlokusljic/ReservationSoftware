@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +19,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ColumnDefault;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
@@ -58,7 +56,7 @@ public class BrzaRezervacijaSoba {
 	)
 	protected Set<Usluga> dodatneUsluge;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "soba_id", referencedColumnName = "id")
 	protected HotelskaSoba sobaZaRezervaciju;
 	
