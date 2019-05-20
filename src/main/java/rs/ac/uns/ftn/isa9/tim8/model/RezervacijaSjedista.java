@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,63 +16,70 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "rezervacija_sjedista")
 public class RezervacijaSjedista {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;
 
 	@Column(name = "ime_putnika", nullable = false)
 	protected String imePutnika;
-	
+
 	@Column(name = "prezime_putnika", nullable = false)
 	protected String prezimePutnika;
-	
+
 	@Column(name = "broj_pasosa_putnika", nullable = false)
 	protected String brojPasosaPutnika;
-	
+
 	@Column(name = "cijena", nullable = false)
 	@ColumnDefault("0")
 	protected double cijena;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sjediste_id", referencedColumnName = "id")
 	protected Sjediste sjediste;
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name="putnik_id")
-	protected RegistrovanKorisnik putnik; //opciono, ne mora se rezervisati za registrovanog korisnika
-	
+	@JoinColumn(name = "putnik_id")
+	protected RegistrovanKorisnik putnik; // opciono, ne mora se rezervisati za registrovanog korisnika
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "aviokompanija_id")
 	protected Aviokompanija aviokompanija;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "let_id")
 	protected Let let;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "izvodjenje_leta_id")
-	protected IzvodjenjeLeta izvodjenjeLeta;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "putovanje_id")	
+	@JoinColumn(name = "putovanje_id")
 	protected Putovanje putovanje;
 
 	public RezervacijaSjedista() {
 		super();
 	}
-	
-	public RezervacijaSjedista(String imePutnika, String prezimePutnika, String brojPasosaPutnika, double cijena,
-			Sjediste sjediste, IzvodjenjeLeta izvodjenjeLeta, RegistrovanKorisnik putnik) {
+
+	public RezervacijaSjedista(Long id, String imePutnika, String prezimePutnika, String brojPasosaPutnika,
+			double cijena, Sjediste sjediste, RegistrovanKorisnik putnik, Aviokompanija aviokompanija, Let let,
+			Putovanje putovanje) {
 		super();
+		Id = id;
 		this.imePutnika = imePutnika;
 		this.prezimePutnika = prezimePutnika;
 		this.brojPasosaPutnika = brojPasosaPutnika;
 		this.cijena = cijena;
 		this.sjediste = sjediste;
-		//this.izvodjenjeLeta = izvodjenjeLeta;
 		this.putnik = putnik;
+		this.aviokompanija = aviokompanija;
+		this.let = let;
+		this.putovanje = putovanje;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public String getImePutnika() {
@@ -100,6 +106,14 @@ public class RezervacijaSjedista {
 		this.brojPasosaPutnika = brojPasosaPutnika;
 	}
 
+	public double getCijena() {
+		return cijena;
+	}
+
+	public void setCijena(double cijena) {
+		this.cijena = cijena;
+	}
+
 	public Sjediste getSjediste() {
 		return sjediste;
 	}
@@ -114,30 +128,6 @@ public class RezervacijaSjedista {
 
 	public void setPutnik(RegistrovanKorisnik putnik) {
 		this.putnik = putnik;
-	}
-
-	public double getCijena() {
-		return cijena;
-	}
-
-	public void setCijena(double cijena) {
-		this.cijena = cijena;
-	}
-
-	public IzvodjenjeLeta getIzvodjenjeLeta() {
-		return izvodjenjeLeta;
-	}
-
-	public void setIzvodjenjeLeta(IzvodjenjeLeta izvodjenjeLeta) {
-		this.izvodjenjeLeta = izvodjenjeLeta;
-	}
-
-	public Long getId() {
-		return Id;
-	}
-
-	public void setId(Long id) {
-		this.Id = id;
 	}
 
 	public Aviokompanija getAviokompanija() {
@@ -163,7 +153,5 @@ public class RezervacijaSjedista {
 	public void setPutovanje(Putovanje putovanje) {
 		this.putovanje = putovanje;
 	}
-	
-	
-	
+
 }
