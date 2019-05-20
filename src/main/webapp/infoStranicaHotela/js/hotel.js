@@ -7,8 +7,8 @@ let zoomLevel = 17;
 let idHotela = null;
 let idKorisnika = null;
 let rezimRezervacije = false;
-let datumDolaksa = null;
-let datumOdlaska = null;
+let datumDolaskaPutovanje = null;
+let datumOdlaskaPutovanje = null;
 let idPutovanja = null;
 
 
@@ -36,9 +36,15 @@ $(document).ready(function(e) {
 	var params_parser = new URLSearchParams(parametri);
 	
 	idHotela = params_parser.get("id");
+	
+	//inicijalizacijaPodataka
+	ucitajPodatkeHotela();
+	ymaps.ready(inicijalizujMapu);
+	
+	//ocitavanje opcionih parametara za rezervaciju
 	idKorisnika = params_parser.get("korisnik");
-	datumDolaksa = params_parser.get("datumDolaska");
-	datumOdlaska = params_parser.get("datumOdlaska");
+	datumDolaskaPutovanje = params_parser.get("datumDolaska");
+	datumOdlaskaPutovanje = params_parser.get("datumOdlaska");
 	idPutovanja = params_parser.get("idPutovanja");
 	
 	if(idHotela == null) {
@@ -46,13 +52,10 @@ $(document).ready(function(e) {
 		redirectNaPocetnu();
 	}
 	
-	if(datumDolaksa != null & datumOdlaska != null) {
+	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
 		rezimRezervacije = true;
+		prikaziBrzeRezervacijeZaPutovanje();
 	}
-	
-	//inicijalizacijaPodataka
-	ucitajPodatkeHotela();
-	ymaps.ready(inicijalizujMapu);
 	
 	//pretraga soba
 	$("#pretragaSobaForm").submit(function(e) {
@@ -73,6 +76,12 @@ $(document).ready(function(e) {
 		$("#sveBrzeRezervacije").show();
 		$("#prikazUslugaBrzeRezDetalji").empty();
 	});
+	
+	//odjava
+	$("#pocetna").click(function(e) {
+		e.preventDefault();
+		redirectNaPocetnu();
+	});
 });
 
 function ucitajPodatkeHotela() {
@@ -86,6 +95,29 @@ function ucitajPodatkeHotela() {
 		},
 	});
 
+}
+
+function prikaziBrzeRezervacijeZaPutovanje() {
+	$("#input-start-1").val(datumDolaskaPutovanje);
+	$("#input-end-1").val(datumOdlaskaPutovanje);
+	
+	let kriterijumiPretrage = {
+			datumDolaska: datumDolaskaPutovanje,
+			datumOdlaska: datumOdlaskaPutovanje,
+			idHotela: podaciHotela.id
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../rezervacijeSoba/pretragaBrzihRezervacijaSoba",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(kriterijumiPretrage),
+		success: function(response) {
+			brzeRezervacije = response;
+			prikaziBrzeRezervacije(response);
+		},
+	});
+	
 }
 
 function prikaziPodatkeHotela() {
