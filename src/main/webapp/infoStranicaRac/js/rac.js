@@ -26,15 +26,32 @@ $(document).ready(function(e) {
 	
 	ucitajPodatkeRac();
 	
+	//pretraga vozila za obicnu rezervaciju
 	$("#pretragaVozilaForm").submit(function(e) {
 		e.preventDefault();
 		pretragaVozila();
-	})
+	});
+	
+	//pretraga vozila za brzu rezervaciju
+	$("#pretragaVozilaSaPopustomForm").submit(function(e){
+		e.preventDefault();
+		pretragaVozilaSaPopustom();
+	});
 	
 	//prikazivanje lokacije sjedista RAC servisa
 	$("#lokacijaRacServisaPrikaz").click(function(e) {
 		e.preventDefault();
 		postaviMarker([podaciRac.adresa.latituda, podaciRac.adresa.longituda]);
+	});
+	
+	$("#vratiNaPocetnu").click(function(e){
+		e.preventDefault();
+		if (korisnikId != null){
+			window.location.replace("../registrovaniKorisnikPocetna/index.html");
+		}
+		else{
+			window.location.replace("../pocetnaStranica/index.html");
+		}
 	});
 });
 
@@ -70,9 +87,13 @@ function ucitajPodatkeRac() {
 			$("#opisRac").val(response.promotivniOpis);
 			$("#mjestoPreuzimanjaSelect").empty();
 			$("#mjestoVracanjaSelect").empty();
+			$("#mjestoPreuzimanjaPopustSelect").empty();
+			$("#mjestoVracanjaPopustSelect").empty();
 			$.each(podaciRac.filijale, function(i,filijala){
 				$("#mjestoPreuzimanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 				$("#mjestoVracanjaSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
+				$("#mjestoPreuzimanjaPopustSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
+				$("#mjestoVracanjaPopustSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 			});
 			ymaps.ready(inicijalizujMape);
 			prikaziFilijale();
@@ -190,7 +211,10 @@ function prikaziVozila(vozila) {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+		if (korisnikId != null){
+			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+		}
+		
 		prikaz.append(noviRed);
 	})
 	
@@ -246,4 +270,125 @@ function inicijalizujMape() {
     });
 	mapa.controls.add('typeSelector');
 	mapa.controls.add('zoomControl');
+}
+
+function pretragaVozilaSaPopustom(){
+	let _datumPreuzimanja = $("#input-start-2").val();
+	let _datumVracanja = $("#input-end-2").val();
+	
+	let _vrijemePreuzimanja = $("#input-start-time-popust").val();
+	let _vrijemeVracanja = $("#input-end-time-popust").val();
+	if (_vrijemePreuzimanja == '' || _vrijemeVracanja == ''){
+		alert("Niste unijeli vrijeme preuzimanja/vracanja vozila");
+	}
+	
+	let _mjestoPreuzimanja = $("#mjestoPreuzimanjaPopustSelect").val();
+	let _mjestoVracanja = $("#mjestoVracanjaPopustSelect").val();
+	
+	let _brojPutnika = $("#brojPutnikaPopustInput").val();
+	let _tipVozila = $("#tipVozilaPopustSelect").val();
+	
+	
+	let pretragaVozila = {
+			idRac : podaciRac.id,
+			datumPreuzimanja : _datumPreuzimanja,
+			datumVracanja : _datumVracanja,
+			vrijemePreuzimanja: _vrijemePreuzimanja,
+			vrijemeVracanja: _vrijemeVracanja,
+			idMjestoPreuzimanja: _mjestoPreuzimanja,
+			idMjestoVracanja: _mjestoVracanja,
+			tipVozila: _tipVozila,
+			brojPutnika: _brojPutnika,
+			
+	}
+
+	if (_datumPreuzimanja != '' && _datumVracanja != ''){
+		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);
+		/*var datetime1 = new Date('1970-01-01T' + _vrijemePreuzimanja + 'Z');
+		var datetime2 = new Date('1970-01-01T' + _vrijemeVracanja + 'Z');
+		ukupno = ukupno + Math.abs(Date.parse(datetime1) - Date.parse(datetime2)) / 36e5;*/
+	}
+	
+	
+	$.ajax({
+		type: "POST",
+		url: "../rentACar/pretraziVozilaSaPopustom",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(pretragaVozila),
+		success: function(response) {
+			if(response.length == 0) {
+				alert("Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.");
+			}
+			prikaziVozilaSaPopustom(response);
+		},
+	});
+}
+
+function prikaziVozilaSaPopustom(rezVozila) {
+	$("#tabelaVozilaSaPopustom").show();
+	let prikaz = $("#prikazVozilaSaPopustom");
+	prikaz.empty();
+	
+	$.each(rezVozila, function(i, rez) {
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + rez.vozilo.naziv + '</td>');
+		noviRed.append('<td class="column1">' + rez.vozilo.marka + '</td>');
+		noviRed.append('<td class="column1">' + rez.vozilo.model + '</td>');
+		noviRed.append('<td class="column1">' + rez.vozilo.godina_proizvodnje + '</td>');
+		noviRed.append('<td class="column1">' + rez.vozilo.broj_sjedista + '</td>');
+		noviRed.append('<td class="column1">' + rez.vozilo.tip_vozila + '</td>');
+		let sumaOcjena = rez.vozilo.sumaOcjena;
+		sumaOcjena = parseFloat(sumaOcjena);
+		let brOcjena = rez.vozilo.brojOcjena;
+		brOcjena = parseInt(brOcjena);
+		if(brOcjena > 0) {
+			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+		} else {
+			noviRed.append('<td class="column1">Nema ocjena</td>');
+		}
+		noviRed.append('<td class="column1">' + ukupno*rez.vozilo.cijena_po_danu + '</td>');
+		let cijenaSaPopustom = 0;
+		if (rez.procenatPopusta != 0){
+			cijenaSaPopustom = ukupno*rez.vozilo.cijena_po_danu - ukupno*rez.vozilo.cijena_po_danu*rez.procenatPopusta/100 ;
+		}
+		noviRed.append('<td class="column1">' + cijenaSaPopustom + '</td>');
+		if (korisnikId != null){
+			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "brzaRezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
+		}
+		
+		prikaz.append(noviRed);
+	});
+	$(".brzaRezervacija").click(function(e){
+		e.preventDefault();
+		let brzaRez = rezVozila[e.target.id];
+		cijenaSaPopustom = ukupno*brzaRez.vozilo.cijena_po_danu - ukupno*brzaRez.vozilo.cijena_po_danu*brzaRez.procenatPopusta/100 ;		
+		let rezervacijaVozila = {
+				rezervisanoVozilo : brzaRez.vozilo,
+				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaPopustSelect").val(),
+				datumPreuzimanjaVozila : Date.parse($("#input-start-2").val()),
+				mjestoVracanjaVozila : $("#mjestoVracanjaPopustSelect").val(),
+			    datumVracanjaVozila : Date.parse($("#input-end-2").val()),
+			    cijena : cijenaSaPopustom,
+			    putnik : korisnikId ,
+			    putovanje : null
+		}
+		
+		$.ajax({
+			type: "POST",
+			url: "../rentACar/rezervisiVozilo/" + podaciRac.id,
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacijaVozila),
+			success: function(response) {
+				if(response == '') {
+					alert("Uspjesno ste rezervisali vozilo.");
+					location.reload(true);
+					return;
+				}
+				else{
+					alert (response);
+				}
+			},
+		});
+		
+	});
 }

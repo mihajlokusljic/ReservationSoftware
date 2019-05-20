@@ -160,6 +160,8 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
 		
+		$("#pregledPrijateljaSearch").val("");
+		
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviSvePrijatelje",
@@ -169,7 +171,7 @@ $(document).ready(function() {
 				prikaziPrijatelje(response);
 			},
 		});
-		
+				
 		});
 
 	$("#dodaj_prijatelje_tab").click(function(e){
@@ -186,16 +188,22 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
 
+		$("#dodavanjePrijateljaSearch").val("");
+
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviKorisnikeZaDodavanjePrijatelja",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(korisnik.id),
+			async: false,
 			success: function(response) {
 				prikaziKorisnikeZaPrijateljstvo(response);
 			},
 		});
 		
+		$("#dodavanjePrijateljaRows").empty();
+
+				
 	});
 	
 	$("#zahtjevi_prijateljstva_tab").click(function(e){
@@ -294,12 +302,60 @@ $(document).ready(function() {
 				tbody.empty();
 				$.each(response, function(i, podatak) {
 
-					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStraanicaRac");
+					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 				});
 				if(response.length == 0) {
 					alert("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
 				}
 				$('#racSearchForm')[0].reset();
+			},
+		});
+		
+	});
+	
+	$("#dodavanjePrijateljaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let imePrezimeInput = $("#dodavanjePrijateljaSearch").val();
+		
+		let filtriranjePrijateljaDTO = {
+				idKorisnika : korisnik.id,
+				imePrezime: imePrezimeInput,
+				pregledPrijatelja: false
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../korisnik/pretraziPrijatelje",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(filtriranjePrijateljaDTO),
+			success: function(response) {
+				prikaziKorisnikeZaPrijateljstvo(response);
+				return;
+			},
+		});
+		
+	});
+	
+	$("#pregledPrijateljaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let imePrezimeInput = $("#pregledPrijateljaSearch").val();
+		
+		let filtriranjePrijateljaDTO = {
+				idKorisnika : korisnik.id,
+				imePrezime: imePrezimeInput,
+				pregledPrijatelja: true
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../korisnik/pretraziPrijatelje",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(filtriranjePrijateljaDTO),
+			success: function(response) {
+				prikaziPrijatelje(response);
+				return;
 			},
 		});
 		
@@ -482,6 +538,7 @@ function prikaziPrijatelje(prijatelji) {
 			success: function(response) {
 				if (response == true) {
 				alert("Uspješno uklonjen korisnik iz liste prijatelja.");
+				$("#prijatelj" + prijateljZaBrisanjeId).remove();
 				return;
 				} else {
 					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
@@ -496,7 +553,7 @@ function prikaziPrijatelje(prijatelji) {
 
 function prikaziPrijatelja(prijatelj) {
 	let prijateljiTabela = $("#pregledPrijateljaRows");
-	let noviRed = $("<tr></tr>");
+	let noviRed = $('<tr id = "prijatelj' + prijatelj.id + '"></tr>');
 	noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
 	"</td>");
 	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');
@@ -530,6 +587,7 @@ function prikaziKorisnikeZaPrijateljstvo(prijatelji) {
 			url : "../korisnik/dodajPrijatelja",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(zahtjevZaPrijateljstvoDTO),
+			async: false,
 			success: function(response) {
 				if (response == true) {
 					alert("Zahtjev je uspješno poslat.");
@@ -612,6 +670,18 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 			success: function(response) {
 				if (response == true) {
 				alert("Uspješno prihvaćen zahtjev za prijateljstvo.");
+				
+				$.ajax({
+					type: "POST",
+					url : "../korisnik/dobaviKorisnikeZaDodavanjePrijatelja",
+					contentType : "application/json; charset=utf-8",
+					data: JSON.stringify(korisnik.id),
+					success: function(response) {
+						prikaziKorisnikeZaPrijateljstvo(response);
+						$("#adf" + idPrijatelja).remove();
+					},
+				});
+				
 				return;
 				} else {
 					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
@@ -641,6 +711,7 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 			success: function(response) {
 				if (response == true) {
 				alert("Uspješno odbijen zahtjev za prijateljstvo.");
+				$("#adf" + idPrijatelja).remove();
 				return;
 				} else {
 					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
@@ -655,7 +726,7 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 
 function prikaziKorisnikaKojiJeZatrazioPrijateljstvo(prijatelj) {
 	let prijateljiTabela = $("#zahtjeviZaPrijateljstvoRows");
-	let noviRed = $("<tr></tr>");
+	let noviRed = $('<tr id="adf' + prijatelj.id + '"></tr>');
 	noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
 	"</td>");
 	noviRed.append('<td class="column6">' + '<input type="hidden" id="' + prijatelj.id +  '">' + '</td>');

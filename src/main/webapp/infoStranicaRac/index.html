@@ -42,7 +42,7 @@
 	</div>
 	
     <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
-        <div class="wrapper wrapper--w1050">
+        <div class="wrapper wrapper--w1150">
             <div class="card card-3">
                 <div class="card-body">
                 	<h1 id="racNaslov">Naziv rent-a-car servisa</h1>
@@ -55,13 +55,13 @@
                             <a class="tab-list__link" href="#tab-vozila" data-toggle="tab" id = "vozila">Vozila</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id ="dodatneUsluge">Dodatne usluge</a>
+                            <a class="tab-list__link" href="#tab-vozila-sa-popustom" data-toggle="tab" id ="vozilaSaPopustom">Vozila sa popustom</a>
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-filijale" data-toggle="tab" id ="filijale">Filijale</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="../registrovaniKorisnikPocetna/index.html">Nazad na početnu stranicu</a>
+                            <a class="tab-list__link" href="#tab-nazad" id = "vratiNaPocetnu">Nazad na početnu stranicu</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -210,17 +210,103 @@
 							</table>
                         </div>
                         
-                        <div class="tab-pane" id="tab-dodatne-usluge">
-	                        <table>
+                        <div class="tab-pane" id="tab-vozila-sa-popustom">
+	                        <form method="POST" action="#" id="pretragaVozilaSaPopustomForm">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum preuzimanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum vraćanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme preuzimanja vozila</label>
+                                            <input class="input--style-2" type="time" name="check-in" placeholder="--:--" id="input-start-time-popust">
+                                            <i class="zmdi zmdi-timer input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Vrijeme vraćanja vozila</label>
+                                            <input class="input--style-2" type="time" name="check-out" placeholder="--:--" id="input-end-time-popust">
+                                            <i class="zmdi zmdi-timer input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                	<div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Mjesto preuzimanja vozila:</label>
+                                           <div class="rs-select2 js-select-simple select--no-search">
+                                               <select id="mjestoPreuzimanjaPopustSelect">
+                                               </select>
+                                               <div class="select-dropdown"></div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Mjesto vraćanja vozila:</label>
+                                           <div class="rs-select2 js-select-simple select--no-search">
+                                               <select id="mjestoVracanjaPopustSelect">
+                                               </select>
+                                               <div class="select-dropdown"></div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-space">
+                                	<div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Tip vozila:</label>
+                                            <div class="rs-select2 js-select-simple select--no-search">
+                                                <select name="tipVozilaPopust" id = "tipVozilaPopustSelect">
+                                                    <option value = "Automobil">Automobil</option>
+                                                    <option value = "Kombi">Kombi</option>
+                                                    <option value = "Motocikl">Motocikl</option>
+													<option value = "Minibus">Minibus</option>
+                                                </select>
+                                                <div class="select-dropdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Broj putnika:</label>
+                                            <input class="input--style-2" type="number" value = "1" min = "1" id = "brojPutnikaPopustInput" >
+                                        </div>
+                                    </div>
+                                </div>	
+	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodna vozila"/>
+	                        </form>
+	                         <h1>&nbsp</h1>
+	                        <table hidden id="tabelaVozilaSaPopustom">
 								<thead>
 									<tr class="table100-head">
 										<th class="column1">Naziv</th>
-										<th class = "column1">Opis</th>
-										<th class="column1">Cijena €</th>
-										<th class = "column1">Način plaćanja</th>
+										<th class="column1">Marka</th>
+										<th class="column1">Model</th>
+										<th class="column1">Godina proizvodnje</th>
+										<th class="column1">Broj sjedista</th>
+										<th class="column1">Tip vozila</th>
+										<th class="column1">Ocjena</th>
+										<th class="column1">Cijena bez popusta</th>
+										<th class="column1">Cijena sa popustom</th>
+										<th class="column1"></th>
 									</tr>
 								</thead>
-								<tbody id="prikazUsluga">
+								<tbody id="prikazVozilaSaPopustom">
 								</tbody>
 							</table>
                         </div>
