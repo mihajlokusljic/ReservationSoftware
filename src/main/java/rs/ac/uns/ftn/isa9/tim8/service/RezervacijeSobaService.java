@@ -145,7 +145,6 @@ public class RezervacijeSobaService {
 
 	public Collection<BrzaRezervacijaSoba> pretraziBrzeRezervacijeSoba(PretragaSobaDTO kriterijumiPretrage)
 			throws NevalidniPodaciException {
-		// TODO Auto-generated method stub
 		Date datumDolaska = null;
 		Date datumOdlaska = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -167,15 +166,24 @@ public class RezervacijeSobaService {
 		Collection<BrzaRezervacijaSoba> rezultat = brzeRezervacijeRepository.findAll();
 		Iterator<BrzaRezervacijaSoba> it = rezultat.iterator();
 		BrzaRezervacijaSoba tekucaRezervacija = null;
+		Date tekuciDatumDolaska = null;
+		Date tekuciDatumOdlaska = null;
 		while (it.hasNext()) {
 			tekucaRezervacija = it.next();
 			if (!tekucaRezervacija.getSobaZaRezervaciju().getHotel().getId().equals(hotel.getId())) {
 				it.remove();
 				continue;
 			}
+			try {
+				//izdvajanje datuma (svodjenje date objekta samo na datum u istom formatu kao parsirani parametri pretrage)
+				tekuciDatumDolaska = df.parse(df.format(tekucaRezervacija.getDatumDolaska()));
+				tekuciDatumOdlaska = df.parse(df.format(tekucaRezervacija.getDatumOdlaska()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// ako je ponuda pocela prije dolaska ili traje i nakon odlaska punika uklanjamo je
-			if (tekucaRezervacija.getDatumDolaska().before(datumDolaska)
-					|| tekucaRezervacija.getDatumOdlaska().after(datumOdlaska)) {
+			if (tekuciDatumDolaska.before(datumDolaska) || tekuciDatumOdlaska.after(datumOdlaska)) {
 				it.remove();
 				continue;
 			}
