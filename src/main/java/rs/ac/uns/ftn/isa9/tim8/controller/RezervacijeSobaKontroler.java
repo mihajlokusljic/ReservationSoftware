@@ -84,6 +84,7 @@ public class RezervacijeSobaKontroler {
 	}
 
 	@RequestMapping(value = "/izvrsiBrzuRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> izvrsiBrzuRezervaciju(@RequestBody IzvrsavanjeBrzeRezervacijeSobeDTO podaciRezervacije) {
 		try {
 			return new ResponseEntity<String>(rezervacijeServis.izvrsiBrzuRezervaciju(
