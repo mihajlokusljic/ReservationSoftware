@@ -5,6 +5,11 @@ var rentACarServisi = [];
 var korisnik = null;
 var prijatelji = [];
 var broj_zahtjeva_za_prijateljstvo = 0;
+var rezimRezervacije = false;
+//podaci o periodu u kojem je korisnik na putovanju
+var datumDolaska = null;
+var datumOdlaska = null;
+var idPutovanja = null;
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -78,6 +83,14 @@ $(document).ready(function() {
 	
 	
 	ucitajRezervacije();
+	
+	//pretraga hotela
+	$("#hotelSearchForm").submit(function(e) {
+		e.preventDefault();
+		//funkcija iz modula hotelSearch.js
+		//paramteri su potrebni za pozivanje info stranice hotela
+		pretragaHotela(korisnik.id, datumDolaska, datumOdlaska, idPutovanja);
+	});
 	
 	//odjavljivanje
 	$("#odjava").click(function(e) {

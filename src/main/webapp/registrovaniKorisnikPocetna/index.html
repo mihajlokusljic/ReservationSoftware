@@ -95,8 +95,68 @@
 							</table>
                     	</div>
                     	
-                    	<!-- Lista hotela -->
+                    	<!-- Pretraga hotela -->
                         <div class="tab-pane" id="tab-hoteli">
+                        <form method="POST" action="#" id="hotelSearchForm" name="pretragaHotelaForma">
+                               <div class="input-group">
+                                   <label class="label">Odredište</label>
+                                   <input class="input--style-2" type="text" name="address" placeholder="Naziv hotela ili destinacije" id="hotelNaziv">
+                                   <i class="zmdi zmdi-pin input-group-symbol"></i>
+                               </div>
+                               <div class="row row-space">
+                                   <div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Datum dolaska</label>
+                                           <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+                                           <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                       </div>
+                                   </div>
+                                   <div class="col-2">
+                                       <div class="input-group">
+                                           <label class="label">Datum odlaska</label>
+                                           <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+                                           <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="input-group">
+                                   <label class="label">Potrebno soba</label>
+                                   <div class="input-group-icon" id="js-select-special">
+                                       <input class="input--style-2" type="text" name="traveller" value="Nema zahtjeva za sobe" disabled="disabled" id="info">
+                                       <i class="zmdi zmdi-chevron-down input-icon"></i>
+                                   </div>
+                                   <div class="dropdown-select">
+                                       <ul class="list-room">
+                                           <li class="list-room__item">
+                                               <span class="list-room__name">Zahtjev 1</span>
+                                               <ul class="list-person">
+                                                   <li class="list-person__item">
+                                                       <span class="name">Broj kreveta po sobi</span>
+                                                       <div class="quantity quantity1">
+                                                           <span class="minus">-</span>
+                                                           <input class="inputQty" type="number" min="0" value="0">
+                                                           <span class="plus">+</span>
+                                                       </div>
+                                                   </li>
+                                                   <li class="list-person__item">
+                                                       <span class="name">Broj soba</span>
+                                                       <div class="quantity quantity2">
+                                                           <span class="minus">-</span>
+                                                           <input class="inputQty" type="number" min="0" value="0">
+                                                           <span class="plus">+</span>
+                                                       </div>
+                                                   </li>
+                                               </ul>
+                                           </li>
+                                       </ul>
+                                       <div class="list-room__footer">
+                                           <a href="#" id="btn-add-room">Dodaj zahtjev</a>
+                                       </div>
+                                   </div>
+                               </div>
+                               <button class="btn-submit" type="submit">Pretraži</button>
+                          </form>
+                          <h1>&nbsp;</h1>
    		           		 <table class = "sortable">
 								<thead>
 									<tr class="table100-head">
@@ -105,7 +165,6 @@
 											<th class="column1">Adresa</th>
 											<th class="column1">Prosječna ocjena</th>
 											<th class = "column1">Info stranica</th>
-										
 									</tr>
 								</thead>
 								<tbody id="prikazHotela">
@@ -378,6 +437,7 @@
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
+    <script type="text/javascript" src="js/pretragaHotela.js"></script>
     <script type="text/javascript" src="js/regKor.js"></script>
     <script src="js/global.js"></script>
 	<script type="text/javascript" src="../sorttable/sorttable.js"></script>
