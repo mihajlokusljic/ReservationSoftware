@@ -52,6 +52,10 @@ $(document).ready(function(e) {
 		redirectNaPocetnu();
 	}
 	
+	if(idKorisnika != null) {
+		rezimRezervacije = true;
+	}
+	
 	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
 		rezimRezervacije = true;
 		prikaziBrzeRezervacijeZaPutovanje();
