@@ -30,6 +30,12 @@ public class AvionKontroler {
 	public ResponseEntity<Collection<Avion>> dobaviAvione() {
 		return new ResponseEntity<Collection<Avion>>(servis.dobaviAvione(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/dobaviSveAvioneZaAviokompaniju/{aviokompanijaId}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Avion>> dobaviAvione(@PathVariable("aviokompanijaId") Long aviokompanijaId) {
+		return new ResponseEntity<Collection<Avion>>(servis.dobaviAvione(aviokompanijaId), HttpStatus.OK);
+	}
+
 
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
 	public ResponseEntity<?> dodajAvion(@RequestBody AvionDTO noviAvion) {

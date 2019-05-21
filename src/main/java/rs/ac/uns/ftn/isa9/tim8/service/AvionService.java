@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.controller.AviokompanijeKontroler;
 import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.SjedisteDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
@@ -235,6 +236,13 @@ public class AvionService {
 
 		return najveciRed;
 
+	}
+
+	public Collection<Avion> dobaviAvione(Long aviokompanijaId) {
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(aviokompanijaId);
+		Aviokompanija aviokompanija = pretragaAviokompanije.get();
+		
+		return aviokompanija.getAvioni();
 	}
 
 }

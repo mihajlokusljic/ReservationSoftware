@@ -661,4 +661,11 @@ public class AviokompanijaService {
 		return novaRezervacija;
 	}
 
+	public Collection<Let> dobaviLetove(Long idAviokompanije) {
+		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(idAviokompanije);
+		Aviokompanija trazenaAviokompanija = aviokompanijaSearch.get();
+		
+		return trazenaAviokompanija.getLetovi();
+	}
+
 }

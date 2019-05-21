@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +30,11 @@ public class DestinacijeKontroler {
 	@RequestMapping(value = "/dobaviSve", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Destinacija>> dobaviDestinacije() {
 		return new ResponseEntity<Collection<Destinacija>>(servis.dobaviDestinacije(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/dobaviSveDestinacijeZaAviokompaniju/{idAviokompanije}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Destinacija>> dobaviDestinacije(@PathVariable("idAviokompanije") Long idAviokompanije) {
+		return new ResponseEntity<Collection<Destinacija>>(servis.dobaviDestinacije(idAviokompanije), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)

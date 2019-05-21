@@ -452,7 +452,7 @@ function ucitajPodatkeSistema() {
 function ucitajDestinacije() {
 	$.ajax({
 		type : "GET",
-		url : "../destinacije/dobaviSve",
+		url : "../destinacije/dobaviSveDestinacijeZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			prikaziDestinacije(response);
@@ -467,7 +467,7 @@ function ucitajDestinacije() {
 function ucitajAvione() {
 	$.ajax({
 		type : "GET",
-		url : "../avioni/dobaviSve",
+		url : "../avioni/dobaviSveAvioneZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			popuniListuZaAvione(response);
@@ -482,7 +482,7 @@ function ucitajAvione() {
 function ucitajLetove() {
 	$.ajax({
 		type : "GET",
-		url : "../letovi/dobaviSve",
+		url : "../letovi/dobaviSveLetoveZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			updateLetovi(response);
