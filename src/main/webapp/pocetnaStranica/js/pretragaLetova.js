@@ -13,8 +13,8 @@ $(document).ready(function(e) {
 				nazivAviokompanije : $("#nazivAviokompanije").val(),
 				nazivPolazista : $("#nazivPolazista").val(),
 				nazivOdredista : $("#nazivOdredista").val(),
-				datumPoletanja : $("#datumPoletanja").val(),
-				datumSletanja : $("#datumSletanja").val(),
+				datumPoletanja : $("#input-start-1").val(),
+				datumSletanja : $("#input-end-1").val(),
 				duzinaPutovanja : $("#duzinaPutovanja").val(),
 				cijenaKarte : cijenaK
 		};

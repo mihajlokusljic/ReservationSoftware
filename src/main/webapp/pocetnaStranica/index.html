@@ -25,6 +25,8 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+   	<link rel="stylesheet" href="../sorttable/sorttable.css">
+    
 </head>
 
 <body>
@@ -68,10 +70,10 @@
                             
                             <h1>&nbsp</h1>
                             
-                            <!-- Tabela za prikaz pretrazenih hotela -->
+                            <!-- Tabela za prikaz pretrazenih aviokompanija -->
                             <table>
 						<thead>
-							<tr class="table100-head">
+							<tr class="table100-head" class = "sortable">
 								<th class="column1">Slika</th>
 								<th class="column1">Naziv</th>
 								<th class="column1">Adresa</th>
@@ -149,7 +151,7 @@
                             <h1>&nbsp</h1>
                             
                             <!-- Tabela za prikaz pretrazenih hotela -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column1">Slika</th>
@@ -178,14 +180,14 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Datum dolaska</label>
-	                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-rac">
+	                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
 	                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
 	                                        </div>
 	                                    </div>
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Datum odlaska</label>
-	                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-rac">
+	                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
 	                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
 	                                        </div>
 	                                    </div>
@@ -207,7 +209,7 @@
 		                         <button class="btn-submit" type="submit">Pretraži</button>
 		                         <h1>&nbsp</h1>
 		                         
-	                    		 <table>
+	                    		 <table class = "sortable">
 									<thead>
 										<tr class="table100-head">
 											<th class="column1">Slika</th>
@@ -252,27 +254,25 @@
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum poletanja</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-1">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumPoletanja">
-                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum sletanja</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-1">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="datumSletanja">
-                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                  	<div class="input-group">
-                                     	<label class="label">Duzina putovanja</label>
-                                      	<i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
-                                       	<input class="input--style-2" type="text" id="duzinaPutovanja"  name="duzinaPutovanja" placeholder="mm/dd/yyyy" id="input-start-2">
-                                   	</div>
+                                        <div class="input-group">
+                                            <label class="label">Datum povratka (dužina putovanja):</label>
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                            <input class="input--style-2 js-single-datepicker" type="text" name="pickup" placeholder="mm/dd/yyyy" data-drop="1" id="duzinaPutovanja">
+                                            <div class="dropdown-datepicker" id="dropdown-datepicker1"></div>
+                                        </div>
                                 </div>
                                 
                                 <div class="radio-row" hidden>
@@ -300,7 +300,7 @@
                             </form>
                             <h1>&nbsp</h1>
                             <!-- Tabela za prikaz letova -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column2">Rbr</th>
@@ -343,6 +343,8 @@
     <script type="text/javascript" src="js/pretragaLetova.js"></script>
    	<script type="text/javascript" src="js/pretragaAviokompanija.js"></script>
    	<script type="text/javascript" src="js/pretragaVozila.js"></script>
+	<script type="text/javascript" src="../sorttable/sorttable.js"></script>
+   	
    	
     
     <script src="js/global.js"></script>

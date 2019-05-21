@@ -863,12 +863,10 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 				
 				Collection<BrzaRezervacijaVozila> sveBrzeRez = vratiBrzeRezervacijePoDatumu(vozilo, pocetniDatum, krajnjiDatum);
 				
-				System.out.println("Brze rez vozila: " + sveBrzeRez.size());
 				
 				if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila()) && 
 						 vozilo.getBroj_sjedista()>=kriterijumiPretrage.getBrojPutnika() && vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()){
 					
-					System.out.println("proslo");
 					brzeRezervacije.addAll(sveBrzeRez);
 
 					
