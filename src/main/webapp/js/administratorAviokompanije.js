@@ -289,6 +289,7 @@ $(document).ready(function() {
 		
 		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
 		let naziv_segmenta = $("#avioniNazivSegmentaZaDodavanje").val();
+		let dodatna_cijena_za_segment = $("#dodatnaCijenaZaSegment").val();
 		let pocetni_red = $("#pocetnaVrstaZaSegment").val();
 		let krajnji_red = $("#krajnjaVrstaZaSegment").val();
 		
@@ -296,7 +297,8 @@ $(document).ready(function() {
 				naziv : naziv_segmenta,
 				idAviona : id_aviona,
 				pocetniRed : parseInt(pocetni_red),
-				krajnjiRed : parseInt(krajnji_red)
+				krajnjiRed : parseInt(krajnji_red),
+				dodatnaCijenaZaSegment : dodatna_cijena_za_segment
 		};
 		
 		$.ajax({
@@ -591,6 +593,7 @@ function prikaziSegment(segment, tbody) {
 	let row = $("<tr></tr>");
 	
 	row.append('<td class="column3">' + segment.naziv + "</td>");
+	row.append('<td class="column6">' + segment.cijena + "</td>");
 
 	tbody.append(row);
 }

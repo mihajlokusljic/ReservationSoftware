@@ -26,6 +26,8 @@ public class Segment {
 
 	public Segment() {
 		super();
+		this.naziv = "";
+		this.cijena = 0;
 	}
 
 	public Segment(Long id, String naziv, double cijena) {

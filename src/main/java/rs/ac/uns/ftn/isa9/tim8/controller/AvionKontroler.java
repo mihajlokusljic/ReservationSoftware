@@ -50,7 +50,8 @@ public class AvionKontroler {
 	public ResponseEntity<?> dodajSegment(@RequestBody SegmentDTO segment) {
 		try {
 			return new ResponseEntity<Segment>(servis.dodajSegment(segment.getIdAviona(), segment.getNaziv(),
-					segment.getPocetniRed(), segment.getKrajnjiRed()), HttpStatus.OK);
+					segment.getPocetniRed(), segment.getKrajnjiRed(), segment.getDodatnaCijenaZaSegment()),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
@@ -84,7 +85,7 @@ public class AvionKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dobaviBrojRedovaAviona/{idAviona}", method = RequestMethod.GET)
 	public ResponseEntity<Integer> brojRedovaAviona(@PathVariable("idAviona") Long idAviona) {
 		return new ResponseEntity<Integer>(servis.dobaviBrojRedovaAviona(idAviona), HttpStatus.OK);
