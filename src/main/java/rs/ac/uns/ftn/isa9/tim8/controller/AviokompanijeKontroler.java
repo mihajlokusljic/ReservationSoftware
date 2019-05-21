@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
@@ -98,6 +99,16 @@ public class AviokompanijeKontroler {
 	public ResponseEntity<?> dodajBrzuRezervacijuKarte(@RequestBody BrzaRezervacijaKarteDTO novaRezervacija) {
 		try {
 			return new ResponseEntity<BrzaRezervacijaKarteDTO>(servis.dodajBrzuRezervaciju(novaRezervacija), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping(value = "/zadajPopustBrzojRezervaciji", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	public ResponseEntity<?> zadajPopustBrzeRezervacije(@RequestBody BrzaRezervacijaKarteDTO brzaRezervacija) {
+		try {
+			return new ResponseEntity<BrzaRezervacijaKarteDTO>(servis.zadajPopustBrzeRezervacije(brzaRezervacija), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}

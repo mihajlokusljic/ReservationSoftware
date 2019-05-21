@@ -576,9 +576,6 @@ public class AviokompanijaService {
 
 	public BrzaRezervacijaKarteDTO dodajBrzuRezervaciju(BrzaRezervacijaKarteDTO novaRezervacija)
 			throws NevalidniPodaciException {
-		// BrzaRezervacijaKarteDTO d = new BrzaRezervacijaKarteDTO(id, letId,
-		// aviokompanijaId, sjedisteId, datumPolaska, datumDolaska, cijena,
-		// procenatPopusta)
 		Optional<Let> letSearch = letoviRepository.findById(novaRezervacija.getId());
 
 		if (!letSearch.isPresent()) {
@@ -653,7 +650,7 @@ public class AviokompanijaService {
 		}
 
 		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(trazenoSjediste, datumPolaska, datumDolaska, 0, 0);
-		
+
 		brs.setCijena(trazeniLet.getCijenaKarte() + trazenoSjediste.getSegment().getCijena());
 		brzaRezervacijaSjedistaRepository.save(brs);
 		novaRezervacija.setId(brs.getId());
@@ -664,8 +661,40 @@ public class AviokompanijaService {
 	public Collection<Let> dobaviLetove(Long idAviokompanije) {
 		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(idAviokompanije);
 		Aviokompanija trazenaAviokompanija = aviokompanijaSearch.get();
-		
+
 		return trazenaAviokompanija.getLetovi();
+	}
+
+	public BrzaRezervacijaKarteDTO zadajPopustBrzeRezervacije(BrzaRezervacijaKarteDTO brzaRezervacija)
+			throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSjedista> rezervacijaSearch = brzaRezervacijaSjedistaRepository
+				.findById(brzaRezervacija.getId());
+
+		if (!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji brza rezervacija sa datim id-jem.");
+		}
+
+		BrzaRezervacijaSjedista rezervacija = rezervacijaSearch.get();
+		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		Aviokompanija aviokompanija = admin.getAviokompanija();
+
+		if (!rezervacija.getAviokompanija().getId().equals(aviokompanija.getId())) {
+			throw new NevalidniPodaciException(
+					"Niste ulogovani kao odgovarajuci administrator aviokompanije za datu rezervaciju.");
+		}
+
+		int popust = brzaRezervacija.getProcenatPopusta();
+		if (popust < 0) {
+			throw new NevalidniPodaciException("Popust ne moze biti negativan.");
+		}
+		if (popust > 100) {
+			throw new NevalidniPodaciException("Popust ne moze biti veci od 100 procenata.");
+		}
+		rezervacija.setProcenatPopusta(popust);
+		brzaRezervacijaSjedistaRepository.save(rezervacija);
+
+		return brzaRezervacija;
 	}
 
 }
