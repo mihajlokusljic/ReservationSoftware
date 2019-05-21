@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevRezervacijaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
