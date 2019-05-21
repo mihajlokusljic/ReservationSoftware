@@ -852,7 +852,7 @@ function profilServisa(){
 
 function odjava() {
 	removeJwtToken();
-	window.location.replace("../login/login.html");
+	window.location.replace("../pocetnaStranica/index.html");
 }
 
 function profilKorisnika(){
