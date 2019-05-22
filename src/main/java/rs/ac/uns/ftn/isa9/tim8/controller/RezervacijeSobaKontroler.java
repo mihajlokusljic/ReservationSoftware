@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeBrzeRezervacijeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevRezervacijaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelskeSobeService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
@@ -89,6 +90,16 @@ public class RezervacijeSobaKontroler {
 		try {
 			return new ResponseEntity<String>(rezervacijeServis.izvrsiBrzuRezervaciju(
 					podaciRezervacije.getIdBrzeRezervacije(), podaciRezervacije.getIdPutovanja()), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/izvrsiRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<String> izvrsiRezervacijuSoba(@RequestBody ZahtjevRezervacijaSobaDTO rezervacijaPodaci) {
+		try {
+			return new ResponseEntity<String>(rezervacijeServis.izvrsiRezervacijuSoba(rezervacijaPodaci), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

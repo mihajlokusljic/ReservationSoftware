@@ -14,6 +14,16 @@
             $('#input-start').val(start.format('MM/DD/YYYY'));
             $('#input-end').val(end.format('MM/DD/YYYY'));
         });
+        
+        $('#input-start-1').daterangepicker({
+            ranges: true,
+            autoApply: true,
+            applyButtonClasses: false,
+            autoUpdateInput: false
+        },function (start, end) {
+            $('#input-start-1').val(start.format('MM/DD/YYYY'));
+            $('#input-end-1').val(end.format('MM/DD/YYYY'));
+        });
     
         $('#input-start-2').daterangepicker({
             ranges: true,

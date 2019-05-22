@@ -776,7 +776,7 @@ function prikaziSobeZaBrzuRezervaciju(sobe) {
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1">' + soba.brojSobe + '</td>');
 		noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
-		noviRed.append('<td class="column1">' + soba.cijena + '</td>');
+		noviRed.append('<td class="column1">' + soba.cijenaBoravka + '</td>');
 		noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 		noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 		noviRed.append('<td class="column1">' + soba.kolona + '</td>');

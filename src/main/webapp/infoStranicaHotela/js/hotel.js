@@ -155,11 +155,30 @@ function prikaziPodatkeHotela() {
 function pretragaSoba() {
 	let _datumDolaska = $("#input-start").val();
 	let _datumOdlaska = $("#input-end").val();
+	let _minCijena = $("#minCijenaBoravka").val();
+	let _maxCijena = $("#maxCijenaBoravka").val();
+	
+	if(_minCijena == "") {
+		_minCijena = null;
+	}
+	if(_maxCijena == "") {
+		_maxCijena = null;
+	}
+	
+	if(_minCijena != null && _maxCijena != null) {
+		if(_minCijena > _maxCijena) {
+			alert("Minimalna cijena ne smije biti veća od maksimalne cijene.");
+			return;
+		}
+	}
+	
 	
 	let pretragaSobaHotela = {
 			idHotela: podaciHotela.id,
 			datumDolaska: _datumDolaska,
 			datumOdlaska: _datumOdlaska,
+			minCijenaBoravka: _minCijena,
+			maxCijenaBoravka: _maxCijena
 	}
 	
 	$.ajax({
@@ -318,7 +337,7 @@ function prikaziSobe(sobe) {
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1">' + soba.brojSobe + '</td>');
 		noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
-		noviRed.append('<td class="column1">' + soba.cijena + '</td>');
+		noviRed.append('<td class="column1">' + soba.cijenaBoravka + '</td>');
 		noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 		noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 		noviRed.append('<td class="column1">' + soba.kolona + '</td>');

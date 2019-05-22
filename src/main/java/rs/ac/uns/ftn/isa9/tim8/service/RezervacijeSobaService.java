@@ -13,15 +13,18 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevRezervacijaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.HotelskaSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.PutovanjeRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaSobeRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
@@ -43,6 +46,9 @@ public class RezervacijeSobaService {
 	
 	@Autowired
 	protected PutovanjeRepository putovanjeRepository;
+	
+	@Autowired
+	protected HotelskaSobaRepository sobeRepository;
 
 	public BrzaRezervacijaSobeDTO dodajUslugeBrzeRezervacije(BrzaRezervacijaSobeDTO brzaRezervacija)
 			throws NevalidniPodaciException {
@@ -220,6 +226,109 @@ public class RezervacijeSobaService {
 			putovanjeRepository.save(putovanje);
 		}
 		return "Uspjesno ste rezervisali sobu.";
+	}
+
+	public String izvrsiRezervacijuSoba(ZahtjevRezervacijaSobaDTO rezervacijaPodaci) throws NevalidniPodaciException {
+		// TODO Auto-generated method stub
+		Date datumDolaska = null;
+		Date datumOdlaska = null;
+		Putovanje putovanje = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		int brojKreveta = 0;
+		int brojOsoba = 0;
+		try {
+			datumDolaska = df.parse(rezervacijaPodaci.getDatumDolaska());
+			datumOdlaska = df.parse(rezervacijaPodaci.getDatumOdlaksa());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		if(datumOdlaska.before(datumDolaska)) {
+			throw new NevalidniPodaciException("Datum odlaska ne može biti poslije datuma dolaska.");
+		}
+		if(datumDolaska.after(datumOdlaska)) {
+			throw new NevalidniPodaciException("Datum dolaska ne može biti nakon datum odlaska.");
+		}
+		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(rezervacijaPodaci.getPutovanjeId());
+		if(putovanjeSearch.isPresent()) {
+			putovanje = putovanjeSearch.get();
+			brojOsoba = putovanje.getRezervacijeSjedista().size();
+		}
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		double ukupnaCijena = 0;
+		int ukupanProcenatPopusta = 0;
+		Optional<Usluga> uslugaSearch = null;
+		Usluga usluga = null;
+		if(putovanje != null) {
+			for(Long idUsluge : rezervacijaPodaci.getDodatneUslugeIds()) {
+				uslugaSearch = uslugeRepository.findById(idUsluge);
+				if(!uslugaSearch.isPresent()) {
+					throw new NevalidniPodaciException("Zadata je nepostojeća dodatna usluga.");
+				}
+				usluga = uslugaSearch.get();
+				putovanje.getDodatneUsluge().add(usluga);
+				ukupanProcenatPopusta += usluga.getProcenatPopusta();
+				switch (usluga.getNacinPlacanja()) {
+				case DNEVNO:
+				{
+					ukupnaCijena += usluga.getCijena() * brojNocenja;
+					break;
+				}
+				case DNEVNO_PO_OSOBI:
+				{
+					ukupnaCijena += usluga.getCijena() * brojNocenja * brojOsoba;
+					break;
+				}
+				case FIKSNO:
+				{
+					ukupnaCijena += usluga.getCijena();
+					break;
+				}
+				case FIKSNO_PO_OSOBI:
+				{
+					ukupnaCijena += usluga.getCijena() * brojOsoba;
+					break;
+				}
+				default:
+					break;
+				}
+				
+			}
+		}
+		
+		Optional<HotelskaSoba> sobaSearch = null;
+		HotelskaSoba soba = null;
+		RezervacijaSobe rezervacijaSobe = null;
+		double cijenaBoravka, popust = 0;
+		for(Long idSobe : rezervacijaPodaci.getSobeZaRezervacijuIds()) {
+			sobaSearch = sobeRepository.findById(idSobe);
+			if(!sobaSearch.isPresent()) {
+				throw new NevalidniPodaciException("Ne postoji zadata soba.");
+			}
+			soba = sobaSearch.get();
+			brojKreveta += soba.getBrojKreveta();
+			if(putovanje != null &&  brojKreveta > brojOsoba) {
+				//uraditi rollback, rezervacija nece biti dozvoljena
+				throw new NevalidniPodaciException("Ukupan broj kreveta rezervisanih soba premašuje broj rezervisanih karata.");
+			}
+			cijenaBoravka = soba.getCijena() * brojNocenja;
+			popust = cijenaBoravka * ukupanProcenatPopusta / 100.0;
+			cijenaBoravka -= popust;
+			ukupnaCijena += cijenaBoravka;
+			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
+			rezervacijeRepository.save(rezervacijaSobe);
+			if (putovanje != null) {
+				putovanje.getRezervacijeSoba().add(rezervacijaSobe);
+			}
+		}
+		
+		if(putovanje != null) {
+			putovanjeRepository.save(putovanje);
+		}
+		return "Uspješno ste rezervisali hotelski smještaj.";
 	}
 
 }
