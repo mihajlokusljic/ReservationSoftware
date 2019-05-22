@@ -1,16 +1,18 @@
-function getJwtToken(token_key){
+let token_key = "jwtToken";
+
+function getJwtToken(){
 	return localStorage.getItem(token_key);
 }
 
-function setJwtToken(token_key, token){
+function setJwtToken(token){
 	localStorage.setItem(token_key, token);
 }
 
-function removeJwtToken(token_key){
+function removeJwtToken(){
 	localStorage.removeItem(token_key);
 }
 
-function createAuthorizationTokenHeader(token_key){
+function createAuthorizationTokenHeader(){
 	var token = getJwtToken(token_key)
 	
 	if(token){
