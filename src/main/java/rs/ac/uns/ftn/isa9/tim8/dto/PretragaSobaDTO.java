@@ -4,6 +4,8 @@ public class PretragaSobaDTO {
 	protected String datumDolaska;
 	protected String datumOdlaska;
 	protected Long idHotela;
+	protected Double minCijenaBoravka;
+	protected Double maxCijenaBoravka;
 	public PretragaSobaDTO() {
 		super();
 	}
@@ -30,6 +32,18 @@ public class PretragaSobaDTO {
 	}
 	public void setIdHotela(Long idHotela) {
 		this.idHotela = idHotela;
+	}
+	public Double getMinCijenaBoravka() {
+		return minCijenaBoravka;
+	}
+	public void setMinCijenaBoravka(Double minCijenaBoravka) {
+		this.minCijenaBoravka = minCijenaBoravka;
+	}
+	public Double getMaxCijenaBoravka() {
+		return maxCijenaBoravka;
+	}
+	public void setMaxCijenaBoravka(Double maxCijenaBoravka) {
+		this.maxCijenaBoravka = maxCijenaBoravka;
 	}
 	
 }
