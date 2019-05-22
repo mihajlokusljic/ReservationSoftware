@@ -56,16 +56,23 @@
             <div class="card card-3">
                 <div class="card-body">
                     <ul class="tab-list">
-                        <li class="tab-list__item active">
+                        <li class="dropdown active">
                             <a class="tab-list__link" href="#tab-destinacije" data-toggle="tab" id = "destinacije">Destinacije</a>
                         </li>
-                        <li class="tab-list__item">
+                        <li class="dropdown">
                             <a class="tab-list__link" href="#tab-avioni" data-toggle="tab" id = "avioni">Avioni</a>
                         </li>
-                        <li class="tab-list__item">
+                        <li class="dropdown">
                             <a class="tab-list__link" href="#tab-letovi" data-toggle="tab" id = "letovi">Letovi</a>
                         </li>
-						<li class="tab-list__item">
+                  		<li class="dropdown" id = "stavka_brze_rezervacije">
+	                       	<a class="tab-list__link" href="#tab-brzeRezervacije" data-toggle="dropdown" id ="brzeRezervacije" >Brze rezervacije</a>
+	                      	<ul class="dropdown-content">
+	                    		<li><a href="#" id ="dodavanjeBrzeRezervacije">Dodavanje</a></li>
+	                    		<li><a href="#" id ="pregledanjeBrzihRezervacija">Pregledanje</a></li>
+	                    	</ul>
+                       	</li>
+						<li class="dropdown">
                             <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
                         </li>
                    		<li class="dropdown" id = "profilKorisnickiTab">
@@ -75,13 +82,13 @@
 								  	<li><a href="#" id = "promjeni_lozinku_tab">Promjeni lozinku</a></li>
 								</ul>
 	                   	</li>
-						<li class="tab-list__item">
+						<li class="dropdown">
                             <a class="tab-list__link" href="#tab-profilAviokompanije" data-toggle="tab" id = "profilAviokomp">Profil aviokompanije</a>
                         </li>
-                        <li class="tab-list__item">
+                        <li class="dropdown">
                             <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id = "dodatneUsluge">Dodatne usluge</a>
                         </li>
-						<li class="tab-list__item">
+						<li class="dropdown">
                             <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
                         </li>
                     </ul>
@@ -536,6 +543,100 @@
 					</table>
 					
 				</div>
+                        <!-- Rad sa brzim rezervacijama -->
+                        <div class="tab-pane" id="tab-brze-rezervacije-dodavanje">
+                            <h2 class="zaglavlje">Dodavanje brze rezervacije</h2>
+                            <div class="radio-row">
+                                <label class="radio-container m-r-45">1: Zadajte vremenski period i izaberite vozilo
+                                    <input type="radio" name="class" checked="checked" id="izborVozilaBrzeRezervacijeBtn">
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                                <label class="radio-container m-r-45">2: Zadajte popust
+                                    <input type="radio" name="class" id="definisanjePopustaBrzeRezervacijeBtn">
+                                    <span class="radio-checkmark"></span>
+                                </label>
+                            </div>
+                            <p>&nbsp</p>
+                            
+                            <div id="izborVozilaBrzeRezervacije">
+                            	<form method="POST" action="#" id="pretragaVozilaForm">
+	                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum preuzimanja</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum vraćanja</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                	</div>
+	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodna vozila"/>
+	                        		</form>
+	                        		<h1>&nbsp</h1>
+	                        		<div id="vozilaBrzeRezervacije" hidden="hidden">
+			                        <table id="tabelaVozilaBrzeRezervacije">
+										<thead>
+											<tr class="table100-head">
+												<th class="column1">Naziv</th>
+												<th class="column1">Marka</th>
+												<th class="column1">Model</th>
+												<th class="column1">Tip</th>
+												<th class="column1">Godina proizvodnje</th>
+												<th class="column6">Cijena po danu</th>
+												<th class="column1">Ocjena</th>
+												<th class="column1">Izabrana</th>
+											</tr>
+										</thead>
+										<tbody id="prikazVozilaBrzeRezervacije">
+										</tbody>
+									</table>
+									<button class="btn btn-submit" id="zadajVoziloBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
+									</div>
+                            </div>
+                                                    
+                            <div id="definisanjePopustaBrzeRezervacije" hidden="hidden">
+                            	<div class="input-group">
+                                    <label class="label">Ukupna cijena iznajmljivanja vozila (bez zadatog popusta):</label>
+                                    <input class="input--style-2" type="text" name="origin" readonly="readonly" id="ukupnaCijenaBezPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Procenat popusta:</label>
+                                    <input class="input--style-2" type="number" min="0" max="100" value="0" required="required" placeholder="Unesite procenat popusta" id="procenatPopustaBrzeRezervacije">
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Ukupna cijena iznajmljivanja vozila (sa zadatim popustom):</label>
+                                    <input class="input--style-2" type="text" readonly="readonly" id="ukupnaCijenaSaPopustomBrzeRezervacije">
+                                </div>
+                                <p style="color: white;">*Napomena: konačna cijena rezervacije zavisi od broja poena korisnika koji je rezerviše</p>
+                                <button  class="btn btn-submit" id="zadavanjePopustaBrzeRezervacijeBtn">Potvrdi i završi</button>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        <div class="tab-pane" id="tab-brze-rezervacije-pregledanje">
+                            <h2 class="zaglavlje">Pregledanje brzih rezervacija</h2>                    
+                       		 <table id="tabelaBrzeRezervacije">
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Vozilo</th>
+										<th class="column1">Rent-a-car servis</th>
+										<th class="column1">Početni datum</th>
+										<th class="column1">Krajnji datum</th>
+										<th class="column1">Puna cijena</th>
+										<th class="column1">Cijena sa popustom</th>
+									</tr>
+								</thead>
+								<tbody id="prikazBrzeRezervacije">
+								</tbody>
+							</table>
+                        </div>
 
 						<div class="tab-pane" id="tab-izvjestaj">
                             Izvjestaj
