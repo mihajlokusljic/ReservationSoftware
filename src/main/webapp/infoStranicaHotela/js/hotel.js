@@ -165,6 +165,13 @@ function pretragaSoba() {
 		_maxCijena = null;
 	}
 	
+	if(_minCijena != null && _maxCijena != null) {
+		if(_minCijena > _maxCijena) {
+			alert("Minimalna cijena ne smije biti veća od maksimalne cijene.");
+			return;
+		}
+	}
+	
 	
 	let pretragaSobaHotela = {
 			idHotela: podaciHotela.id,

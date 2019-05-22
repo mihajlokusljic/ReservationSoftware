@@ -107,27 +107,27 @@
 	                                    <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Datum dolaska</label>
-	                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
+	                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start" required="required">
 	                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
 	                                        </div>
 	                                    </div>
 		                                 <div class="col-2">
 		                                    	<div class="input-group">
 		                                            <label class="label">Datum odlaska</label>
-		                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
+		                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end" required="required">
 		                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
 		                                        </div>
 		                                </div>
 		                                <div class="col-2">
 	                                        <div class="input-group">
 	                                            <label class="label">Minimalna cijena boravka €:</label>
-	                                            <input class="input--style-2" type="number" step="0.1" value="0" placeholder="Unesite minimalnu cijenu za cjenovni rang" name="check-in" id="minCijenaBoravka">
+	                                            <input class="input--style-2" type="number" step="0.1" min="0" value="0" placeholder="Unesite minimalnu cijenu za cjenovni rang" name="check-in" id="minCijenaBoravka">
 	                                        </div>
 	                                    </div>
 		                                 <div class="col-2">
 		                                    	<div class="input-group">
 		                                            <label class="label">Maksimalna cijena boravka €:</label>
-		                                            <input class="input--style-2" type="number" step="0.1" placeholder="Unesite maksimalnu cijenu za cjenovni rang" name="check-out" id="maxCijenaBoravka">
+		                                            <input class="input--style-2" type="number" step="0.1" min="0" placeholder="Unesite maksimalnu cijenu za cjenovni rang" name="check-out" id="maxCijenaBoravka">
 		                                        </div>
 		                                </div>
 	                                </div>
