@@ -29,6 +29,14 @@ public class DestinacijaService {
 	public Collection<Destinacija> dobaviDestinacije() {
 		return destinacijeRepository.findAll();
 	}
+	
+	public Collection<Destinacija> dobaviDestinacije(Long idAviokompanije) {
+		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(idAviokompanije);
+		
+		Aviokompanija trazenaAviokompanija = aviokompanijaSearch.get();
+
+		return trazenaAviokompanija.getDestinacije();
+	}
 
 	public Collection<Destinacija> vratiDestinacijeOsnovno(Collection<Destinacija> destinacije) {
 		return destinacije;

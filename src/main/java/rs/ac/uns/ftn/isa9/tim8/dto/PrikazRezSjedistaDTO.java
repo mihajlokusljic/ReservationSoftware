@@ -5,42 +5,32 @@ import java.util.Date;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 
 public class PrikazRezSjedistaDTO {
-	
-	protected Long idRezervacije;
-	
-	protected String nazivAviokompanije;
-	
-	protected String brojLeta;
-	
-	protected double cijena;
 
-	protected Sjediste sjediste;	
-	
-	protected String destinacijaPolaska;
-	
-	protected String destinacijaDolaska;
-	
+	protected Long idRezervacije;
+
 	protected Date datumPolaska;
-	
+
 	protected Date datumDolaska;
 
-	public PrikazRezSjedistaDTO(Long idRezervacije, String nazivAviokompanije, String brojLeta, double cijena,
-			Sjediste sjediste, String destinacijaPolaska, String destinacijaDolaska, Date datumPolaska,
-			Date datumDolaska) {
-		super();
-		this.idRezervacije = idRezervacije;
-		this.nazivAviokompanije = nazivAviokompanije;
-		this.brojLeta = brojLeta;
-		this.cijena = cijena;
-		this.sjediste = sjediste;
-		this.destinacijaPolaska = destinacijaPolaska;
-		this.destinacijaDolaska = destinacijaDolaska;
-		this.datumPolaska = datumPolaska;
-		this.datumDolaska = datumDolaska;
-	}
+	protected Sjediste sjediste;
+
+	protected double originalnaCijena;
+
+	protected double popust;
 
 	public PrikazRezSjedistaDTO() {
 		super();
+	}
+
+	public PrikazRezSjedistaDTO(Long idRezervacije, Date datumPolaska, Date datumDolaska, Sjediste sjediste,
+			double originalnaCijena, double popust) {
+		super();
+		this.idRezervacije = idRezervacije;
+		this.datumPolaska = datumPolaska;
+		this.datumDolaska = datumDolaska;
+		this.sjediste = sjediste;
+		this.originalnaCijena = originalnaCijena;
+		this.popust = popust;
 	}
 
 	public Long getIdRezervacije() {
@@ -49,54 +39,6 @@ public class PrikazRezSjedistaDTO {
 
 	public void setIdRezervacije(Long idRezervacije) {
 		this.idRezervacije = idRezervacije;
-	}
-
-	public String getNazivAviokompanije() {
-		return nazivAviokompanije;
-	}
-
-	public void setNazivAviokompanije(String nazivAviokompanije) {
-		this.nazivAviokompanije = nazivAviokompanije;
-	}
-
-	public String getBrojLeta() {
-		return brojLeta;
-	}
-
-	public void setBrojLeta(String brojLeta) {
-		this.brojLeta = brojLeta;
-	}
-
-	public double getCijena() {
-		return cijena;
-	}
-
-	public void setCijena(double cijena) {
-		this.cijena = cijena;
-	}
-
-	public Sjediste getSjediste() {
-		return sjediste;
-	}
-
-	public void setSjediste(Sjediste sjediste) {
-		this.sjediste = sjediste;
-	}
-
-	public String getDestinacijaPolaska() {
-		return destinacijaPolaska;
-	}
-
-	public void setDestinacijaPolaska(String destinacijaPolaska) {
-		this.destinacijaPolaska = destinacijaPolaska;
-	}
-
-	public String getDestinacijaDolaska() {
-		return destinacijaDolaska;
-	}
-
-	public void setDestinacijaDolaska(String destinacijaDolaska) {
-		this.destinacijaDolaska = destinacijaDolaska;
 	}
 
 	public Date getDatumPolaska() {
@@ -114,6 +56,29 @@ public class PrikazRezSjedistaDTO {
 	public void setDatumDolaska(Date datumDolaska) {
 		this.datumDolaska = datumDolaska;
 	}
-	
-	
+
+	public Sjediste getSjediste() {
+		return sjediste;
+	}
+
+	public void setSjediste(Sjediste sjediste) {
+		this.sjediste = sjediste;
+	}
+
+	public double getOriginalnaCijena() {
+		return originalnaCijena;
+	}
+
+	public void setOriginalnaCijena(double originalnaCijena) {
+		this.originalnaCijena = originalnaCijena;
+	}
+
+	public double getPopust() {
+		return popust;
+	}
+
+	public void setPopust(double popust) {
+		this.popust = popust;
+	}
+
 }

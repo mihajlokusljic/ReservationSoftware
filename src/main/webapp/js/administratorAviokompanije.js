@@ -6,6 +6,8 @@ let podrazumjevana_slika = "https://assets.nst.com.my/images/articles/PELANCARAN
 let mapaAviokompanije = null;
 let mapaDestinacije = null;
 let zoomLevel = 17;
+let stavkeMenija = ["stavka_destinacije", "stavka_avioni", "stavka_letovi", "stavka_brze_rezervacije", "stavka_izvjestaj", "profilKorisnickiTab",
+	"stavka_profil_aviokompanije", "stavka_dodatne_usluge", "stavka_odjava"];
 
 $(document).ready(function() {
 	
@@ -35,6 +37,8 @@ $(document).ready(function() {
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 	});
 	
 	$("#avioni").click(function(e){
@@ -47,7 +51,10 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
 	});
 	
 	$("#letovi").click(function(e){
@@ -61,8 +68,82 @@ $(document).ready(function() {
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
 	});
 
+	$("#dodavanjeBrzeRezervacije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_brze_rezervacije");
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").show();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
+		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").show();
+	});
+	
+	$("#pregledanjeBrzihRezervacija").click(function(e) {
+		e.preventDefault();
+		vratiSveBrzeRezervacije();
+		aktivirajStavkuMenija("stavkaBrzeRezervacije");
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").show();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
+		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").show();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
+	});
+	
+	//prikaz koraka za dodavanje brze rezervacije
+	$("#izborLetaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#izborLetaBrzeRezervacijeBtn").is(":checked")) {
+			$("#izborLetaBrzeRezervacije").show();
+			$("#definisanjePopustaBrzeRezervacije").hide();
+		}
+	});
+	
+	$("#definisanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		if ($("#definisanjePopustaBrzeRezervacijeBtn").is(":checked")) {
+			$("#definisanjePopustaBrzeRezervacije").show();
+			$("#izborLetaBrzeRezervacije").hide();
+		}
+	});
+	
+	//pretraga letova za brzu rezervaciju
+	$("#pretragaVozilaForm").submit(function(e) {
+		e.preventDefault();
+		pretraziSlobodnaVozila();
+	});
+	
+	//zadavanje letova za brze rezervacije
+	$("#zadajVoziloBrzeRezervacijeBtn").click(function (e) {
+		e.preventDefault();
+		zadajVoziloBrzeRez();
+	});
+	//izmjena procenta popusta kod brzih rezervacija
+	$("#procenatPopustaBrzeRezervacije").change(function(e) {
+		e.preventDefault();
+		azurirajCijeneBrzeRezervacije();
+	});
+	//zadavanje procenta popusta kod brzih rezervacija
+	$("#zadavanjePopustaBrzeRezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		zadavanjePopustaBrzeRezervacije();
+	});
+	
 	$("#izvjestaj").click(function(e){
 		e.preventDefault();
 		$("#tab-destinacije").hide();
@@ -73,11 +154,15 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
 	});
 
 	$("#izmjeni_podatke_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("#profilKorisnickiTab");
 		$("#tab-destinacije").hide();
 		$("#tab-avioni").hide();
 		$("#tab-letovi").hide();
@@ -87,12 +172,14 @@ $(document).ready(function() {
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		profilKorisnika();
-		aktivirajStavkuMenija("#profilKorisnickiTab");
 	});
 	
 	$("#promjeni_lozinku_tab").click(function(e){
 		e.preventDefault();
+		aktivirajStavkuMenija("#profilKorisnickiTab");
 		$("#tab-destinacije").hide();
 		$("#tab-avioni").hide();
 		$("#tab-letovi").hide();
@@ -102,7 +189,10 @@ $(document).ready(function() {
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
 		promjeniLozinku();
+
 	});
 	
 	$("#profilAviokomp").click(function(e){
@@ -116,6 +206,9 @@ $(document).ready(function() {
 		$("#tab-profilAviokompanije").show();
 		$("#tab-dodatne-usluge").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
 	});
 	
 	$("#dodatneUsluge").click(function(e){
@@ -128,7 +221,10 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-profilAviokompanije").hide();
 		$("#tab-dodatne-usluge").show();
-		$("#tab-odjava").hide();	
+		$("#tab-odjava").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+
 	});
 	
 	$("#dodavanjeDodatneUslugeForm").submit(function(e) {
@@ -289,6 +385,7 @@ $(document).ready(function() {
 		
 		let id_aviona = $("#avionZaDodavanjeNekogSegmentaSelect").val();
 		let naziv_segmenta = $("#avioniNazivSegmentaZaDodavanje").val();
+		let dodatna_cijena_za_segment = $("#dodatnaCijenaZaSegment").val();
 		let pocetni_red = $("#pocetnaVrstaZaSegment").val();
 		let krajnji_red = $("#krajnjaVrstaZaSegment").val();
 		
@@ -296,7 +393,8 @@ $(document).ready(function() {
 				naziv : naziv_segmenta,
 				idAviona : id_aviona,
 				pocetniRed : parseInt(pocetni_red),
-				krajnjiRed : parseInt(krajnji_red)
+				krajnjiRed : parseInt(krajnji_red),
+				dodatnaCijenaZaSegment : dodatna_cijena_za_segment
 		};
 		
 		$.ajax({
@@ -450,7 +548,7 @@ function ucitajPodatkeSistema() {
 function ucitajDestinacije() {
 	$.ajax({
 		type : "GET",
-		url : "../destinacije/dobaviSve",
+		url : "../destinacije/dobaviSveDestinacijeZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			prikaziDestinacije(response);
@@ -465,7 +563,7 @@ function ucitajDestinacije() {
 function ucitajAvione() {
 	$.ajax({
 		type : "GET",
-		url : "../avioni/dobaviSve",
+		url : "../avioni/dobaviSveAvioneZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			popuniListuZaAvione(response);
@@ -480,7 +578,7 @@ function ucitajAvione() {
 function ucitajLetove() {
 	$.ajax({
 		type : "GET",
-		url : "../letovi/dobaviSve",
+		url : "../letovi/dobaviSveLetoveZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
 			updateLetovi(response);
@@ -591,6 +689,7 @@ function prikaziSegment(segment, tbody) {
 	let row = $("<tr></tr>");
 	
 	row.append('<td class="column3">' + segment.naziv + "</td>");
+	row.append('<td class="column6">' + segment.cijena + "</td>");
 
 	tbody.append(row);
 }
@@ -726,7 +825,7 @@ function profilKorisnika(){
 		let admin = {
 				id: podaciAdmina.id,
 				ime: imeAdmina,
-				prezime: podaciAdmina.prezime,
+				prezime: prezimeAdmina,
 				email: podaciAdmina.email,
 				lozinka: podaciAdmina.lozinka,
 				brojTelefona: brTelefonaAdmina,

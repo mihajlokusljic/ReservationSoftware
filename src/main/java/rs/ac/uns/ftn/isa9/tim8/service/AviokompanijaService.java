@@ -13,26 +13,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
-import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AviokompanijaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.BrzaRezervacijaSjedistaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.Rezervacija_sjedistaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.SjedisteRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
@@ -55,6 +63,12 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected UslugeRepository uslugeRepository;
+
+	@Autowired
+	protected Rezervacija_sjedistaRepository rezervacijaSjedistaRepository;
+
+	@Autowired
+	protected BrzaRezervacijaSjedistaRepository brzaRezervacijaSjedistaRepository;
 
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
@@ -504,7 +518,6 @@ public class AviokompanijaService {
 		return rezultat;
 	}
 
-
 	public Usluga dodajUsluguAviokompanije(UslugaDTO novaUsluga) throws NevalidniPodaciException {
 
 		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(novaUsluga.getIdPoslovnice());
@@ -531,6 +544,158 @@ public class AviokompanijaService {
 		aviokompanijaRepository.save(aviokompanija);
 
 		return usluga;
+	}
+
+	public Boolean sjedisteJeRezervisano(Sjediste sjediste, Date datumPolaska, Date datumDolaska) {
+		if (datumPolaska == null || datumDolaska == null) {
+			return false;
+		}
+
+		for (RezervacijaSjedista r : rezervacijaSjedistaRepository.findAllBySjediste(sjediste)) {
+			if (datumPolaska.compareTo(r.getLet().getDatumPoletanja()) < 0
+					&& datumDolaska.compareTo(r.getLet().getDatumSletanja()) > 0) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Boolean sjedisteJeNaBrzojRezervaciji(Sjediste sjediste, Date datumPolaska, Date datumDolaska) {
+		if (datumPolaska == null || datumDolaska == null) {
+			return false;
+		}
+
+		for (BrzaRezervacijaSjedista r : brzaRezervacijaSjedistaRepository.findAllBySjediste(sjediste)) {
+			if (datumPolaska.compareTo(r.getLet().getDatumPoletanja()) < 0
+					&& datumDolaska.compareTo(r.getLet().getDatumSletanja()) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public BrzaRezervacijaKarteDTO dodajBrzuRezervaciju(BrzaRezervacijaKarteDTO novaRezervacija)
+			throws NevalidniPodaciException {
+		Optional<Let> letSearch = letoviRepository.findById(novaRezervacija.getId());
+
+		if (!letSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji let sa datim id-jem.");
+		}
+
+		Let trazeniLet = letSearch.get();
+		Sjediste trazenoSjediste = null;
+
+		Boolean postojiLiTakvoSjediste = false;
+
+		for (Sjediste s : trazeniLet.getAvion().getSjedista()) {
+			if (s.getId().equals(novaRezervacija.getSjedisteId())) {
+				postojiLiTakvoSjediste = true;
+				trazenoSjediste = s;
+			}
+		}
+
+		if (!postojiLiTakvoSjediste) {
+			throw new NevalidniPodaciException("Ne postoji sjediste sa datim id-jem.");
+		}
+
+		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		Aviokompanija aviokompanija = admin.getAviokompanija();
+
+		/*
+		 * Ako aviokompanija kojoj pripada trazeniLet nije ova kojom operise admin, onda
+		 * nije dobro razrijeseno ovlascenje
+		 */
+
+		Boolean pripadaLiLet = false;
+		for (Let l : aviokompanija.getLetovi()) {
+			if (l.getId().equals(trazeniLet.getId())) {
+				pripadaLiLet = true;
+			}
+		}
+
+		if (!pripadaLiLet) {
+			throw new NevalidniPodaciException("Niste ulogovani kao odgovarajuci administrator aviokompanije.");
+		}
+
+		Date datumPolaska = null;
+		Date datumDolaska = null;
+		Date danasnjiDatum = null;
+
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+		try {
+			datumPolaska = novaRezervacija.getDatumPolaska();
+			datumDolaska = novaRezervacija.getDatumDolaska();
+			danasnjiDatum = df.parse(df.format(new Date()));
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+
+		if (datumPolaska.before(danasnjiDatum) || datumDolaska.before(danasnjiDatum)) {
+			throw new NevalidniPodaciException("Datumi ne smiju biti u proslosti.");
+		}
+
+		if (datumDolaska.before(datumPolaska)) {
+			throw new NevalidniPodaciException("Datum dolaska ne moze biti prije datuma polaska.");
+		}
+
+		if (sjedisteJeRezervisano(trazenoSjediste, datumPolaska, datumDolaska)) {
+			throw new NevalidniPodaciException("Dato sjediste je vec rezervisano u zadatom vremenskom periodu.");
+		}
+
+		if (sjedisteJeNaBrzojRezervaciji(trazenoSjediste, datumPolaska, datumDolaska)) {
+			throw new NevalidniPodaciException(
+					"Dato sjediste se vec nalazi na brzoj rezervaciji u zadatom vremenskom periodu.");
+		}
+
+		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(trazenoSjediste, datumPolaska, datumDolaska, 0, 0);
+
+		brs.setCijena(trazeniLet.getCijenaKarte() + trazenoSjediste.getSegment().getCijena());
+		brzaRezervacijaSjedistaRepository.save(brs);
+		novaRezervacija.setId(brs.getId());
+		novaRezervacija.setCijena(brs.getCijena());
+		return novaRezervacija;
+	}
+
+	public Collection<Let> dobaviLetove(Long idAviokompanije) {
+		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(idAviokompanije);
+		Aviokompanija trazenaAviokompanija = aviokompanijaSearch.get();
+
+		return trazenaAviokompanija.getLetovi();
+	}
+
+	public BrzaRezervacijaKarteDTO zadajPopustBrzeRezervacije(BrzaRezervacijaKarteDTO brzaRezervacija)
+			throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSjedista> rezervacijaSearch = brzaRezervacijaSjedistaRepository
+				.findById(brzaRezervacija.getId());
+
+		if (!rezervacijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji brza rezervacija sa datim id-jem.");
+		}
+
+		BrzaRezervacijaSjedista rezervacija = rezervacijaSearch.get();
+		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		Aviokompanija aviokompanija = admin.getAviokompanija();
+
+		if (!rezervacija.getAviokompanija().getId().equals(aviokompanija.getId())) {
+			throw new NevalidniPodaciException(
+					"Niste ulogovani kao odgovarajuci administrator aviokompanije za datu rezervaciju.");
+		}
+
+		int popust = brzaRezervacija.getProcenatPopusta();
+		if (popust < 0) {
+			throw new NevalidniPodaciException("Popust ne moze biti negativan.");
+		}
+		if (popust > 100) {
+			throw new NevalidniPodaciException("Popust ne moze biti veci od 100 procenata.");
+		}
+		rezervacija.setProcenatPopusta(popust);
+		brzaRezervacijaSjedistaRepository.save(rezervacija);
+
+		return brzaRezervacija;
 	}
 
 }
