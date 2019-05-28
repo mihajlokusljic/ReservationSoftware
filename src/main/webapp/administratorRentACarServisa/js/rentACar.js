@@ -235,7 +235,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
-		profilKorisnika();
+		prihodiServisa();
 	})
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -1293,5 +1293,34 @@ function prikaziBrzeRez(brzeRez){
 		noviRed.append('<td class="column1">' + br.cijenaSaPopustom + '</td>');
 		
 		prikaz.append(noviRed);
+	})
+}
+
+function prihodiServisa(){
+	$("#prihod_id").hide();
+	$("#forma_prihodi").submit(function(e){
+		e.preventDefault();
+		let _datumPocetni = $("#input-start-2").val();
+		let _datumKrajnji = $("#input-end-2").val();
+		
+		let datumiZaPrihod = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		}
+		
+		let idServisa = rentACarServis.id;
+		$.ajax({
+			type : 'POST',
+			url : "../rentACar/prihodServisa/" + idServisa,
+			data : JSON.stringify(datumiZaPrihod),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				$("#prihod_id").text("Ostvareni prihodi: " + response);
+				$("#prihod_id").show();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
 	})
 }
