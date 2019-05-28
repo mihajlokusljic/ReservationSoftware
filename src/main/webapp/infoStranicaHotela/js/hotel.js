@@ -86,6 +86,21 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		redirectNaPocetnu();
 	});
+	
+	//prikaz koraka za rezervaciju sobe
+	$("#izborSobeBtn").click(function(e) {
+		if ($("#izborSobeBtn").is(":checked")) {
+			$("#pretragaIzborSoba").show();
+			$("#izborDodatnihUsluga").hide();
+		}
+	});
+	
+	$("#izborDodatnihUslugaBtn").click(function(e) {
+		if ($("#izborDodatnihUslugaBtn").is(":checked")) {
+			$("#izborDodatnihUsluga").show();
+			$("#pretragaIzborSoba").hide();
+		}
+	});
 });
 
 function ucitajPodatkeHotela() {
@@ -149,6 +164,17 @@ function prikaziPodatkeHotela() {
 		noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
 		noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
 		tabelaUsluga.append(noviRed);
+	});
+	
+	let tabelaIzborUsluga = $("#izborUslugaRezervacija");
+	$.each(podaciHotela.cjenovnikDodatnihUsluga, function(i, usluga) {
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+		noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
+		noviRed.append('<td class="column1">' + usluga.procenatPopusta + ' %</td>');
+		noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
+		noviRed.append('<td class="column6"><input type="checkbox" class="rezervacijaUsluge" id="ru' + usluga.id + '"/></td>');
+		tabelaIzborUsluga.append(noviRed);
 	});
 }
 
@@ -350,8 +376,15 @@ function prikaziSobe(sobe) {
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
+		if(rezimRezervacije) {
+			noviRed.append('<td class="column6"><input type="checkbox" class="rezervacijaSobe" id="rs' + soba.id + '"/></td>');
+		}
 		prikaz.append(noviRed);
-	})
+	});
+	
+	if(rezimRezervacije) {
+		$("#zadajSobeRezervacijeBtn").show();
+	}
 }
 
 function redirectNaPocetnu() {
