@@ -24,6 +24,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
@@ -889,5 +890,18 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		}
 		
 		return brzeRez;
+	}
+
+	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException {
+		
+		Optional<RezervacijaVozila> pretragaRez = rezervacijaVozilaRepository.findById(id);
+		
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rezervacija zadatim id-em");
+		}
+		
+		RezervacijaVozila rez = pretragaRez.get();
+		rezervacijaVozilaRepository.delete(rez);
+		return "Uspjesno ste otkazali rezervaciju vozila";
 	}
 }

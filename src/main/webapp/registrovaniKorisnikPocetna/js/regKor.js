@@ -852,6 +852,7 @@ function prikaziRezVozila(vozila){
 			async : false,
 			success: function(response) {
 				alert(response);
+				ucitajRezervisanaVozila();
 			},
 		});
 		
