@@ -56,13 +56,13 @@
             <div class="card card-3">
                 <div class="card-body">
                     <ul class="tab-list">
-                        <li class="dropdown active">
+                        <li class="dropdown active" id="stavka_destinacije">
                             <a class="tab-list__link" href="#tab-destinacije" data-toggle="tab" id = "destinacije">Destinacije</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="stavka_avioni">
                             <a class="tab-list__link" href="#tab-avioni" data-toggle="tab" id = "avioni">Avioni</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="stavka_letovi">
                             <a class="tab-list__link" href="#tab-letovi" data-toggle="tab" id = "letovi">Letovi</a>
                         </li>
                   		<li class="dropdown" id = "stavka_brze_rezervacije">
@@ -72,7 +72,7 @@
 	                    		<li><a href="#" id ="pregledanjeBrzihRezervacija">Pregledanje</a></li>
 	                    	</ul>
                        	</li>
-						<li class="dropdown">
+						<li class="dropdown" id = "stavka_izvjestaj">
                             <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
                         </li>
                    		<li class="dropdown" id = "profilKorisnickiTab">
@@ -82,13 +82,13 @@
 								  	<li><a href="#" id = "promjeni_lozinku_tab">Promjeni lozinku</a></li>
 								</ul>
 	                   	</li>
-						<li class="dropdown">
+						<li class="dropdown" id="stavka_profil_aviokompanije">
                             <a class="tab-list__link" href="#tab-profilAviokompanije" data-toggle="tab" id = "profilAviokomp">Profil aviokompanije</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="stavka_dodatne_usluge">
                             <a class="tab-list__link" href="#tab-dodatne-usluge" data-toggle="tab" id = "dodatneUsluge">Dodatne usluge</a>
                         </li>
-						<li class="dropdown">
+						<li class="dropdown" id="stavka_odjava">
                             <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
                         </li>
                     </ul>
@@ -547,8 +547,8 @@
                         <div class="tab-pane" id="tab-brze-rezervacije-dodavanje">
                             <h2 class="zaglavlje">Dodavanje brze rezervacije</h2>
                             <div class="radio-row">
-                                <label class="radio-container m-r-45">1: Zadajte vremenski period i izaberite vozilo
-                                    <input type="radio" name="class" checked="checked" id="izborVozilaBrzeRezervacijeBtn">
+                                <label class="radio-container m-r-45">1: Zadajte vremenski period i izaberite let
+                                    <input type="radio" name="class" checked="checked" id="izborLetaBrzeRezervacijeBtn">
                                     <span class="radio-checkmark"></span>
                                 </label>
                                 <label class="radio-container m-r-45">2: Zadajte popust
@@ -558,8 +558,8 @@
                             </div>
                             <p>&nbsp</p>
                             
-                            <div id="izborVozilaBrzeRezervacije">
-                            	<form method="POST" action="#" id="pretragaVozilaForm">
+                            <div id="izborLetaBrzeRezervacije">
+                            	<form method="POST" action="#" id="pretragaLetaRezForm">
 	                                <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
@@ -576,33 +576,34 @@
                                         </div>
                                     </div>
                                 	</div>
-	                                <input type="submit" class="btn btn-submit" value="Pretraži slobodna vozila"/>
+	                                <input type="submit" class="btn btn-submit" value="Pretraži letove"/>
 	                        		</form>
 	                        		<h1>&nbsp</h1>
-	                        		<div id="vozilaBrzeRezervacije" hidden="hidden">
-			                        <table id="tabelaVozilaBrzeRezervacije">
+	                        		<div id="letoviBrzeRezervacije" hidden="hidden">
+			                        <table id="tabelaLetovaBrzeRezervacije">
 										<thead>
 											<tr class="table100-head">
-												<th class="column1">Naziv</th>
-												<th class="column1">Marka</th>
-												<th class="column1">Model</th>
-												<th class="column1">Tip</th>
-												<th class="column1">Godina proizvodnje</th>
-												<th class="column6">Cijena po danu</th>
-												<th class="column1">Ocjena</th>
+												<th class="column2">Broj leta</th>
+												<th class="column3">Naziv polazišta</th>
+												<th class="column3">Naziv odredišta</th>
+												<th class="column1">Datum poletanja</th>
+												<th class="column1">Datum sletanja</th>
+												<th class="column5">Broj presjedanja</th>
+												<th class="column6">Cijena karte</th>
+												<th class="column6">Prosječna ocjena</th>
 												<th class="column1">Izabrana</th>
 											</tr>
 										</thead>
-										<tbody id="prikazVozilaBrzeRezervacije">
+										<tbody id="prikazLetovaBrzeRezervacije">
 										</tbody>
 									</table>
-									<button class="btn btn-submit" id="zadajVoziloBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
+									<button class="btn btn-submit" id="zadajLetBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
 									</div>
                             </div>
                                                     
                             <div id="definisanjePopustaBrzeRezervacije" hidden="hidden">
                             	<div class="input-group">
-                                    <label class="label">Ukupna cijena iznajmljivanja vozila (bez zadatog popusta):</label>
+                                    <label class="label">Ukupna cijena avionske karte (bez zadatog popusta):</label>
                                     <input class="input--style-2" type="text" name="origin" readonly="readonly" id="ukupnaCijenaBezPopustaBrzeRezervacije">
                                 </div>
                                 <div class="input-group">
@@ -610,7 +611,7 @@
                                     <input class="input--style-2" type="number" min="0" max="100" value="0" required="required" placeholder="Unesite procenat popusta" id="procenatPopustaBrzeRezervacije">
                                 </div>
                                 <div class="input-group">
-                                    <label class="label">Ukupna cijena iznajmljivanja vozila (sa zadatim popustom):</label>
+                                    <label class="label">Ukupna cijena avionske karte (sa zadatim popustom):</label>
                                     <input class="input--style-2" type="text" readonly="readonly" id="ukupnaCijenaSaPopustomBrzeRezervacije">
                                 </div>
                                 <p style="color: white;">*Napomena: konačna cijena rezervacije zavisi od broja poena korisnika koji je rezerviše</p>
@@ -625,11 +626,12 @@
                        		 <table id="tabelaBrzeRezervacije">
 								<thead>
 									<tr class="table100-head">
-										<th class="column1">Vozilo</th>
-										<th class="column1">Rent-a-car servis</th>
-										<th class="column1">Početni datum</th>
-										<th class="column1">Krajnji datum</th>
-										<th class="column1">Puna cijena</th>
+										<th class="column3">Naziv polazišta</th>
+										<th class="column3">Naziv odredišta</th>
+										<th class="column1">Datum poletanja</th>
+										<th class="column1">Datum sletanja</th>
+										<th class="column1">Mjesto u avionu</th>
+										<th class="column1">Originalna cijena</th>
 										<th class="column1">Cijena sa popustom</th>
 									</tr>
 								</thead>
