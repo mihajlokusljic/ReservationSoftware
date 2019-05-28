@@ -6,7 +6,7 @@ var mapaRacServisa = null;
 var mapaFilijaleDodavanje = null;
 var mapaFilijaleIzmjena = null;
 var zoomLevel = 17;
-let stavkeMenija = ["stavka_vozila", "stavka_filijale", "stavka_brze_rezervacije", "stavka_profil_servisa", "stavka_profil_korisnika", "stavka_izvjestaj", "stavka_odjava"];
+let stavkeMenija = ["stavka_vozila", "stavka_filijale", "stavka_brze_rezervacije", "stavka_profil_servisa", "stavka_profil_korisnika", "stavka_izvjestaj", "stavka_odjava", "stavka_izvjestaj"];
 
 $(document).ready(function() {
 	
@@ -48,6 +48,8 @@ $(document).ready(function() {
 		$("#tab-vozila").show();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-servisa").hide();
+
 		dobaviSvaVozilaServisa();
 		ponudiFilijale();
 
@@ -69,6 +71,8 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-servisa").hide();
+
 		dobaviSveFilijale();
 	
 	});
@@ -89,6 +93,7 @@ $(document).ready(function() {
 		$("#tab-profil-lozinka").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-servisa").hide();
 		profilServisa();
 	});
 	
@@ -114,6 +119,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-servisa").hide();
 		profilKorisnika();
 	})
 	
@@ -133,6 +139,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-servisa").hide();
 		promjeniLozinku();
 	})
 	$("#dodaj_vozilo_dugme").click(function(e){
@@ -186,6 +193,8 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-prihodi-servisa").hide();
+
 	});
 	
 	$("#pregledanjeBrzihRezervacija").click(function(e) {
@@ -205,8 +214,29 @@ $(document).ready(function() {
 		$("#tab-prikaz-vozila").hide();
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-prihodi-servisa").hide();
 
 	});
+	
+	$("#prikazi_prihode_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_izvjestaj");
+		$("#tab-prihodi-servisa").show();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		prihodiServisa();
+	})
 	
 	//prikaz koraka za dodavanje brze rezervacije
 	$("#izborVozilaBrzeRezervacijeBtn").click(function(e) {
@@ -1263,5 +1293,34 @@ function prikaziBrzeRez(brzeRez){
 		noviRed.append('<td class="column1">' + br.cijenaSaPopustom + '</td>');
 		
 		prikaz.append(noviRed);
+	})
+}
+
+function prihodiServisa(){
+	$("#prihod_id").hide();
+	$("#forma_prihodi").submit(function(e){
+		e.preventDefault();
+		let _datumPocetni = $("#input-start-2").val();
+		let _datumKrajnji = $("#input-end-2").val();
+		
+		let datumiZaPrihod = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		}
+		
+		let idServisa = rentACarServis.id;
+		$.ajax({
+			type : 'POST',
+			url : "../rentACar/prihodServisa/" + idServisa,
+			data : JSON.stringify(datumiZaPrihod),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				$("#prihod_id").text("Ostvareni prihodi: " + response);
+				$("#prihod_id").show();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
 	})
 }

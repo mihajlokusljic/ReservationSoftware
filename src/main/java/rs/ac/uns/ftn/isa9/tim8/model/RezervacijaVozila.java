@@ -28,11 +28,11 @@ public class RezervacijaVozila {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "rezervisano_vozilo_id", referencedColumnName = "id")
 	protected Vozilo rezervisanoVozilo;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mjesto_preuzimanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoPreuzimanjaVozila;
 	
@@ -40,7 +40,7 @@ public class RezervacijaVozila {
 	@Temporal(TemporalType.DATE)
 	protected Date datumPreuzimanjaVozila;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mjesto_vracanja_vozila", referencedColumnName = "id")
 	protected Filijala mjestoVracanjaVozila;
 	

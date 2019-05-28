@@ -32,9 +32,11 @@ public class RegistrovanKorisnik extends Osoba {
 	protected Set<RegistrovanKorisnik> prijatelji;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	@JsonIgnore
 	protected Set<Pozivnica> primljenePozivnice;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	@JsonIgnore
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL, mappedBy= "inicijatorPutovanja")

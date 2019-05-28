@@ -76,6 +76,10 @@
 	                        </li>
 							<li class="dropdown" id = "stavka_izvjestaj">
 	                            <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
+	                            <ul class="dropdown-content">
+								  <li><a href="#" id = "prikazi_prihode_tab">Prihodi servisa</a></li>
+								  <li><a href="#" id = "grafik_rez_vozila_tab">Rezervisana vozila</a></li>
+								</ul>
 	                        </li>
 							<li class="dropdown" id = "stavka_odjava">
 	                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id = "odjava">Odjavi se</a>
@@ -524,6 +528,30 @@
 	                                </div> 
 	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
                         		</form>
+                        	</div>
+                        	<div class="tab-pane" id="tab-prihodi-servisa">
+                        		<h2 class="zaglavlje">Prihodi servisa</h2>
+                        		<form id = "forma_prihodi">                    
+                        		 <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Od</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Do</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-submit">Prikaži</button>
+                                </form>
+                                <br>
+                                <h3 hidden class = "prihod" id = "prihod_id">Ostvareni prihod: 5000.00</h3>
                         	</div>
 	                    </div>                    
                 	</div>

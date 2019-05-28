@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
@@ -261,6 +263,26 @@ public class RentACarKontroler {
 	public ResponseEntity<?> pretraziVozilaSaPopustom(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
 		try {
 			return new ResponseEntity<Collection<BrzaRezervacijaVozila> >(this.servis.pretraziVozilaSaPopustom(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/otkaziRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> otkaziRezervaciju(@RequestBody Long id) {
+		try {
+			return new ResponseEntity<String >(this.servis.otkaziRezervaciju(id), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/prihodServisa/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+	public ResponseEntity<?> prihodServisa(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa ) {
+		try {
+			return new ResponseEntity<String >(this.servis.izracunajPrihode(datumiDto, idServisa), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
