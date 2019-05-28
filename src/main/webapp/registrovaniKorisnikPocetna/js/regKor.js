@@ -828,9 +828,33 @@ function prikaziRezVozila(vozila){
 		noviRed.append('<td class="column1">' + vozilo.mjestoVracanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + vozilo.id + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
+	});
+	
+	$(".otkaziRezervaciju").click(function(e){
+		e.preventDefault();
+		let rezervacija = vozila[e.target.id];
+		var datumP = Date.parse(rezervacija.datumPreuzimanja);
+		var sadasnjiDatum = new Date();
+		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
+		if (diff<2){
+			alert("Zakasnili ste sa otkazivanjem rezervacije vozila.");
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url : "../rentACar/otkaziRezervaciju",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacija.idRezervacije),
+			async : false,
+			success: function(response) {
+				alert(response);
+			},
+		});
+		
 	});
 }
 

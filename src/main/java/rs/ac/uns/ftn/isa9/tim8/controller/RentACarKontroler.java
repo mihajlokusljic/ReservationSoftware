@@ -265,4 +265,14 @@ public class RentACarKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+//	@RequestMapping(value = "/pretraziVozilaSaPopustom", method = RequestMethod.POST)
+//	public ResponseEntity<?> pretraziVozilaSaPopustom(@RequestBody PretragaVozilaDTO kriterijumiPretrage) {
+//		try {
+//			return new ResponseEntity<Collection<BrzaRezervacijaVozila> >(this.servis.pretraziVozilaSaPopustom(kriterijumiPretrage), HttpStatus.OK);
+//		} catch (NevalidniPodaciException e) {
+//			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//		}
+//	}
+	
 }
