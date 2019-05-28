@@ -21,6 +21,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.RezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.VoziloDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorRentACar;
@@ -265,4 +266,15 @@ public class RentACarKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/otkaziRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> otkaziRezervaciju(@RequestBody Long id) {
+		try {
+			return new ResponseEntity<String >(this.servis.otkaziRezervaciju(id), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }
