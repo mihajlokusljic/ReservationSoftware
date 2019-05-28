@@ -5,17 +5,19 @@ public class SegmentDTO {
 	protected Long idAviona;
 	protected int pocetniRed; // po redovima dodjeljujemo segmente za sjedista
 	protected int krajnjiRed; // ako stavis npr od 1 do 3, onda ces u prva tri reda dodijeliti ovaj segment
+	protected double dodatnaCijenaZaSegment;
 
 	public SegmentDTO() {
 		super();
 	}
 
-	public SegmentDTO(String naziv, Long idAviona, int pocetniRed, int krajnjiRed) {
+	public SegmentDTO(String naziv, Long idAviona, int pocetniRed, int krajnjiRed, double dodatnaCijenaZaSegment) {
 		super();
 		this.naziv = naziv;
 		this.idAviona = idAviona;
 		this.pocetniRed = pocetniRed;
 		this.krajnjiRed = krajnjiRed;
+		this.dodatnaCijenaZaSegment = dodatnaCijenaZaSegment;
 	}
 
 	public String getNaziv() {
@@ -48,6 +50,14 @@ public class SegmentDTO {
 
 	public void setKrajnjiRed(int krajnjiRed) {
 		this.krajnjiRed = krajnjiRed;
+	}
+
+	public double getDodatnaCijenaZaSegment() {
+		return dodatnaCijenaZaSegment;
+	}
+
+	public void setDodatnaCijenaZaSegment(double dodatnaCijenaZaSegment) {
+		this.dodatnaCijenaZaSegment = dodatnaCijenaZaSegment;
 	}
 
 }

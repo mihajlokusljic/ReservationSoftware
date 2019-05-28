@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.controller.AviokompanijeKontroler;
 import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.SjedisteDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
@@ -54,8 +55,8 @@ public class AvionService {
 		return null;
 	}
 
-	public Segment dodajSegment(Long idAviona, String nazivSegmenta, int pocetniRed, int krajnjiRed)
-			throws NevalidniPodaciException {
+	public Segment dodajSegment(Long idAviona, String nazivSegmenta, int pocetniRed, int krajnjiRed,
+			double dodatnaCijenaZaSegment) throws NevalidniPodaciException {
 		Optional<Avion> avionSearch = avionRepository.findById(idAviona);
 		Avion a = null;
 
@@ -64,7 +65,8 @@ public class AvionService {
 			for (Segment s : a.getSegmenti()) {
 				if (s.getNaziv().equalsIgnoreCase("")) {
 					s.setNaziv(nazivSegmenta);
-										
+					s.setCijena(dodatnaCijenaZaSegment);
+					
 					for (Sjediste ss : a.getSjedista()) {
 						if (ss.getRed() >= pocetniRed) {
 							if (ss.getRed() <= krajnjiRed) {
@@ -72,7 +74,7 @@ public class AvionService {
 							}
 						}
 					}
-					
+
 					avionRepository.save(a);
 					return s;
 				}
@@ -221,19 +223,26 @@ public class AvionService {
 
 	public Integer dobaviBrojRedovaAviona(Long idAviona) {
 		Optional<Avion> optionalAvion = avionRepository.findById(idAviona);
-		
+
 		Avion a = optionalAvion.get();
-		
+
 		int najveciRed = 0;
-		
+
 		for (Sjediste s : a.getSjedista()) {
 			if (s.getRed() > najveciRed) {
 				najveciRed = s.getRed();
 			}
 		}
-		
+
 		return najveciRed;
+
+	}
+
+	public Collection<Avion> dobaviAvione(Long aviokompanijaId) {
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(aviokompanijaId);
+		Aviokompanija aviokompanija = pretragaAviokompanije.get();
 		
+		return aviokompanija.getAvioni();
 	}
 
 }

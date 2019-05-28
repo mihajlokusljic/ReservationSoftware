@@ -29,11 +29,18 @@ public class LetoviKontroler {
 	public ResponseEntity<Collection<Let>> dobaviLetove() {
 		return new ResponseEntity<Collection<Let>>(servis.dobaviLetove(), HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(value = "/dobaviSveLetoveZaAviokompaniju/{idAviokompanije}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Let>> dobaviLetove(@PathVariable("idAviokompanije") Long idAviokompanije) {
+		return new ResponseEntity<Collection<Let>>(servis.dobaviLetove(idAviokompanije),
+				HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/letoviAviokompanije/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> dobaviLetoveAviokompanije(@PathVariable("id") Long aviokompanijaId) {
 		try {
-			return new ResponseEntity<Collection<Let> >(servis.dobaviLetoveAviokompanije(aviokompanijaId), HttpStatus.OK);
+			return new ResponseEntity<Collection<Let>>(servis.dobaviLetoveAviokompanije(aviokompanijaId),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -42,12 +49,12 @@ public class LetoviKontroler {
 	@RequestMapping(value = "/dodaj", method = RequestMethod.POST)
 	public ResponseEntity<?> dodajLet(@RequestBody LetDTO noviLet) {
 		try {
-		return new ResponseEntity<Let>(servis.dodajLet(noviLet), HttpStatus.OK);
+			return new ResponseEntity<Let>(servis.dodajLet(noviLet), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/pretraziLetove", method = RequestMethod.POST)
 	public ResponseEntity<?> pretraziLetove(@RequestBody PretragaLetaDTO kriterijumiPretrage) {
 		try {
