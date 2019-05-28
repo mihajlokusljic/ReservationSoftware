@@ -103,7 +103,7 @@
                         <!-- Pretraga soba -->
                         <div class="tab-pane" id="tab-sobe">
                         	<!-- Koraci rezervacije -->
-                        	<div class="radio-row">
+                        	<div class="radio-row" id="rezervacijaSobaKoraci" hidden="hidden">
                                 <label class="radio-container m-r-45">1: Zadajte vremenski period boravka i izaberite sobe
                                     <input type="radio" name="class" checked="checked" id="izborSobeBtn">
                                     <span class="radio-checkmark"></span>
@@ -158,7 +158,7 @@
 											<th class="column1">Red</th>
 											<th class="column1">Kolona</th>
 											<th class="column1">Ocjena</th>
-											<th class="column6">Izabrana</th>
+											<th class="column6" id="izborSobeCol" hidden="hidden">Izabrana</th>
 										</tr>
 									</thead>
 									<tbody id="prikazSoba">
@@ -167,7 +167,7 @@
 								<button style="display: none;" class="btn btn-submit" id="zadajSobeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
                         	</div>
                         	
-                        	<!-- Izbor dodatnih usluga za rezervaciju -->
+                        	<!-- Izbor dodatnih usluga i rezervacija -->
                         	<div id="izborDodatnihUsluga" hidden="hidden">
                         		<table>
 								<thead>
@@ -182,7 +182,7 @@
 								<tbody id="izborUslugaRezervacija">
 								</tbody>
 								</table>
-								<button class="btn btn-submit" id="zadajDodatneUslugeBrzeRezervacijeBtn">Potrvrdi i rezerviši</button>
+								<button class="btn btn-submit" id="uslugeIRezervacijaBtn">Potrvrdi i rezerviši</button>
                         	</div>
                         </div>
                         

@@ -54,6 +54,8 @@ $(document).ready(function(e) {
 	
 	if(idKorisnika != null) {
 		rezimRezervacije = true;
+		$("#rezervacijaSobaKoraci").show();
+		$("#izborSobeCol").show();
 	}
 	
 	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
@@ -101,7 +103,78 @@ $(document).ready(function(e) {
 			$("#pretragaIzborSoba").hide();
 		}
 	});
+	
+	//izbor soba za rezevaciju i prelazak na izbor dodatnih usluga
+	$("#zadajSobeRezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		$("#izborDodatnihUsluga").show();
+		$("#pretragaIzborSoba").hide();
+		$("#izborSobeBtn")[0].checked = false;
+		$("#izborDodatnihUslugaBtn")[0].checked = true;
+	});
+	
+	//izbor dodatnih usluga i rezervacija smjestaja
+	$("#uslugeIRezervacijaBtn").click(function(e) {
+		e.preventDefault();
+		izvrsiRezervaciju();
+	});
 });
+
+function izvrsiRezervaciju() {
+	let sobeIds = [];
+	let uslugeIds = [];
+	let idSobe = null;
+	let idUsluge = null;
+	
+	let sobeBtns = $(".rezervacijaSobe");
+	$.each(sobeBtns, function(i, btn) {
+		if(btn.checked) {
+			idSobe = btn.id.substring(2); //id dugmeta je tipa "rs<id sobe>"
+			sobeIds.push(idSobe);
+		}
+	});
+	if(sobeIds.length == 0) {
+		alert("Morate izabrati bar jednu sobu.");
+		return;
+	}
+	
+	let uslugeBtns = $(".rezervacijaUsluge");
+	$.each(uslugeBtns, function(i, btn) {
+		if(btn.checked) {
+			idUsluge = btn.id.substring(2); //id dugmeta je tipa "ru<id usluge>"
+			uslugeIds.push(idUsluge);
+		}
+	});
+	
+	let _datumDolaska = $("#input-start").val();
+	let _datumOdlaska = $("#input-end").val();
+	
+	if(_datumDolaska == "" || _datumOdlaska == "") {
+		alert("Period boravka mora biti zadat.");
+		return;
+	}
+	
+	let rezervacija = {
+			sobeZaRezervacijuIds: sobeIds,
+			dodatneUslugeIds: uslugeIds,
+			putovanjeId: idPutovanja,
+			datumDolaska: _datumDolaska,
+			datumOdlaksa: _datumOdlaska
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../rezervacijeSoba/izvrsiRezervaciju",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(rezervacija),
+		success: function(response) {
+			alert(response);
+			redirectNaPocetnu();
+		},
+	});
+	
+	
+}
 
 function ucitajPodatkeHotela() {
 	$.ajax({
