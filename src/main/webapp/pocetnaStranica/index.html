@@ -25,6 +25,8 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
+   	<link rel="stylesheet" href="../sorttable/sorttable.css">
+    
 </head>
 
 <body>
@@ -69,9 +71,9 @@
                             <h1>&nbsp</h1>
                             
                             <!-- Tabela za prikaz pretrazenih aviokompanija -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
-							<tr class="table100-head">
+							<tr class="table100-head" >
 								<th class="column1">Slika</th>
 								<th class="column1">Naziv</th>
 								<th class="column1">Adresa</th>
@@ -146,10 +148,10 @@
                                 <button class="btn-submit" type="submit">Pretraži</button>
                             </form>
                             
-                            <h1>&nbsp</h1>
+                            <h1>&nbsp;</h1>
                             
                             <!-- Tabela za prikaz pretrazenih hotela -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column1">Slika</th>
@@ -191,23 +193,12 @@
 	                                    </div>
 	                                </div>
 	                            <div class="row row-space">
-		                    		<div class="col-2">
-		                                  <div class="input-group">
-		                                      <label class = "label">Sortiraj po:</label>
-		                                      <div class="rs-select2 js-select-simple select--no-search">
-		                                          <select name="tip_vozila" id = "tip_vozila_input">
-		                                              <option selected="selected">Nazivu</option>
-		                                              <option>Adresi</option>
-		                                          </select>
-	<!-- 	                                          <div class="select-dropdown"></div> -->
-		                                      </div>
-		                                  </div>                                 	
-		                             </div>
+		                    		
 		                         </div>
 		                         <button class="btn-submit" type="submit">Pretraži</button>
 		                         <h1>&nbsp</h1>
 		                         
-	                    		 <table>
+	                    		 <table class = "sortable">
 									<thead>
 										<tr class="table100-head">
 											<th class="column1">Slika</th>
@@ -298,7 +289,7 @@
                             </form>
                             <h1>&nbsp</h1>
                             <!-- Tabela za prikaz letova -->
-                            <table>
+                            <table class = "sortable">
 						<thead>
 							<tr class="table100-head">
 								<th class="column2">Rbr</th>
@@ -341,6 +332,8 @@
     <script type="text/javascript" src="js/pretragaLetova.js"></script>
    	<script type="text/javascript" src="js/pretragaAviokompanija.js"></script>
    	<script type="text/javascript" src="js/pretragaVozila.js"></script>
+	<script type="text/javascript" src="../sorttable/sorttable.js"></script>
+   	
    	
     
     <script src="js/global.js"></script>

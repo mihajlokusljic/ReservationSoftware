@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.SobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
@@ -178,8 +179,17 @@ public class HotelskeSobeService {
 		}
 		return false;
 	}
+	
+	public long brojNocenja(Date datumDolaska, Date datumOdlaska) {
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		return brojNocenja;
+	}
 
-	public Collection<HotelskaSoba> pretraziSobeHotela(PretragaSobaDTO kriterijumiPretrage) throws NevalidniPodaciException {
+	public Collection<SobaDTO> pretraziSobeHotela(PretragaSobaDTO kriterijumiPretrage) throws NevalidniPodaciException {
 		Optional<Hotel> hotelSearch = this.hoteliRepository.findById(kriterijumiPretrage.getIdHotela());
 		if(!hotelSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji zadati hotel.");
@@ -194,10 +204,32 @@ public class HotelskeSobeService {
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
-		ArrayList<HotelskaSoba> rezultat = new ArrayList<HotelskaSoba>();
+		if (pocetniDatum != null && krajnjiDatum != null) {
+			if (krajnjiDatum.before(pocetniDatum)) {
+				throw new NevalidniPodaciException("Datum odlaska ne smije biti prije datuma dolaska.");
+			}
+			if (pocetniDatum.after(krajnjiDatum)) {
+				throw new NevalidniPodaciException("Datum dolaska ne smije biti nakon datuma odlaska.");
+			} 
+		}
+		long brojNocenja = this.brojNocenja(pocetniDatum, krajnjiDatum);
+		Double minCijena = 0d;
+		Double maxCijena = Double.POSITIVE_INFINITY;
+		if(kriterijumiPretrage.getMinCijenaBoravka() != null) {
+			minCijena = kriterijumiPretrage.getMinCijenaBoravka();
+		}
+		if(kriterijumiPretrage.getMaxCijenaBoravka() != null) {
+			maxCijena = kriterijumiPretrage.getMaxCijenaBoravka();
+		}
+		ArrayList<SobaDTO> rezultat = new ArrayList<SobaDTO>();
+		double cijenaBoravka = 0;
 		for(HotelskaSoba s : hotel.getSobe()) {
+			cijenaBoravka = s.getCijena() * brojNocenja;
+			if(cijenaBoravka < minCijena || cijenaBoravka > maxCijena) {
+				continue;
+			}
 			if(!this.sobaJeRezervisana(s, pocetniDatum, krajnjiDatum) && !this.sobaJeNaBrzojRezervaciji(s, pocetniDatum, krajnjiDatum)) {
-				rezultat.add(s);
+				rezultat.add(new SobaDTO(s.getId(), s.getBrojSobe(), s.getBrojKreveta(), s.getSprat(), s.getVrsta(), s.getKolona(), cijenaBoravka, s.getSumaOcjena(), s.getBrojOcjena()));
 			}
 		}
 		return rezultat;
@@ -238,11 +270,7 @@ public class HotelskeSobeService {
 			throw new NevalidniPodaciException("Data soba se vec nalazi na brzoj rezervaciji u zadatom vremenskom periodu");
 		}
 		BrzaRezervacijaSoba brs = new BrzaRezervacijaSoba(datumDolaska, datumOdlaska, 0, 0, new HashSet<Usluga>(), target);
-		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
-		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
-		if(brojNocenja == 0) {
-			brojNocenja = 1;
-		}
+		long brojNocenja = this.brojNocenja(datumDolaska, datumOdlaska);
 		brs.setBaznaCijena(brojNocenja * target.getCijena());
 		this.brzeRezervacijeRepository.save(brs);
 		novaRezervacija.setId(brs.getId());

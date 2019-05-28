@@ -41,53 +41,18 @@ public class Putovanje {
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name="putovanje_usluga", joinColumns=@JoinColumn(name="putovanje_id"), inverseJoinColumns=@JoinColumn(name="usluga_id"))
-	protected Set<Usluga> dodatne_usluge;
+	protected Set<Usluga> dodatneUsluge;
 
 	public Putovanje() {
 		super();
-	}
-
-	public Set<Pozivnica> getPozivnice() {
-		return pozivnice;
-	}
-
-	public void setPozivnice(Set<Pozivnica> pozivnice) {
-		this.pozivnice = pozivnice;
-	}
-
-
-	public Set<RezervacijaVozila> getRezervacijeVozila() {
-		return rezervacijeVozila;
-	}
-
-	public void setRezervacijeVozila(Set<RezervacijaVozila> rezervacijeVozila) {
-		this.rezervacijeVozila = rezervacijeVozila;
-	}
-
-
-	public RegistrovanKorisnik getInicijatorPutovanja() {
-		return inicijatorPutovanja;
-	}
-
-	public void setInicijatorPutovanja(RegistrovanKorisnik inicijatorPutovanja) {
-		this.inicijatorPutovanja = inicijatorPutovanja;
 	}
 
 	public long getId() {
 		return Id;
 	}
 
-	
 	public void setId(long id) {
-		this.Id = id;
-	}
-
-	public Set<Usluga> getDodatne_usluge() {
-		return dodatne_usluge;
-	}
-
-	public void setDodatne_usluge(Set<Usluga> dodatne_usluge) {
-		this.dodatne_usluge = dodatne_usluge;
+		Id = id;
 	}
 
 	public Set<RezervacijaSjedista> getRezervacijeSjedista() {
@@ -98,6 +63,14 @@ public class Putovanje {
 		this.rezervacijeSjedista = rezervacijeSjedista;
 	}
 
+	public Set<Pozivnica> getPozivnice() {
+		return pozivnice;
+	}
+
+	public void setPozivnice(Set<Pozivnica> pozivnice) {
+		this.pozivnice = pozivnice;
+	}
+
 	public Set<RezervacijaSobe> getRezervacijeSoba() {
 		return rezervacijeSoba;
 	}
@@ -105,8 +78,29 @@ public class Putovanje {
 	public void setRezervacijeSoba(Set<RezervacijaSobe> rezervacijeSoba) {
 		this.rezervacijeSoba = rezervacijeSoba;
 	}
-	
-	
 
-	
+	public Set<RezervacijaVozila> getRezervacijeVozila() {
+		return rezervacijeVozila;
+	}
+
+	public void setRezervacijeVozila(Set<RezervacijaVozila> rezervacijeVozila) {
+		this.rezervacijeVozila = rezervacijeVozila;
+	}
+
+	public RegistrovanKorisnik getInicijatorPutovanja() {
+		return inicijatorPutovanja;
+	}
+
+	public void setInicijatorPutovanja(RegistrovanKorisnik inicijatorPutovanja) {
+		this.inicijatorPutovanja = inicijatorPutovanja;
+	}
+
+	public Set<Usluga> getDodatneUsluge() {
+		return dodatneUsluge;
+	}
+
+	public void setDodatneUsluge(Set<Usluga> dodatneUsluge) {
+		this.dodatneUsluge = dodatneUsluge;
+	}
+
 }

@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class RegistrovanKorisnik extends Osoba {
 	
@@ -26,12 +28,15 @@ public class RegistrovanKorisnik extends Osoba {
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "prijatelji", joinColumns = @JoinColumn(name = "korisnik", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "prijatelj", referencedColumnName = "id"))
+	@JsonIgnore
 	protected Set<RegistrovanKorisnik> prijatelji;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	@JsonIgnore
 	protected Set<Pozivnica> primljenePozivnice;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "primalac")
+	@JsonIgnore
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade= CascadeType.ALL, mappedBy= "inicijatorPutovanja")

@@ -167,6 +167,14 @@ public class HotelService {
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
+		if (pocetniDatum != null && krajnjiDatum != null) {
+			if (krajnjiDatum.before(pocetniDatum)) {
+				throw new NevalidniPodaciException("Datum odlaska ne smije biti prije datuma dolaska.");
+			}
+			if (pocetniDatum.after(krajnjiDatum)) {
+				throw new NevalidniPodaciException("Datum dolaska ne smije biti nakon datuma odlaska.");
+			} 
+		}
 		// inicijalno su svi hoteli u rezultatu
 		Collection<Hotel> rezultat = this.hotelRepository.findAll();
 

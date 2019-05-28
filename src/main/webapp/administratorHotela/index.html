@@ -112,13 +112,13 @@
 	                                </div>
 	                                <input type="submit" class="btn btn-submit" value="Dodaj sobu"/>
 	                        </form>
-	                        <h1>&nbsp</h1>
+	                        <h1>&nbsp;</h1>
 	                        <table>
 								<thead>
 									<tr class="table100-head">
 										<th class="column1">Broj sobe</th>
 										<th class="column1">Broj kreveta</th>
-										<th class="column1">Cijena noćenja</th>
+										<th class="column1">Cijena noćenja €</th>
 										<th class="column1">Sprat</th>
 										<th class="column1">Red</th>
 										<th class="column1">Kolona</th>
@@ -220,7 +220,7 @@
 								<thead>
 									<tr class="table100-head">
 										<th class="column1">Naziv</th>
-										<th class="column6">Cijena</th>
+										<th class="column6">Cijena €</th>
 										<th class = "column1">Način plaćanja</th>
 										<th class = "column5">Akcije</th>
 									</tr>
@@ -321,7 +321,7 @@
 											<tr class="table100-head">
 												<th class="column1">Broj sobe</th>
 												<th class="column1">Broj kreveta</th>
-												<th class="column1">Cijena noćenja</th>
+												<th class="column1">Ukupna cijena noćenja €</th>
 												<th class="column1">Sprat</th>
 												<th class="column1">Red</th>
 												<th class="column1">Kolona</th>
@@ -341,7 +341,7 @@
 								<thead>
 									<tr class="table100-head">
 										<th class="column1">Naziv</th>
-										<th class="column6">Cijena</th>
+										<th class="column6">Cijena €</th>
 										<th class = "column1">Način plaćanja</th>
 										<th class = "column1">Izabrana</th>
 									</tr>
@@ -374,6 +374,89 @@
                         
                         <div class="tab-pane" id="tab-brze-rezervacije-pregledanje">
                             <h2 class="zaglavlje">Pregledanje brzih rezervacija</h2>
+	                            <div id="sveBrzeRezervacije">
+	                            <table>
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Datum dolaska</th>
+											<th class="column1">Datum odlaska</th>
+											<th class="column1">Originalna cijena €</th>
+											<th class = "column1">Procenat popusta</th>
+											<th class = "column1">Cijna sa popustom €</th>
+											<th class = "column1">Broj kreveta u sobi</th>
+											<th class = "column1">Ocjena sobe</th>
+											<th class = "column6">Pogledaj detalje</th>
+										</tr>
+									</thead>
+									<tbody id="prikazBrzihRezervacija">
+									</tbody>
+								</table>
+								</div>
+								
+								
+								<!-- Detaljan prikaz brze rezervacije -->
+								<div id="detaljanPrikazBrzeRez" hidden="hidden">
+									<div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum dolaska</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="datumDolaskaBrzaRez">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum odlaska</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="datumOdlaskaBrzaRez">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                	</div>
+									<div class="input-group">
+	                                    <label class="label">Broj sobe:</label>
+	                                    <input class="input--style-2" type="number" min="1" readonly="readonly" id="brojSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Ocjena sobe:</label>
+	                                    <input class="input--style-2" type="text" readonly="readonly" id="ocjenaSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Sprat:</label>
+	                                    <input class="input--style-2" type="number" min="0" readonly="readonly" id="spratSobeBrzaRez">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj kreveta u sobi:</label>
+	                                    <input class="input--style-2" type="number" min="0" readonly="readonly" id="brKrevetaSobeBrzaRez">
+	                                </div>
+	                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Početna cijena:</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="pocetnaCijenaBrzaRez">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Cijena s popustom:</label>
+                                            <input class="input--style-2" type="text" readonly="readonly" id="cijenaSaPopsutomBrzaRez">
+                                        </div>
+                                    </div>
+                                	</div>
+	                                <h2 class="zaglavlje">Dodatne usluge:</h2>
+	                                <table>
+									<thead>
+										<tr class="table100-head">
+											<th class="column1">Naziv</th>
+											<th class="column6">Cijena €</th>
+											<th class = "column1">Način plaćanja</th>
+											<th class = "column1">Opis</th>
+										</tr>
+									</thead>
+									<tbody id="prikazUslugaBrzeRezDetalji">
+									</tbody>
+								</table>
+								<button  class="btn btn-submit" id="zatvoriDetaljanPrikazBrzeRezBtn">Nazad</button>
+								</div>
                         </div>
                         
                         <!-- Izvjestaji -->

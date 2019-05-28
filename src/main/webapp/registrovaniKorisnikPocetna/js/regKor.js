@@ -5,6 +5,11 @@ var rentACarServisi = [];
 var korisnik = null;
 var prijatelji = [];
 var broj_zahtjeva_za_prijateljstvo = 0;
+var rezimRezervacije = false;
+//podaci o periodu u kojem je korisnik na putovanju
+var datumDolaska = null;
+var datumOdlaska = null;
+var idPutovanja = null;
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -78,6 +83,14 @@ $(document).ready(function() {
 	
 	
 	ucitajRezervacije();
+	
+	//pretraga hotela
+	$("#hotelSearchForm").submit(function(e) {
+		e.preventDefault();
+		//funkcija iz modula hotelSearch.js
+		//paramteri su potrebni za pozivanje info stranice hotela
+		pretragaHotela(korisnik.id, datumDolaska, datumOdlaska, idPutovanja);
+	});
 	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
@@ -815,9 +828,34 @@ function prikaziRezVozila(vozila){
 		noviRed.append('<td class="column1">' + vozilo.mjestoVracanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + vozilo.id + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
+	});
+	
+	$(".otkaziRezervaciju").click(function(e){
+		e.preventDefault();
+		let rezervacija = vozila[e.target.id];
+		var datumP = Date.parse(rezervacija.datumPreuzimanja);
+		var sadasnjiDatum = new Date();
+		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
+		if (diff<2){
+			alert("Zakasnili ste sa otkazivanjem rezervacije vozila.");
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url : "../rentACar/otkaziRezervaciju",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacija.idRezervacije),
+			async : false,
+			success: function(response) {
+				alert(response);
+				ucitajRezervisanaVozila();
+			},
+		});
+		
 	});
 }
 
@@ -854,9 +892,34 @@ function prikaziRezervisaneSobe(rezSoba){
 		noviRed.append('<td class="column1">' + rSoba.cijena + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumDolaksa + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumOdlaksa + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rSoba.id + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
+	});
+	
+	$(".otkaziRezervaciju").click(function(e){
+		e.preventDefault();
+		let rezervacija = rezSoba[e.target.id];
+		var datumP = Date.parse(rezervacija.datumDolaksa);
+		var sadasnjiDatum = new Date();
+		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
+		if (diff<2){
+			alert("Zakasnili ste sa otkazivanjem rezervacije sobe.");
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url : "../rezervacijeSoba/otkaziRezervaciju",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacija.idRezervacije),
+			async : false,
+			success: function(response) {
+				alert(response);
+				ucitajRezervisaneSobe();
+			},
+		});
+		
 	});
 }
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.DodavanjeSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.SobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.service.HotelskeSobeService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
@@ -60,7 +61,7 @@ public class SobeKontroler {
 	@RequestMapping(value = "/pretrazi", method = RequestMethod.POST)
 	public ResponseEntity<?> pretraziSobeHotela(@RequestBody PretragaSobaDTO kriterijumiPretrage) {
 		try {
-			return new ResponseEntity<Collection<HotelskaSoba> >(this.sobeService.pretraziSobeHotela(kriterijumiPretrage), HttpStatus.OK);
+			return new ResponseEntity<Collection<SobaDTO> >(this.sobeService.pretraziSobeHotela(kriterijumiPretrage), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
