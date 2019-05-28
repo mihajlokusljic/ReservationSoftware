@@ -268,6 +268,7 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/otkaziRezervaciju", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> otkaziRezervaciju(@RequestBody Long id) {
 		try {
 			return new ResponseEntity<String >(this.servis.otkaziRezervaciju(id), HttpStatus.OK);

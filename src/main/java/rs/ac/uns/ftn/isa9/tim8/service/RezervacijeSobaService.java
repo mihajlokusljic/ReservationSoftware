@@ -21,6 +21,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
@@ -329,6 +330,18 @@ public class RezervacijeSobaService {
 			putovanjeRepository.save(putovanje);
 		}
 		return "Uspješno ste rezervisali hotelski smještaj.";
+	}
+
+	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException {
+		Optional<RezervacijaSobe> pretragaRez = rezervacijeRepository.findById(id);
+		
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rezervacija zadatim id-em");
+		}
+		
+		RezervacijaSobe rez = pretragaRez.get();
+		rezervacijeRepository.delete(rez);
+		return "Uspjesno ste otkazali rezervaciju sobe";
 	}
 
 }
