@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
@@ -903,5 +904,60 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		RezervacijaVozila rez = pretragaRez.get();
 		rezervacijaVozilaRepository.delete(rez);
 		return "Uspjesno ste otkazali rezervaciju vozila";
+	}
+
+	public String izracunajPrihode(DatumiZaPrihodDTO datumiDto, Long idServisa) throws NevalidniPodaciException{
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		double prihodi = 0;
+		
+		Collection<RezervacijaVozila> sveRezervacije = rezervacijaVozilaRepository.findAllByRentACarServis(rac);
+		
+		for (RezervacijaVozila rVozila : sveRezervacije) {
+			if (pocetniDatum != null && krajnjiDatum != null) {
+				if (pocetniDatum.compareTo(rVozila.getDatumPreuzimanjaVozila()) <= 0 && krajnjiDatum.compareTo(rVozila.getDatumPreuzimanjaVozila()) >= 0) {
+					prihodi = prihodi + rVozila.getCijena();
+				}
+			}
+			else if (pocetniDatum != null) {
+				if (pocetniDatum.compareTo(rVozila.getDatumPreuzimanjaVozila()) <= 0) {
+					prihodi = prihodi + rVozila.getCijena();
+				}
+			}
+			else if ( krajnjiDatum != null) {
+				if (krajnjiDatum.compareTo(rVozila.getDatumPreuzimanjaVozila()) >= 0) {
+					prihodi = prihodi + rVozila.getCijena();
+				}
+			}
+			else {
+				prihodi = prihodi + rVozila.getCijena();
+			}
+		}
+		
+		return Double.toString(prihodi);
 	}
 }
