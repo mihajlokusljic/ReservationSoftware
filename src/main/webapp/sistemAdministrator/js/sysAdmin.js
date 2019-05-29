@@ -1,5 +1,8 @@
-let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"]
-let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
+let stavkeMenija = ["stavkaPoslovnice", "stavkaAdministratori", "stavkaProfilKorisnika"];
+let tabovi = ["tab-aviokompanije", "tab-hoteli", "tab-rac", "tab-administartori",
+	"tab-profil-kor", "tab-lozinka"];
+let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"];
+let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"];
 let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let mapaAviokompanije = null;
@@ -78,6 +81,61 @@ $(document).ready(function(e) {
 		dodavanjeAdmina();
 	});
 	
+	//reakcije na klik na navigacionom meniju
+	$("#aviokompanije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-aviokompanije");
+	});
+	
+	$("#hoteli").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-hoteli");
+	});
+	
+	$("#racServisi").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-rac");
+	});
+	
+	$("#administrtori").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaAdministratori");
+		prikaziTab("tab-administartori");
+	});
+	
+	$("#izmjeni_podatke").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-profil-kor");
+	});
+	
+	$("#promjeni_lozinku").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-lozinka");
+	});
+	
+	//izmjena profila
+	$("#forma_profil_korisnika").submit(function(e){
+		e.preventDefault();
+		izmjenaProfila();
+	});
+	
+	//ponistavanje izmjena profila
+	$("#ponistavanjeIzmjenaProfila").click(function(e) {
+		e.preventDefault();
+		prikaziPodatkeAdmina();
+	});
+	
+	//izmjena lozinke
+	$("#forma_lozinka").submit(function(e) {
+		e.preventDefault();
+		promjenaLozinke();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -86,6 +144,26 @@ $(document).ready(function(e) {
 		
 	
 });
+
+function prikaziTab(idTaba) {
+	for(i in tabovi) {
+		if(idTaba == tabovi[i]) {
+			$("#" + tabovi[i]).addClass("active");
+		} else {
+			$("#" + tabovi[i]).removeClass("active");
+		}
+	}
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
+}
 
 function prikaziIzborPoslovnice(idPoslovnice) {
 	$.each(poslovnicaAdminaInputs, function(i, tekucaPoslovnicaId) {
@@ -284,17 +362,30 @@ function korisnikInfo(){
 	$.ajax({
 		type : 'GET',
 		url : "../korisnik/getInfo",
+		async: false,
 		dataType : "json",
 		success: function(data){
 			if(data != null){
 				podaciAdmina = data;
-				$("#podaciAdmina").append(data.ime + " " + data.prezime);
+				prikaziPodatkeAdmina();
 			}
 			else{
 				alert("nepostojeci korisnik");
 			}
 		},
 	});
+}
+
+function prikaziPodatkeAdmina() {
+	$("#emailKorisnika").val(podaciAdmina.email);
+	$("#imeKorisnika").val(podaciAdmina.ime);
+	$("#prezimeKorisnika").val(podaciAdmina.prezime);
+	$("#brTelefonaKorisnika").val(podaciAdmina.brojTelefona);
+	if(podaciAdmina.adresa == null) {
+		$("#adresaKorisnika").val("");
+	} else {
+		$("#adresaKorisnika").val(podaciAdmina.adresa.punaAdresa);
+	}
 }
 
 function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, idSelekcionogMenija, defaultSlika) {
@@ -389,6 +480,84 @@ function inicijalizujMape() {
 	mapaRacServisa.controls.add('geolocationControl');
 	mapaRacServisa.controls.add('typeSelector');
 	mapaRacServisa.controls.add('zoomControl');
+}
+
+function izmjenaProfila(){
+	
+	var imeAdmina = $("#imeKorisnika").val();
+	if (imeAdmina == ''){
+		alert("Polje za unos imena ne moze biti prazno.");
+		return;
+	}
+	var prezimeAdmina = $("#prezimeKorisnika").val();
+	if (prezimeAdmina == ''){
+		alert("Polje za unos prezimena ne moze biti prazno.");
+		return;
+	}
+	var brTelefonaAdmina = $("#brTelefonaKorisnika").val();
+	if (brTelefonaAdmina == ''){
+		alert("Polje za unos broja telefona ne moze biti prazno.");
+		return;
+	}
+	var adresaAdmina = $("#adresaKorisnika").val();
+	if (adresaAdmina == ''){
+		alert("Polje za unos adrese ne moze biti prazno.");
+		return;
+	}		
+
+	let admin = {
+			id: podaciAdmina.id,
+			email: podaciAdmina.email,
+			ime: imeAdmina,
+			prezime: prezimeAdmina,
+			brojTelefona: brTelefonaAdmina,
+			adresa: { punaAdresa : adresaAdmina }
+	};
+	$.ajax({
+		type:"PUT",
+		url:"../korisnik/izmjeniProfil",
+		contentType : "application/json; charset=utf-8",
+		data:JSON.stringify(admin),
+		success:function(response){
+			alert("Uspjesno ste izmjenili profil.");
+			podaciAdmina = response;
+			prikaziPodatkeAdmina();
+		},
+	});
+}
+
+function promjenaLozinke() {
+	var staraLozinka = $("#staraLozinka").val();
+	var novaLozinka = $("#novaLozinka").val();
+	var novaLozinka2 = $("#novaLozinka2").val();
+	var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
+
+	if (novaLozinka == ''){
+		alert("Niste unijeli novu lozinku");
+		return;
+	}
+	
+	if (novaLozinka != novaLozinka2){
+		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		return;
+	}
+	
+	$.ajax({
+		type : 'PUT',
+		url : "../auth/changePassword/" + staraLozinka,
+		data : novaLozinka,
+		success : function(data) {
+			if (data == ''){
+				alert("Pogresna trenutna lozinka.");
+				return;
+			}
+			else{
+				setJwtToken(data.accessToken);
+				alert("Uspjesno ste izmjenili lozinku");
+			}
+			$("#forma_lozinka")[0].reset();
+		}
+	});
 }
 
 ymaps.ready(inicijalizujMape);

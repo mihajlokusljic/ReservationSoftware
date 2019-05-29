@@ -37,28 +37,32 @@
             <div class="card card-3">
                 <div class="card-body">
                     <ul class="tab-list">
-                        <li class="tab-list__item active">
-                            <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab" id = "aviokompanije">Aviokompanije</a>
+                    	<li class="dropdown active" id="stavkaPoslovnice">
+                            <a class="tab-list__link" id="poslovnice">Poslovnice</a>
+                            <ul class="dropdown-content">
+								<li><a href="#" id ="aviokompanije">Aviokompanije</a></li>
+								<li><a href="#" id ="hoteli">Hoteli</a></li>
+								<li><a href="#" id ="racServisi">Rent-a-car servisi</a></li>
+							</ul>
                         </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-hoteli" data-toggle="tab" id = "hoteli">Hoteli</a>
+                        <li class="dropdown" id="stavkaAdministratori">
+                            <a class="tab-list__link" href="#" id="administrtori">Administratori</a>
                         </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-rac" data-toggle="tab" id = "rac">Rent-a-car servisi</a>
+						<li class="dropdown" id="stavkaProfilKorisnika">
+                            <a class="tab-list__link" id="profil_korisnika">Profil</a>
+                            <ul class="dropdown-content">
+								<li><a href="#" id ="izmjeni_podatke">Izmjeni podatke</a></li>
+								<li><a href="#" id ="promjeni_lozinku">Promjeni lozinku</a></li>
+							</ul>
                         </li>
-                        <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-administartori" data-toggle="tab" id = "administrtori">Administratori</a>
-                        </li>
-						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-profil-kor" data-toggle="tab" id = "profil_korisnika">Profil</a>
-                        </li>
-						<li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-odjava" data-toggle="tab" id ="odjava">Odjavi se</a>
+						<li class="dropdown">
+                            <a class="tab-list__link" href="#" id ="odjava">Odjavi se</a>
                         </li>
                     </ul>
                     <div class="tab-content">
+                    	<!-- Dodavanje aviokompanije -->
                         <div class="tab-pane active" id="tab-aviokompanije">
-                        
+                        <h2 class="zaglavlje">Aviokompanije</h2>
                         <form method="POST" action="#" id="dodavanjeAviokompanijeForm">
                                 <div class="input-group">
                                     <label class="label">Naziv:</label>
@@ -77,7 +81,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis aviokompanije (opciono)" id="opisAviokompanije">
+                                    <textarea rows="5" cols="5" placeholder="Unesite promotivni opis aviokompanije (opciono)" id="opisAviokompanije"></textarea>
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj aviokompaniju"/>
                         </form>
@@ -96,7 +100,9 @@
 					</table>
                         </div>
                         
+                        <!-- Dodavanje hotela -->
                         <div class="tab-pane" id="tab-hoteli">
+                        <h2 class="zaglavlje">Hoteli</h2>
                         <form method="POST" action="#" id="dodavanjeHotelaForm">
                                 <div class="input-group">
                                     <label class="label">Naziv:</label>
@@ -115,7 +121,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis hotela (opciono)" id="promotivniOpisHotela">
+                                    <textarea rows="5" cols="5" placeholder="Unesite promotivni opis hotela (opciono)" id="promotivniOpisHotela"></textarea>
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj hotel"/>
                         </form>
@@ -134,8 +140,9 @@
 					</table>
                         </div>
 							
+						<!-- Dodavanje rent-a-car servisa -->
                         <div class="tab-pane" id="tab-rac">
-                        
+                        <h2 class="zaglavlje">Rent-a-car servisi</h2>
                         <form method="POST" action="#" id="dodavanjeRacServisaForm">
                                 <div class="input-group">
                                     <label class="label">Naziv:</label>
@@ -154,7 +161,7 @@
                                 </div>
                                 <div class="input-group">
                                     <label class="label">Promotivni opis:</label>
-                                    <input class="input--style-2" type="text" name="origin" placeholder="Unesite promotivni opis rent-a-car servisa (opciono)" id="opisRacServisa">
+                                    <textarea rows="5" cols="5" placeholder="Unesite promotivni opis rent-a-car servisa (opciono)" id="opisRacServisa"></textarea>
                                 </div>
                                 <input type="submit" class="btn btn-submit" value="Dodaj rent-a-car servis"/>
                         </form>
@@ -174,6 +181,7 @@
 					</table>
                         </div>
                         
+                        <!-- Dodavanje administratora -->
                         <div class="tab-pane" id="tab-administartori">
                             <form method="POST" action="#" id="dodavanjeAdminaForm">
                             
@@ -273,7 +281,68 @@
                         </div>
                         
 						<div class="tab-pane" id="tab-profil-kor">
-                            <p id="podaciAdmina">Sistem administrator: </p>
+                        	<h2 class="zaglavlje">Ažuriranje profila</h2>
+                        	<form id = "forma_profil_korisnika">
+	                            <div class="input-group">
+	                                    <label class="label">E-mail:</label>
+	                                    <input class="input--style-2" type="email" required="required" id="emailKorisnika" readonly>
+	                                </div>
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Ime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="imeKorisnika">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Prezime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="prezimeKorisnika">
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Broj telefona:</label>
+	                                    <input class="input--style-2" type="number" id="brTelefonaKorisnika">
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Adresa:</label>
+	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                    <input class="input--style-2" type="text" required="required" id="adresaKorisnika">
+	                                </div>
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                    	<input type="submit" class="btn btn-submit" value="Izmjeni"/>
+	                                    </div>
+	                                    <div class="col-2">
+	                                    	<button class="btn btn-submit" id="ponistavanjeIzmjenaProfila">Poništi izmjene</button>
+	                                    </div>
+	                                </div>
+                                </form>
+                        	</div>
+                        
+                        <div class="tab-pane" id="tab-lozinka">
+                        	<h2 class="zaglavlje">Izmjena lozinke</h2>
+                        		<div id="izmjenaInicijalneLozinkePoruka" hidden="hidden">
+	                        		<h3 style="color: white">Molimo Vas da izmjenite inicijalnu lozinku prije nego što nastavite sa radom.</h3>
+	                        		<h3 style="color: white">&nbsp;</h3>
+                        		</div>
+                        		<form id = "forma_lozinka">
+                        		    <div class="input-group">
+	                                    <label class="label">Trenutna lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
+	                                </div>	                                
+	                                <div class="input-group">    
+	                                    <label class="label">Nova lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite novu lozinku" required="required" id="novaLozinka">
+	                                </div>
+	                                <div class="input-group">    
+	                                    <label class="label">Potvrdite novu lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Ponovo unesite novu lozinku" required="required" id="novaLozinka2">
+	                                </div> 
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
+                        		</form>             
                         </div>
                         
 						<div class="tab-pane" id="tab-odjava">

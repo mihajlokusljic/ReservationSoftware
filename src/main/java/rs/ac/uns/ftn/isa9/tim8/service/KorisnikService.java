@@ -78,7 +78,9 @@ public class KorisnikService {
 		o.setPrezime(noviPodaci.getPrezime());
 		o.setBrojTelefona(noviPodaci.getBrojTelefona());
 		Adresa staraAdresa = null;
-		if (!noviPodaci.getAdresa().getPunaAdresa().equals(o.getAdresa().getPunaAdresa())) {
+		if(o.getAdresa() == null) {
+			o.setAdresa(noviPodaci.getAdresa());
+		} else if (!noviPodaci.getAdresa().getPunaAdresa().equals(o.getAdresa().getPunaAdresa())) {
 			staraAdresa = o.getAdresa();
 			Adresa a = this.adresaRepository.findOneByPunaAdresa(noviPodaci.getAdresa().getPunaAdresa());
 			if (a != null) {
@@ -86,6 +88,7 @@ public class KorisnikService {
 			}
 			o.setAdresa(noviPodaci.getAdresa());
 		}
+		
 		korisnikRepository.save(o);
 		if (staraAdresa != null) {
 			adresaRepository.delete(staraAdresa);
