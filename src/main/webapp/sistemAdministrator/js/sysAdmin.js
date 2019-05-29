@@ -368,12 +368,21 @@ function korisnikInfo(){
 			if(data != null){
 				podaciAdmina = data;
 				prikaziPodatkeAdmina();
+				if(!podaciAdmina.lozinkaPromjenjena) {
+					izmjenaInicijalneLozinke();
+				}
 			}
 			else{
 				alert("nepostojeci korisnik");
 			}
 		},
 	});
+}
+
+function izmjenaInicijalneLozinke() {
+	$("#meni").hide();
+	$("#izmjenaInicijalneLozinkePoruka").show();
+	prikaziTab("tab-lozinka");
 }
 
 function prikaziPodatkeAdmina() {
@@ -554,6 +563,12 @@ function promjenaLozinke() {
 			else{
 				setJwtToken(data.accessToken);
 				alert("Uspjesno ste izmjenili lozinku");
+				if(!lozinkaMijenjana) {
+					$("#izmjenaInicijalneLozinkePoruka").hide();
+					$("#meni").show();
+					prikaziTab("tab-aviokompanije");
+					podaciAdmina.lozinkaPromjenjena = true;
+				}
 			}
 			$("#forma_lozinka")[0].reset();
 		}
