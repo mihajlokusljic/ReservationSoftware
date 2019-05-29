@@ -20,6 +20,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
@@ -205,6 +206,7 @@ public class RezervacijeSobaService {
 		}
 		BrzaRezervacijaSoba brzaRez = rezervacijaSearch.get();
 		Putovanje putovanje = null;
+		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(idPutovanja != null) {
 			Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
 			if(!putovanjeSearch.isPresent()) {
@@ -215,6 +217,7 @@ public class RezervacijeSobaService {
 		double popust = brzaRez.getBaznaCijena() * brzaRez.getProcenatPopusta() / 100.0;
 		double cijena = brzaRez.getBaznaCijena() - popust;
 		RezervacijaSobe rezervacija = new RezervacijaSobe(brzaRez.getDatumDolaska(), brzaRez.getDatumOdlaska(), cijena, brzaRez.getSobaZaRezervaciju());
+		rezervacija.setPutnik(korisnik);
 		if (putovanje != null) {
 			putovanje.getRezervacijeSoba().add(rezervacija);
 			for (Usluga dodatnaUsluga : brzaRez.getDodatneUsluge()) {
@@ -230,13 +233,13 @@ public class RezervacijeSobaService {
 	}
 
 	public String izvrsiRezervacijuSoba(ZahtjevRezervacijaSobaDTO rezervacijaPodaci) throws NevalidniPodaciException {
-		// TODO Auto-generated method stub
 		Date datumDolaska = null;
 		Date datumOdlaska = null;
 		Putovanje putovanje = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		int brojKreveta = 0;
 		int brojOsoba = 0;
+		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		try {
 			datumDolaska = df.parse(rezervacijaPodaci.getDatumDolaska());
 			datumOdlaska = df.parse(rezervacijaPodaci.getDatumOdlaksa());
@@ -249,10 +252,12 @@ public class RezervacijeSobaService {
 		if(datumDolaska.after(datumOdlaska)) {
 			throw new NevalidniPodaciException("Datum dolaska ne može biti nakon datum odlaska.");
 		}
-		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(rezervacijaPodaci.getPutovanjeId());
-		if(putovanjeSearch.isPresent()) {
-			putovanje = putovanjeSearch.get();
-			brojOsoba = putovanje.getRezervacijeSjedista().size();
+		if (rezervacijaPodaci.getPutovanjeId() != null) {
+			Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(rezervacijaPodaci.getPutovanjeId());
+			if (putovanjeSearch.isPresent()) {
+				putovanje = putovanjeSearch.get();
+				brojOsoba = putovanje.getRezervacijeSjedista().size();
+			} 
 		}
 		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
 		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
@@ -320,6 +325,7 @@ public class RezervacijeSobaService {
 			cijenaBoravka -= popust;
 			ukupnaCijena += cijenaBoravka;
 			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
+			rezervacijaSobe.setPutnik(korisnik);
 			rezervacijeRepository.save(rezervacijaSobe);
 			if (putovanje != null) {
 				putovanje.getRezervacijeSoba().add(rezervacijaSobe);

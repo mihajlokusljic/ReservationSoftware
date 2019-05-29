@@ -38,7 +38,7 @@ public class RezervacijaSobe {
 	@ColumnDefault("0")
 	protected double cijena;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "soba_id", referencedColumnName = "id")
 	protected HotelskaSoba rezervisanaSoba;
 	
