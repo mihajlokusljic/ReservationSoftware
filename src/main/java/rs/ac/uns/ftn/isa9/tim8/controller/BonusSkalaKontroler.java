@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,11 @@ public class BonusSkalaKontroler {
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@RequestMapping(value = "/dobaviStavke", method = RequestMethod.GET)
+	public ResponseEntity<Collection<BonusPopust>> dobaviStavke() {
+		return new ResponseEntity<Collection<BonusPopust>>(this.bonusSkalaServis.dobaviStavke(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/obrisiSkalu", method = RequestMethod.DELETE)
