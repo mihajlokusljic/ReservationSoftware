@@ -13,28 +13,28 @@ import rs.ac.uns.ftn.isa9.tim8.repository.BonusPopustRepository;
 
 @Service
 public class BonusSkalaService {
-	
+
 	@Autowired
 	protected BonusPopustRepository bonusPopustRepository;
-	
+
 	private boolean preklapanjeStavki(BonusPopust novaStavka) {
-		//uslov preklapanja: novaDonja < staraGornja && staraDonja <= novaGornja
+		// uslov preklapanja: novaDonja < staraGornja && staraDonja <= novaGornja
 		boolean novaDonjaPreklapanje = false;
 		boolean novaGornjaPreklapanje = false;
-		for(BonusPopust stavka : this.bonusPopustRepository.findAll()) {
-			if(stavka.getGornjaGranicaBonusPoeni() != null) {
+		for (BonusPopust stavka : this.bonusPopustRepository.findAll()) {
+			if (stavka.getGornjaGranicaBonusPoeni() != null) {
 				novaDonjaPreklapanje = novaStavka.getDonjaGranicaBonusPoeni() < stavka.getGornjaGranicaBonusPoeni();
 			} else {
 				novaDonjaPreklapanje = true;
 			}
-			
-			if(novaStavka.getGornjaGranicaBonusPoeni() != null) {
+
+			if (novaStavka.getGornjaGranicaBonusPoeni() != null) {
 				novaGornjaPreklapanje = stavka.getDonjaGranicaBonusPoeni() <= novaStavka.getGornjaGranicaBonusPoeni();
 			} else {
 				novaGornjaPreklapanje = true;
 			}
-			
-			if(novaDonjaPreklapanje && novaGornjaPreklapanje) {
+
+			if (novaDonjaPreklapanje && novaGornjaPreklapanje) {
 				return true;
 			}
 		}
@@ -43,21 +43,22 @@ public class BonusSkalaService {
 
 	public BonusPopust dodajStavku(BonusPopust novaStavka) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
-		if(novaStavka.getDonjaGranicaBonusPoeni() == null) {
+		if (novaStavka.getDonjaGranicaBonusPoeni() == null) {
 			throw new NevalidniPodaciException("Donja granica za bonus poene mora biti zadata.");
 		}
-		if(novaStavka.getDonjaGranicaBonusPoeni() < 0) {
+		if (novaStavka.getDonjaGranicaBonusPoeni() < 0) {
 			throw new NevalidniPodaciException("Donja granica za bonus poene ne smije biti negativna.");
 		}
-		if(novaStavka.getGornjaGranicaBonusPoeni() != null) {
-			if(novaStavka.getGornjaGranicaBonusPoeni() < novaStavka.getDonjaGranicaBonusPoeni()) {
-				throw new NevalidniPodaciException("Gornja granica za bonus poene ne smije biti manja od donje granice");
+		if (novaStavka.getGornjaGranicaBonusPoeni() != null) {
+			if (novaStavka.getGornjaGranicaBonusPoeni() < novaStavka.getDonjaGranicaBonusPoeni()) {
+				throw new NevalidniPodaciException(
+						"Gornja granica za bonus poene ne smije biti manja od donje granice");
 			}
 		}
-		if(novaStavka.getOstvarenProcenatPopusta() < 0 || novaStavka.getOstvarenProcenatPopusta() > 100) {
+		if (novaStavka.getOstvarenProcenatPopusta() < 0 || novaStavka.getOstvarenProcenatPopusta() > 100) {
 			throw new NevalidniPodaciException("Procenat ostvarenog popusta mora biti u intervalu od 0 do 100.");
 		}
-		if(this.preklapanjeStavki(novaStavka)) {
+		if (this.preklapanjeStavki(novaStavka)) {
 			throw new NevalidniPodaciException("Preklapanje intervala za bonus poene nije dozvoljeno.");
 		}
 		this.bonusPopustRepository.save(novaStavka);
@@ -77,6 +78,29 @@ public class BonusSkalaService {
 		List<BonusPopust> stavke = this.bonusPopustRepository.findAll();
 		Collections.sort(stavke, new StavkePopustaComparator());
 		return stavke;
+	}
+
+	/**
+	 * Vraca procenat dodatnog popusta na putovanje za dati broj bonus poena korisnika.
+	 * Ako za dati broj poena nije predvidjen popust vraca nulu.
+	 * @param bonusPoeni - broj ostvarenih bonus poena korisnika
+	 * @return procenat popusta za dati broj bonus poena
+	 */
+	public int odrediProcenatBonusPopusta(double bonusPoeni) {
+		boolean donjaGranicaOk = false;
+		boolean gornjaGranicaOk = false;
+		for (BonusPopust stavka : this.bonusPopustRepository.findAll()) {
+			donjaGranicaOk = stavka.getDonjaGranicaBonusPoeni() <= bonusPoeni;
+			if (!donjaGranicaOk) {
+				continue;
+			}
+			gornjaGranicaOk = stavka.getGornjaGranicaBonusPoeni() == null ? true
+					: bonusPoeni < stavka.getGornjaGranicaBonusPoeni();
+			if (donjaGranicaOk && gornjaGranicaOk) {
+				return stavka.getOstvarenProcenatPopusta();
+			}
+		}
+		return 0;
 	}
 
 }
