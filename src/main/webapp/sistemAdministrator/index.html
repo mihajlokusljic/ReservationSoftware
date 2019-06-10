@@ -48,6 +48,13 @@
                         <li class="dropdown" id="stavkaAdministratori">
                             <a class="tab-list__link" href="#" id="administrtori">Administratori</a>
                         </li>
+                        <li class="dropdown" id="stavkaPopusti">
+                            <a class="tab-list__link" id="profil_korisnika">Skala bonus popusta</a>
+                            <ul class="dropdown-content">
+								<li><a href="#" id ="zadavanjeSkalePopusta">Zadavanje nove skale popusta</a></li>
+								<li><a href="#" id ="pregledSkalePopusta">Pregled skale popusta</a></li>
+							</ul>
+                        </li>
 						<li class="dropdown" id="stavkaProfilKorisnika">
                             <a class="tab-list__link" id="profil_korisnika">Profil</a>
                             <ul class="dropdown-content">
@@ -280,6 +287,69 @@
                             </form>
                         </div>
                         
+                        <!-- Rad sa skalom popusta za bonus poene -->
+                        
+                        <!-- Zadavanje nove skale popusta -->
+                        <div class="tab-pane" id="tab-zadavanje-skale-popusta">
+                        	<h2 class="zaglavlje">Zadavanje skale dodatnih popusta</h2>
+                        	<a id="skalaPopustaPrikaziPomoc" style="color: white; font-size: 22px; display: none;" href="#">Prikaži pomoć</a>
+                        	<div id="stavkePopustaPomoc">
+	                        	<p style="color: white; font-size: 22px;">Pomoć: Svaka stavka određuje procenat popusta na
+	                        	putovanje za broj ostvarenih bonus poena korisnika koji je veći ili jednak donjoj
+	                        	granici i manji od gornje granice. Intervali ostvarenih bonus poena za stavke se ne
+	                        	smiju preklapati. Ukoliko ne zadate gornju granicu za bonus poene u stavki
+	                        	smatra se da se zadati popust odnosi na bilo koji broj ostvarenih bonus poena
+	                        	veći od zadate donje granice i unos stavki se automatski završava.</p>
+	                        	<a id="skalaPopustaSakrijPomoc" style="color: white; font-size: 22px;" href="#">Sakrij pomoć</a>
+                        	</div>
+                        	<h1>&nbsp;</h1>
+                        	<form id="dodavanjeStavkeSkalePopustaForm">
+                                	<div class="input-group">
+                                            <label class="label">Donja granica ostvarenih bonus poena (uključivo): </label>
+                                            <input class="input--style-2" type="number" min= "0" step="0.1" value="0" placeholder="Unesite minimum bonus poena za ostvarenje datog popusta" required="required" id="donjaGranicaPoeni">
+                                    </div>
+                                    <div class="input-group">
+                                            <label class="label">Gornja granica ostvarenih bonus poena (isključivo): </label>
+                                            <input class="input--style-2" type="number" min = "0" step="0.1" placeholder="Unesite maksimum bonus poena za ostvarenje datog popusta" id="gornjaGranicaPoeni">
+                                    </div>
+                                	<div class="input-group">
+	                                    <label class="label">Procenat popusta: </label>
+	                                    <input class="input--style-2" type="number" min="1" max="100" placeholder="Unesite procenat ostvarenog popusta" required="required" id="procenatBonusPopusta">
+                                	</div>
+                            
+                            		<input type="submit" class="btn btn-submit" value="Dodaj stavku"/>
+                            </form>
+                            <h1>&nbsp;</h1>
+                            <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Interval osvojenih bonus poena</th>
+										<th class="column1">Ostvaren procenat popusta</th>
+									</tr>
+								</thead>
+								<tbody id="zadateStavkePopustaPrikaz">
+								</tbody>
+							</table>
+                            
+                        </div>
+                        
+                        <!-- Prikaz skale popusta -->
+                        <div class="tab-pane" id="tab-prikaz-skale-popusta">
+                        	<h2 class="zaglavlje">Prikaz skale popusta</h2>
+                        	<h2>&nbsp;</h2>
+                            <table>
+								<thead>
+									<tr class="table100-head">
+										<th class="column1">Interval osvojenih bonus poena</th>
+										<th class="column1">Ostvaren procenat popusta</th>
+									</tr>
+								</thead>
+								<tbody id="skalaPopustaPrikaz">
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <!-- Rad sa profilom korisnika -->
 						<div class="tab-pane" id="tab-profil-kor">
                         	<h2 class="zaglavlje">Ažuriranje profila</h2>
                         	<form id = "forma_profil_korisnika">
