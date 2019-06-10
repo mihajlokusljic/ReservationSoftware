@@ -25,7 +25,7 @@
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
-   	<link rel="stylesheet" href="../sorttable/sorttable.css">
+   	<link rel="stylesheet" href="../sorttable/sorttable.css">	
     
 </head>
 
@@ -273,6 +273,7 @@
 											<th class="column1">Datum preuzimanja</th>
 											<th class = "column1">Datum vraćanja</th>
 											<th class="column1"></th>
+											<th class="column1"></th>
 										</tr>
 									</thead>
 									<tbody id="prikazRezervisanihVozila">
@@ -417,6 +418,41 @@
 	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
                         		</form>
                         	</div>
+                        	
+							<!-- The Modal -->
+							<div id="myModal" class="modal">
+							
+							  <!-- Modal content -->
+							  <div class="modal-content">
+							    <span class="close">&times;</span>
+							    <section class='rating-widget'> 
+								  <!-- Rating Stars Box -->
+								  <div class='rating-stars text-center'>
+								    <ul id='stars'>
+								      <li class='star' data-value='1'>
+								        <i class='fa fa-star fa-fw'></i>
+								      </li>
+								      <li class='star' data-value='2'>
+								        <i class='fa fa-star fa-fw'></i>
+								      </li>
+								      <li class='star' data-value='3'>
+								        <i class='fa fa-star fa-fw'></i>
+								      </li>
+								      <li class='star' data-value='4'>
+								        <i class='fa fa-star fa-fw'></i>
+								      </li>
+								      <li class='star' data-value='5'>
+								        <i class='fa fa-star fa-fw'></i>
+								      </li>
+								    </ul>
+								  </div>
+								  
+								  <button type="submit" class="btn btn-submit">Potvrdi</button>
+								  
+								</section>
+							  </div>
+
+</div>
                                         
                     </div>
                     
