@@ -3,7 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 public class PrikazSegmentaDTO {
 	protected String oznakaSegmenta;
 
-	protected float cijenaSegmenta;
+	protected double cijenaSegmenta;
 
 	protected String nazivSegmenta;
 
@@ -11,7 +11,7 @@ public class PrikazSegmentaDTO {
 		super();
 	}
 
-	public PrikazSegmentaDTO(String oznakaSegmenta, float cijenaSegmenta, String nazivSegmenta) {
+	public PrikazSegmentaDTO(String oznakaSegmenta, double cijenaSegmenta, String nazivSegmenta) {
 		super();
 		this.oznakaSegmenta = oznakaSegmenta;
 		this.cijenaSegmenta = cijenaSegmenta;
@@ -26,11 +26,11 @@ public class PrikazSegmentaDTO {
 		this.oznakaSegmenta = oznakaSegmenta;
 	}
 
-	public float getCijenaSegmenta() {
+	public double getCijenaSegmenta() {
 		return cijenaSegmenta;
 	}
 
-	public void setCijenaSegmenta(float cijenaSegmenta) {
+	public void setCijenaSegmenta(double cijenaSegmenta) {
 		this.cijenaSegmenta = cijenaSegmenta;
 	}
 

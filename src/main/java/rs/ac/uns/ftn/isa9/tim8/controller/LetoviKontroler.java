@@ -64,7 +64,7 @@ public class LetoviKontroler {
 		}
 	}
 
-	@RequestMapping(value = "/dobaviSjedistaZaPrikazNaMapi/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/dobaviSjedistaZaPrikazNaMapi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> dobaviSjedistaZaPrikazNaMapi(@PathVariable("id") Long idLeta) {
 		try {
 			return new ResponseEntity<PrikazSjedistaDTO>(servis.dobaviSjedistaZaPrikazNaMapi(idLeta),

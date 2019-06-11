@@ -36,7 +36,7 @@ public class Avion {
 	protected Set<Segment> segmenti;
 	
 	@OneToMany(mappedBy = "avion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OrderBy("red ASC kolona ASC")
+	@OrderBy("red ASC, kolona ASC")
 	protected Set<Sjediste> sjedista;
 	
 	@JsonIgnore

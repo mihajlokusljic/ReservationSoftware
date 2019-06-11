@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +21,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSegmentaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
@@ -784,8 +786,43 @@ public class AviokompanijaService {
 		}
 
 		Let let = pretragaLetova.get();
+
+		Collection<String> sjedista = new ArrayList<String>();
+		Collection<PrikazSegmentaDTO> segmenti = new ArrayList<PrikazSegmentaDTO>();
+
+		String oznake = "abcdefghij";
+		int tekuciSegmentIndex = -1;
+		int tekucaVrsta = 1;
+		Long tekuciSegmentId = -1L;
+		StringBuilder sb = new StringBuilder();
+
+		for (Sjediste s : let.getAvion().getSjedista()) {
+			if (!s.getSegment().getId().equals(tekuciSegmentId)) {
+				// Naisli smo na novi segment
+				tekuciSegmentIndex++;
+				tekuciSegmentId = s.getSegment().getId();
+				segmenti.add(new PrikazSegmentaDTO(oznake.charAt(tekuciSegmentIndex) + "",
+						let.getCijenaKarte() + s.getSegment().getCijena(), s.getSegment().getNaziv()));
+			}
+			if (s.getRed() != tekucaVrsta) {
+				// Dosli smo u novu vrstu, pa trebamo sadrzaj StringBuilder-a upisati u
+				// kolekciju
+				sjedista.add(sb.toString());
+				sb.setLength(0);
+				tekucaVrsta = s.getRed();
+			}
+			sb.append(oznake.charAt(tekuciSegmentIndex));
+			sb.append("[");
+			sb.append(s.getId());
+			sb.append("]");
+		}
+
+		sjedista.add(sb.toString());
 		
-		
+		PrikazSjedistaDTO rezultat = new PrikazSjedistaDTO(sjedista, segmenti);
+
+		return rezultat;
+
 	}
 
 }
