@@ -527,6 +527,8 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 	$("#izborLetaBrzeRezervacije").hide();
 	$("#izborSjedistaBrzeRez").show();
 	
+	scGlobal = null;
+	
 	firstSeatLabel = 1;
     var $cart = $('#selected-seats'),
     $counter = $('#counter'),
@@ -557,7 +559,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
     
     },
     naming : {
-      top : false,
+      top : true,
       getLabel : function (character, row, column) {
         return firstSeatLabel++;
       },
@@ -571,12 +573,20 @@ function prikaziIzborSjedistaBrzeRezervacije() {
         ]         
     },
     click: function () {
+    
       if (this.status() == 'available') {
+          scGlobal = sc;
+          if (scGlobal.find('selected').length > 0) {
+            	return this.style();
+          }
+
+    	  
         //let's create a new <li> which we'll add to the cart items
         $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
           .attr('id', 'cart-item-'+this.settings.id)
           .data('seatId', this.settings.id)
           .appendTo($cart);
+
         
         /*
          * Lets up<a href="https://www.jqueryscript.net/time-clock/">date</a> the counter and total
@@ -596,7 +606,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
       
         //remove the item from our cart
         $('#cart-item-'+this.settings.id).remove();
-      
+              
         //seat has been vacated
         return 'available';
       } else if (this.status() == 'unavailable') {
@@ -616,6 +626,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 
   //let's pretend some seats have already been booked
   sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
+  
 }
 
 function pretraziSlobodneLetove() {
