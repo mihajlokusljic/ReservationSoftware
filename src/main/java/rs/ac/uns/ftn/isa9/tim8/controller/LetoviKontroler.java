@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.service.AviokompanijaService;
 import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
@@ -32,8 +33,7 @@ public class LetoviKontroler {
 
 	@RequestMapping(value = "/dobaviSveLetoveZaAviokompaniju/{idAviokompanije}", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Let>> dobaviLetove(@PathVariable("idAviokompanije") Long idAviokompanije) {
-		return new ResponseEntity<Collection<Let>>(servis.dobaviLetove(idAviokompanije),
-				HttpStatus.OK);
+		return new ResponseEntity<Collection<Let>>(servis.dobaviLetove(idAviokompanije), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/letoviAviokompanije/{id}", method = RequestMethod.GET)
@@ -59,6 +59,16 @@ public class LetoviKontroler {
 	public ResponseEntity<?> pretraziLetove(@RequestBody PretragaLetaDTO kriterijumiPretrage) {
 		try {
 			return new ResponseEntity<Collection<Let>>(servis.pretraziLetove(kriterijumiPretrage), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(value = "/dobaviSjedistaZaPrikazNaMapi/{id}", method = RequestMethod.POST)
+	public ResponseEntity<?> dobaviSjedistaZaPrikazNaMapi(@PathVariable("id") Long idLeta) {
+		try {
+			return new ResponseEntity<PrikazSjedistaDTO>(servis.dobaviSjedistaZaPrikazNaMapi(idLeta),
+					HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

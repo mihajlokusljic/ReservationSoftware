@@ -20,6 +20,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
@@ -773,6 +774,18 @@ public class AviokompanijaService {
 
 		return letovi;
 
+	}
+
+	public PrikazSjedistaDTO dobaviSjedistaZaPrikazNaMapi(Long idLeta) throws NevalidniPodaciException {
+		Optional<Let> pretragaLetova = letoviRepository.findById(idLeta);
+
+		if (!pretragaLetova.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji let sa datim id-jem. Pokusajte ponovo.");
+		}
+
+		Let let = pretragaLetova.get();
+		
+		
 	}
 
 }
