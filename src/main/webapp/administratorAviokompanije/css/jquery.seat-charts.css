@@ -11,7 +11,7 @@ div.seatCharts-cell {
 	outline: none;
 	font-size: 13px;
 	line-height:16px;
-	color: blue;
+	color: white;
 
 }
 div.seatCharts-seat {
@@ -32,7 +32,7 @@ div.seatCharts-seat:focus {
 */
 
 div.seatCharts-space {
-	background-color: white;
+	background-color: transparent;
 }
 div.seatCharts-row {
 	height: 50px;
@@ -43,7 +43,7 @@ div.seatCharts-row:after {
 }
 
 div.seatCharts-seat.selected {
-	background-color: aqua;
+	background-color: blue;
 }
 
 div.seatCharts-seat.focused {
