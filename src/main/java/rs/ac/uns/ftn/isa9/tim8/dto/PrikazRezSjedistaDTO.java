@@ -2,14 +2,23 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 
 public class PrikazRezSjedistaDTO {
 
 	protected Long idRezervacije;
 
+	protected String nazivPolazista;
+
+	protected String nazivOdredista;
+
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumPolaska;
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumDolaska;
 
 	protected Sjediste sjediste;
@@ -22,10 +31,12 @@ public class PrikazRezSjedistaDTO {
 		super();
 	}
 
-	public PrikazRezSjedistaDTO(Long idRezervacije, Date datumPolaska, Date datumDolaska, Sjediste sjediste,
-			double originalnaCijena, double popust) {
+	public PrikazRezSjedistaDTO(Long idRezervacije, String nazivPolazista, String nazivOdredista, Date datumPolaska,
+			Date datumDolaska, Sjediste sjediste, double originalnaCijena, double popust) {
 		super();
 		this.idRezervacije = idRezervacije;
+		this.nazivPolazista = nazivPolazista;
+		this.nazivOdredista = nazivOdredista;
 		this.datumPolaska = datumPolaska;
 		this.datumDolaska = datumDolaska;
 		this.sjediste = sjediste;
@@ -39,6 +50,22 @@ public class PrikazRezSjedistaDTO {
 
 	public void setIdRezervacije(Long idRezervacije) {
 		this.idRezervacije = idRezervacije;
+	}
+
+	public String getNazivPolazista() {
+		return nazivPolazista;
+	}
+
+	public void setNazivPolazista(String nazivPolazista) {
+		this.nazivPolazista = nazivPolazista;
+	}
+
+	public String getNazivOdredista() {
+		return nazivOdredista;
+	}
+
+	public void setNazivOdredista(String nazivOdredista) {
+		this.nazivOdredista = nazivOdredista;
 	}
 
 	public Date getDatumPolaska() {

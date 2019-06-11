@@ -27,12 +27,14 @@ public class Aviokompanija extends Poslovnica {
 	@JoinTable(name = "aviokompanija_let", joinColumns = @JoinColumn(name = "aviokompanija_id"), inverseJoinColumns = @JoinColumn(name = "let_id"))
 	protected Set<Let> letovi;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<BrzaRezervacijaSjedista> brzeRezervacije;
 
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<Avion> avioni;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacije;
 

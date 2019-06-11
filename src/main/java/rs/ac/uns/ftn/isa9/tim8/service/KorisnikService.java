@@ -408,10 +408,8 @@ public class KorisnikService {
 		Collection<PrikazRezSjedistaDTO> rezSjedistaDTO = new ArrayList<>();
 
 		for (RezervacijaSjedista rs : rezSjediste) {
-			// rezSjedistaDTO.add(new PrikazRezSjedistaDTO(idRezervacije, datumPolaska,
-			// datumDolaska, sjediste, originalnaCijena, popust))
-
-			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getLet().getDatumPoletanja(),
+			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getLet().getPolaziste().getNazivDestinacije(),
+					rs.getLet().getOdrediste().getNazivDestinacije(), rs.getLet().getDatumPoletanja(),
 					rs.getLet().getDatumSletanja(), rs.getSjediste(), rs.getCijena(), 0));
 
 		}

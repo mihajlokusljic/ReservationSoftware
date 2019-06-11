@@ -10,6 +10,7 @@ let stavkeMenija = ["stavka_destinacije", "stavka_avioni", "stavka_letovi", "sta
 	"stavka_profil_aviokompanije", "stavka_dodatne_usluge", "stavka_odjava"];
 let izabraniLetZaBrzuRezervacijuId = null;
 let scGlobal = null;
+let tekucaBrzaRezervacija = null;
 
 $(document).ready(function() {
 	
@@ -94,7 +95,7 @@ $(document).ready(function() {
 	
 	$("#pregledanjeBrzihRezervacija").click(function(e) {
 		e.preventDefault();
-		//vratiSveBrzeRezervacije();
+		vratiSveBrzeRezervacije();
 		aktivirajStavkuMenija("stavka_brze_rezervacije");
 		$("#tab-destinacije").hide();
 		$("#tab-avioni").hide();
@@ -521,11 +522,138 @@ $(document).ready(function() {
 	
 });
 
+function zadavanjePopustaBrzeRezervacije() {
+	if(tekucaBrzaRezervacija == null) {
+		alert("Morate odabrati let.");
+	}
+	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
+	tekucaBrzaRezervacija.procenatPopusta = popustProc;
+	$.ajax({
+		type : 'POST',
+		url : "../aviokompanije/zadajPopustBrzojRezervaciji",
+		data : JSON.stringify(tekucaBrzaRezervacija),
+		success : function(responseBrzaRez) {
+			tekucaBrzaRezervacija = null;
+			alert("Usješno ste definisali popust za brzu rezervaciju.");
+			resetBrzeRezervacijeView();	
+		}
+	});
+}
+
+function prikaziBrzeRez(brzeRez){
+	let prikaz = $("#prikazBrzeRezervacije");
+	prikaz.empty();
+	
+	$.each(brzeRez, function(i, br) {
+		
+		/*
+		 								<th class="column3">Naziv polazišta</th>
+										<th class="column3">Naziv odredišta</th>
+										<th class="column1">Datum poletanja</th>
+										<th class="column1">Datum sletanja</th>
+										<th class="column1">Mjesto u avionu</th>
+										<th class="column1">Originalna cijena</th>
+										<th class="column1">Cijena sa popustom</th>
+		 */
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column3">' + br.nazivPolazista + '</td>');
+		noviRed.append('<td class="column3">' + br.nazivOdredista + '</td>');
+		noviRed.append('<td class="column1">' + br.datumPolaska + '</td>');
+		noviRed.append('<td class="column1">' + br.datumDolaska + '</td>');
+		noviRed.append('<td class="column1">' + "red: " + br.sjediste.red + ", kolona: "  + br.sjediste.kolona + '</td>');
+		noviRed.append('<td class="column1">' + br.originalnaCijena + '</td>');
+		noviRed.append('<td class="column1">' + br.popust + '</td>');
+	
+		prikaz.append(noviRed);
+	})
+}
+
+function vratiSveBrzeRezervacije(){
+	$.ajax({
+		type: "GET",
+		url: "../aviokompanije/dobaviBrzeRezervacije/" + aviokompanija.id,
+		success: function(response) {
+			prikaziBrzeRez(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+}
+
+function resetBrzeRezervacijeView() {
+	$("#izborLetaBrzeRezervacije").show();
+	$("#definisanjePopustaBrzeRezervacije").hide();
+	$("#izborLetaBrzeRezervacijeBtn")[0].checked = true;
+	$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = false;
+	$("#letoviBrzeRezervacije").hide();
+	$("#prikazLetovaBrzeRezervacije").empty();
+	$("#pretragaLetaRezForm")[0].reset();
+	$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(0);
+	$("#procenatPopustaBrzeRezervacije").val(0);
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(0);
+	$("#tab-brze-rezervacije-pregledanje").show();
+	$("#izborLetaBrzeRezervacije").hide();
+	$("#tab-brze-rezervacije-dodavanje").hide();
+	$("#input-start").val("");
+	$("#input-end").val("");
+	vratiSveBrzeRezervacije();
+}
+
+function azurirajCijeneBrzeRezervacije(){
+	if(tekucaBrzaRezervacija == null) {
+		return;
+	}
+	let procenatPopusta = $("#procenatPopustaBrzeRezervacije").val();
+	procenatPopusta = parseFloat(procenatPopusta);
+	if(isNaN(procenatPopusta)) {
+		return;
+	}
+	if(procenatPopusta < 0 || procenatPopusta > 100) {
+		return;
+	}
+	let popust = tekucaBrzaRezervacija.cijena * procenatPopusta / 100;
+	let cijenaSaPopustom = tekucaBrzaRezervacija.cijena - popust;
+	$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(cijenaSaPopustom);
+}
+
 function dodajBrzuRezervaciju() {	
 	if (scGlobal.find('selected').length != 1) {
 		alert("Morate odabrati jedno sjedište prije nego što pređete na sledeći korak.");
 		return;
 	}
+	
+	let _sjedisteId = scGlobal.find('selected').seatIds[0];
+	
+	let brzaRezervacijaKarte = {
+			aviokompanijaId : aviokompanija.id,
+			letId : izabraniLetZaBrzuRezervacijuId,
+			sjedisteId : _sjedisteId
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../aviokompanije/dodajBrzuRezervacijuKarte/",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(brzaRezervacijaKarte),
+		success: function(response) {
+			tekucaBrzaRezervacija = response;
+			alert("Sjedište je uspješno dodato na brzu rezervaciju.");
+			$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.cijena);
+			$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.cijena);
+			$("#izborLetaBrzeRezervacije").hide();
+			$("#izborSjedistaBrzeRez").hide();
+			$("#definisanjePopustaBrzeRezervacije").show();
+			$("#izborLetaBrzeRezervacijeBtn")[0].checked = false;
+			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = true;
+			return;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
+	
 }
 
 function recalculateTotal(sc) {
