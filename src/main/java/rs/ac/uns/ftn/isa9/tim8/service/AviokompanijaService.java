@@ -3,11 +3,13 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,14 +20,12 @@ import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
-import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
-import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
@@ -40,7 +40,6 @@ import rs.ac.uns.ftn.isa9.tim8.repository.BrzaRezervacijaSjedistaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.Rezervacija_sjedistaRepository;
-import rs.ac.uns.ftn.isa9.tim8.repository.SjedisteRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
@@ -696,6 +695,84 @@ public class AviokompanijaService {
 		brzaRezervacijaSjedistaRepository.save(rezervacija);
 
 		return brzaRezervacija;
+	}
+
+	public Boolean jeLiSjedisteRezervisano(Sjediste s, Collection<RezervacijaSjedista> rezervisanaSjedista) {
+		for (RezervacijaSjedista rs : rezervisanaSjedista) {
+			if (rs.getSjediste().getId().equals(s.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static Date removeTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+
+	public Collection<Let> slobodniLetovi(Aviokompanija aviokompanija, Date pocetniDatum, Date krajnjiDatum) {
+		Collection<Let> rezultat = new HashSet<Let>();
+
+		Date trenutniDatum = new Date();
+
+		Set<Let> sviLetoviAviokompanije = aviokompanija.getLetovi();
+
+		for (Let l : sviLetoviAviokompanije) {
+
+			Date datumPoletanja = removeTime(l.getDatumPoletanja());
+			Date datumSletanja = removeTime(l.getDatumSletanja());
+			Date pocetni = removeTime(pocetniDatum);
+			Date krajnji = removeTime(krajnjiDatum);
+
+			if (!l.getDatumPoletanja().before(trenutniDatum) && !l.getDatumSletanja().before(trenutniDatum)
+					&& !pocetniDatum.after(krajnjiDatum) && datumPoletanja.compareTo(pocetni) == 0
+					&& datumSletanja.compareTo(krajnji) == 0) {
+
+				Set<Sjediste> sjedista = l.getAvion().getSjedista();
+				for (Sjediste s : sjedista) {
+					// kroz sjedista i gledas postoji li rezervacija za to sjediste
+					if (!jeLiSjedisteRezervisano(s, l.getRezervacije())) {
+						rezultat.add(l);
+						break;
+					}
+				}
+			}
+		}
+
+		return rezultat;
+	}
+
+	public Collection<Let> pretraziLetoveZaBrzuRezervaciju(PretragaLetaDTO kriterijumiPretrage, Long aviokompanijaId)
+			throws NevalidniPodaciException {
+		Optional<Aviokompanija> pretragaAviokompanija = aviokompanijaRepository.findById(aviokompanijaId);
+
+		if (!pretragaAviokompanija.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa datim id-jem. Pokusajte ponovo.");
+		}
+
+		Aviokompanija aviokompanija = pretragaAviokompanija.get();
+
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPoletanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumSletanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+
+		Collection<Let> letovi = slobodniLetovi(aviokompanija, pocetniDatum, krajnjiDatum);
+
+		return letovi;
+
 	}
 
 }

@@ -13,6 +13,7 @@
     <!-- Title Page-->
     <title>Administrator aviokompanije</title>
 
+	
     <!-- Icons font CSS-->
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
     <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
@@ -29,15 +30,14 @@
     <!-- Popup window -->
     <link href="css/popup.css" rel="stylesheet" media="all">
     
-    
-  	<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
    	<script type="text/javascript" src="../js/auth.js"></script>
+   	
+   	<!-- SVE STO JE POTREBNO ZA BIBLIOTEKU jquerySeats -->
+    <link rel="stylesheet" href="css/jquery.seat-charts.css">
+   	
    	<script type="text/javascript" src="../js/administratorAviokompanije.js"></script>
     
-    
-    
-    <!-- SVE STO JE POTREBNO ZA BIBLIOTEKU selectize.js -->
-	<script src="../js/selectize.js-master/dist/js/standalone/selectize.js"></script>
     
 </head>
 
@@ -497,7 +497,7 @@
                               <div class="input-group">
 	                                            <label class="label">Presjedanja: </label>
 	                                            <div class="rs-select2 js-select-simple">
-	                                                <select multiple name="sva_presjedanja" id = "svaPresjedanja" required="required">
+	                                                <select multiple name="sva_presjedanja" id = "svaPresjedanja">
 	                                                
 	                                                </select>
 	                                                <div class="select-dropdown"></div>
@@ -563,14 +563,14 @@
 	                                <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
-                                            <label class="label">Datum preuzimanja</label>
+                                            <label class="label">Datum polaska</label>
                                             <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
                                     </div>
                                     <div class="col-2">
                                         <div class="input-group">
-                                            <label class="label">Datum vraćanja</label>
+                                            <label class="label">Datum dolaska</label>
                                             <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end">
                                             <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
                                         </div>
@@ -600,7 +600,17 @@
 									<button class="btn btn-submit" id="zadajLetBrzeRezervacijeBtn">Potrvrdi i nastavi &gt;</button>
 									</div>
                             </div>
-                                                    
+                            
+                            <div id = "izborSjedistaBrzeRez" hidden="hidden">
+                            	<h2 class="zaglavlje">Odabir sjedišta</h2>   
+                            	<div id="seat-map">
+                            		<div class="front-indicator"></div>
+								</div>
+                            	
+                            	
+                            	                         
+                            </div>
+                                                 
                             <div id="definisanjePopustaBrzeRezervacije" hidden="hidden">
                             	<div class="input-group">
                                     <label class="label">Ukupna cijena avionske karte (bez zadatog popusta):</label>
@@ -796,6 +806,7 @@
 
     <!-- Main JS-->
     <script src="js/global.js"></script>
+    <script src="js/jquery.seat-charts.js"></script>
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
