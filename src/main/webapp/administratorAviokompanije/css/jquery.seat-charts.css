@@ -3,15 +3,15 @@ div.seatCharts-container {
 }
 div.seatCharts-cell {
 
-	height: 16px;
-	width: 16px;
+	height: 32px;
+	width: 32px;
 	margin: 3px;
 	float: left;
 	text-align: center;
 	outline: none;
 	font-size: 13px;
 	line-height:16px;
-	color: blue;
+	color: white;
 
 }
 div.seatCharts-seat {
@@ -32,7 +32,7 @@ div.seatCharts-seat:focus {
 */
 
 div.seatCharts-space {
-	background-color: white;
+	background-color: transparent;
 }
 div.seatCharts-row {
 	height: 50px;
@@ -43,7 +43,7 @@ div.seatCharts-row:after {
 }
 
 div.seatCharts-seat.selected {
-	background-color: aqua;
+	background-color: blue;
 }
 
 div.seatCharts-seat.focused {
@@ -65,4 +65,6 @@ ul.seatCharts-legendList {
 li.seatCharts-legendItem {
 	margin-top: 10px;
 	line-height: 2;
+	font-size: 20px;
+	color: white;
 }
