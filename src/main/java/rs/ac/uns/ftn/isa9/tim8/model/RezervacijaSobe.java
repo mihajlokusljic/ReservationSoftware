@@ -50,8 +50,12 @@ public class RezervacijaSobe {
 	@JoinColumn(name = "putovanje_id")	
 	protected Putovanje putovanje;
 	
+	@Column(name = "ocjenjeno")
+    protected boolean ocjenjeno;
+	
 	public RezervacijaSobe() {
 		super();
+		this.ocjenjeno = false;
 	}
 	public RezervacijaSobe(Date datumDolaska, Date datumOdlaska, double cijena, HotelskaSoba rezervisanaSoba) {
 		super();
@@ -59,7 +63,18 @@ public class RezervacijaSobe {
 		this.datumOdlaska = datumOdlaska;
 		this.cijena = cijena;
 		this.rezervisanaSoba = rezervisanaSoba;
+		this.ocjenjeno = false;
 	}
+	
+	public RezervacijaSobe(Date datumDolaska, Date datumOdlaska, double cijena, HotelskaSoba rezervisanaSoba, boolean ocjenjeno) {
+		super();
+		this.datumDolaska = datumDolaska;
+		this.datumOdlaska = datumOdlaska;
+		this.cijena = cijena;
+		this.rezervisanaSoba = rezervisanaSoba;
+		this.ocjenjeno = ocjenjeno;
+	}
+	
 	public Date getDatumDolaska() {
 		return datumDolaska;
 	}
