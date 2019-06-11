@@ -115,6 +115,7 @@ $(document).ready(function() {
 	
 	$("#hoteliT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg", "infoStranicaHotela");
 		$("#tab-aviokompanije").hide();
 		$("#tab-hoteli").show();
 		$("#tab-rac-servisi").hide();
@@ -1020,9 +1021,133 @@ function prikaziRezervisaneSobe(rezSoba){
 		noviRed.append('<td class="column1">' + rSoba.datumDolaksa + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumOdlaksa + '</td>');
 		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuSobe" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniSobu" id = "' + i + '">Ocjeni sobu</a></td></tr>')
 
 		tabela.append(noviRed);
 	});
+	
+	// okvir popup-a
+	var modal = document.getElementById("myModal");
+
+	// <span> za zatvaranje
+	var span = document.getElementsByClassName("close")[0];
+	
+	
+	
+	$(".ocjeniSobu").click(function(e){
+		
+		e.preventDefault();
+		
+		var ratingValue = 0;
+		let rezervacija = rezSoba[e.target.id];
+		
+		var ocjenjeno = false;
+		//provjera da li je vec ocjenjeno
+		$.ajax({
+			type : 'GET',
+			url : "../rezervacijeSoba/ocjenjenaRezervacija/" + rezervacija.idRezervacije,
+			dataType : "json",
+			async : false,
+			success: function(response){
+				ocjenjeno = response;
+				if(response == true){
+					alert("Vec ste ocjenili koristenu rezervaciju");
+					return;
+				}
+			},
+		});
+		
+		if (ocjenjeno == true){
+			return;
+		}
+		
+		var trenutniDatum = new Date();
+		var datumVracanja = Date.parse(rezervacija.datumOdlaksa);
+		
+		if (datumVracanja>trenutniDatum) {
+			alert("Ne mozete ocjeniti sobu prije njenog napustanja.");
+			return;
+		}
+		
+		modal.style.display = "block";
+		// kad korisnik klikne na "x" zatvara se prozor
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+		 var stars = $('#stars li').parent().children('li.star');
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		// kad korisnik klikne bilo gdje izvan prozora prozor se zatvara
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		/* 1. Prelazak preko zvjezdica */
+		  $('#stars li').on('mouseover', function(){
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda na kojoj je trenutno kursor misa
+		   
+		    // highlight zvjezdica preko kojih je predjeno
+		    $(this).parent().children('li.star').each(function(e){
+		      if (e < onStar) {
+		        $(this).addClass('hover');
+		      }
+		      else {
+		        $(this).removeClass('hover');
+		      }
+		    });
+		    
+		  }).on('mouseout', function(){
+		    $(this).parent().children('li.star').each(function(e){
+		      $(this).removeClass('hover');
+		    });
+		  });
+		  
+		  
+		  /* 2. Akcije za klik */
+		  $('#stars li').click(function(e){
+			  e.preventDefault();
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda koja je odabrana
+		    var stars = $(this).parent().children('li.star');
+		    
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		    
+		    for (i = 0; i < onStar; i++) {
+		      $(stars[i]).addClass('selected');
+		    }
+		    
+		    // Vrijednost odabrane zvjezdice
+		     ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+		    var msg = "";
+		    if (ratingValue > 1) {
+		        msg = "Hvala! Glasali se sa " + ratingValue + " zvjezdica.";
+		    }
+		    else {
+		        msg = "Pokušaćemo da poboljšamo svoje usluge. Glasali ste sa " + ratingValue + " zvjezdica.";
+		    }
+		    
+		    $("#potvrdi_ocjenu").unbind().click(function(e){
+		    	e.preventDefault();
+			    modal.style.display = "none";
+			    $.ajax({
+					type: "POST",
+					url : "../rezervacijeSoba/ocjeniSobu/" + ratingValue,
+					contentType : "application/json; charset=utf-8",
+					data: JSON.stringify(rezervacija.idRezervacije),
+					async : false,
+					success: function(response) {
+						alert(response);
+					},
+				});
+
+		    });
+		  });
+	})
+	
 	
 	$(".otkaziRezervacijuSobe").click(function(e){
 		e.preventDefault();
