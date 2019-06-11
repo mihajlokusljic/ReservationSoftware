@@ -287,4 +287,24 @@ public class RentACarKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/ocjeniVozilo/{ratingValue}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> ocjeniVozilo(@RequestBody Long id, @PathVariable("ratingValue") int ratingValue){
+		try {
+			return new ResponseEntity<String >(this.servis.ocjeniVozilo(id, ratingValue), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	@RequestMapping(value = "/ocjenjenaRezervacija/{idRezervacije}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+ 	public ResponseEntity<?> OcjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
+		try {
+			return new ResponseEntity<Boolean>(servis.rezervacijaVozilaOcjenjena(idRezervacije), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 }

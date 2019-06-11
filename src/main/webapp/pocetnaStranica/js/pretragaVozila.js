@@ -58,7 +58,7 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 		ocjena = 0;
 	}
 	else{
-		ocjena = podatak.sumaOcjena/podatak.brojOcjena;
+		ocjena = (podatak.sumaOcjena/podatak.brojOcjena).toFixed(2);
 	}
 	noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');

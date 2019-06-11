@@ -1,5 +1,8 @@
-let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"]
-let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"]
+let stavkeMenija = ["stavkaPoslovnice", "stavkaAdministratori", "stavkaPopusti","stavkaProfilKorisnika"];
+let tabovi = ["tab-aviokompanije", "tab-hoteli", "tab-rac", "tab-administartori",
+	"tab-zadavanje-skale-popusta", "tab-prikaz-skale-popusta", "tab-profil-kor", "tab-lozinka"];
+let poslovnicaAdminaInputs = ["aviokompanijaAdmina", "hotelAdmina", "racServisAdmina"];
+let poslovnicaInputs = ["aviokompanijaAdminaInp", "hotelAdminaInp", "racAdminaInp"];
 let podaciAdmina = null;
 let pocetnaStrana = "../pocetnaStranica/index.html";
 let mapaAviokompanije = null;
@@ -36,6 +39,9 @@ $(document).ready(function(e) {
 
 	//ucitavanje rent-a-car servisa
 	ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "racServisAdminaSelect", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
+	
+	//ucitavanje skale popusta
+	ucitajSkaluPopusta();
 
 	//podesavanje vidljivosti polja za poslovnicu kod dodavanja novog administratora
 	$("#adminAviokompanijeBtn").click(function() {
@@ -52,6 +58,74 @@ $(document).ready(function(e) {
 	
 	$("#sysAdminBtn").click(function() {
 		if($("#sysAdminBtn").is(":checked")) { prikaziIzborPoslovnice(""); }
+	});
+	
+	//podesavanje vidljivosti za pomoc pri unosu skale popusta za bonus poene
+	$("#skalaPopustaSakrijPomoc").click(function(e) {
+		e.preventDefault();
+		$("#stavkePopustaPomoc").hide();
+		$("#skalaPopustaPrikaziPomoc").show();
+	});
+	
+	$("#skalaPopustaPrikaziPomoc").click(function(e) {
+		e.preventDefault();
+		$("#skalaPopustaPrikaziPomoc").hide();
+		$("#stavkePopustaPomoc").show();
+	});
+	
+	//reakcije na klik na navigacionom meniju
+	$("#aviokompanije").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-aviokompanije");
+	});
+	
+	$("#hoteli").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-hoteli");
+	});
+	
+	$("#racServisi").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPoslovnice");
+		prikaziTab("tab-rac");
+	});
+	
+	$("#administrtori").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaAdministratori");
+		prikaziTab("tab-administartori");
+	});
+	
+	$("#zadavanjeSkalePopusta").click(function(e) {
+		e.preventDefault();
+		let potvrda = confirm("Da li ste sigurni da zelite obrisati postojecu skalu popusta i zadati novu?");
+		if(potvrda) {
+			brisanjeSkalePopusta();
+			$("#zadateStavkePopustaPrikaz").empty();
+			$("#skalaPopustaPrikaz").empty();
+			aktivirajStavkuMenija("stavkaPopusti");
+			prikaziTab("tab-zadavanje-skale-popusta");
+		}
+	});
+	
+	$("#pregledSkalePopusta").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaPopusti");
+		prikaziTab("tab-prikaz-skale-popusta");
+	});
+	
+	$("#izmjeni_podatke").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-profil-kor");
+	});
+	
+	$("#promjeni_lozinku").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaProfilKorisnika");
+		prikaziTab("tab-lozinka");
 	});
 	
 	//dodavanje aviokompanije
@@ -78,6 +152,30 @@ $(document).ready(function(e) {
 		dodavanjeAdmina();
 	});
 	
+	//dodavanje nove stavke skale popusta za bonus poene
+	$("#dodavanjeStavkeSkalePopustaForm").submit(function(e) {
+		e.preventDefault();
+		dodavanjeStavkeDodatnogPopusta();
+	});
+	
+	//izmjena profila
+	$("#forma_profil_korisnika").submit(function(e){
+		e.preventDefault();
+		izmjenaProfila();
+	});
+	
+	//ponistavanje izmjena profila
+	$("#ponistavanjeIzmjenaProfila").click(function(e) {
+		e.preventDefault();
+		prikaziPodatkeAdmina();
+	});
+	
+	//izmjena lozinke
+	$("#forma_lozinka").submit(function(e) {
+		e.preventDefault();
+		promjenaLozinke();
+	});
+	
 	//odjavljivanje
 	$("#odjava").click(function(e) {
 		e.preventDefault();
@@ -86,6 +184,26 @@ $(document).ready(function(e) {
 		
 	
 });
+
+function prikaziTab(idTaba) {
+	for(i in tabovi) {
+		if(idTaba == tabovi[i]) {
+			$("#" + tabovi[i]).addClass("active");
+		} else {
+			$("#" + tabovi[i]).removeClass("active");
+		}
+	}
+}
+
+function aktivirajStavkuMenija(idStavke) {
+	for(i in stavkeMenija) {
+		if(idStavke == stavkeMenija[i]) {
+			$("#" + stavkeMenija[i]).addClass("active");
+		} else {
+			$("#" + stavkeMenija[i]).removeClass("active");
+		}
+	}
+}
 
 function prikaziIzborPoslovnice(idPoslovnice) {
 	$.each(poslovnicaAdminaInputs, function(i, tekucaPoslovnicaId) {
@@ -284,17 +402,108 @@ function korisnikInfo(){
 	$.ajax({
 		type : 'GET',
 		url : "../korisnik/getInfo",
+		async: false,
 		dataType : "json",
 		success: function(data){
 			if(data != null){
 				podaciAdmina = data;
-				$("#podaciAdmina").append(data.ime + " " + data.prezime);
+				prikaziPodatkeAdmina();
+				if(!podaciAdmina.lozinkaPromjenjena) {
+					izmjenaInicijalneLozinke();
+				}
 			}
 			else{
 				alert("nepostojeci korisnik");
 			}
 		},
 	});
+}
+
+function brisanjeSkalePopusta() {
+	$.ajax({
+		type : 'DELETE',
+		url : "../bonusSkala/obrisiSkalu",
+		async: false,
+		dataType : "json",
+		success: function(ok){
+			if(!ok) {
+				alert("Doslo je do greske pri resetovanju skale popusta");
+			}
+		},
+	});
+}
+
+function dodavanjeStavkeDodatnogPopusta() {
+	let _donjaGranicaPoeni = $("#donjaGranicaPoeni").val();
+	_donjaGranicaPoeni = parseFloat(_donjaGranicaPoeni);
+	let _gornjaGranicaPoeni = $("#gornjaGranicaPoeni").val();
+	_gornjaGranicaPoeni = parseFloat(_gornjaGranicaPoeni);
+	
+	if(_gornjaGranicaPoeni < _donjaGranicaPoeni) {
+		alert("Gornja granica za ostvarene bonus poene ne smije biti manja od donje granice.");
+	}
+	
+	let _procenatPopusta = $("#procenatBonusPopusta").val();
+	
+	let novaStavka = {
+			donjaGranicaBonusPoeni: _donjaGranicaPoeni,
+			gornjaGranicaBonusPoeni: _gornjaGranicaPoeni,
+			ostvarenProcenatPopusta: _procenatPopusta
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../bonusSkala/dodajStavku",
+		data: JSON.stringify(novaStavka),
+		success: function(response) {
+			prikaziStavku(response, true);
+			$("#dodavanjeStavkeSkalePopustaForm")[0].reset();
+			if(response.gornjaGranicaBonusPoeni == null) {
+				prikaziTab("tab-prikaz-skale-popusta");
+				$("#donjaGranicaPoeni").val(0);
+				$("#donjaGranicaPoeni").attr("min", 0);
+			} else {
+				$("#donjaGranicaPoeni").val(response.gornjaGranicaBonusPoeni);
+				$("#donjaGranicaPoeni").attr("min", response.gornjaGranicaBonusPoeni);
+			}
+		},
+	});
+	
+}
+
+function prikaziStavku(stavka, dodavanje) {
+	let zadateStavke = $("#zadateStavkePopustaPrikaz");
+	let sveStavke = $("#skalaPopustaPrikaz");
+	let noviRed = $('<tr></tr>');
+	let gornjaGranica = stavka.gornjaGranicaBonusPoeni;
+	if(gornjaGranica == null) {
+		gornjaGranica = "∞";
+	}
+	noviRed.append('<td class="column1">[' + stavka.donjaGranicaBonusPoeni + ", " + gornjaGranica + ")</td>");
+	noviRed.append('<td class="column1">' + stavka.ostvarenProcenatPopusta + "%</td>");
+	noviRed.appendTo(sveStavke);
+	if(dodavanje) {
+		noviRed.clone().appendTo(zadateStavke);
+	}
+	
+}
+
+function izmjenaInicijalneLozinke() {
+	$("#meni").hide();
+	$("#izmjenaInicijalneLozinkePoruka").show();
+	prikaziTab("tab-lozinka");
+}
+
+function prikaziPodatkeAdmina() {
+	$("#emailKorisnika").val(podaciAdmina.email);
+	$("#imeKorisnika").val(podaciAdmina.ime);
+	$("#prezimeKorisnika").val(podaciAdmina.prezime);
+	$("#brTelefonaKorisnika").val(podaciAdmina.brojTelefona);
+	if(podaciAdmina.adresa == null) {
+		$("#adresaKorisnika").val("");
+	} else {
+		$("#adresaKorisnika").val(podaciAdmina.adresa.punaAdresa);
+	}
 }
 
 function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, idSelekcionogMenija, defaultSlika) {
@@ -324,6 +533,18 @@ function prikazi(podatak, tabelaZaPrikaz, selekcioniMeni, defaultSlika) {
 	if(selekcioniMeni != undefined) {
 		selekcioniMeni.append('<option value="' + podatak.id + '">' + podatak.naziv + ', ' + podatak.adresa.punaAdresa + '</option>');
 	}
+}
+
+function ucitajSkaluPopusta() {
+	$.ajax({
+		type: "GET",
+		url: "../bonusSkala/dobaviStavke",
+		success: function(response) {
+			$.each(response, function(i, stavka) {
+				prikaziStavku(stavka, false);
+			});
+		},
+	});
 }
 
 function odjava() {
@@ -389,6 +610,90 @@ function inicijalizujMape() {
 	mapaRacServisa.controls.add('geolocationControl');
 	mapaRacServisa.controls.add('typeSelector');
 	mapaRacServisa.controls.add('zoomControl');
+}
+
+function izmjenaProfila(){
+	
+	var imeAdmina = $("#imeKorisnika").val();
+	if (imeAdmina == ''){
+		alert("Polje za unos imena ne moze biti prazno.");
+		return;
+	}
+	var prezimeAdmina = $("#prezimeKorisnika").val();
+	if (prezimeAdmina == ''){
+		alert("Polje za unos prezimena ne moze biti prazno.");
+		return;
+	}
+	var brTelefonaAdmina = $("#brTelefonaKorisnika").val();
+	if (brTelefonaAdmina == ''){
+		alert("Polje za unos broja telefona ne moze biti prazno.");
+		return;
+	}
+	var adresaAdmina = $("#adresaKorisnika").val();
+	if (adresaAdmina == ''){
+		alert("Polje za unos adrese ne moze biti prazno.");
+		return;
+	}		
+
+	let admin = {
+			id: podaciAdmina.id,
+			email: podaciAdmina.email,
+			ime: imeAdmina,
+			prezime: prezimeAdmina,
+			brojTelefona: brTelefonaAdmina,
+			adresa: { punaAdresa : adresaAdmina }
+	};
+	$.ajax({
+		type:"PUT",
+		url:"../korisnik/izmjeniProfil",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(admin),
+		success:function(response){
+			alert("Uspjesno ste izmjenili profil.");
+			podaciAdmina = response;
+			prikaziPodatkeAdmina();
+		},
+	});
+}
+
+function promjenaLozinke() {
+	var staraLozinka = $("#staraLozinka").val();
+	var novaLozinka = $("#novaLozinka").val();
+	var novaLozinka2 = $("#novaLozinka2").val();
+	var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
+
+	if (novaLozinka == ''){
+		alert("Niste unijeli novu lozinku");
+		return;
+	}
+	
+	if (novaLozinka != novaLozinka2){
+		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		return;
+	}
+	
+	$.ajax({
+		type : 'PUT',
+		url : "../auth/changePassword/" + staraLozinka,
+		data : novaLozinka,
+		success : function(data) {
+			if (data == ''){
+				alert("Pogresna trenutna lozinka.");
+				return;
+			}
+			else{
+				setJwtToken(data.accessToken);
+				alert("Uspjesno ste izmjenili lozinku");
+				if(!lozinkaMijenjana) {
+					$("#izmjenaInicijalneLozinkePoruka").hide();
+					$("#meni").show();
+					prikaziTab("tab-aviokompanije");
+					podaciAdmina.lozinkaPromjenjena = true;
+				}
+			}
+			$("#forma_lozinka")[0].reset();
+		}
+	});
 }
 
 ymaps.ready(inicijalizujMape);

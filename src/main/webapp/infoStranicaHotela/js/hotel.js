@@ -54,6 +54,8 @@ $(document).ready(function(e) {
 	
 	if(idKorisnika != null) {
 		rezimRezervacije = true;
+		$("#rezervacijaSobaKoraci").show();
+		$("#izborSobeCol").show();
 	}
 	
 	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
@@ -86,7 +88,93 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		redirectNaPocetnu();
 	});
+	
+	//prikaz koraka za rezervaciju sobe
+	$("#izborSobeBtn").click(function(e) {
+		if ($("#izborSobeBtn").is(":checked")) {
+			$("#pretragaIzborSoba").show();
+			$("#izborDodatnihUsluga").hide();
+		}
+	});
+	
+	$("#izborDodatnihUslugaBtn").click(function(e) {
+		if ($("#izborDodatnihUslugaBtn").is(":checked")) {
+			$("#izborDodatnihUsluga").show();
+			$("#pretragaIzborSoba").hide();
+		}
+	});
+	
+	//izbor soba za rezevaciju i prelazak na izbor dodatnih usluga
+	$("#zadajSobeRezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		$("#izborDodatnihUsluga").show();
+		$("#pretragaIzborSoba").hide();
+		$("#izborSobeBtn")[0].checked = false;
+		$("#izborDodatnihUslugaBtn")[0].checked = true;
+	});
+	
+	//izbor dodatnih usluga i rezervacija smjestaja
+	$("#uslugeIRezervacijaBtn").click(function(e) {
+		e.preventDefault();
+		izvrsiRezervaciju();
+	});
 });
+
+function izvrsiRezervaciju() {
+	let sobeIds = [];
+	let uslugeIds = [];
+	let idSobe = null;
+	let idUsluge = null;
+	
+	let sobeBtns = $(".rezervacijaSobe");
+	$.each(sobeBtns, function(i, btn) {
+		if(btn.checked) {
+			idSobe = btn.id.substring(2); //id dugmeta je tipa "rs<id sobe>"
+			sobeIds.push(idSobe);
+		}
+	});
+	if(sobeIds.length == 0) {
+		alert("Morate izabrati bar jednu sobu.");
+		return;
+	}
+	
+	let uslugeBtns = $(".rezervacijaUsluge");
+	$.each(uslugeBtns, function(i, btn) {
+		if(btn.checked) {
+			idUsluge = btn.id.substring(2); //id dugmeta je tipa "ru<id usluge>"
+			uslugeIds.push(idUsluge);
+		}
+	});
+	
+	let _datumDolaska = $("#input-start").val();
+	let _datumOdlaska = $("#input-end").val();
+	
+	if(_datumDolaska == "" || _datumOdlaska == "") {
+		alert("Period boravka mora biti zadat.");
+		return;
+	}
+	
+	let rezervacija = {
+			sobeZaRezervacijuIds: sobeIds,
+			dodatneUslugeIds: uslugeIds,
+			putovanjeId: idPutovanja,
+			datumDolaska: _datumDolaska,
+			datumOdlaksa: _datumOdlaska
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: "../rezervacijeSoba/izvrsiRezervaciju",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(rezervacija),
+		success: function(response) {
+			alert(response);
+			redirectNaPocetnu();
+		},
+	});
+	
+	
+}
 
 function ucitajPodatkeHotela() {
 	$.ajax({
@@ -135,7 +223,7 @@ function prikaziPodatkeHotela() {
 	let brOcjena = podaciHotela.brojOcjena;
 	brOcjena = parseInt(brOcjena);
 	if(brOcjena > 0) {
-		$("#ocjenaHotela").val(sumaOcjena / brOcjena);
+		$("#ocjenaHotela").val((sumaOcjena / brOcjena).toFixed(2));
 	} else {
 		$("#ocjenaHotela").val("Nema ocjena");
 	}
@@ -149,6 +237,17 @@ function prikaziPodatkeHotela() {
 		noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
 		noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
 		tabelaUsluga.append(noviRed);
+	});
+	
+	let tabelaIzborUsluga = $("#izborUslugaRezervacija");
+	$.each(podaciHotela.cjenovnikDodatnihUsluga, function(i, usluga) {
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
+		noviRed.append('<td class="column1">' + usluga.cijena + '</td>');
+		noviRed.append('<td class="column1">' + usluga.procenatPopusta + ' %</td>');
+		noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
+		noviRed.append('<td class="column6"><input type="checkbox" class="rezervacijaUsluge" id="ru' + usluga.id + '"/></td>');
+		tabelaIzborUsluga.append(noviRed);
 	});
 }
 
@@ -247,7 +346,7 @@ function prikaziBrzeRezervacije(brzeRezervacije) {
 		let soba = rezervacija.sobaZaRezervaciju;
 		noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
 		if(soba.brojOcjena > 0) {
-			noviRed.append('<td class="column1">' + soba.sumaOcjena / soba.brojOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (soba.sumaOcjena / soba.brojOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
@@ -302,7 +401,7 @@ function detaljanPrikazBrzeRez(idRez) {
 	let soba = brzaRez.sobaZaRezervaciju;
 	$("#brojSobeBrzaRez").val(soba.brojSobe);
 	if(soba.brojOcjena > 0) {
-		let ocjena = soba.sumaOcjena / soba.brojOcjena;
+		let ocjena = (soba.sumaOcjena / soba.brojOcjena).toFixed(2);
 		$("#ocjenaSobeBrzaRez").val(ocjena);
 	} else {
 		$("#ocjenaSobeBrzaRez").val("Nema ocjena");
@@ -346,12 +445,19 @@ function prikaziSobe(sobe) {
 		let brOcjena = soba.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
+		if(rezimRezervacije) {
+			noviRed.append('<td class="column6"><input type="checkbox" class="rezervacijaSobe" id="rs' + soba.id + '"/></td>');
+		}
 		prikaz.append(noviRed);
-	})
+	});
+	
+	if(rezimRezervacije) {
+		$("#zadajSobeRezervacijeBtn").show();
+	}
 }
 
 function redirectNaPocetnu() {

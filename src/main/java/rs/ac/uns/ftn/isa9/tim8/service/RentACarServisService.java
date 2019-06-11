@@ -85,6 +85,8 @@ public class RentACarServisService {
 		for( RentACarServis r : rentACarLista) {
 			Poslovnica p = new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
 			p.setId(r.getId());
+			p.setSumaOcjena(r.getSumaOcjena());
+			p.setBrojOcjena(r.getBrojOcjena());
 			servisi.add(p);
 		}
 
@@ -394,7 +396,10 @@ public class RentACarServisService {
 		if (kriterijumiPretrage.getNazivRacIliDestinacije().isEmpty() && pocetniDatum == null && krajnjiDatum == null) {
 			Collection<Poslovnica> p = new ArrayList<>();
 			for (RentACarServis r:rezultat) {
-				p.add(new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa()));
+				Poslovnica posl = new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
+				posl.setBrojOcjena(r.getBrojOcjena());
+				posl.setSumaOcjena(r.getSumaOcjena());
+				p.add(posl);
 			}
 			
 			return p;
@@ -959,5 +964,63 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		}
 		
 		return Double.toString(prihodi);
+	}
+	
+	//ocjenjivanje koristenog vozila i rent-a-car servisa od strane korisnika 
+	public String ocjeniVozilo(Long id, int ratingValue) throws NevalidniPodaciException {
+		Optional<RezervacijaVozila> pretragaRez = rezervacijaVozilaRepository.findById(id);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaVozila rVozila = pretragaRez.get();
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(rVozila.getRentACarServis().getId());
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je obrisan rent-a-car servis cije su usluge koristene.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Optional<Vozilo> pretragaVozilo = voziloRepository.findById(rVozila.getRezervisanoVozilo().getId());
+		if (!pretragaVozilo.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je uklonjeno vozilo cije su usluge koristene.");
+		}
+		
+		Vozilo vozilo = pretragaVozilo.get();
+		
+		Date danasnjiDatum = new Date();
+		if (rVozila.getDatumVracanjaVozila().after(danasnjiDatum)) {
+			return "Ne mozete da ocjenite vozilo prije njegovog vracanja.";
+		}
+		
+		vozilo.setSumaOcjena(vozilo.getSumaOcjena() + ratingValue);
+		vozilo.setBrojOcjena(vozilo.getBrojOcjena() + 1);
+		rVozila.setOcjenjeno(true);
+		
+		rac.setSumaOcjena(rac.getSumaOcjena() + ratingValue);
+		rac.setBrojOcjena(rac.getBrojOcjena() + 1);
+		
+		rentACarRepository.save(rac);
+		voziloRepository.save(vozilo);
+		rezervacijaVozilaRepository.save(rVozila);
+		
+		return "Uspjesno ste ocjenili usluge vozila";
+	}
+
+	public Boolean rezervacijaVozilaOcjenjena(Long idRezervacije) throws NevalidniPodaciException{
+		Optional<RezervacijaVozila> pretragaRez = rezervacijaVozilaRepository.findById(idRezervacije);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaVozila rVozila = pretragaRez.get();
+		
+		if (rVozila.isOcjenjeno()) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

@@ -80,7 +80,10 @@ function ucitajPodatkeRac() {
 			let brOcjena = response.brojOcjena;
 			brOcjena = parseInt(brOcjena);
 			if(brOcjena > 0) {
-				$("#ocjenaRac").val(sumaOcjena / brOcjena);
+				var prosjek = sumaOcjena/brOcjena;
+				prosjek = prosjek.toFixed(2);
+
+				$("#ocjenaRac").val(prosjek);
 			} else {
 				$("#ocjenaRac").val("Nema ocjena");
 			}
@@ -206,7 +209,7 @@ function prikaziVozila(vozila) {
 		let brOcjena = vozilo.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
@@ -342,7 +345,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 		let brOcjena = rez.vozilo.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}

@@ -38,7 +38,7 @@ public class RezervacijaSobe {
 	@ColumnDefault("0")
 	protected double cijena;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "soba_id", referencedColumnName = "id")
 	protected HotelskaSoba rezervisanaSoba;
 	
@@ -50,8 +50,12 @@ public class RezervacijaSobe {
 	@JoinColumn(name = "putovanje_id")	
 	protected Putovanje putovanje;
 	
+	@Column(name = "ocjenjeno")
+    protected boolean ocjenjeno;
+	
 	public RezervacijaSobe() {
 		super();
+		this.ocjenjeno = false;
 	}
 	public RezervacijaSobe(Date datumDolaska, Date datumOdlaska, double cijena, HotelskaSoba rezervisanaSoba) {
 		super();
@@ -59,7 +63,18 @@ public class RezervacijaSobe {
 		this.datumOdlaska = datumOdlaska;
 		this.cijena = cijena;
 		this.rezervisanaSoba = rezervisanaSoba;
+		this.ocjenjeno = false;
 	}
+	
+	public RezervacijaSobe(Date datumDolaska, Date datumOdlaska, double cijena, HotelskaSoba rezervisanaSoba, boolean ocjenjeno) {
+		super();
+		this.datumDolaska = datumDolaska;
+		this.datumOdlaska = datumOdlaska;
+		this.cijena = cijena;
+		this.rezervisanaSoba = rezervisanaSoba;
+		this.ocjenjeno = ocjenjeno;
+	}
+	
 	public Date getDatumDolaska() {
 		return datumDolaska;
 	}
@@ -101,6 +116,12 @@ public class RezervacijaSobe {
 	}
 	public void setPutovanje(Putovanje putovanje) {
 		this.putovanje = putovanje;
+	}
+	public boolean isOcjenjeno() {
+		return ocjenjeno;
+	}
+	public void setOcjenjeno(boolean ocjenjeno) {
+		this.ocjenjeno = ocjenjeno;
 	}
 	
 }

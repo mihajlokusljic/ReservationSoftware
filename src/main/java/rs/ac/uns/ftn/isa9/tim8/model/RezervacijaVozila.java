@@ -64,9 +64,13 @@ public class RezervacijaVozila {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "putovanje_id")	
 	protected Putovanje putovanje;
+	
+	@Column(name = "ocjenjeno")
+    protected boolean ocjenjeno;
 
 	public RezervacijaVozila() {
 		super();
+		this.ocjenjeno = false;
 	}
 
 	public RezervacijaVozila(Vozilo rezervisanoVozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
@@ -78,8 +82,21 @@ public class RezervacijaVozila {
 		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
 		this.datumVracanjaVozila = datumVracanjaVozila;
 		this.cijena = cijena;
+		this.ocjenjeno = false;
 	}
-
+	
+	public RezervacijaVozila(Vozilo rezervisanoVozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
+			Filijala mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena, boolean ocjenjeno) {
+		super();
+		this.rezervisanoVozilo = rezervisanoVozilo;
+		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.ocjenjeno = ocjenjeno;
+	}
+	
 	public Vozilo getRezervisanoVozilo() {
 		return rezervisanoVozilo;
 	}
@@ -158,6 +175,14 @@ public class RezervacijaVozila {
 
 	public void setPutovanje(Putovanje putovanje) {
 		this.putovanje = putovanje;
+	}
+
+	public boolean isOcjenjeno() {
+		return ocjenjeno;
+	}
+
+	public void setOcjenjeno(boolean ocjenjeno) {
+		this.ocjenjeno = ocjenjeno;
 	}
 
 	

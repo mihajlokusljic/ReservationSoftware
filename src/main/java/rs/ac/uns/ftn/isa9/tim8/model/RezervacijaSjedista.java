@@ -53,9 +53,13 @@ public class RezervacijaSjedista {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "putovanje_id")
 	protected Putovanje putovanje;
-
+	
+	@Column(name = "ocjenjeno")
+    protected boolean ocjenjeno;
+	
 	public RezervacijaSjedista() {
 		super();
+		this.ocjenjeno = false;
 	}
 
 	public RezervacijaSjedista(Long id, String imePutnika, String prezimePutnika, String brojPasosaPutnika,
@@ -72,8 +76,27 @@ public class RezervacijaSjedista {
 		this.aviokompanija = aviokompanija;
 		this.let = let;
 		this.putovanje = putovanje;
+		this.ocjenjeno = false;
+	}
+	
+	public RezervacijaSjedista(Long id, String imePutnika, String prezimePutnika, String brojPasosaPutnika,
+			double cijena, Sjediste sjediste, RegistrovanKorisnik putnik, Aviokompanija aviokompanija, Let let,
+			Putovanje putovanje, boolean ocjenjeno) {
+		super();
+		Id = id;
+		this.imePutnika = imePutnika;
+		this.prezimePutnika = prezimePutnika;
+		this.brojPasosaPutnika = brojPasosaPutnika;
+		this.cijena = cijena;
+		this.sjediste = sjediste;
+		this.putnik = putnik;
+		this.aviokompanija = aviokompanija;
+		this.let = let;
+		this.putovanje = putovanje;
+		this.ocjenjeno = ocjenjeno;
 	}
 
+	
 	public Long getId() {
 		return Id;
 	}
