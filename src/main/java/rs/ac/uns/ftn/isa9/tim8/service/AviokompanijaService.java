@@ -789,6 +789,7 @@ public class AviokompanijaService {
 
 		Collection<String> sjedista = new ArrayList<String>();
 		Collection<PrikazSegmentaDTO> segmenti = new ArrayList<PrikazSegmentaDTO>();
+		Collection<Long> rezervisanaSjedistaIds = new ArrayList<Long>();
 
 		String oznake = "abcdefghij";
 		int tekuciSegmentIndex = -1;
@@ -811,6 +812,9 @@ public class AviokompanijaService {
 				sb.setLength(0);
 				tekucaVrsta = s.getRed();
 			}
+			if(jeLiSjedisteRezervisano(s, let.getRezervacije())) {
+				rezervisanaSjedistaIds.add(s.getId());
+			}
 			sb.append(oznake.charAt(tekuciSegmentIndex));
 			sb.append("[");
 			sb.append(s.getId());
@@ -819,7 +823,7 @@ public class AviokompanijaService {
 
 		sjedista.add(sb.toString());
 		
-		PrikazSjedistaDTO rezultat = new PrikazSjedistaDTO(sjedista, segmenti);
+		PrikazSjedistaDTO rezultat = new PrikazSjedistaDTO(sjedista, segmenti, rezervisanaSjedistaIds);
 
 		return rezultat;
 

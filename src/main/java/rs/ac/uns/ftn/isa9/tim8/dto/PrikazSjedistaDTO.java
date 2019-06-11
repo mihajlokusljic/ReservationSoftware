@@ -6,15 +6,20 @@ public class PrikazSjedistaDTO {
 	protected Collection<String> sjedista;
 
 	protected Collection<PrikazSegmentaDTO> segmenti;
+	
+	protected Collection<Long> zauzetaSjedistaIds;
+
 
 	public PrikazSjedistaDTO() {
 		super();
 	}
 
-	public PrikazSjedistaDTO(Collection<String> sjedista, Collection<PrikazSegmentaDTO> segmenti) {
+	public PrikazSjedistaDTO(Collection<String> sjedista, Collection<PrikazSegmentaDTO> segmenti,
+			Collection<Long> zauzetaSjedistaIds) {
 		super();
 		this.sjedista = sjedista;
 		this.segmenti = segmenti;
+		this.zauzetaSjedistaIds = zauzetaSjedistaIds;
 	}
 
 	public Collection<String> getSjedista() {
@@ -31,6 +36,14 @@ public class PrikazSjedistaDTO {
 
 	public void setSegmenti(Collection<PrikazSegmentaDTO> segmenti) {
 		this.segmenti = segmenti;
+	}
+
+	public Collection<Long> getZauzetaSjedistaIds() {
+		return zauzetaSjedistaIds;
+	}
+
+	public void setZauzetaSjedistaIds(Collection<Long> zauzetaSjedistaIds) {
+		this.zauzetaSjedistaIds = zauzetaSjedistaIds;
 	}
 
 }

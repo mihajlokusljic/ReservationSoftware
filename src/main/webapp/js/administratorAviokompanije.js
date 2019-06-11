@@ -9,6 +9,7 @@ let zoomLevel = 17;
 let stavkeMenija = ["stavka_destinacije", "stavka_avioni", "stavka_letovi", "stavka_brze_rezervacije", "stavka_izvjestaj", "profilKorisnickiTab",
 	"stavka_profil_aviokompanije", "stavka_dodatne_usluge", "stavka_odjava"];
 let izabraniLetZaBrzuRezervacijuId = null;
+let scGlobal = null;
 
 $(document).ready(function() {
 	
@@ -130,11 +131,18 @@ $(document).ready(function() {
 		pretraziSlobodneLetove();
 	});
 	
-	//zadavanje letova za brze rezervacije
+	//izbor jednog sjedista za brzu rezervaciju
 	$("#zadajLetBrzeRezervacijeBtn").click(function (e) {
 		e.preventDefault();
 		prikaziIzborSjedistaBrzeRezervacije();
 	});
+	
+	//zadavanje letova za brze rezervacije
+	$("#zadajSjedisteBrzeRezBtn").click(function (e) {
+		e.preventDefault();
+		dodajBrzuRezervaciju();
+	});
+	
 	//izmjena procenta popusta kod brzih rezervacija
 	$("#procenatPopustaBrzeRezervacije").change(function(e) {
 		e.preventDefault();
@@ -513,6 +521,13 @@ $(document).ready(function() {
 	
 });
 
+function dodajBrzuRezervaciju() {	
+	if (scGlobal.find('selected').length != 1) {
+		alert("Morate odabrati jedno sjedište prije nego što pređete na sledeći korak.");
+		return;
+	}
+}
+
 function recalculateTotal(sc) {
 	  var total = 0;
 
@@ -526,7 +541,8 @@ function recalculateTotal(sc) {
 
 function prikaziIzborSjedistaBrzeRezervacije() {
 	izabraniLetZaBrzuRezervacijuId = null;
-
+	podaciOMapi = null;
+	
 	let letoviBrzeRezRadioBtns = $(".letBrzaRez");
 	$.each(letoviBrzeRezRadioBtns, function(i, btn) {
 		if (btn.checked) {
@@ -541,18 +557,27 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 	
 	$("#izborLetaBrzeRezervacije").hide();
 	$("#izborSjedistaBrzeRez").show();
-	var seatsJaKuco = {};
-	var segmentSlova = ["f", "e"];
-	var prices = [100, 40];
-	var nazivi = ['first class', 'economy class'];
-	for(i in segmentSlova) {
-		seatsJaKuco[segmentSlova[i]] = {
-				price: prices[i],
-				category: nazivi[i]
-		};
-	}
 	
-	scGlobal = null;
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : "../letovi/dobaviSjedistaZaPrikazNaMapi/" + izabraniLetZaBrzuRezervacijuId,
+		dataType : "json",
+		success: function(data){
+			podaciOMapi = data;
+		},
+	});
+	
+	var seatsData = {};
+	for(i in podaciOMapi.segmenti) {
+		let tekuciSegment = podaciOMapi.segmenti[i];
+		
+		seatsData[tekuciSegment.oznakaSegmenta] = {
+				price : tekuciSegment.cijenaSegmenta,
+				category : tekuciSegment.nazivSegmenta
+		};
+		
+	}
 	
 	firstSeatLabel = 1;
     var $cart = $('#selected-seats'),
@@ -560,33 +585,12 @@ function prikaziIzborSjedistaBrzeRezervacije() {
     $total = $('#total'),
     
     sc = $('#seat-map').seatCharts({
-    map: [
-      'f[898]fffff',
-      'ffffff',
-      'ffffff',
-      'ffffff',
-      'eeeeee',
-      'eeeeee',
-      'eeeeee',
-      'eeeeee[991]',
-    ],
-    /*
-    seats: {
-      f: {
-        price   : 100,
-        category: 'First Class'
-      },
-      e: {
-        price   : 40,
-        category: 'Economy Class'
-      }         
-    
-    },
-    */
-    seats: seatsJaKuco,
+    map: podaciOMapi.sjedista,
+    seats: seatsData,
     naming : {
       top : false,
       getLabel : function (character, row, column) {
+    	scGlobal = sc;
         return firstSeatLabel++;
       },
     },
@@ -601,7 +605,6 @@ function prikaziIzborSjedistaBrzeRezervacije() {
     click: function () {
     
       if (this.status() == 'available') {
-          scGlobal = sc;
           if (scGlobal.find('selected').length > 0) {
             	return this.style();
           }
@@ -643,7 +646,10 @@ function prikaziIzborSjedistaBrzeRezervacije() {
       }
     }
   });
+    scGlobal = sc;
+    sc.get(podaciOMapi.zauzetaSjedistaIds).status('unavailable');
 
+  /*
   //this will handle "[cancel]" link clicks
   $('#selected-seats').on('click', '.cancel-cart-item', function () {
     //let's just trigger Click event on the appropriate seat, so we don't have to repeat the logic here
@@ -652,6 +658,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 
   //let's pretend some seats have already been booked
   sc.get([ 898, '3_2', '3_3', '3_4', '6_3']).status('unavailable');
+  */
   
 }
 
