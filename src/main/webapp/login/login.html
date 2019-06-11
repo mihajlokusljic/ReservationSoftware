@@ -26,6 +26,13 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+
+<!-- SweetAlert-->
+   	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"></script>
+   	
+   	
+   	
 </head>
 <body>
 	
@@ -38,7 +45,7 @@
 					</span>
 				</div>
 
-				<form class="login100-form validate-form">
+				<form id = "formaPrijava" class="login100-form validate-form">
 					<div class="wrap-input100 validate-input m-b-26" data-validate="Email je obavezan">
 						<span class="label-input100">Email</span>
 						<input class="input100" type="text" name="username" placeholder="Unesite email adresu" id = "username">
@@ -73,7 +80,7 @@
 					</div>
 
 					<div class="container-login100-form-btn">
-						<button id = "prijava_btn" class="login100-form-btn">
+						<button  type = "submit" id = "prijava_btn" class="login100-form-btn">
 							Prijavi se
 						</button>
 					</div>
@@ -106,5 +113,6 @@
 	<script type="text/javascript" src="../js/auth.js"></script>
 	
 
+   	
 </body>
 </html>

@@ -294,7 +294,7 @@ function korisnikInfo(){
 		success: function(data){
 			if(data != null){
 				korisnik = data;
-				alert("Ulogovani ste kao administrator rent-a-car servisa: " + data.ime + " " + data.prezime );
+				//alert("Ulogovani ste kao administrator rent-a-car servisa: " + data.ime + " " + data.prezime );
 				if(!korisnik.lozinkaPromjenjena) {
 					izmjenaInicijalneLozinke();
 				}

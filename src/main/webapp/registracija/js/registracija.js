@@ -22,6 +22,11 @@ $(document).ready(function() {
 			alert("Niste unijeli broj telefona");
 			return;
 		}
+		var adresa = $("#adresa").val();
+		if (adresa == ""){
+			alert("Niste unijeli adresu");
+			return;
+		}
 		var lozinka = $("#lozinka").val();
 		if (lozinka== ""){
 			alert("Niste unijeli lozinku");
@@ -39,6 +44,7 @@ $(document).ready(function() {
 				email:email,
 				brojTelefona:brojTelefona,
 				lozinka:lozinka,
+				adresa: { punaAdresa : adresa }
 		};
 		
 		$.ajax({

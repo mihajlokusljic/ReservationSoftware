@@ -8,10 +8,10 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
+	    		alert(XMLHttpRequest.responseText, "error");
 	    	}
 	    	else {
-	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown, "error");
 	    	}
 		}
 	});
@@ -34,7 +34,8 @@ $(document).ready(function(e) {
 			success: function(response) {
 				refreshAviokompanije(response);
 				if(response.length == 0) {
-					alert("Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.");
+					
+					swal("Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.");
 				}
 				$('#aviokompanijeSearchForm')[0].reset();
 			}

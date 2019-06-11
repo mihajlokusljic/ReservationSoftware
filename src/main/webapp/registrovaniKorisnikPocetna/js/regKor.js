@@ -321,7 +321,7 @@ $(document).ready(function() {
 					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 				});
 				if(response.length == 0) {
-					alert("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
+					swal("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
 				}
 				$('#racSearchForm')[0].reset();
 			},
@@ -392,7 +392,7 @@ function korisnikInfo(){
 				$("#korisnik").append(data.ime + " " + data.prezime);
 			}
 			else{
-				alert("Nepostojeći korisnik");
+				swal("Nepostojeći korisnik");
 			}
 		},
 	});
@@ -432,32 +432,37 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 }
 
 function profilKorisnika(){
+
 	$("#emailAdmina").val(korisnik.email);
 	$("#imeAdmina").val(korisnik.ime);
 	$("#prezimeAdmina").val(korisnik.prezime);
 	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
+
 	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
-	
+
 	$("#forma_profil_korisnika").unbind().submit(function(e){
 		e.preventDefault();
+		
+
 		var imeAdmina = $("#imeAdmina").val();
 		if (imeAdmina == ''){
-			alert("Polje za unos imena ne moze biti prazno.");
+			
+			swal("Polje za unos imena ne moze biti prazno.");
 			return;
 		}
 		var prezimeAdmina = $("#prezimeAdmina").val();
 		if (prezimeAdmina == ''){
-			alert("Polje za unos prezimena ne moze biti prazno.");
+			swal("Polje za unos prezimena ne moze biti prazno.");
 			return;
 		}
 		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
 		if (brTelefonaAdmina == ''){
-			alert("Polje za unos broja telefona ne moze biti prazno.");
+			swal("Polje za unos broja telefona ne moze biti prazno.");
 			return;
 		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
-			alert("Polje za unos adrese ne moze biti prazno.");
+			swal("Polje za unos adrese ne moze biti prazno.");
 			return;
 		}		
 
@@ -478,12 +483,25 @@ function profilKorisnika(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
-					alert("Izmjena nije uspjela.");
+					swal({
+						  title: "Izmjena nije uspjela.",
+						  icon: "error",
+						  timer: 1500
+						}).then(function(){
+							korisnik = response;
+							profilKorisnika();
+						});
 				}
 				else{
-					alert("Uspješno ste izmjenili profil.");
-					korisnik = response;
-					profilKorisnika();
+					swal({
+						  title: "Uspješno ste izmjenili profil.",
+						  icon: "success",
+						  timer:1500
+						}).then(function(){
+							korisnik = response;
+							profilKorisnika();
+						});
+					
 				}
 				
 			},
