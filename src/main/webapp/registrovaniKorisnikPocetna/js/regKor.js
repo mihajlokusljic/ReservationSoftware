@@ -130,6 +130,7 @@ $(document).ready(function() {
 	
 	$("#rentacarT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../rentACar/sviServisi", "prikazRacServisa", "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 		$("#tab-aviokompanije").hide();
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").show();
@@ -292,6 +293,7 @@ $(document).ready(function() {
 		promjeniLozinku();
 	});
 	
+	
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
 	   
@@ -401,6 +403,7 @@ function ucitajPodatke(putanjaControlera, idTabeleZaPrikaz, defaultSlika, infoSt
 		type: "GET",
 		url: putanjaControlera,
 		success: function(response) {
+			tabela.empty();
 			$.each(response, function(i, podatak) {
 				prikazi(podatak, tabela, defaultSlika, infoStranica);
 			});
@@ -416,6 +419,7 @@ function prikazi(podatak, tabelaZaPrikaz, defaultSlika, infoStranica) {
 	}
 	else{
 		ocjena = podatak.sumaOcjena/podatak.brojOcjena;
+		ocjena = ocjena.toFixed(2);
 	}
 	noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
 	noviRed.append('<td class="column1">' + podatak.naziv + '</td>');
@@ -829,9 +833,132 @@ function prikaziRezVozila(vozila){
 		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
 		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniVozilo" id = "' + i + '">Ocjeni vozilo</a></td></tr>')
 
 		tabela.append(noviRed);
 	});
+	
+	// okvir popup-a
+	var modal = document.getElementById("myModal");
+
+	// <span> za zatvaranje
+	var span = document.getElementsByClassName("close")[0];
+	
+	
+	
+	$(".ocjeniVozilo").click(function(e){
+		
+		e.preventDefault();
+		
+		var ratingValue = 0;
+		let rezervacija = vozila[e.target.id];
+		
+		var ocjenjeno = false;
+		//provjera da li je vec ocjenjeno
+		$.ajax({
+			type : 'GET',
+			url : "../rentACar/ocjenjenaRezervacija/" + rezervacija.idRezervacije,
+			dataType : "json",
+			async : false,
+			success: function(response){
+				ocjenjeno = response;
+				if(response == true){
+					alert("Vec ste ocjenili koristenu rezervaciju");
+					return;
+				}
+			},
+		});
+		
+		if (ocjenjeno == true){
+			return;
+		}
+		
+		var trenutniDatum = new Date();
+		var datumVracanja = Date.parse(rezervacija.datumVracanja);
+		
+		if (datumVracanja>trenutniDatum) {
+			alert("Ne mozete ocjeniti vozilo prije njegovog vracanja.");
+			return;
+		}
+		
+		modal.style.display = "block";
+		// kad korisnik klikne na "x" zatvara se prozor
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+		 var stars = $('#stars li').parent().children('li.star');
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		// kad korisnik klikne bilo gdje izvan prozora prozor se zatvara
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		/* 1. Prelazak preko zvjezdica */
+		  $('#stars li').on('mouseover', function(){
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda na kojoj je trenutno kursor misa
+		   
+		    // highlight zvjezdica preko kojih je predjeno
+		    $(this).parent().children('li.star').each(function(e){
+		      if (e < onStar) {
+		        $(this).addClass('hover');
+		      }
+		      else {
+		        $(this).removeClass('hover');
+		      }
+		    });
+		    
+		  }).on('mouseout', function(){
+		    $(this).parent().children('li.star').each(function(e){
+		      $(this).removeClass('hover');
+		    });
+		  });
+		  
+		  
+		  /* 2. Akcije za klik */
+		  $('#stars li').click(function(e){
+			  e.preventDefault();
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda koja je odabrana
+		    var stars = $(this).parent().children('li.star');
+		    
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		    
+		    for (i = 0; i < onStar; i++) {
+		      $(stars[i]).addClass('selected');
+		    }
+		    
+		    // Vrijednost odabrane zvjezdice
+		     ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+		    var msg = "";
+		    if (ratingValue > 1) {
+		        msg = "Hvala! Glasali se sa " + ratingValue + " zvjezdica.";
+		    }
+		    else {
+		        msg = "Pokušaćemo da poboljšamo svoje usluge. Glasali ste sa " + ratingValue + " zvjezdica.";
+		    }
+		    
+		    $("#potvrdi_ocjenu").unbind().click(function(e){
+		    	e.preventDefault();
+			    modal.style.display = "none";
+			    $.ajax({
+					type: "POST",
+					url : "../rentACar/ocjeniVozilo/" + ratingValue,
+					contentType : "application/json; charset=utf-8",
+					data: JSON.stringify(rezervacija.idRezervacije),
+					async : false,
+					success: function(response) {
+						alert(response);
+					},
+				});
+
+		    });
+		  });
+	})
 	
 	$(".otkaziRezervaciju").click(function(e){
 		e.preventDefault();
@@ -922,4 +1049,5 @@ function prikaziRezervisaneSobe(rezSoba){
 		
 	});
 }
+
 
