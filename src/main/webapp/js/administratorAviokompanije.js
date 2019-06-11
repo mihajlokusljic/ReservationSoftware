@@ -8,6 +8,7 @@ let mapaDestinacije = null;
 let zoomLevel = 17;
 let stavkeMenija = ["stavka_destinacije", "stavka_avioni", "stavka_letovi", "stavka_brze_rezervacije", "stavka_izvjestaj", "profilKorisnickiTab",
 	"stavka_profil_aviokompanije", "stavka_dodatne_usluge", "stavka_odjava"];
+let izabraniLetZaBrzuRezervacijuId = null;
 
 $(document).ready(function() {
 	
@@ -524,8 +525,32 @@ function recalculateTotal(sc) {
 	}
 
 function prikaziIzborSjedistaBrzeRezervacije() {
+	izabraniLetZaBrzuRezervacijuId = null;
+
+	let letoviBrzeRezRadioBtns = $(".letBrzaRez");
+	$.each(letoviBrzeRezRadioBtns, function(i, btn) {
+		if (btn.checked) {
+			izabraniLetZaBrzuRezervacijuId = btn.id.substring(3);
+		}
+	});
+	
+	if (izabraniLetZaBrzuRezervacijuId == null) {
+		alert("Morate izabrati let.");
+		return;
+	}
+	
 	$("#izborLetaBrzeRezervacije").hide();
 	$("#izborSjedistaBrzeRez").show();
+	var seatsJaKuco = {};
+	var segmentSlova = ["f", "e"];
+	var prices = [100, 40];
+	var nazivi = ['first class', 'economy class'];
+	for(i in segmentSlova) {
+		seatsJaKuco[segmentSlova[i]] = {
+				price: prices[i],
+				category: nazivi[i]
+		};
+	}
 	
 	scGlobal = null;
 	
@@ -533,33 +558,34 @@ function prikaziIzborSjedistaBrzeRezervacije() {
     var $cart = $('#selected-seats'),
     $counter = $('#counter'),
     $total = $('#total'),
+    
     sc = $('#seat-map').seatCharts({
     map: [
-      'ff_ff',
-      'ff_ff',
-      'ee_ee',
-      'ee_ee',
-      'ee___',
-      'ee_ee',
-      'ee_ee',
-      'ee_ee',
-      'eeeee',
+      'f[898]fffff',
+      'ffffff',
+      'ffffff',
+      'ffffff',
+      'eeeeee',
+      'eeeeee',
+      'eeeeee',
+      'eeeeee[991]',
     ],
+    /*
     seats: {
       f: {
         price   : 100,
-        classes : 'first-class', //your custom CSS class
         category: 'First Class'
       },
       e: {
         price   : 40,
-        classes : 'economy-class', //your custom CSS class
         category: 'Economy Class'
       }         
     
     },
+    */
+    seats: seatsJaKuco,
     naming : {
-      top : true,
+      top : false,
       getLabel : function (character, row, column) {
         return firstSeatLabel++;
       },
@@ -567,9 +593,9 @@ function prikaziIzborSjedistaBrzeRezervacije() {
     legend : {
       node : $('#legend'),
         items : [
-        [ 'f', 'available',   'First Class' ],
-        [ 'e', 'available',   'Economy Class'],
-        [ 'f', 'unavailable', 'Already Booked']
+        [ '', 'available',   'Slobodno' ],
+        [ '', 'unavailable', 'Zauzeto'],
+        [ '', 'selected',   'Odabrano' ]
         ]         
     },
     click: function () {
@@ -625,7 +651,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
   });
 
   //let's pretend some seats have already been booked
-  sc.get(['1_2', '4_1', '7_1', '7_2']).status('unavailable');
+  sc.get([ 898, '3_2', '3_3', '3_4', '6_3']).status('unavailable');
   
 }
 
