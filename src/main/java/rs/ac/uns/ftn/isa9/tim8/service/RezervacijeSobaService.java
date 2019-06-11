@@ -21,9 +21,11 @@ import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.RentACarServis;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
+import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 import rs.ac.uns.ftn.isa9.tim8.repository.BrzeRezervacijeSobaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelskaSobaRepository;
@@ -348,6 +350,64 @@ public class RezervacijeSobaService {
 		RezervacijaSobe rez = pretragaRez.get();
 		rezervacijeRepository.delete(rez);
 		return "Uspjesno ste otkazali rezervaciju sobe";
+	}
+
+	public Boolean rezervacijaSobeOcjenjena(Long idRezervacije) throws NevalidniPodaciException {
+		Optional<RezervacijaSobe> pretragaRez = rezervacijeRepository.findById(idRezervacije);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaSobe rSobe = pretragaRez.get();
+		
+		if (rSobe.isOcjenjeno()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	//ocjenjivanje koristene sobe i hotela od strane korisnika 
+	public String ocjeniSobu(Long idRezervacije, int ratingValue) throws NevalidniPodaciException{
+		Optional<RezervacijaSobe> pretragaRez = rezervacijeRepository.findById(idRezervacije);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaSobe rSobe = pretragaRez.get();
+		
+		Optional<Hotel> pretragaHotel = hotelRepository.findById(rSobe.getRezervisanaSoba().getHotel().getId());
+		if (!pretragaHotel.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je obrisan hotel cije su usluge koristene.");
+		}
+		
+		Hotel hotel = pretragaHotel.get();
+		
+		Optional<HotelskaSoba> pretragaSobe = sobeRepository.findById(rSobe.getRezervisanaSoba().getId());
+		if (!pretragaSobe.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je uklonjena soba cije su usluge koristene.");
+		}
+		
+		HotelskaSoba soba = pretragaSobe.get();
+		
+		Date danasnjiDatum = new Date();
+		if (rSobe.getDatumOdlaska().after(danasnjiDatum)) {
+			return "Ne mozete da ocjenite sobu prije njenog napustanja.";
+		}
+		
+		soba.setSumaOcjena(soba.getSumaOcjena() + ratingValue);
+		soba.setBrojOcjena(soba.getBrojOcjena() + 1);
+		rSobe.setOcjenjeno(true);
+		
+		hotel.setSumaOcjena(hotel.getSumaOcjena() + ratingValue);
+		hotel.setBrojOcjena(hotel.getBrojOcjena() + 1);
+		
+		hotelRepository.save(hotel);
+		sobeRepository.save(soba);
+		rezervacijeRepository.save(rSobe);
+		
+		return "Uspjesno ste ocjenili usluge sobe";
 	}
 
 }

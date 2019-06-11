@@ -223,7 +223,7 @@ function prikaziPodatkeHotela() {
 	let brOcjena = podaciHotela.brojOcjena;
 	brOcjena = parseInt(brOcjena);
 	if(brOcjena > 0) {
-		$("#ocjenaHotela").val(sumaOcjena / brOcjena);
+		$("#ocjenaHotela").val((sumaOcjena / brOcjena).toFixed(2));
 	} else {
 		$("#ocjenaHotela").val("Nema ocjena");
 	}
@@ -346,7 +346,7 @@ function prikaziBrzeRezervacije(brzeRezervacije) {
 		let soba = rezervacija.sobaZaRezervaciju;
 		noviRed.append('<td class="column1">' + soba.brojKreveta + '</td>');
 		if(soba.brojOcjena > 0) {
-			noviRed.append('<td class="column1">' + soba.sumaOcjena / soba.brojOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (soba.sumaOcjena / soba.brojOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
@@ -401,7 +401,7 @@ function detaljanPrikazBrzeRez(idRez) {
 	let soba = brzaRez.sobaZaRezervaciju;
 	$("#brojSobeBrzaRez").val(soba.brojSobe);
 	if(soba.brojOcjena > 0) {
-		let ocjena = soba.sumaOcjena / soba.brojOcjena;
+		let ocjena = (soba.sumaOcjena / soba.brojOcjena).toFixed(2);
 		$("#ocjenaSobeBrzaRez").val(ocjena);
 	} else {
 		$("#ocjenaSobeBrzaRez").val("Nema ocjena");
@@ -445,7 +445,7 @@ function prikaziSobe(sobe) {
 		let brOcjena = soba.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column1">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column1">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}

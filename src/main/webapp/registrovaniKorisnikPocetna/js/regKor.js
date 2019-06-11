@@ -115,6 +115,7 @@ $(document).ready(function() {
 	
 	$("#hoteliT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../hoteli/dobaviSve", "prikazHotela", "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg", "infoStranicaHotela");
 		$("#tab-aviokompanije").hide();
 		$("#tab-hoteli").show();
 		$("#tab-rac-servisi").hide();

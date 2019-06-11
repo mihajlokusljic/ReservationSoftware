@@ -117,5 +117,11 @@ public class RezervacijaSobe {
 	public void setPutovanje(Putovanje putovanje) {
 		this.putovanje = putovanje;
 	}
+	public boolean isOcjenjeno() {
+		return ocjenjeno;
+	}
+	public void setOcjenjeno(boolean ocjenjeno) {
+		this.ocjenjeno = ocjenjeno;
+	}
 	
 }
