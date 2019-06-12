@@ -36,6 +36,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
@@ -894,6 +895,26 @@ public class AviokompanijaService {
 		rezervacijaSjedistaRepository.save(rs);
 
 		return "Rezervacija je uspjesno izvrsena.";
+	}
+
+	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException{
+		
+		Optional<RezervacijaSjedista> pretragaRez = rezervacijaSjedistaRepository.findById(id);
+		
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rezervacija zadatim id-em");
+		}
+		
+		RezervacijaSjedista rez = pretragaRez.get();
+		rezervacijaSjedistaRepository.delete(rez);
+		
+		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(rez.getSjediste(), rez.getLet().getDatumPoletanja(), rez.getLet().getDatumSletanja(), 0, 0);
+
+		brs.setCijena(rez.getLet().getCijenaKarte() + rez.getSjediste().getSegment().getCijena());
+		brs.setAviokompanija(rez.getAviokompanija());
+		brs.setLet(rez.getLet());
+		brzaRezervacijaSjedistaRepository.save(brs);
+		return "Uspjesno ste otkazali rezervaciju leta";
 	}
 
 }

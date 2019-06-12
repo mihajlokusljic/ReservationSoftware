@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -339,7 +340,16 @@ public class RezervacijeSobaService {
 		}
 		return null;
 	}
-
+	
+	public long brojNocenja(Date datumDolaska, Date datumOdlaska) {
+		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); //razlika u milisekundama
+		long brojNocenja = diff / (24 * 60 * 60 * 1000);             //razlika u danima
+		if(brojNocenja == 0) {
+			brojNocenja = 1;
+		}
+		return brojNocenja;
+	}
+	
 	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException {
 		Optional<RezervacijaSobe> pretragaRez = rezervacijeRepository.findById(id);
 		
@@ -349,6 +359,10 @@ public class RezervacijeSobaService {
 		
 		RezervacijaSobe rez = pretragaRez.get();
 		rezervacijeRepository.delete(rez);
+		BrzaRezervacijaSoba brs = new BrzaRezervacijaSoba(rez.getDatumDolaska(), rez.getDatumOdlaska(), 0, 0, new HashSet<Usluga>(), rez.getRezervisanaSoba());
+		long brojNocenja = this.brojNocenja(rez.getDatumDolaska(), rez.getDatumOdlaska());
+		brs.setBaznaCijena(brojNocenja * rez.getRezervisanaSoba().getCijena());
+		brzeRezervacijeRepository.save(brs);
 		return "Uspjesno ste otkazali rezervaciju sobe";
 	}
 

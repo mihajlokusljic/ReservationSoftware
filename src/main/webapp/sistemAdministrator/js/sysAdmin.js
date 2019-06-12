@@ -100,14 +100,23 @@ $(document).ready(function(e) {
 	
 	$("#zadavanjeSkalePopusta").click(function(e) {
 		e.preventDefault();
-		let potvrda = confirm("Da li ste sigurni da zelite obrisati postojecu skalu popusta i zadati novu?");
-		if(potvrda) {
-			brisanjeSkalePopusta();
-			$("#zadateStavkePopustaPrikaz").empty();
-			$("#skalaPopustaPrikaz").empty();
-			aktivirajStavkuMenija("stavkaPopusti");
-			prikaziTab("tab-zadavanje-skale-popusta");
-		}
+		
+		swal({
+			  title: "Da li ste sigurni da zelite obrisati postojecu skalu popusta i zadati novu?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  brisanjeSkalePopusta();
+					$("#zadateStavkePopustaPrikaz").empty();
+					$("#skalaPopustaPrikaz").empty();
+					aktivirajStavkuMenija("stavkaPopusti");
+					prikaziTab("tab-zadavanje-skale-popusta");
+			  } 
+			});
+
 	});
 	
 	$("#pregledSkalePopusta").click(function(e) {
