@@ -111,7 +111,25 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
+
 	});
+	
+	$("#letoviT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-letovi").show();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();
+	});	
 	
 	$("#hoteliT").click(function(e){
 		e.preventDefault();
@@ -127,6 +145,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 		});
 	
 	$("#rentacarT").click(function(e){
@@ -143,6 +163,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 		});
 	
 	$("#rezervacijeT").click(function(e){
@@ -158,6 +180,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		ucitajRezervacije();
 	});
 	
@@ -174,7 +197,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
-		
+		$("#tab-letovi").hide();
 		$("#pregledPrijateljaSearch").val("");
 		
 		$.ajax({
@@ -202,6 +225,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
 
 		$("#dodavanjePrijateljaSearch").val("");
 
@@ -234,7 +258,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
-		
+		$("#tab-letovi").hide();
+
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviZahtjeveZaPrijateljstvo",
@@ -260,6 +285,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 	});
 	
 	$("#izmjeni_podatke_tab").click(function(e){
@@ -275,6 +302,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		profilKorisnika();
 	});
 	
@@ -291,9 +319,61 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		promjeniLozinku();
 	});
 	
+	$("#duzinaPutovanja").val("");
+	
+	$("#pretragaLetovaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let cijenaK = $("#cijenaKarte").val();
+		if (cijenaK == "") {
+			cijenaK = 0;
+		}
+		
+		let parametriPretrage = {
+				brojLeta : $("#brojLeta").val(),
+				nazivAviokompanije : $("#nazivAviokompanije").val(),
+				nazivPolazista : $("#nazivPolazista").val(),
+				nazivOdredista : $("#nazivOdredista").val(),
+				datumPoletanja : $("#input-start-1").val(),
+				datumSletanja : $("#input-end-1").val(),
+				duzinaPutovanja : $("#duzinaPutovanja").val(),
+				cijenaKarte : cijenaK
+		};
+		
+		  $.ajax({
+			    type : "POST",
+			    url : "../letovi/pretraziLetove",
+			    contentType: "application/json; charset=utf-8",
+			    data : JSON.stringify(parametriPretrage),
+			    success : function(response) {
+			      if (response == undefined) {
+			    		swal({
+							  title: "Došlo je do greške.",
+							  icon: "error",
+							  timer: 2500
+							})	
+			      } else {
+			        if (response.length == 0) {
+			        	swal({
+							  title: "Ne postoji ni jedan let koji zadovoljava navedeni kriterijum pretrage.",
+							  icon: "info",
+							  timer: 2500
+							})	
+			        }
+			        updateLetovi(response);
+			        $('#pretragaLetovaForm')[0].reset();
+			      }
+			    },
+			    error : function(XMLHttpRequest, textStatus, errorThrown) {
+			      alert("AJAX ERROR: " + errorThrown);
+			    }	
+			  });
+		
+	});
 	
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
@@ -382,6 +462,32 @@ $(document).ready(function() {
 	});
 	
 });
+
+function updateLetovi(letovi) {
+	let table = $("#prikazLetovaRezervacije");
+	table.empty();
+	
+	$.each(letovi, function(i, flight) {
+		let row = $("<tr></tr>");
+		
+		row.append("<td>" + flight.brojLeta + "</td>");
+		row.append("<td>" + flight.polaziste.nazivDestinacije + "</td>");
+		row.append("<td>" + flight.odrediste.nazivDestinacije + "</td>");
+		row.append("<td>" + flight.datumPoletanja + "</td>");
+		row.append("<td>" + flight.datumSletanja + "</td>");
+		row.append("<td>" + flight.presjedanja.length + "</td>");
+		row.append("<td>" + flight.cijenaKarte + "</td>");
+		if (flight.brojOcjena > 0) {
+			row.append("<td>" + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+		} else {
+			row.append("<td>Nema ocjena</td>");
+		}
+		row.append('</td><td class = "column1"><a href = "#" class = "rezervacijaSjed" id = "rsl' + flight.id + 
+		'">Rezerviši sjedišta</a></td></tr>');
+		
+		table.append(row);
+	});
+}
 
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
