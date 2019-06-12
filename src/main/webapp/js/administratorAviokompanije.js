@@ -1164,9 +1164,9 @@ function updateLet(flight, tbody) {
 	row.append('<td class="column2">' + flight.brojLeta + "</td>");
 	row.append('<td class="column3">' + flight.polaziste.nazivDestinacije + "</td>");
 	row.append('<td class="column3">' + flight.odrediste.nazivDestinacije + "</td>");
-	row.append('<td class="column1">' + datum_poletanja.getFullYear() + "-" + datum_poletanja.getMonth() + 
+	row.append('<td class="column1">' + datum_poletanja.getFullYear() + "-" + parseInt(datum_poletanja.getMonth()+1) + 
 			"-" + datum_poletanja.getDate() + "</td>");
-	row.append('<td class="column1">' + datum_sletanja.getFullYear() + "-" + datum_sletanja.getMonth() + 
+	row.append('<td class="column1">' + datum_sletanja.getFullYear() + "-" + parseInt(datum_sletanja.getMonth()+1) + 
 			"-" + datum_sletanja.getDate() + "</td>");
 	row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
 	row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
