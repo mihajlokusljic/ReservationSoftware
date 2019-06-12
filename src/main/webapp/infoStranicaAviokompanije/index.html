@@ -68,7 +68,7 @@
                             <a class="tab-list__link" href="#tab-brze-rezervacije" data-toggle="tab" id ="brzeRezervacije">Brze rezervacije</a>
                         </li>
                         <li class="dropdown">
-                            <a class="tab-list__link" href="../pocetnaStranica/index.html">Nazad na početnu stranicu</a>
+                            <a class="tab-list__link" href="#" id="vratiNaPocetnu">Nazad na početnu stranicu</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -212,7 +212,23 @@
                         </div>
                         
                         <div class="tab-pane" id="tab-brze-rezervacije">
-	                        Brze rezervacije
+	                      	<table id="tabelaBrzeRezervacije">
+								<thead>
+									<tr class="table100-head">
+										<th class="column3">Naziv polazišta</th>
+										<th class="column3">Naziv odredišta</th>
+										<th class="column1">Datum poletanja</th>
+										<th class="column1">Datum sletanja</th>
+										<th class="column1">Mjesto u avionu</th>
+										<th class="column1">Originalna cijena</th>
+										<th class="column1">Cijena sa popustom</th>
+										<th class="column1" id="kolonaBrzaRezKarte" hidden></th>
+									
+									</tr>
+								</thead>
+								<tbody id="prikazBrzeRezervacije">
+								</tbody>
+							</table>
                         </div>
 							
                     </div>

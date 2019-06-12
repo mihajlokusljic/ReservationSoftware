@@ -26,6 +26,10 @@ public class PrikazRezSjedistaDTO {
 	protected double originalnaCijena;
 
 	protected double popust;
+	
+	protected String nazivAviokompanije;
+	
+	protected String brojLeta;
 
 	public PrikazRezSjedistaDTO() {
 		super();
@@ -42,6 +46,20 @@ public class PrikazRezSjedistaDTO {
 		this.sjediste = sjediste;
 		this.originalnaCijena = originalnaCijena;
 		this.popust = popust;
+	}
+
+	public PrikazRezSjedistaDTO(Long id, String nazivPolazista, String nazivOdredista, Date datumPolaska, Date datumDolaska,
+			Sjediste sjediste, double originalnaCijena, String nazivAviokompanije, String brojLeta) {
+		super();
+		this.idRezervacije = id;
+		this.nazivPolazista = nazivPolazista;
+		this.nazivOdredista = nazivOdredista;
+		this.datumPolaska = datumPolaska;
+		this.datumDolaska = datumDolaska;
+		this.sjediste = sjediste;
+		this.originalnaCijena = originalnaCijena;
+		this.nazivAviokompanije = nazivAviokompanije;
+		this.brojLeta = brojLeta;
 	}
 
 	public Long getIdRezervacije() {
@@ -108,4 +126,20 @@ public class PrikazRezSjedistaDTO {
 		this.popust = popust;
 	}
 
+	public String getNazivAviokompanije() {
+		return nazivAviokompanije;
+	}
+
+	public void setNazivAviokompanije(String nazivAviokompanije) {
+		this.nazivAviokompanije = nazivAviokompanije;
+	}
+
+	public String getBrojLeta() {
+		return brojLeta;
+	}
+
+	public void setBrojLeta(String brojLeta) {
+		this.brojLeta = brojLeta;
+	}
+	
 }

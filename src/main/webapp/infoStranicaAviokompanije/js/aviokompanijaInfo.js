@@ -6,6 +6,7 @@ let stavkeMenija = ["info", "pregledaj", "brzeRezervacije"];
 let mapa = null;
 let tabovi = ["tab-info", "tab-destinacije", "tab-avioni", "tab-letovi", "tab-prtljag", "tab-brze-rezervacije"];
 let zoomLevel = 17;
+let korisnikId = null;
 
 $(document).ready(function(e) {
 	
@@ -24,7 +25,7 @@ $(document).ready(function(e) {
 	    	}
 		}
 	});
-	
+		
 	//reakcije na dogadjaje klika na naviogacionom baru
 	$("#info").click(function(e) {
 		e.preventDefault();
@@ -74,6 +75,30 @@ $(document).ready(function(e) {
 	});
 	
 	ucitajPodatkeAviokompanije();
+	vratiSveBrzeRezervacije();
+
+	var url = window.location.href;
+	var parametri = url.substring(url.indexOf("?") + 1);
+	var params_parser = new URLSearchParams(parametri);
+	
+	var id = params_parser.get("id");
+	var kor =  params_parser.get("korisnik");
+	korisnikId = kor;
+	
+	if (korisnikId != null) {
+		$("#kolonaBrzaRezKarte").show();
+	}
+
+	$("#vratiNaPocetnu").click(function(e){
+		e.preventDefault();
+		if (korisnikId != null){
+			window.location.replace("../registrovaniKorisnikPocetna/index.html");
+		}
+		else{
+			window.location.replace("../pocetnaStranica/index.html");
+		}
+	});
+	
 });
 
 function pretragaLetova() {
@@ -140,6 +165,7 @@ function ucitajPodatkeAviokompanije() {
 	
 	$.ajax({
 		type: "GET",
+		async : false,
 		url: "../aviokompanije/dobavi/" + id,
 		success: function(response) {
 			podaciAviokompanije = response;
@@ -279,4 +305,61 @@ function inicijalizujMape() {
     });
 	mapa.controls.add('typeSelector');
 	mapa.controls.add('zoomControl');
+}
+
+function prikaziBrzeRez(brzeRez){
+	let prikaz = $("#prikazBrzeRezervacije");
+	prikaz.empty();
+	
+	$.each(brzeRez, function(i, br) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column3">' + br.nazivPolazista + '</td>');
+		noviRed.append('<td class="column3">' + br.nazivOdredista + '</td>');
+		noviRed.append('<td class="column1">' + br.datumPolaska + '</td>');
+		noviRed.append('<td class="column1">' + br.datumDolaska + '</td>');
+		noviRed.append('<td class="column1">' + "red: " + br.sjediste.red + ", kolona: "  + br.sjediste.kolona + '</td>');
+		noviRed.append('<td class="column1">' + br.originalnaCijena + '</td>');
+		noviRed.append('<td class="column1">' + br.popust + '</td>');
+		if (korisnikId != null){
+			noviRed.append('</td><td class = "column1"><a href = "#" class = "brzaRezervacija" id = "brl' + br.idRezervacije + 
+					'">Rezerviši kartu</a></td></tr>');
+		}
+		prikaz.append(noviRed);
+	})
+	
+	$(".brzaRezervacija").click(function(e){
+		e.preventDefault();
+		let idBrzeRez = e.target.id.substring(3);
+		
+		$.ajax({
+			type: "POST",
+			url: "../aviokompanije/izvrsiBrzuRezervacijuKarte/" + idBrzeRez,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				if(response == "Rezervacija je uspjesno izvrsena.") {
+					alert("Uspješno ste izvršili brzu rezervaciju avionske karte.");
+					window.location.replace("../registrovaniKorisnikPocetna/index.html");
+					return;
+				} else {
+					alert("Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
+	});
+}
+
+function vratiSveBrzeRezervacije(){
+	$.ajax({
+		type: "GET",
+		url: "../aviokompanije/dobaviBrzeRezervacije/" + podaciAviokompanije.id,
+		success: function(response) {
+			prikaziBrzeRez(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
 }

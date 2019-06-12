@@ -546,16 +546,6 @@ function prikaziBrzeRez(brzeRez){
 	
 	$.each(brzeRez, function(i, br) {
 		
-		/*
-		 								<th class="column3">Naziv polazišta</th>
-										<th class="column3">Naziv odredišta</th>
-										<th class="column1">Datum poletanja</th>
-										<th class="column1">Datum sletanja</th>
-										<th class="column1">Mjesto u avionu</th>
-										<th class="column1">Originalna cijena</th>
-										<th class="column1">Cijena sa popustom</th>
-		 */
-		
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column3">' + br.nazivPolazista + '</td>');
 		noviRed.append('<td class="column3">' + br.nazivOdredista + '</td>');
@@ -572,6 +562,7 @@ function prikaziBrzeRez(brzeRez){
 function vratiSveBrzeRezervacije(){
 	$.ajax({
 		type: "GET",
+		async: false,
 		url: "../aviokompanije/dobaviBrzeRezervacije/" + aviokompanija.id,
 		success: function(response) {
 			prikaziBrzeRez(response);
@@ -863,6 +854,7 @@ function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
 	$.ajax({
 		type : 'GET',
+		async: false,
 		url : "../korisnik/getInfo",
 		dataType : "json",
 		success: function(data){
@@ -898,6 +890,7 @@ function ucitajDestinacije() {
 		type : "GET",
 		url : "../destinacije/dobaviSveDestinacijeZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
+		async : false,
 		success : function(response) {
 			prikaziDestinacije(response);
 			popuniListuZaDestinacije(response);
@@ -911,6 +904,7 @@ function ucitajDestinacije() {
 function ucitajAvione() {
 	$.ajax({
 		type : "GET",
+		async: false,
 		url : "../avioni/dobaviSveAvioneZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
 		success : function(response) {
@@ -928,6 +922,7 @@ function ucitajLetove() {
 		type : "GET",
 		url : "../letovi/dobaviSveLetoveZaAviokompaniju/" + aviokompanija.id,
 		dataType : "json",
+		async : false,
 		success : function(response) {
 			updateLetovi(response);
 		},

@@ -102,8 +102,8 @@ public class AviokompanijeKontroler {
 	public ResponseEntity<?> pretraziLetoveZaBrzuRezervaciju(@RequestBody PretragaLetaDTO kriterijumiPretrage,
 			@PathVariable("id") Long aviokompanijaId) {
 		try {
-			return new ResponseEntity<Collection<Let>>(servis.pretraziLetoveZaBrzuRezervaciju(kriterijumiPretrage, aviokompanijaId),
-					HttpStatus.OK);
+			return new ResponseEntity<Collection<Let>>(
+					servis.pretraziLetoveZaBrzuRezervaciju(kriterijumiPretrage, aviokompanijaId), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -130,11 +130,22 @@ public class AviokompanijeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/dobaviBrzeRezervacije/{idServisa}", method = RequestMethod.GET)
 	public ResponseEntity<?> vratiBrzeZaPrikaz(@PathVariable("idServisa") Long idServisa) {
 		try {
-			return new ResponseEntity<Collection<PrikazRezSjedistaDTO>>(servis.vratiBrzeZaPrikaz(idServisa), HttpStatus.OK);
+			return new ResponseEntity<Collection<PrikazRezSjedistaDTO>>(servis.vratiBrzeZaPrikaz(idServisa),
+					HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(value = "/izvrsiBrzuRezervacijuKarte/{idBrzeRez}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> izvrsiBrzuRezervacijuKarte(@PathVariable("idBrzeRez") Long idBrzeRez) {
+		try {
+			return new ResponseEntity<String>(servis.izvrsiBrzuRezervacijuKarte(idBrzeRez), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
