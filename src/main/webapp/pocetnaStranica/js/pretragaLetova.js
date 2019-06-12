@@ -26,10 +26,18 @@ $(document).ready(function(e) {
 			    data : JSON.stringify(parametriPretrage),
 			    success : function(response) {
 			      if (response == undefined) {
-			    	  swal("Došlo je do greške.");
+			    		swal({
+							  title: "Došlo je do greške.",
+							  icon: "error",
+							  timer: 2500
+							})	
 			      } else {
 			        if (response.length == 0) {
-			          swal("Ne postoji ni jedan let koji zadovoljava kriterijume pretrage.");
+			        	swal({
+							  title: "Ne postoji ni jedan let koji zadovoljava navedeni kriterijum pretrage.",
+							  icon: "warning",
+							  timer: 2500
+							})	
 			        }
 			        updateLetovi(response);
 			        $('#pretragaLetovaForm')[0].reset();

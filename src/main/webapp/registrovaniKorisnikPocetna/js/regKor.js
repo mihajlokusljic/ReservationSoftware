@@ -321,7 +321,11 @@ $(document).ready(function() {
 					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 				});
 				if(response.length == 0) {
-					swal("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
+					swal({
+						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage",
+						  icon: "warning",
+						  timer: 2500
+						})	
 				}
 				$('#racSearchForm')[0].reset();
 			},
@@ -392,7 +396,11 @@ function korisnikInfo(){
 				$("#korisnik").append(data.ime + " " + data.prezime);
 			}
 			else{
-				swal("Nepostojeći korisnik");
+				swal({
+					  title: "Nepostojeći korisnik",
+					  icon: "warning",
+					  timer: 2500
+					})
 			}
 		},
 	});
@@ -446,23 +454,38 @@ function profilKorisnika(){
 
 		var imeAdmina = $("#imeAdmina").val();
 		if (imeAdmina == ''){
-			
-			swal("Polje za unos imena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos imena ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var prezimeAdmina = $("#prezimeAdmina").val();
 		if (prezimeAdmina == ''){
-			swal("Polje za unos prezimena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos prezimena ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
 		if (brTelefonaAdmina == ''){
-			swal("Polje za unos broja telefona ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos broja telefona ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
-			swal("Polje za unos adrese ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos adrese ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}		
 
@@ -486,7 +509,7 @@ function profilKorisnika(){
 					swal({
 						  title: "Izmjena nije uspjela.",
 						  icon: "error",
-						  timer: 1500
+						  timer: 2000
 						}).then(function(){
 							korisnik = response;
 							profilKorisnika();
@@ -496,7 +519,7 @@ function profilKorisnika(){
 					swal({
 						  title: "Uspješno ste izmjenili profil.",
 						  icon: "success",
-						  timer:1500
+						  timer:2000
 						}).then(function(){
 							korisnik = response;
 							profilKorisnika();
@@ -518,12 +541,21 @@ function promjeniLozinku(){
 		var novaLozinka2 = $("#novaLozinka2").val();
 
 		if (novaLozinka == ''){
-			alert("Niste unijeli novu lozinku");
+			swal({
+				  title: "Niste unijeli novu lozinku.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
 		if (novaLozinka != novaLozinka2){
-			alert("Greška. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			swal({
+				  title: "Greška. ",
+				  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+				  icon: "error",
+				  timer: 2500
+				});
 			return;
 		}
 		
@@ -536,12 +568,20 @@ function promjeniLozinku(){
 			data : novaLozinka,
 			success : function(data) {
 				if (data == ''){
-					alert("Pogrešna trenutna lozinka.");
+					swal({
+						  title: "Pogrešna trenutna lozinka.",
+						  icon: "error",
+						  timer: 2000
+						});
 					return;
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspješno ste izmjenili lozinku.");	
+					swal({
+						  title: "Uspješno ste izmjenili lozinku.",
+						  icon: "success",
+						  timer:2000
+						});
 				}
 				
 			}
@@ -573,11 +613,19 @@ function prikaziPrijatelje(prijatelji) {
 			async : false,
 			success: function(response) {
 				if (response == true) {
-				alert("Uspješno uklonjen korisnik iz liste prijatelja.");
+					swal({
+						  title: "Uspješno uklonjen korisnik iz liste prijatelja.",
+						  icon: "success",
+						  timer:2000
+						});
 				$("#prijatelj" + prijateljZaBrisanjeId).remove();
 				return;
 				} else {
-					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					swal({
+						  title: "Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.",
+						  icon: "error",
+						  timer:2500
+						});
 					return;
 				}
 			},
@@ -626,13 +674,21 @@ function prikaziKorisnikeZaPrijateljstvo(prijatelji) {
 			async: false,
 			success: function(response) {
 				if (response == true) {
-					alert("Zahtjev je uspješno poslat.");
+					swal({
+						  title: "Zahtjev je uspješno poslat.",
+						  icon: "success",
+						  timer:2000
+						});
 					$("#dpt" + idPotencijalnogPrijatelja).attr("disabled", "disabled");
 					$("#dpt" + idPotencijalnogPrijatelja).empty();
 					$("#dpt" + idPotencijalnogPrijatelja).append("Poslat zahtjev ✔️");
 					return;
 				} else {
-					alert("Došlo je do greške prilikom slanja zahtjeva. Molimo pričekajte i pokušajte ponovo.");
+					swal({
+						  title: "Došlo je do greške prilikom slanja zahtjeva. Molimo pričekajte i pokušajte ponovo.",
+						  icon: "error",
+						  timer:2500
+						});
 					return;
 				}
 			},
@@ -705,7 +761,11 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 			async : false,
 			success: function(response) {
 				if (response == true) {
-				alert("Uspješno prihvaćen zahtjev za prijateljstvo.");
+					swal({
+						  title: "Uspješno prihvaćen zahtjev za prijateljstvo.",
+						  icon: "success",
+						  timer:2000
+						});
 				
 				$.ajax({
 					type: "POST",
@@ -720,7 +780,11 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 				
 				return;
 				} else {
-					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					swal({
+						  title: "Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.",
+						  icon: "error",
+						  timer:2500
+						});
 					return;
 				}
 			},
@@ -746,11 +810,19 @@ function prikaziKorisnikeKojiSuZatraziliPrijateljstvo(prijatelji) {
 			async : false,
 			success: function(response) {
 				if (response == true) {
-				alert("Uspješno odbijen zahtjev za prijateljstvo.");
+					swal({
+						  title: "Uspješno odbijen zahtjev za prijateljstvo.",
+						  icon: "success",
+						  timer:2000
+						});
 				$("#adf" + idPrijatelja).remove();
 				return;
 				} else {
-					alert("Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.");
+					swal({
+						  title: "Došlo je do greške prilikom procesiranja zahtjeva. Molimo sačekajte i pokušajte ponovo.",
+						  icon: "error",
+						  timer:2500
+						});
 					return;
 				}
 			},
@@ -882,7 +954,11 @@ function prikaziRezVozila(vozila){
 			success: function(response){
 				ocjenjeno = response;
 				if(response == true){
-					alert("Vec ste ocjenili koristenu rezervaciju");
+					swal({
+						  text: "Vec ste ocjenili koristenu rezervaciju.",
+						  icon: "warning",
+						  timer: 2000
+						})	
 					return;
 				}
 			},
@@ -896,7 +972,11 @@ function prikaziRezVozila(vozila){
 		var datumVracanja = Date.parse(rezervacija.datumVracanja);
 		
 		if (datumVracanja>trenutniDatum) {
-			alert("Ne mozete ocjeniti vozilo prije njegovog vracanja.");
+			swal({
+				  text: "Ne mozete ocjeniti vozilo prije njegovog vracanja.",
+				  icon: "warning",
+				  timer: 2000
+				})
 			return;
 		}
 		
@@ -971,7 +1051,20 @@ function prikaziRezVozila(vozila){
 					data: JSON.stringify(rezervacija.idRezervacije),
 					async : false,
 					success: function(response) {
-						alert(response);
+						if (response == ''){
+							swal({
+								  title: "Uspješno ste ocjenili usluge vozila.",
+								  icon: "success",
+								  timer:2000
+								})
+						}
+						else{
+							swal({
+								  title: response,
+								  icon: "warning",
+								  timer:2000
+								})
+						}
 					},
 				});
 
@@ -986,7 +1079,11 @@ function prikaziRezVozila(vozila){
 		var sadasnjiDatum = new Date();
 		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
 		if (diff<2){
-			alert("Zakasnili ste sa otkazivanjem rezervacije vozila.");
+			swal({
+				  title: "Zakasnili ste sa otkazivanjem rezervacije vozila.",
+				  icon: "error",
+				  timer: 2500
+				});
 			return;
 		}
 		
@@ -997,7 +1094,11 @@ function prikaziRezVozila(vozila){
 			data: JSON.stringify(rezervacija.idRezervacije),
 			async : false,
 			success: function(response) {
-				alert(response);
+				swal({
+					  title: response,
+					  icon: "success",
+					  timer:2000
+					})
 				ucitajRezervisanaVozila();
 			},
 		});
@@ -1069,7 +1170,11 @@ function prikaziRezervisaneSobe(rezSoba){
 			success: function(response){
 				ocjenjeno = response;
 				if(response == true){
-					alert("Vec ste ocjenili koristenu rezervaciju");
+					swal({
+						  title: "Vec ste ocjenili koristenu rezervaciju.",
+						  icon: "warning",
+						  timer:2000
+						})
 					return;
 				}
 			},
@@ -1083,7 +1188,11 @@ function prikaziRezervisaneSobe(rezSoba){
 		var datumVracanja = Date.parse(rezervacija.datumOdlaksa);
 		
 		if (datumVracanja>trenutniDatum) {
-			alert("Ne mozete ocjeniti sobu prije njenog napustanja.");
+			swal({
+				  title: "Ne mozete ocjeniti sobu prije njenog napustanja.",
+				  icon: "warning",
+				  timer:2000
+				})
 			return;
 		}
 		
@@ -1158,7 +1267,20 @@ function prikaziRezervisaneSobe(rezSoba){
 					data: JSON.stringify(rezervacija.idRezervacije),
 					async : false,
 					success: function(response) {
-						alert(response);
+						if (response == ''){
+							swal({
+								  title: "Uspješno ste ocjenili usluge sobe.",
+								  icon: "success",
+								  timer:2000
+								})
+						}
+						else{
+							swal({
+								  title: response,
+								  icon: "warning",
+								  timer:2000
+								})
+						}
 					},
 				});
 
@@ -1174,7 +1296,11 @@ function prikaziRezervisaneSobe(rezSoba){
 		var sadasnjiDatum = new Date();
 		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
 		if (diff<2){
-			alert("Zakasnili ste sa otkazivanjem rezervacije sobe.");
+			swal({
+				  text: "Zakasnili ste sa otkazivanjem rezervacije sobe..",
+				  icon: "warning",
+				  timer: 2000
+				})	
 			return;
 		}
 		
@@ -1185,7 +1311,11 @@ function prikaziRezervisaneSobe(rezSoba){
 			data: JSON.stringify(rezervacija.idRezervacije),
 			async : false,
 			success: function(response) {
-				alert(response);
+				swal({
+					  title: response,
+					  icon: "success",
+					  timer:2000
+					})
 				ucitajRezervisaneSobe();
 			},
 		});

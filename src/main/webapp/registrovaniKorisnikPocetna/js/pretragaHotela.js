@@ -47,7 +47,11 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 		success: function(response) {
 			refreshHotels(response, idKorisnika, datumDolaska, datumOdlaska, idPutovanja);
 			if(response.length == 0) {
-				alert("Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage");
+				swal({
+					  title: "Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage",
+					  icon: "warning",
+					  timer: 2500
+					})	
 			}
 			if(datumDolaska == null || datumOdlaska == null || datumOdlaska == null) {
 				//ako nije rezim rezervacije, forma se resetuje

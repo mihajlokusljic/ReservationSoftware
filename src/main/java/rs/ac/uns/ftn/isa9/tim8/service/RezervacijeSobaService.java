@@ -407,7 +407,7 @@ public class RezervacijeSobaService {
 		sobeRepository.save(soba);
 		rezervacijeRepository.save(rSobe);
 		
-		return "Uspjesno ste ocjenili usluge sobe";
+		return null;
 	}
 
 }

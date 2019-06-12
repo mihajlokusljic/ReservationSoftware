@@ -42,7 +42,11 @@ $(document).ready(function() {
 					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
 				});
 				if(response.length == 0) {
-					swal("Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage");
+					swal({
+						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava navedeni kriterijum pretrage.",
+						  icon: "warning",
+						  timer: 2500
+						})	
 				}
 				$('#racSearchForm')[0].reset();
 			},

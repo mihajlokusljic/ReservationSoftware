@@ -1005,7 +1005,7 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		voziloRepository.save(vozilo);
 		rezervacijaVozilaRepository.save(rVozila);
 		
-		return "Uspjesno ste ocjenili usluge vozila";
+		return null;
 	}
 
 	public Boolean rezervacijaVozilaOcjenjena(Long idRezervacije) throws NevalidniPodaciException{

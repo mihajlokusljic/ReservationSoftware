@@ -34,8 +34,11 @@ $(document).ready(function(e) {
 			success: function(response) {
 				refreshAviokompanije(response);
 				if(response.length == 0) {
-					
-					swal("Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.");
+					swal({
+						  title: "Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.",
+						  icon: "warning",
+						  timer: 2500
+						})	
 				}
 				$('#aviokompanijeSearchForm')[0].reset();
 			}

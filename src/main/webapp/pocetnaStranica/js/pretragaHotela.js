@@ -47,8 +47,11 @@ $(document).ready(function(e) {
 			success: function(response) {
 				refreshHotels(response);
 				if(response.length == 0) {
-					swal("Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage");
-				}
+					swal({
+						  title: "Ne postoji ni jedan hotel koji zadovoljava navedene kriterijume pretrage.",
+						  icon: "warning",
+						  timer: 2500
+						})					}
 				$('#hotelSearchForm')[0].reset();
 				resetujZahtjeveSoba();
 			},
