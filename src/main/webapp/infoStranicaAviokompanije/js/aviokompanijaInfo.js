@@ -85,6 +85,10 @@ $(document).ready(function(e) {
 	var kor =  params_parser.get("korisnik");
 	korisnikId = kor;
 	
+	if (korisnikId != null) {
+		$("#kolonaBrzaRezKarte").show();
+	}
+	
 	$("#vratiNaPocetnu").click(function(e){
 		e.preventDefault();
 		if (korisnikId != null){
@@ -317,7 +321,9 @@ function prikaziBrzeRez(brzeRez){
 		noviRed.append('<td class="column1">' + "red: " + br.sjediste.red + ", kolona: "  + br.sjediste.kolona + '</td>');
 		noviRed.append('<td class="column1">' + br.originalnaCijena + '</td>');
 		noviRed.append('<td class="column1">' + br.popust + '</td>');
-		
+		if (korisnikId != null){
+			noviRed.append('</td><td class = "column1"><a href = "#" class = "rezervacija" id = "' + i + '">Rezerviši kartu</a></td></tr>');
+		}
 		prikaz.append(noviRed);
 	})
 }
