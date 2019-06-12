@@ -355,17 +355,29 @@ function izmjenaInfoStranice() {
 	let _opis = $("#opisHotela").val();
 	
 	if(_naziv == "") {
-		alert("Naziv aviokompanije mora biti zadat.");
+		swal({
+			  title: "Naziv aviokompanije mora biti zadat.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if(_lat == "" || _long == "") {
-		alert("Morate zadati lokaciju na mapi (kliknite na link u polju adresa)");
+		swal({
+			  title: "Morate zadati lokaciju na mapi (kliknite na link u polju adresa).",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if(_adresa == "") {
-		alert("Adresa aviokompanije mora biti zadata.");
+		swal({
+			  title: "Adresa aviokompanije mora biti zadata.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
@@ -385,7 +397,11 @@ function izmjenaInfoStranice() {
 		data: JSON.stringify(hotel),
 		success: function(response) {
 			podaciHotela = response;
-			alert("Informacije hotela su uspjesno izmjenjene.");
+			swal({
+				  title: "Informacije hotela su uspjesno izmjenjene.",
+				  icon: "success",
+				  timer: 2500
+				})
 		},
 	});
 }
@@ -405,7 +421,11 @@ function korisnikInfo(){
 				}
 			}
 			else{
-				alert("nepostojeci korisnik");
+				swal({
+					  title: "Nepostojeći korisnik.",
+					  icon: "error",
+					  timer: 2500
+					})
 			}
 		},
 	});
@@ -585,7 +605,11 @@ function prikaziIzmjenuSobe(idSobe) {
 		}
 	}
 	if(soba == null) {
-		alert("Doslo je do greske pri izmjeni sobe.");
+		swal({
+			  title: "Došlo je do greške pri izmjeni sobe.",
+			  icon: "error",
+			  timer: 2500
+			})
 		return;
 	}
 	
@@ -616,7 +640,11 @@ function brisanjeSobe(idSobe) {
 	let indeksSobe = 0;
 	let soba = nadjiSobu(idSobe);
 	if(soba == null) {
-		alert("Doslo je do greske pri brisanju sobe.");
+		swal({
+			  title: "Došlo je do greške pri brisanju sobe.",
+			  icon: "error",
+			  timer: 2500
+			})		
 		return;
 	}
 	let obrisi = confirm("Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?");
@@ -628,7 +656,11 @@ function brisanjeSobe(idSobe) {
 		type: "DELETE",
 		url: "../hotelskeSobe/obrisi/" + idSobe,
 		success: function(response) {
-			alert(response);
+			swal({
+				  title: response,
+				  icon: "success",
+				  timer: 2500
+				})	
 			//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
 			for(i in podaciHotela.sobe) {
 				if(podaciHotela.sobe[i].id == idSobe) {
@@ -644,22 +676,38 @@ function izmjenaProfila(){
 	
 	var imeAdmina = $("#imeAdmina").val();
 	if (imeAdmina == ''){
-		alert("Polje za unos imena ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos imena ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			})	
 		return;
 	}
 	var prezimeAdmina = $("#prezimeAdmina").val();
 	if (prezimeAdmina == ''){
-		alert("Polje za unos prezimena ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos prezimena ne može biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	var brTelefonaAdmina = $("#brTelefonaAdmina").val();
 	if (brTelefonaAdmina == ''){
-		alert("Polje za unos broja telefona ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos broja telefona ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	var adresaAdmina = $("#adresaAdmina").val();
 	if (adresaAdmina == ''){
-		alert("Polje za unos adrese ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos adrese ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}		
 
@@ -677,7 +725,11 @@ function izmjenaProfila(){
 		contentType : "application/json; charset=utf-8",
 		data:JSON.stringify(admin),
 		success:function(response){
-			alert("Uspjesno ste izmjenili profil.");
+			swal({
+				  title: "Uspješno ste izmjenili profil.",
+				  icon: "success",
+				  timer: 2500
+				})
 			podaciAdmina = response;
 			prikaziPodatkeAdmina();
 		},
@@ -691,12 +743,22 @@ function promjenaLozinke() {
 	var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
 
 	if (novaLozinka == ''){
-		alert("Niste unijeli novu lozinku");
+		swal({
+			  title: "Niste unijeli novu lozinku.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if (novaLozinka != novaLozinka2){
-		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		
+		swal({
+			  title: "Greška. ",
+			  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+			  icon: "error",
+			  timer: 2500
+			});
 		return;
 	}
 	
@@ -706,12 +768,20 @@ function promjenaLozinke() {
 		data : novaLozinka,
 		success : function(data) {
 			if (data == ''){
-				alert("Pogresna trenutna lozinka.");
+				swal({
+					  title: "Pogrešna trenutna lozinka.",
+					  icon: "error",
+					  timer: 2000
+					});	
 				return;
 			}
 			else{
 				setJwtToken(data.accessToken);
-				alert("Uspjesno ste izmjenili lozinku");
+				swal({
+					  title: "Uspješno ste izmjenili lozinku.",
+					  icon: "success",
+					  timer:2000
+					});
 				if(!lozinkaMijenjana) {
 					$("#izmjenaInicijalneLozinkePoruka").hide();
 					$("#meni").show();
@@ -810,7 +880,11 @@ function pretraziSobeZaSlobodnuRezervaciju() {
 				$("#sobeBrzeRezervacije").show();
 				prikaziSobeZaBrzuRezervaciju(sobe);
 			} else {
-				alert("Nema slobodnih soba u zadatom periodu.");
+				swal({
+					  title: "Nema slobodnih soba u zadatom periodu.",
+					  icon: "info",
+					  timer: 2000
+					});	
 			}
 		}
 	});
@@ -843,7 +917,11 @@ function zadajSobuBrzeRez() {
 				data : JSON.stringify(brzaRezervacija),
 				success : function(responseBrzaRez) {
 					tekucaBrzaRezervacija = responseBrzaRez;
-					alert("Soba broj " + soba.brojSobe + " je uspješno dodata na brzu rezervaciju.");
+					swal({
+						  title:"Soba broj " + soba.brojSobe + " je uspješno dodata na brzu rezervaciju.",
+						  icon: "success",
+						  timer: 2000
+						});	
 					$("#izborDodatnihUslugaBrzeRezervacije").show();
 					$("#izborSobeBrzeRezervacije").hide();
 					$("#definisanjePopustaBrzeRezervacije").hide();
@@ -856,13 +934,22 @@ function zadajSobuBrzeRez() {
 		}
 	});
 	if(!sobaIzabrana) {
-		alert("Morate izabrati sobu za brzu rezervaciju.");
+		swal({
+			  title:"Morate izabrati sobu za brzu rezervaciju",
+			  icon: "warning",
+			  timer: 2000
+			});			
+		
 	}
 }
 
 function zadajDodatneUsluge() {
 	if(tekucaBrzaRezervacija == null) {
-		alert("Morate zadati sobu za brzu rezervaciju u koraku 1");
+		swal({
+			  title:"Morate zadati sobu za brzu rezervaciju u koraku 1",
+			  icon: "warning",
+			  timer: 2000
+			});	
 		return;
 	}
 	let uslugeIzborBtns = $(".uslugaBrzaRezBtn");
@@ -881,7 +968,11 @@ function zadajDodatneUsluge() {
 		data : JSON.stringify(tekucaBrzaRezervacija),
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = responseBrzaRez;
-			alert("Usješno ste definisali dodatne usluge za brzu rezervaciju.");
+			swal({
+				  title:"Usješno ste definisali dodatne usluge za brzu rezervaciju.",
+				  icon: "success",
+				  timer: 2000
+				});	
 			$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.cijenaBoravka);
 			$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.cijenaBoravka);
 			$("#definisanjePopustaBrzeRezervacije").show();
@@ -936,7 +1027,11 @@ function resetBrzeRezervacijeView() {
 
 function zadavanjePopustaBrzeRezervacije() {
 	if(tekucaBrzaRezervacija == null) {
-		alert("Morate izabrati sobu i dodatne usluge.");
+		swal({
+			  title:"Morate izabrati sobu i dodatne usluge.",
+			  icon: "warning",
+			  timer: 2000
+			});	
 	}
 	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
 	tekucaBrzaRezervacija.procenatPopusta = popustProc;
@@ -948,8 +1043,13 @@ function zadavanjePopustaBrzeRezervacije() {
 			tekucaBrzaRezervacija = null;
 			brzeRezervacije.push(responseBrzaRez);
 			prikaziBrzeRezervacije(brzeRezervacije);
-			alert("Usješno ste definisali popust za brzu rezervaciju.");
-			resetBrzeRezervacijeView();			
+			swal({
+				  title:"Usješno ste definisali popust za brzu rezervaciju.",
+				  icon: "success",
+				  timer: 2000
+				}).then(function(){
+					resetBrzeRezervacijeView();			
+				})	
 		}
 	});
 }

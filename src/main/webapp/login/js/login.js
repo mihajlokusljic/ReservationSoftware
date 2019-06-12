@@ -6,8 +6,9 @@ $(document).ready(function() {
 	
 	
 	
-	$("#prijava_btn").click(function(e) {
+	$("#formaPrijava").submit(function(e) {
 		e.preventDefault();
+		
 		var username_email = $("#username").val();
 		var password = $("#lozinka").val();
 		
@@ -23,31 +24,71 @@ $(document).ready(function() {
 			data: JSON.stringify(korisnik),
 			success: function(response) {
 				if(response == '') {
-					alert("Pogrešan email/korisničko ime ili lozinka");
+					swal({
+						  title: "Neuspješna prijava!",
+						  text: "Pogrešan email ili lozinka",
+						  icon: "error",
+						});
 					return;
 				} 
 				else if(response == 'verifikacija'){
-					alert("Niste verifikovali svoj nalog.");
+					swal({
+						  title: "Neuspješna prijava!",
+						  text: "Niste verifikovali svoj nalog",
+						  icon: "error",
+						});
 					return;
 				}
 				else {
+					
 					setJwtToken(TOKEN_KEY, response.accessToken);			
 					if (response.tipKorisnika == "RegistrovanKorisnik"){
-						alert ("Prijavili ste se kao registrovani korisnik.");
+						
+						swal({
+							  title: "Uspješna prijava!",
+							  text: "Prijavili ste se kao registrovani korisnik",
+							  icon: "success",
+							}).then(function(){
+							window.location.replace(response.redirectionUrl);
+						})
 					}
 					else if (response.tipKorisnika == "AdministratorHotela"){
-						alert ("Prijavili ste se kao administrator hotela.");
+						swal({
+							  title: "Uspješna prijava!",
+							  text: "Prijavili ste se kao administrator hotela",
+							  icon: "success",
+							}).then(function(){
+							window.location.replace(response.redirectionUrl);
+						})
 					}
 					else if (response.tipKorisnika == "AdministratorRentACar"){
-			//			alert ("Prijavili ste se kao administrator rent-a-car-a.");
+						
+						swal({
+							  title: "Uspješna prijava!",
+							  text: "Prijavili ste se kao administrator rent-a-car servisa",
+							  icon: "success",
+							}).then(function(){
+							window.location.replace(response.redirectionUrl);
+						})
 					}
 					else if (response.tipKorisnika == "AdministratorAviokompanije"){
-						alert ("Prijavili ste se kao administrator aviokompanije.");
+						swal({
+							  title: "Uspješna prijava!",
+							  text: "Prijavili ste se kao administrator aviokompanije",
+							  icon: "success",
+							}).then(function(){
+							window.location.replace(response.redirectionUrl);
+						})
 					}
 					else{
-						alert ("Prijavili ste se kao sistemski administrator.");
+						swal({
+							  title: "Uspješna prijava!",
+							  text: "Prijavili ste se kao sistemski administrator",
+							  icon: "success",
+							}).then(function(){
+							window.location.replace(response.redirectionUrl);
+						})
 					}
-					window.location.replace(response.redirectionUrl);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {

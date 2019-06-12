@@ -227,12 +227,20 @@ function dodavanjeAviokompanije() {
 	let _opis = $("#opisAviokompanije").val();
 	
 	if(_naziv == "") {
-		alert("Naziv aviokompanije mora biti zadat.");
+		swal({
+			  title: "Naziv aviokompanije mora biti zadat.",
+			  icon: "warning",
+			  timer:2000
+			});
 		return;
 	}
 	
 	if(_lat == "" || _long == "") {
-		alert("Morate označiti lokaciju aviokompanije na mapi.");
+		swal({
+			  title: "Morate označiti lokaciju aviokompanije na mapi.",
+			  icon: "warning",
+			  timer:2000
+			});
 		return;
 	}
 	
@@ -257,7 +265,11 @@ function dodavanjeAviokompanije() {
 			let tabelaAviokompanija = $("#prikazAviokompanija");
 			let selekcioniMeni = $("#aviokompanijaAdminaSelect");
 			prikazi(response, tabelaAviokompanija, selekcioniMeni, "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg");
-			alert("Aviokompanija je uspjesno dodata.");
+			swal({
+				  title: "Aviokompanija je uspjesno dodata.",
+				  icon: "success",
+				  timer:2000
+				});
 			$("#dodavanjeAviokompanijeForm")[0].reset();
 			mapaAviokompanije.geoObjects.removeAll();
 		},
@@ -272,12 +284,20 @@ function dodavanjeHotela() {
 	let _opis = $("#promotivniOpisHotela").val();
 	
 	if(_naziv == "") {
-		alert("Naziv aviokompanije mora biti zadat.");
+		swal({
+			  title: "Naziv aviokompanije mora biti zadat.",
+			  icon: "warning",
+			  timer:2000
+			});
 		return;
 	}
 	
 	if(_lat == "" || _long == "") {
-		alert("Morate označiti lokaciju hotela na mapi.");
+		swal({
+			  title: "Morate označiti lokaciju hotela na mapi.",
+			  icon: "warning",
+			  timer:2000
+			});
 		return;
 	}
 	
@@ -299,7 +319,11 @@ function dodavanjeHotela() {
 			let tabelaHotela = $("#prikazHotela");
 			let selekcioniMeni = $("#hotelAdminaSelect");
 			prikazi(response, tabelaHotela, selekcioniMeni, "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg");
-			alert("Hotel je uspjesno dodat.");
+			swal({
+				  title: "Hotel je uspješno dodat.",
+				  icon: "success",
+				  timer:2000
+				});
 			$("#dodavanjeHotelaForm")[0].reset();
 			mapaHotela.geoObjects.removeAll();
 		},
@@ -314,12 +338,20 @@ function dodavanjeRacServisa() {
 	let _long = $("#longitudaRacServisa").val();
 	
 	if(_naziv == "") {
-		alert("Naziv rent-a-car servisa mora biti zadat.");
+		swal({
+			  title: "Naziv rent-a-car servisa mora biti zadat.",
+			  icon: "warning",
+			  timer:2000
+			});		
 		return;
 	}
 	
 	if(_lat == "" || _long == "") {
-		alert("Morate označiti lokaciju rent-a-car servisa na mapi.");
+		swal({
+			  title: "Morate označiti lokaciju rent-a-car servisa na mapi.",
+			  icon: "warning",
+			  timer:2000
+			});	
 		return;
 	}
 	
@@ -341,7 +373,11 @@ function dodavanjeRacServisa() {
 			let tabelaRacServisa = $("#prikazRacServisa");
 			let selekcioniMeni = $("#racServisAdminaSelect");
 			prikazi(response, tabelaRacServisa, selekcioniMeni, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg");
-			alert("Rent-a-car servis je uspjesno dodat.");
+			swal({
+				  title: "Rent-a-car servis je uspješno dodat.",
+				  icon: "success",
+				  timer:2000
+				});	
 			$("#dodavanjeRacServisaForm")[0].reset();
 			mapaRacServisa.geoObjects.removeAll();
 		},
@@ -353,7 +389,12 @@ function dodavanjeAdmina() {
 	let _lozinka = $("#lozinkaAdmina").val();
 	let lozinkaPotvrda = $("#potvrdaLozinkeAdmina").val();
 	if (_lozinka != lozinkaPotvrda){
-		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		swal({
+			  title: "Greška. ",
+			  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+			  icon: "error",
+			  timer: 2500
+			});
 		return;
 	}
 	let _ime = $("#imeAdmina").val();
@@ -392,7 +433,11 @@ function dodavanjeAdmina() {
 		url: tergetUrl,
 		data: JSON.stringify(noviAdmin),
 		success: function(response) {
-			alert(response);
+			swal({
+				  title: response,
+				  icon: "success",
+				  timer: 2500
+				});
 		},
 	});
 }
@@ -413,7 +458,11 @@ function korisnikInfo(){
 				}
 			}
 			else{
-				alert("nepostojeci korisnik");
+				swal({
+					  title: "Nepostojeći korsinik",
+					  icon: "error",
+					  timer: 2500
+					});
 			}
 		},
 	});
@@ -427,7 +476,11 @@ function brisanjeSkalePopusta() {
 		dataType : "json",
 		success: function(ok){
 			if(!ok) {
-				alert("Doslo je do greske pri resetovanju skale popusta");
+				swal({
+					  title: "Došlo je do greške pri resetovanju skale popusta.",
+					  icon: "error",
+					  timer: 2500
+					});
 			}
 		},
 	});
@@ -440,7 +493,11 @@ function dodavanjeStavkeDodatnogPopusta() {
 	_gornjaGranicaPoeni = parseFloat(_gornjaGranicaPoeni);
 	
 	if(_gornjaGranicaPoeni < _donjaGranicaPoeni) {
-		alert("Gornja granica za ostvarene bonus poene ne smije biti manja od donje granice.");
+		swal({
+			  title: "Gornja granica za ostvarene bonus poene ne smije biti manja od donje granice.",
+			  icon: "warning",
+			  timer: 2500
+			});
 	}
 	
 	let _procenatPopusta = $("#procenatBonusPopusta").val();
@@ -616,22 +673,38 @@ function izmjenaProfila(){
 	
 	var imeAdmina = $("#imeKorisnika").val();
 	if (imeAdmina == ''){
-		alert("Polje za unos imena ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos imena ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	var prezimeAdmina = $("#prezimeKorisnika").val();
 	if (prezimeAdmina == ''){
-		alert("Polje za unos prezimena ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos prezimena ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	var brTelefonaAdmina = $("#brTelefonaKorisnika").val();
 	if (brTelefonaAdmina == ''){
-		alert("Polje za unos broja telefona ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos broja telefona ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	var adresaAdmina = $("#adresaKorisnika").val();
 	if (adresaAdmina == ''){
-		alert("Polje za unos adrese ne moze biti prazno.");
+		swal({
+			  title: "Polje za unos adrese ne moze biti prazno.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}		
 
@@ -649,7 +722,11 @@ function izmjenaProfila(){
 		contentType : "application/json; charset=utf-8",
 		data: JSON.stringify(admin),
 		success:function(response){
-			alert("Uspjesno ste izmjenili profil.");
+			swal({
+				  title: "Uspješno ste izmjenili profil.",
+				  icon: "success",
+				  timer: 2500
+				});
 			podaciAdmina = response;
 			prikaziPodatkeAdmina();
 		},
@@ -663,12 +740,21 @@ function promjenaLozinke() {
 	var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
 
 	if (novaLozinka == ''){
-		alert("Niste unijeli novu lozinku");
+		swal({
+			  title: "Niste unijeli novu lozinku.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if (novaLozinka != novaLozinka2){
-		alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+		swal({
+			  title: "Greška. ",
+			  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+			  icon: "error",
+			  timer: 2500
+			});
 		return;
 	}
 	
@@ -678,12 +764,20 @@ function promjenaLozinke() {
 		data : novaLozinka,
 		success : function(data) {
 			if (data == ''){
-				alert("Pogresna trenutna lozinka.");
+				swal({
+					  title: "Pogrešna trenutna lozinka.",
+					  icon: "error",
+					  timer: 2000
+					});	
 				return;
 			}
 			else{
 				setJwtToken(data.accessToken);
-				alert("Uspjesno ste izmjenili lozinku");
+				swal({
+					  title: "Uspješno ste izmjenili lozinku.",
+					  icon: "success",
+					  timer:2000
+					});
 				if(!lozinkaMijenjana) {
 					$("#izmjenaInicijalneLozinkePoruka").hide();
 					$("#meni").show();

@@ -18,8 +18,11 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
-	    	}
+	    		swal({
+		  			  title: XMLHttpRequest.responseText,
+		  			  icon: "warning",
+		  			  timer: 2500
+		  			});	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -125,10 +128,18 @@ function pretragaLetova() {
 		    data : JSON.stringify(parametriPretrage),
 		    success : function(response) {
 		      if (response == undefined) {
-		        alert("Došlo je do greške.");
+		    		swal({
+						  title: "Došlo je do greške.",
+						  icon: "error",
+						  timer: 2500
+						})	
 		      } else {
 		        if (response.length == 0) {
-		          alert("Ne postoji ni jedan let koji zadovoljava kriterijume pretrage.");
+		        	swal({
+						  title: "Ne postoji ni jedan let koji zadovoljava navedeni kriterijum pretrage.",
+						  icon: "info",
+						  timer: 2500
+						})	
 		        }
 		        prikaziLetove(response);
 		      }

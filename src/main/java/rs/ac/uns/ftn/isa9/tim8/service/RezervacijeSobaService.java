@@ -231,7 +231,7 @@ public class RezervacijeSobaService {
 		if (putovanje != null) {
 			putovanjeRepository.save(putovanje);
 		}
-		return "Uspjesno ste rezervisali sobu.";
+		return null;
 	}
 
 	public String izvrsiRezervacijuSoba(ZahtjevRezervacijaSobaDTO rezervacijaPodaci) throws NevalidniPodaciException {
@@ -337,7 +337,7 @@ public class RezervacijeSobaService {
 		if(putovanje != null) {
 			putovanjeRepository.save(putovanje);
 		}
-		return "Uspješno ste rezervisali hotelski smještaj.";
+		return null;
 	}
 
 	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException {
@@ -407,7 +407,7 @@ public class RezervacijeSobaService {
 		sobeRepository.save(soba);
 		rezervacijeRepository.save(rSobe);
 		
-		return "Uspjesno ste ocjenili usluge sobe";
+		return null;
 	}
 
 }

@@ -294,7 +294,6 @@ function korisnikInfo(){
 		success: function(data){
 			if(data != null){
 				korisnik = data;
-				alert("Ulogovani ste kao administrator rent-a-car servisa: " + data.ime + " " + data.prezime );
 				if(!korisnik.lozinkaPromjenjena) {
 					izmjenaInicijalneLozinke();
 				}
@@ -304,8 +303,12 @@ function korisnikInfo(){
 				}
 			}
 			else{
-				alert("nepostojeci korisnik");
-			}
+				swal({
+					  title: "Nepostojeći korisnik.",
+					  icon: "error",
+					  timer: 2500
+					})
+				}
 		},
 		async: false,
 		error : function(XMLHttpRequest) {
@@ -343,7 +346,11 @@ function dobaviSvaVozilaServisa(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
 			if(response == "Servis koji ste unijeli ne postoji.") {
-				alert(response);
+				swal({
+					  title: response,
+					  icon: "error",
+					  timer: 2500
+					})
 			} else {
 				prikaziVozila(response);
 				
@@ -391,66 +398,115 @@ function prikaziVozila(vozila){
 			e.preventDefault();
 			let naziv_v = $("#naziv_input1").val();
 			if (naziv_v == ''){
-				alert("Niste unijeli naziv vozila");
+				swal({
+					  title: "Niste unijeli naziv vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			let marka_v = $("#marka_input1").val();
 			if (marka_v == ''){
-				alert("Niste unijeli marku vozila");
+				swal({
+					  title: "Niste unijeli marku vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
+				
 				return;
 			}
 			let model_v = $("#model_input1").val();
 			if (model_v == ''){
-				alert("Niste unijeli model vozila");
+				swal({
+					  title: "Niste unijeli model vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			let tip_vozila_ = $("#tip_vozila_input1").val();
 			let godina_s = $("#godina_input1").val();
 			if (godina_s == ''){
-				alert("Niste unijeli godinu proizvodnje vozila");
+				swal({
+					  title: "Niste unijeli godinu proizvodnje vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			var dt = new Date();
 	        var trenutna_godina = dt.getFullYear();
 			var godina = parseInt(godina_s);
 			if (isNaN(godina) || godina<0){
-				alert("Niste unijeli validnu godinu proizvodnje.");
+				swal({
+					  title: "Niste unijeli validnu godinu proizvodnje.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			if (godina>trenutna_godina) {
-				alert("Godina proizvodnje mora biti manja od trenutne godine.");
+				swal({
+					  title: "Godina proizvodnje mora biti manja od trenutne godine.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			
 			let broj_sjedista_s = $("#broj_sjedista_input1").val();
 			if (broj_sjedista_s == ''){
-				alert("Niste unijeli broj sjedista vozila");
+				swal({
+					  title: "Niste unijeli broj sjedišta vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			var broj_sjedista_v = parseInt(broj_sjedista_s);
 			if (isNaN(broj_sjedista_v) || broj_sjedista_v<0){
-				alert("Broj sjedista mora biti broj veći od 0.");
+				swal({
+					  title: "Broj sjedista mora biti broj veći od 0.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			let broj_vrata_s = $("#broj_vrata_input1").val();
 			if (broj_vrata_s == ''){
-				alert("Niste unijeli broj vrata vozila");
+				swal({
+					  title: "Niste unijeli broj vrata vozila",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			var broj_vrata_v = parseInt(broj_vrata_s);
 			if (isNaN(broj_vrata_v) || broj_vrata_v<0){
-				alert("Broj vrata mora biti broj veći od 0.");
+				swal({
+					  title: "Broj vrata mora biti broj veći od 0.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			
 			let cijena_s = $("#cijena_input1").val();
 			if (cijena_s == ''){
-				alert("Niste unijeli cijenu usluga vozila po danu.");
+				swal({
+					  title: "Niste unijeli cijenu usluga vozila po danu",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			var cijena_v = parseInt(cijena_s);
 			if (isNaN(cijena_v) || cijena_v<0){
-				alert("Cijena usluge po danu mora biti decimalan broj veci od 0.");
+				swal({
+					  title: "Cijena usluge po danu mora biti decimalan broj veci od 0.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			
@@ -511,24 +567,40 @@ function dodajVozilo(){
 		let naziv_servisa = rentACarServis.naziv;
 		let naziv = $('#naziv_input').val();
 		if (naziv == ''){
-			alert("Niste unijeli naziv vozila");
+			swal({
+				  title: "Niste unijeli naziv vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		let marka = $("#marka_input").val();
 		if (marka == ''){
-			alert("Niste unijeli marku vozila");
+			swal({
+				  title: "Niste unijeli marku vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		let model = $("#model_input").val();
 		if (model == ''){
-			alert("Niste unijeli model vozila");
+			swal({
+				  title: "Niste unijeli model vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		let tip_vozila = $("#tip_vozila_input").val();
 		
 		let godina = $("#godina_proizvodnje_input").val();
 		if (godina == ''){
-			alert("Niste unijeli godinu proizvodnje vozila");
+			swal({
+				  title: "Niste unijeli godinu proizvodnje vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
@@ -536,24 +608,40 @@ function dodajVozilo(){
 	    var trenutna_godina = dt.getFullYear();
 		var godina_ = parseInt(godina);
 		if (isNaN(godina_) || godina_<0){
-			alert("Niste unijeli validnu godinu proizvodnje.");
+			swal({
+				  title: "Niste unijeli validnu godinu proizvodnje.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		if (godina_>trenutna_godina) {
-			alert("Godina proizvodnje mora biti manja od trenutne godine.");
+			swal({
+				  title: "Godina proizvodnje mora biti manja od trenutne godine.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
 		let broj_sjedista_s = $("#broj_sjedista_input").val();
 		if (broj_sjedista_s == ''){
-			alert("Niste unijeli broj sjedista vozila");
+			swal({
+				  title: "Niste unijeli broj sjedišta vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var broj_sjedista_v = parseInt(broj_sjedista_s);
 		
 		let broj_vrata_s = $("#broj_vrata_input").val();
 		if (broj_vrata_s == ''){
-			alert("Niste unijeli broj vrata vozila");
+			swal({
+				  title: "Niste unijeli broj vrata vozila.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var broj_vrata_v = parseInt(broj_vrata_s);
@@ -561,13 +649,21 @@ function dodajVozilo(){
 		
 		let cijena_s = $("#cijena_input").val();
 		if (cijena_s == ''){
-			alert("Niste unijeli cijenu usluga vozila po danu.");
+			swal({
+				  title: "Niste unijeli cijenu usluga vozila po danu.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
 		var cijena_v = parseInt(cijena_s);
 		if (isNaN(cijena_v) || cijena_v<0){
-			alert("Cijena usluge po danu mora biti decimalan broj veci od 0.");
+			swal({
+				  title: "Cijena usluge po danu mora biti decimalan broj veci od 0.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
@@ -600,10 +696,18 @@ function dodajVozilo(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				if(response == '') {
-					alert("Uspjesno ste dodali novo vozilo");
+					swal({
+						  title: "Uspješno ste dodali novo vozilo.",
+						  icon: "success",
+						  timer: 2500
+						})
 					dobaviSvaVozilaServisa();
 				} else {
-					alert(response);
+					swal({
+						  title: response,
+						  icon: "warning",
+						  timer: 2500
+						})
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -681,13 +785,21 @@ function prikazFilijala(filijale){
 			e.preventDefault();
 			let nova_lokacija = $("#adresa_filijale_nova").val();
 			if (nova_lokacija == ''){
-				alert("Ne mozete unijeti praznu lokaciju.");
+				swal({
+					  title: "Ne mozete unijeti praznu lokaciju.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			let _lat = $("#latitudaFilijaleIzmjena").val();
 			let _long = $("#longitudaFilijaleIzmjena").val();
 			if(_lat == "" || _long == "") {
-				alert("Morate označiti lokaciju filijale na mapi.");
+				swal({
+					  title: "Morate označiti lokaciju filijale na mapi.",
+					  icon: "warning",
+					  timer: 2500
+					})
 				return;
 			}
 			
@@ -704,12 +816,20 @@ function prikazFilijala(filijale){
 				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(response){
 					if (response != ''){
-						alert(response);
+						swal({
+							  title: response,
+							  icon: "warning",
+							  timer: 2500
+							})						
 						prikazFilijalaOdabranogServisa();				
 
 					}
 					else{
-						alert("Uspjesno ste izmjenili adresu filijale");
+						swal({
+							  title: "Uspjesno ste izmjenili adresu filijale",
+							  icon: "warning",
+							  timer: 2500
+							})	
 						prikazFilijalaOdabranogServisa();				
 					}
 					
@@ -721,36 +841,6 @@ function prikazFilijala(filijale){
 		});
 		
 	});
-	
-	
-	
-	$("#forma_izmjeni_filijalu").unbind().submit(function(e){
-		e.preventDefault();
-		let filijala = filijale[e.target.id];
-		let nova_lokacija = $("#adresa_filijale_nova").val();
-		if (nova_lokacija == ''){
-			alert("Ne mozete unijeti praznu lokaciju.");
-			return;
-		}
-		$.ajax({
-			type : "GET",
-			url : "../rentACar/izmjeniFilijalu/" + filijala.id + "/" + nova_lokacija,
-			headers: createAuthorizationTokenHeader("jwtToken"),
-			success : function(response){
-				if (response != ''){
-					alert(response);		
-				}
-				else{
-					alert("Uspjesno ste izmjenili adresu filijale");
-					prikazFilijalaOdabranogServisa();				
-				}
-				
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
-			}
-		});
-	});
 }
 
 function dodajFilijalu(){
@@ -761,14 +851,22 @@ function dodajFilijalu(){
 
 		let adresa = $("#adresa_filijale").val();
 		if (adresa == ''){
-			alert ("Niste unijeli adresu.");
+			swal({
+				  title: "Niste unijeli adresu.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		let _lat = $("#latitudaFilijaleDodavanje").val();
 		let _long = $("#longitudaFilijaleDodavanje").val();
 		
 		if(_lat == "" || _long == "") {
-			alert("Morate označiti lokaciju filijale na mapi.");
+			swal({
+				  title: "Morate označiti lokaciju filijale na mapi.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		
@@ -826,20 +924,32 @@ function profilServisa(){
 		var naziv_serv = $("#profil_servisa_naziv").val();
 		var adresa = $("#profil_servisa_adresa").val();
 		if (adresa == ''){
-			alert("Polje za unos adrese servisa ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos adrese servisa ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})				
 			return;
 		}
 		var _lat = $("#latitudaServisa").val();
 		var _long = $("#longitudaServisa").val();
 		
 		if(_lat == "" || _long == "") {
-			alert("Morate zadati lokaciju rent-a-car servisa na mapi.");
+			swal({
+				  title: "Morate zadati lokaciju rent-a-car servisa na mapi.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		
 		var opis = $("#profil_servisa_opis").val();
 		if (opis == ''){
-			alert("Polje za unos promotivnog opisa servisa ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos promotivnog opisa servisa ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		
@@ -864,12 +974,20 @@ function profilServisa(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
-					alert("Uspjesno ste izmjenili profil");
+					swal({
+						  title: "Uspješno ste izmjenili profil.",
+						  icon: "success",
+						  timer: 2500
+						})	
 					ucitajPodatkeSistema();
 					profilServisa();
 				}
 				else{
-					alert(response);
+					swal({
+						  title: response,
+						  icon: "warning",
+						  timer: 2500
+						})
 
 				}
 				
@@ -896,22 +1014,38 @@ function profilKorisnika(){
 		e.preventDefault();
 		var imeAdmina = $("#imeAdmina").val();
 		if (imeAdmina == ''){
-			alert("Polje za unos imena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos imena ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var prezimeAdmina = $("#prezimeAdmina").val();
 		if (prezimeAdmina == ''){
-			alert("Polje za unos prezimena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos prezimena ne može biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
 		if (brTelefonaAdmina == ''){
-			alert("Polje za unos broja telefona ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos broja telefona ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
-			alert("Polje za unos adrese ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos adrese ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}		
 
@@ -932,10 +1066,18 @@ function profilKorisnika(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
-					alert("Izmjena nije uspjela");
+					swal({
+						  title: "Izmjena nije uspjela.",
+						  icon: "error",
+						  timer: 2500
+						})
 				}
 				else{
-					alert("Uspjesno ste izmjenili profil.");
+					swal({
+						  title: "Uspješno ste izmjenili profil.",
+						  icon: "success",
+						  timer: 2500
+						})
 					korisnik = response;
 					profilKorisnika();
 				}
@@ -955,12 +1097,21 @@ function promjeniLozinku(){
 		var lozinkaMijenjana = korisnik.lozinkaPromjenjena;
 		
 		if (novaLozinka == ''){
-			alert("Niste unijeli novu lozinku");
+			swal({
+				  title: "Niste unijeli novu lozinku.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
 		if (novaLozinka != novaLozinka2){
-			alert("Greska. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			swal({
+				  title: "Greška. ",
+				  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+				  icon: "error",
+				  timer: 2500
+				});
 			return;
 		}
 		
@@ -973,12 +1124,20 @@ function promjeniLozinku(){
 			data : novaLozinka,
 			success : function(data) {
 				if (data == ''){
-					alert("Pogresna trenutna lozinka.");
-					return;
+					swal({
+						  title: "Pogrešna trenutna lozinka.",
+						  icon: "error",
+						  timer: 2000
+						});	
+				return;
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspjesno ste izmjenili lozinku");
+					swal({
+						  title: "Uspješno ste izmjenili lozinku.",
+						  icon: "success",
+						  timer:2000
+						});
 					if(!lozinkaMijenjana) {
 						$("#izmjenaInicijalneLozinkePoruka").hide();
 						$("#tab-profil-lozinka").hide();
@@ -1122,7 +1281,11 @@ function pretraziSlobodnaVozila(){
 				$("#vozilaBrzeRezervacije").show();
 				prikaziVozilaZaBrzuRezervaciju(data);
 			} else {
-				alert("Nema slobodnih vozila u zadatom periodu.");
+				swal({
+					  title: "Nema slobodnih vozila u zadatom periodu.",
+					  icon: "warning",
+					  timer:2000
+					});
 			}
 		}
 	});
@@ -1187,7 +1350,11 @@ function zadajVoziloBrzeRez(){
 				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(responseBrzaRez) {
 					tekucaBrzaRezervacija = responseBrzaRez;
-					alert("Vozilo je uspješno dodato na brzu rezervaciju.");
+					swal({
+						  title: "Vozilo je uspješno dodato na brzu rezervaciju.",
+						  icon: "success",
+						  timer:2000
+						});
 					$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.baznaCijena);
 					$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.baznaCijena);
 					$("#izborVozilaBrzeRezervacije").hide();
@@ -1200,13 +1367,21 @@ function zadajVoziloBrzeRez(){
 		}
 	});
 	if(!voziloIzabrano) {
-		alert("Morate izabrati vozilo za brzu rezervaciju.");
+		swal({
+			  title: "Morate izabrati vozilo za brzu rezervaciju.",
+			  icon: "warning",
+			  timer:2000
+			});
 	}
 }
 
 function zadavanjePopustaBrzeRezervacije(){
 	if(tekucaBrzaRezervacija == null) {
-		alert("Morate izabrati vozilo.");
+		swal({
+			  title: "Morate izabrati vozilo.",
+			  icon: "warning",
+			  timer:2000
+			});
 	}
 	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
 	tekucaBrzaRezervacija.procenatPopusta = popustProc;
@@ -1217,7 +1392,11 @@ function zadavanjePopustaBrzeRezervacije(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = null;
-			alert("Usješno ste definisali popust za brzu rezervaciju.");
+			swal({
+				  title: "Usješno ste definisali popust za brzu rezervaciju.",
+				  icon: "warning",
+				  timer:2000
+				});
 			resetBrzeRezervacijeView();	
 		}
 	});

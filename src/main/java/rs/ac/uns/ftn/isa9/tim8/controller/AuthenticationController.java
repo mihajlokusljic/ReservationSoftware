@@ -80,6 +80,7 @@ public class AuthenticationController {
 		this.userDetailsService.podesiPrivilegije(registrovaniKorisnik, TipKorisnika.RegistrovanKorisnik);
 		registrovaniKorisnik.setBonusPoeni(0);
 		registrovaniKorisnik.setBrojTelefona(korisnik.getBrojTelefona());
+		registrovaniKorisnik.setAdresa(korisnik.getAdresa());
 		registrovaniKorisnik.setPrijatelji(new HashSet<RegistrovanKorisnik>());
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
 		registrovaniKorisnik.setEnabled(true); 

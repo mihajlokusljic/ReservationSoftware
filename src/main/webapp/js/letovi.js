@@ -24,7 +24,11 @@ $(document).ready(function() {
 		if (brojLeta == "" || polaziste == "" || odrediste == "" || datumPoletanja == "" || datumSletanja == "" ||
 				duzinaPutovanja == "" || brojPresjedanja == "" || kapacitetPrva == "" || kapacitetBiznis == "" ||
 				kapacitetEkonomska == "") {
-			alert("Polja ne smiju biti prazna. Pokušajte ponovo.");
+			swal({
+				  title: "Polja ne smiju biti prazna. Pokušajte ponovo.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
@@ -52,7 +56,7 @@ $(document).ready(function() {
 					let tabelaLetova = $("#letoviPrikaz");
 					prikazi(flight, tabelaLetova);
 				} else {
-					alert(response);
+					swal(response);
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {

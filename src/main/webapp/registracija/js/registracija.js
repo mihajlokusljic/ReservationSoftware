@@ -4,32 +4,65 @@ $(document).ready(function() {
 		e.preventDefault();
 		var ime = $("#ime").val();
 		if (ime == ""){
-			alert("Niste unijeli ime.");
+			swal({
+				  title: "Niste unijeli ime.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		var prezime = $("#prezime").val();
 		if (prezime == ""){
-			alert("Niste unijeli prezime");
+			swal({
+				  title: "Niste unijeli prezime.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		var email = $("#email").val();
 		if (email == ""){
-			alert("Niste unijeli email");
+			swal({
+				  title: "Niste unijeli email.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		var brojTelefona = $("#brojTelefona").val();
 		if (brojTelefona == ""){
-			alert("Niste unijeli broj telefona");
+			swal({
+				  title: "Niste unijeli broj telefona.",
+				  icon: "warning",
+				  timer: 2500
+				})	
+			return;
+		}
+		var adresa = $("#adresa").val();
+		if (adresa == ""){
+			swal({
+				  title: "Niste unijeli adresu stanovanja.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		var lozinka = $("#lozinka").val();
 		if (lozinka== ""){
-			alert("Niste unijeli lozinku");
+			swal({
+				  title: "Niste unijeli lozinku.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 		var lozinka2 = $("#lozinka2").val();
 		if (lozinka2 != lozinka){
-			alert("Ne poklapaju se lozinke");
+			swal({
+				  title: "Ne poklapaju se lozinke.",
+				  icon: "warning",
+				  timer: 2500
+				})	
 			return;
 		}
 
@@ -39,6 +72,7 @@ $(document).ready(function() {
 				email:email,
 				brojTelefona:brojTelefona,
 				lozinka:lozinka,
+				adresa: { punaAdresa : adresa }
 		};
 		
 		$.ajax({
@@ -48,10 +82,20 @@ $(document).ready(function() {
 			data: JSON.stringify(korisnik),
 			success: function(response) {
 				if(response == '') {
-					alert("Uspjesno ste se registrovali");
-					window.location.replace("../login/login.html");
+					swal({
+						  title: "Uspješno ste se registrovali.",
+						  icon: "success",
+						  timer: 2500
+						}).then(function(){
+							window.location.replace("../login/login.html");
+						})	
+					
 				} else {
-					alert(response);
+					swal({
+						  title: response,
+						  icon: "warning",
+						  timer: 2500
+						});
 				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {

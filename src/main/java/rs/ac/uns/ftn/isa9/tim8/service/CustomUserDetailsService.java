@@ -86,6 +86,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public String dodajRegistrovanogKorisnika(RegistrovanKorisnik korisnik) {
 
 		korisnikRepository.save(korisnik);
+		adresaRepository.save(korisnik.getAdresa());
 		return null;
 	}
 
