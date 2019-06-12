@@ -1121,7 +1121,7 @@ function prikaziRezervisaneLetove(rezLetova){
 		noviRed.append('<td class="column1">' + rLet.nazivOdredista + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + rLet.idRezervacije + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
 	});
@@ -1140,7 +1140,6 @@ function prikaziRezervisaneLetove(rezLetova){
 				})	
 			return;
 		}
-		
 		$.ajax({
 			type: "POST",
 			url : "../letovi/otkaziRezervaciju",

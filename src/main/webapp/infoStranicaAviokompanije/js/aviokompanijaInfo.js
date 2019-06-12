@@ -349,11 +349,20 @@ function prikaziBrzeRez(brzeRez){
 			contentType : "application/json; charset=utf-8",
 			success: function(response) {
 				if(response == "Rezervacija je uspjesno izvrsena.") {
-					alert("Uspješno ste izvršili brzu rezervaciju avionske karte.");
-					window.location.replace("../registrovaniKorisnikPocetna/index.html");
+					swal({
+						  title: "Uspješno ste izvršili brzu rezervaciju avionske karte.",
+						  icon: "success",
+						  timer:2000
+						}).then(function(){
+							window.location.replace("../registrovaniKorisnikPocetna/index.html");
+						})
 					return;
 				} else {
-					alert("Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.");
+					swal({
+						  title: "Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.",
+						  icon: "error",
+						  timer:2000
+						})
 					return;
 				}
 			},
