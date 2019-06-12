@@ -996,7 +996,7 @@ function prikaziRezervisaneLetove(rezLetova){
 		let noviRed = $('<tr></tr>');
 		noviRed.append('<td class="column1">' + rLet.nazivAviokompanije + '</td>');
 		noviRed.append('<td class="column1">' + rLet.brojLeta + '</td>');
-		noviRed.append('<td class="column1">' + rLet.cijena + '</td>');		
+		noviRed.append('<td class="column1">' + rLet.originalnaCijena + '</td>');		
 		noviRed.append('<td class="column1">' + rLet.sjediste.red + '/' + rLet.sjediste.kolona +  '</td>');
 		noviRed.append('<td class="column1">' + rLet.destinacijaPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.destinacijaDolaska + '</td>');

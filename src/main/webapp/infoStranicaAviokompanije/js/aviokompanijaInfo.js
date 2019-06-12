@@ -322,10 +322,33 @@ function prikaziBrzeRez(brzeRez){
 		noviRed.append('<td class="column1">' + br.originalnaCijena + '</td>');
 		noviRed.append('<td class="column1">' + br.popust + '</td>');
 		if (korisnikId != null){
-			noviRed.append('</td><td class = "column1"><a href = "#" class = "rezervacija" id = "' + i + '">Rezerviši kartu</a></td></tr>');
+			noviRed.append('</td><td class = "column1"><a href = "#" class = "brzaRezervacija" id = "brl' + br.idRezervacije + 
+					'">Rezerviši kartu</a></td></tr>');
 		}
 		prikaz.append(noviRed);
 	})
+	
+	$(".brzaRezervacija").click(function(e){
+		e.preventDefault();
+		let idBrzeRez = e.target.id.substring(3);
+		
+		$.ajax({
+			type: "POST",
+			url: "../aviokompanije/izvrsiBrzuRezervacijuKarte/" + idBrzeRez,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				if(response == "Rezervacija je uspjesno izvrsena.") {
+					alert("Uspješno ste izvršili brzu rezervaciju avionske karte.");
+					window.location.replace("../registrovaniKorisnikPocetna/index.html");
+					return;
+				} else {
+					alert("Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.");
+					return;
+				}
+			},
+		});
+		
+	});
 }
 
 function vratiSveBrzeRezervacije(){
