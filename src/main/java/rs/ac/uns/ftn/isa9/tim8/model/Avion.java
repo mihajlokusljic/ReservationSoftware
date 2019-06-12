@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,6 +36,7 @@ public class Avion {
 	protected Set<Segment> segmenti;
 	
 	@OneToMany(mappedBy = "avion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OrderBy("red ASC, kolona ASC")
 	protected Set<Sjediste> sjedista;
 	
 	@JsonIgnore

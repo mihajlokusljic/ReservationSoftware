@@ -78,7 +78,7 @@ public class KorisnikService {
 		o.setPrezime(noviPodaci.getPrezime());
 		o.setBrojTelefona(noviPodaci.getBrojTelefona());
 		Adresa staraAdresa = null;
-		if(o.getAdresa() == null) {
+		if (o.getAdresa() == null) {
 			o.setAdresa(noviPodaci.getAdresa());
 		} else if (!noviPodaci.getAdresa().getPunaAdresa().equals(o.getAdresa().getPunaAdresa())) {
 			staraAdresa = o.getAdresa();
@@ -88,7 +88,7 @@ public class KorisnikService {
 			}
 			o.setAdresa(noviPodaci.getAdresa());
 		}
-		
+
 		korisnikRepository.save(o);
 		if (staraAdresa != null) {
 			adresaRepository.delete(staraAdresa);
@@ -411,12 +411,10 @@ public class KorisnikService {
 		Collection<PrikazRezSjedistaDTO> rezSjedistaDTO = new ArrayList<>();
 
 		for (RezervacijaSjedista rs : rezSjediste) {
-			// rezSjedistaDTO.add(new PrikazRezSjedistaDTO(idRezervacije, datumPolaska,
-			// datumDolaska, sjediste, originalnaCijena, popust))
-
-			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getLet().getDatumPoletanja(),
-					rs.getLet().getDatumSletanja(), rs.getSjediste(), rs.getCijena(), 0));
-
+			rezSjedistaDTO.add(new PrikazRezSjedistaDTO(rs.getId(), rs.getLet().getPolaziste().getNazivDestinacije(),
+					rs.getLet().getOdrediste().getNazivDestinacije(), rs.getLet().getDatumPoletanja(),
+					rs.getLet().getDatumSletanja(), rs.getSjediste(), rs.getCijena(), rs.getAviokompanija().getNaziv(),
+					rs.getLet().getBrojLeta()));
 		}
 
 		return rezSjedistaDTO;

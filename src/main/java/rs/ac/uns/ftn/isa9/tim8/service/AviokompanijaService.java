@@ -3,11 +3,14 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,17 +22,19 @@ import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSegmentaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorAviokompanije;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
-import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
@@ -40,7 +45,6 @@ import rs.ac.uns.ftn.isa9.tim8.repository.BrzaRezervacijaSjedistaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.Rezervacija_sjedistaRepository;
-import rs.ac.uns.ftn.isa9.tim8.repository.SjedisteRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
@@ -577,7 +581,7 @@ public class AviokompanijaService {
 
 	public BrzaRezervacijaKarteDTO dodajBrzuRezervaciju(BrzaRezervacijaKarteDTO novaRezervacija)
 			throws NevalidniPodaciException {
-		Optional<Let> letSearch = letoviRepository.findById(novaRezervacija.getId());
+		Optional<Let> letSearch = letoviRepository.findById(novaRezervacija.getLetId());
 
 		if (!letSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji let sa datim id-jem.");
@@ -623,15 +627,9 @@ public class AviokompanijaService {
 		Date datumDolaska = null;
 		Date danasnjiDatum = null;
 
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
-		try {
-			datumPolaska = novaRezervacija.getDatumPolaska();
-			datumDolaska = novaRezervacija.getDatumDolaska();
-			danasnjiDatum = df.parse(df.format(new Date()));
-		} catch (ParseException e) {
-			throw new NevalidniPodaciException("Nevalidan format datuma.");
-		}
+		datumPolaska = trazeniLet.getDatumPoletanja();
+		datumDolaska = trazeniLet.getDatumSletanja();
+		danasnjiDatum = new Date();
 
 		if (datumPolaska.before(danasnjiDatum) || datumDolaska.before(danasnjiDatum)) {
 			throw new NevalidniPodaciException("Datumi ne smiju biti u proslosti.");
@@ -653,7 +651,11 @@ public class AviokompanijaService {
 		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(trazenoSjediste, datumPolaska, datumDolaska, 0, 0);
 
 		brs.setCijena(trazeniLet.getCijenaKarte() + trazenoSjediste.getSegment().getCijena());
+		brs.setAviokompanija(aviokompanija);
+		brs.setLet(trazeniLet);
+		aviokompanija.getBrzeRezervacije().add(brs);
 		brzaRezervacijaSjedistaRepository.save(brs);
+		aviokompanijaRepository.save(aviokompanija);
 		novaRezervacija.setId(brs.getId());
 		novaRezervacija.setCijena(brs.getCijena());
 		return novaRezervacija;
@@ -696,6 +698,192 @@ public class AviokompanijaService {
 		brzaRezervacijaSjedistaRepository.save(rezervacija);
 
 		return brzaRezervacija;
+	}
+
+	public Boolean jeLiSjedisteRezervisano(Sjediste s, Collection<RezervacijaSjedista> rezervisanaSjedista,
+			Collection<BrzaRezervacijaSjedista> brzeRezervacijeSjedista) {
+		for (RezervacijaSjedista rs : rezervisanaSjedista) {
+			if (rs.getSjediste().getId().equals(s.getId())) {
+				return true;
+			}
+		}
+
+		for (BrzaRezervacijaSjedista brs : brzeRezervacijeSjedista) {
+			if (brs.getSjediste().getId().equals(s.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static Date removeTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+
+	public Collection<Let> slobodniLetovi(Aviokompanija aviokompanija, Date pocetniDatum, Date krajnjiDatum) {
+		Collection<Let> rezultat = new HashSet<Let>();
+
+		Date trenutniDatum = new Date();
+
+		Set<Let> sviLetoviAviokompanije = aviokompanija.getLetovi();
+
+		for (Let l : sviLetoviAviokompanije) {
+
+			Date datumPoletanja = removeTime(l.getDatumPoletanja());
+			Date datumSletanja = removeTime(l.getDatumSletanja());
+			Date pocetni = removeTime(pocetniDatum);
+			Date krajnji = removeTime(krajnjiDatum);
+
+			if (!l.getDatumPoletanja().before(trenutniDatum) && !l.getDatumSletanja().before(trenutniDatum)
+					&& !pocetniDatum.after(krajnjiDatum) && datumPoletanja.compareTo(pocetni) == 0
+					&& datumSletanja.compareTo(krajnji) == 0) {
+
+				Set<Sjediste> sjedista = l.getAvion().getSjedista();
+				for (Sjediste s : sjedista) {
+					// kroz sjedista i gledas postoji li rezervacija za to sjediste
+					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(),
+							l.getAvion().getAviokompanija().getBrzeRezervacije())) {
+						rezultat.add(l);
+						break;
+					}
+				}
+			}
+		}
+
+		return rezultat;
+	}
+
+	public Collection<Let> pretraziLetoveZaBrzuRezervaciju(PretragaLetaDTO kriterijumiPretrage, Long aviokompanijaId)
+			throws NevalidniPodaciException {
+		Optional<Aviokompanija> pretragaAviokompanija = aviokompanijaRepository.findById(aviokompanijaId);
+
+		if (!pretragaAviokompanija.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa datim id-jem. Pokusajte ponovo.");
+		}
+
+		Aviokompanija aviokompanija = pretragaAviokompanija.get();
+
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+		try {
+			pocetniDatum = df.parse(kriterijumiPretrage.getDatumPoletanja());
+			krajnjiDatum = df.parse(kriterijumiPretrage.getDatumSletanja());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+
+		Collection<Let> letovi = slobodniLetovi(aviokompanija, pocetniDatum, krajnjiDatum);
+
+		return letovi;
+
+	}
+
+	public PrikazSjedistaDTO dobaviSjedistaZaPrikazNaMapi(Long idLeta) throws NevalidniPodaciException {
+		Optional<Let> pretragaLetova = letoviRepository.findById(idLeta);
+
+		if (!pretragaLetova.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji let sa datim id-jem. Pokusajte ponovo.");
+		}
+
+		Let let = pretragaLetova.get();
+
+		Collection<String> sjedista = new ArrayList<String>();
+		Collection<PrikazSegmentaDTO> segmenti = new ArrayList<PrikazSegmentaDTO>();
+		Collection<Long> rezervisanaSjedistaIds = new ArrayList<Long>();
+
+		String oznake = "abcdefghij";
+		int tekuciSegmentIndex = -1;
+		int tekucaVrsta = 1;
+		Long tekuciSegmentId = -1L;
+		StringBuilder sb = new StringBuilder();
+
+		for (Sjediste s : let.getAvion().getSjedista()) {
+			if (!s.getSegment().getId().equals(tekuciSegmentId)) {
+				// Naisli smo na novi segment
+				tekuciSegmentIndex++;
+				tekuciSegmentId = s.getSegment().getId();
+				segmenti.add(new PrikazSegmentaDTO(oznake.charAt(tekuciSegmentIndex) + "",
+						let.getCijenaKarte() + s.getSegment().getCijena(), s.getSegment().getNaziv()));
+			}
+			if (s.getRed() != tekucaVrsta) {
+				// Dosli smo u novu vrstu, pa trebamo sadrzaj StringBuilder-a upisati u
+				// kolekciju
+				sjedista.add(sb.toString());
+				sb.setLength(0);
+				tekucaVrsta = s.getRed();
+			}
+			if (jeLiSjedisteRezervisano(s, let.getRezervacije(),
+					let.getAvion().getAviokompanija().getBrzeRezervacije())) {
+				rezervisanaSjedistaIds.add(s.getId());
+			}
+			sb.append(oznake.charAt(tekuciSegmentIndex));
+			sb.append("[");
+			sb.append(s.getId());
+			sb.append("]");
+		}
+
+		sjedista.add(sb.toString());
+
+		PrikazSjedistaDTO rezultat = new PrikazSjedistaDTO(sjedista, segmenti, rezervisanaSjedistaIds);
+
+		return rezultat;
+
+	}
+
+	public Collection<PrikazRezSjedistaDTO> vratiBrzeZaPrikaz(Long idServisa) throws NevalidniPodaciException {
+		Optional<Aviokompanija> aviokompanijaSearch = aviokompanijaRepository.findById(idServisa);
+
+		if (!aviokompanijaSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-jem.");
+		}
+
+		Aviokompanija aviokompanija = aviokompanijaSearch.get();
+
+		Collection<PrikazRezSjedistaDTO> brzeRezDTO = new ArrayList<PrikazRezSjedistaDTO>();
+
+		for (BrzaRezervacijaSjedista brs : aviokompanija.getBrzeRezervacije()) {
+			double punaCijena = brs.getCijena();
+			double cijenaSaPopustom = punaCijena - brs.getProcenatPopusta() * punaCijena / 100;
+
+			brzeRezDTO.add(new PrikazRezSjedistaDTO(brs.getId(), brs.getLet().getPolaziste().getNazivDestinacije(),
+					brs.getLet().getOdrediste().getNazivDestinacije(), brs.getDatumPolaska(), brs.getDatumDolaska(),
+					brs.getSjediste(), brs.getCijena(), Math.round(cijenaSaPopustom * 100) / 100D));
+		}
+
+		return brzeRezDTO;
+
+	}
+
+	public String izvrsiBrzuRezervacijuKarte(Long idBrzeRez) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSjedista> brzaRezPretraga = brzaRezervacijaSjedistaRepository.findById(idBrzeRez);
+
+		if (!brzaRezPretraga.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji brza rezervacija avionske karte sa tim id-jem.");
+		}
+
+		BrzaRezervacijaSjedista brs = brzaRezPretraga.get();
+
+		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		double popust = brs.getCijena() * brs.getProcenatPopusta() / 100.0;
+		double cijena = brs.getCijena() - popust;
+
+		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), "", cijena,
+				brs.getSjediste(), korisnik, brs.getAviokompanija(), brs.getLet(), null);
+
+		brzaRezervacijaSjedistaRepository.delete(brs);
+		rezervacijaSjedistaRepository.save(rs);
+
+		return "Rezervacija je uspjesno izvrsena.";
 	}
 
 }

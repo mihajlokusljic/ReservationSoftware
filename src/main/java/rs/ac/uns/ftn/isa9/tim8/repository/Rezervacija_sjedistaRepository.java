@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
@@ -12,4 +13,6 @@ public interface Rezervacija_sjedistaRepository extends JpaRepository<Rezervacij
 	Collection<RezervacijaSjedista> findAllBySjediste(Sjediste sjediste);
 
 	Collection<RezervacijaSjedista> findAllByPutnik(RegistrovanKorisnik registrovaniKorisnik);
+
+	Collection<RezervacijaSjedista> findAllByLet(Let let);
 }

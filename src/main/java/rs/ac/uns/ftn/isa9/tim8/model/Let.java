@@ -101,6 +101,31 @@ public class Let {
 		this.brojOcjena = 0;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Id == null) ? 0 : Id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Let other = (Let) obj;
+		if (Id == null) {
+			if (other.Id != null)
+				return false;
+		} else if (!Id.equals(other.Id))
+			return false;
+		return true;
+	}
+
 	public String getBrojLeta() {
 		return brojLeta;
 	}
@@ -195,6 +220,22 @@ public class Let {
 
 	public void setId(Long id) {
 		Id = id;
+	}
+
+	public Set<RezervacijaSjedista> getRezervacije() {
+		return rezervacije;
+	}
+
+	public void setRezervacije(Set<RezervacijaSjedista> rezervacije) {
+		this.rezervacije = rezervacije;
+	}
+
+	public CjenovnikLeta getCjenovnikLeta() {
+		return cjenovnikLeta;
+	}
+
+	public void setCjenovnikLeta(CjenovnikLeta cjenovnikLeta) {
+		this.cjenovnikLeta = cjenovnikLeta;
 	}
 
 }
