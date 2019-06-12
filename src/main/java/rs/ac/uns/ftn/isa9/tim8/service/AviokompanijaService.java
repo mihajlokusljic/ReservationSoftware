@@ -34,6 +34,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
@@ -854,11 +855,35 @@ public class AviokompanijaService {
 
 			brzeRezDTO.add(new PrikazRezSjedistaDTO(brs.getId(), brs.getLet().getPolaziste().getNazivDestinacije(),
 					brs.getLet().getOdrediste().getNazivDestinacije(), brs.getDatumPolaska(), brs.getDatumDolaska(),
-					brs.getSjediste(), brs.getCijena(), Math.round(cijenaSaPopustom*100)/100D));
+					brs.getSjediste(), brs.getCijena(), Math.round(cijenaSaPopustom * 100) / 100D));
 		}
 
 		return brzeRezDTO;
 
+	}
+
+	public String izvrsiBrzuRezervacijuKarte(Long idBrzeRez) throws NevalidniPodaciException {
+		Optional<BrzaRezervacijaSjedista> brzaRezPretraga = brzaRezervacijaSjedistaRepository.findById(idBrzeRez);
+
+		if (!brzaRezPretraga.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji brza rezervacija avionske karte sa tim id-jem.");
+		}
+
+		BrzaRezervacijaSjedista brs = brzaRezPretraga.get();
+
+		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+
+		double popust = brs.getCijena() * brs.getProcenatPopusta() / 100.0;
+		double cijena = brs.getCijena() - popust;
+
+		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), "", cijena,
+				brs.getSjediste(), korisnik, brs.getAviokompanija(), brs.getLet(), null);
+
+		brzaRezervacijaSjedistaRepository.delete(brs);
+		rezervacijaSjedistaRepository.save(rs);
+
+		return "Rezervacija je uspjesno izvrsena.";
 	}
 
 }

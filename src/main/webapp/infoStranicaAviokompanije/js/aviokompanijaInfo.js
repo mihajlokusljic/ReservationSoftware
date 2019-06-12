@@ -88,7 +88,7 @@ $(document).ready(function(e) {
 	if (korisnikId != null) {
 		$("#kolonaBrzaRezKarte").show();
 	}
-	
+
 	$("#vratiNaPocetnu").click(function(e){
 		e.preventDefault();
 		if (korisnikId != null){
