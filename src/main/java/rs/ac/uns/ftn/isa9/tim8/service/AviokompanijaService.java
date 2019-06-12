@@ -886,4 +886,9 @@ public class AviokompanijaService {
 		return "Rezervacija je uspjesno izvrsena.";
 	}
 
+	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

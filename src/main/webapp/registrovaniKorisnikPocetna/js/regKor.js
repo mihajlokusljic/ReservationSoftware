@@ -1121,9 +1121,42 @@ function prikaziRezervisaneLetove(rezLetova){
 		noviRed.append('<td class="column1">' + rLet.nazivOdredista + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rLet.idRezervacije + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + rLet.idRezervacije + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
+	});
+	
+	$(".otkaziRezervacijuLeta").click(function(e){
+		e.preventDefault();
+		let rezervacija = rezLetova[e.target.id];
+		var datumP = Date.parse(rezervacija.datumPolaska);
+		var sadasnjiDatum = new Date();
+		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
+		if (diff<1){
+			swal({
+				  text: "Zakasnili ste sa otkazivanjem rezervacije leta.",
+				  icon: "warning",
+				  timer: 2000
+				})	
+			return;
+		}
+		
+		$.ajax({
+			type: "POST",
+			url : "../letovi/otkaziRezervaciju",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(rezervacija.idRezervacije),
+			async : false,
+			success: function(response) {
+				swal({
+					  title: response,
+					  icon: "success",
+					  timer:2000
+					})
+				ucitajRezervisaneLetove();
+			},
+		});
+		
 	});
 }
 
