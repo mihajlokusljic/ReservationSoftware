@@ -560,7 +560,6 @@ function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
     
       if (this.status() == 'available') {
 
-
     	  
         //let's create a new <li> which we'll add to the cart items
         $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
@@ -665,7 +664,8 @@ function profilKorisnika(){
 	$("#imeAdmina").val(korisnik.ime);
 	$("#prezimeAdmina").val(korisnik.prezime);
 	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
-
+	$("#brPasosa").val(korisnik.brojPasosa);
+	
 	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
 
 	$("#forma_profil_korisnika").unbind().submit(function(e){
@@ -699,6 +699,15 @@ function profilKorisnika(){
 				})
 			return;
 		}
+		var brPasosa = $("#brPasosa").val();
+		if (brPasosa == ''){
+			swal({
+				  title: "Polje za unos broja pasoša ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
 			swal({
@@ -716,6 +725,7 @@ function profilKorisnika(){
 				email: korisnik.email,
 				lozinka: korisnik.lozinka,
 				brojTelefona: brTelefonaAdmina,
+				brojPasosa : brPasosa,
 				adresa: { punaAdresa : adresaAdmina }
 		};
 		$.ajax({

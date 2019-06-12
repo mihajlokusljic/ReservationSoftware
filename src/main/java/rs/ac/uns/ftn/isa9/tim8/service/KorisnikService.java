@@ -77,6 +77,8 @@ public class KorisnikService {
 		o.setIme(noviPodaci.getIme());
 		o.setPrezime(noviPodaci.getPrezime());
 		o.setBrojTelefona(noviPodaci.getBrojTelefona());
+		o.setBrojPasosa(noviPodaci.getBrojPasosa());
+
 		Adresa staraAdresa = null;
 		if (o.getAdresa() == null) {
 			o.setAdresa(noviPodaci.getAdresa());
@@ -130,6 +132,7 @@ public class KorisnikService {
 		o.setIme(korisnik.getIme());
 		o.setPrezime(korisnik.getPrezime());
 		o.setBrojTelefona(korisnik.getBrojTelefona());
+		o.setBrojPasosa(korisnik.getBrojPasosa());
 		o.setAdresa(korisnik.getAdresa());
 		korisnikRepository.save(o);
 		return korisnik;

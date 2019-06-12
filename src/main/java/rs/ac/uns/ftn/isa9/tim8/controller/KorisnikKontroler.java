@@ -39,8 +39,9 @@ public class KorisnikKontroler {
 		if (o instanceof RegistrovanKorisnik) {
 			o = (RegistrovanKorisnik) o;
 			return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
-					o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena(),
+					o.getLozinka(), o.getBrojTelefona(), o.getBrojPasosa(), o.getAdresa(), o.isLozinkaPromjenjena(),
 					((RegistrovanKorisnik) o).getPrimljeniZahtjevi().size()), HttpStatus.OK);
+
 		} else {
 			return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(o.getId(), o.getIme(), o.getPrezime(), o.getEmail(),
 					o.getLozinka(), o.getBrojTelefona(), o.getAdresa(), o.isLozinkaPromjenjena()), HttpStatus.OK);
@@ -128,11 +129,10 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/ukloniPrijatelja", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> ukloniPrijatelja(
-			@RequestBody UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO) {
+	public ResponseEntity<?> ukloniPrijatelja(@RequestBody UklanjanjePrijateljaDTO uklanjanjePrijateljaDTO) {
 		try {
 			return new ResponseEntity<Boolean>(korisnikService.uklanjanjePrijatelja(uklanjanjePrijateljaDTO),
 					HttpStatus.OK);
@@ -140,14 +140,13 @@ public class KorisnikKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/pretraziPrijatelje", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
-	public ResponseEntity<?> pretraziPrijatelje(
-			@RequestBody FiltriranjePrijateljaDTO filtriranjePrijateljaDTO) {
+	public ResponseEntity<?> pretraziPrijatelje(@RequestBody FiltriranjePrijateljaDTO filtriranjePrijateljaDTO) {
 		try {
-			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(korisnikService.pretragaPrijatelja(filtriranjePrijateljaDTO),
-					HttpStatus.OK);
+			return new ResponseEntity<Collection<PretragaPrijateljaDTO>>(
+					korisnikService.pretragaPrijatelja(filtriranjePrijateljaDTO), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
@@ -167,22 +166,27 @@ public class KorisnikKontroler {
 	@RequestMapping(value = "/rezervisanaVozila", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervisanaVozila() {
-		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<Collection<PrikazRezVozilaDTO>>(korisnikService.vratiRezervacijeVozila(regKor), HttpStatus.OK);
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezVozilaDTO>>(korisnikService.vratiRezervacijeVozila(regKor),
+				HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/rezervisaniLetovi", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervisaniLetovi() {
-		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<Collection<PrikazRezSjedistaDTO>>(korisnikService.vratiRezervacijeLetova(regKor), HttpStatus.OK);
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezSjedistaDTO>>(korisnikService.vratiRezervacijeLetova(regKor),
+				HttpStatus.OK);
 	}
-	
-	
+
 	@RequestMapping(value = "/rezervisaneSobe", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervisaneSobe() {
-		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<Collection<PrikazRezSobeDTO>>(korisnikService.vratiRezervacijeSoba(regKor), HttpStatus.OK);
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		return new ResponseEntity<Collection<PrikazRezSobeDTO>>(korisnikService.vratiRezervacijeSoba(regKor),
+				HttpStatus.OK);
 	}
 }

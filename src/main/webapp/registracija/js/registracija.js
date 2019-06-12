@@ -38,6 +38,15 @@ $(document).ready(function() {
 				})	
 			return;
 		}
+		var _brojPasosa = $("#brojPasosa").val();
+		if (_brojPasosa == ""){
+			swal({
+				  title: "Niste unijeli broj pasoša.",
+				  icon: "warning",
+				  timer: 2500
+				})	
+			return;
+		}
 		var adresa = $("#adresa").val();
 		if (adresa == ""){
 			swal({
@@ -71,6 +80,7 @@ $(document).ready(function() {
 				prezime:prezime,
 				email:email,
 				brojTelefona:brojTelefona,
+				brojPasosa : _brojPasosa,
 				lozinka:lozinka,
 				adresa: { punaAdresa : adresa }
 		};

@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.isa9.tim8.model;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,6 +44,10 @@ public class Putovanje {
 	@JoinTable(name="putovanje_usluga", joinColumns=@JoinColumn(name="putovanje_id"), inverseJoinColumns=@JoinColumn(name="usluga_id"))
 	protected Set<Usluga> dodatneUsluge;
 
+	@Column(name = "bonus_poeni", nullable = true)
+	protected double bonusPoeni;
+
+	
 	public Putovanje() {
 		super();
 	}
