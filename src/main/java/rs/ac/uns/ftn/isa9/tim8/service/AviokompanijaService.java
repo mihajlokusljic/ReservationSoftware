@@ -699,15 +699,16 @@ public class AviokompanijaService {
 		return brzaRezervacija;
 	}
 
-	public Boolean jeLiSjedisteRezervisano(Sjediste s, Collection<RezervacijaSjedista> rezervisanaSjedista, Collection<BrzaRezervacijaSjedista> brzeRezervacijeSjedista) {
+	public Boolean jeLiSjedisteRezervisano(Sjediste s, Collection<RezervacijaSjedista> rezervisanaSjedista,
+			Collection<BrzaRezervacijaSjedista> brzeRezervacijeSjedista) {
 		for (RezervacijaSjedista rs : rezervisanaSjedista) {
 			if (rs.getSjediste().getId().equals(s.getId())) {
 				return true;
 			}
 		}
-		
+
 		for (BrzaRezervacijaSjedista brs : brzeRezervacijeSjedista) {
-			if(brs.getSjediste().getId().equals(s.getId())) {
+			if (brs.getSjediste().getId().equals(s.getId())) {
 				return true;
 			}
 		}
@@ -745,7 +746,8 @@ public class AviokompanijaService {
 				Set<Sjediste> sjedista = l.getAvion().getSjedista();
 				for (Sjediste s : sjedista) {
 					// kroz sjedista i gledas postoji li rezervacija za to sjediste
-					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(), l.getAvion().getAviokompanija().getBrzeRezervacije())) {
+					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(),
+							l.getAvion().getAviokompanija().getBrzeRezervacije())) {
 						rezultat.add(l);
 						break;
 					}
@@ -817,7 +819,8 @@ public class AviokompanijaService {
 				sb.setLength(0);
 				tekucaVrsta = s.getRed();
 			}
-			if (jeLiSjedisteRezervisano(s, let.getRezervacije(), let.getAvion().getAviokompanija().getBrzeRezervacije())) {
+			if (jeLiSjedisteRezervisano(s, let.getRezervacije(),
+					let.getAvion().getAviokompanija().getBrzeRezervacije())) {
 				rezervisanaSjedistaIds.add(s.getId());
 			}
 			sb.append(oznake.charAt(tekuciSegmentIndex));
@@ -851,7 +854,7 @@ public class AviokompanijaService {
 
 			brzeRezDTO.add(new PrikazRezSjedistaDTO(brs.getId(), brs.getLet().getPolaziste().getNazivDestinacije(),
 					brs.getLet().getOdrediste().getNazivDestinacije(), brs.getDatumPolaska(), brs.getDatumDolaska(),
-					brs.getSjediste(), brs.getCijena(), cijenaSaPopustom));
+					brs.getSjediste(), brs.getCijena(), Math.round(cijenaSaPopustom*100)/100D));
 		}
 
 		return brzeRezDTO;

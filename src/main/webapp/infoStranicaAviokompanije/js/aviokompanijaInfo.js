@@ -6,6 +6,7 @@ let stavkeMenija = ["info", "pregledaj", "brzeRezervacije"];
 let mapa = null;
 let tabovi = ["tab-info", "tab-destinacije", "tab-avioni", "tab-letovi", "tab-prtljag", "tab-brze-rezervacije"];
 let zoomLevel = 17;
+let korisnikId = null;
 
 $(document).ready(function(e) {
 	
@@ -76,6 +77,24 @@ $(document).ready(function(e) {
 	ucitajPodatkeAviokompanije();
 	vratiSveBrzeRezervacije();
 
+	var url = window.location.href;
+	var parametri = url.substring(url.indexOf("?") + 1);
+	var params_parser = new URLSearchParams(parametri);
+	
+	var id = params_parser.get("id");
+	var kor =  params_parser.get("korisnik");
+	korisnikId = kor;
+	
+	$("#vratiNaPocetnu").click(function(e){
+		e.preventDefault();
+		if (korisnikId != null){
+			window.location.replace("../registrovaniKorisnikPocetna/index.html");
+		}
+		else{
+			window.location.replace("../pocetnaStranica/index.html");
+		}
+	});
+	
 });
 
 function pretragaLetova() {
