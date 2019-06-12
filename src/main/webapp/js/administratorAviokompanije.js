@@ -728,7 +728,7 @@ function recalculateTotal(sc) {
 	  });
 	  
 	  return total;
-	}
+}
 
 function prikaziIzborSjedistaBrzeRezervacije() {
 	izabraniLetZaBrzuRezervacijuId = null;

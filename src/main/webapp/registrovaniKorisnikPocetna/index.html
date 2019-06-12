@@ -26,6 +26,9 @@
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
    	<link rel="stylesheet" href="../sorttable/sorttable.css">	
+   	
+   	<!-- Jquery seats css -->
+    <link rel="stylesheet" href="css/jquery.seat-charts.css">
     
     <!-- SweetAlert-->
    	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -103,6 +106,8 @@
                     	
                         <!-- Pretraga letova -->
                         <div class="tab-pane" id="tab-letovi">
+                        
+                        	<div id="izborLetaZaRezervaciju">
                             <form method="POST" id="pretragaLetovaForm" action="#">
                              	<div class="input-group">
                                     <label class="label">Broj leta</label>
@@ -174,23 +179,41 @@
                             </form>
                             <h1>&nbsp</h1>
                             <!-- Tabela za prikaz letova -->					
-					<table class="sortable" id="tabelaLetovaRezervacije">
-										<thead>
-											<tr class="table100-head">
-												<th class="column2">Broj leta</th>
-												<th class="column3">Naziv polazišta</th>
-												<th class="column3">Naziv odredišta</th>
-												<th class="column1">Datum poletanja</th>
-												<th class="column1">Datum sletanja</th>
-												<th class="column5">Broj presjedanja</th>
-												<th class="column6">Cijena karte</th>
-												<th class="column6">Prosječna ocjena</th>
-												<th class="column1"></th>
-											</tr>
-										</thead>
-										<tbody id="prikazLetovaRezervacije">
-										</tbody>
-					</table>
+							<table class="sortable" id="tabelaLetovaRezervacije">
+												<thead>
+													<tr class="table100-head">
+														<th class="column2">Broj leta</th>
+														<th class="column3">Naziv polazišta</th>
+														<th class="column3">Naziv odredišta</th>
+														<th class="column1">Datum poletanja</th>
+														<th class="column1">Datum sletanja</th>
+														<th class="column5">Broj presjedanja</th>
+														<th class="column6">Cijena karte</th>
+														<th class="column6">Prosječna ocjena</th>
+														<th class="column1"></th>
+													</tr>
+												</thead>
+												<tbody id="prikazLetovaRezervacije">
+												</tbody>
+							</table>
+						</div>
+						
+						<div id="izborSjedistaZaRezervaciju" hidden="hidden">
+							<h2 class="zaglavlje">Izaberite sjedišta koja želite rezervisati</h2>
+							
+							<div class="booking-details">
+								  <div id="legend"></div>
+							</div>
+							<br><br>
+                            <div id="seat-map">
+                           		<div class="front-indicator"></div>
+							</div>
+							<div class="booking-details">
+							<br><br><h2 class="zaglavlje">Ukupna cijena:&nbsp;<span color="white" id="total">0</span>&nbsp;€</h2>
+							</div>
+                        	<button class="btn btn-submit" id="zadajSjedisteBrzeRezBtn">Potrvrdi i nastavi &gt;</button>
+                         		
+						</div>
                             
                         </div>
                         
@@ -574,6 +597,7 @@
     <!-- Main JS-->
     <script type="text/javascript" src="js/auth.js"></script>
     <script type="text/javascript" src="js/pretragaHotela.js"></script>
+    <script src="js/jquery.seat-charts.js"></script>
     <script type="text/javascript" src="js/regKor.js"></script>
     <script src="js/global.js"></script>
 	<script type="text/javascript" src="../sorttable/sorttable.js"></script>
