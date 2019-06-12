@@ -16,6 +16,8 @@ public class KorisnikDTO {
 
 	protected String brojTelefona;
 
+	protected String brojPasosa;
+
 	protected Adresa adresa;
 
 	protected boolean lozinkaPromjenjena;
@@ -60,6 +62,21 @@ public class KorisnikDTO {
 		this.email = email;
 		this.lozinka = lozinka;
 		this.brojTelefona = brojTelefona;
+		this.adresa = adresa;
+		this.lozinkaPromjenjena = lozinkaPromjenjena;
+		this.brojZahtjevaZaPrijateljstvo = brojZahtjevaZaPrijateljstvo;
+	}
+
+	public KorisnikDTO(Long id, String ime, String prezime, String email, String lozinka, String brojTelefona,
+			String brojPasosa, Adresa adresa, boolean lozinkaPromjenjena, int brojZahtjevaZaPrijateljstvo) {
+		super();
+		Id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.lozinka = lozinka;
+		this.brojTelefona = brojTelefona;
+		this.brojPasosa = brojPasosa;
 		this.adresa = adresa;
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
 		this.brojZahtjevaZaPrijateljstvo = brojZahtjevaZaPrijateljstvo;
@@ -135,6 +152,14 @@ public class KorisnikDTO {
 
 	public void setBrojZahtjevaZaPrijateljstvo(int brojZahtjevaZaPrijateljstvo) {
 		this.brojZahtjevaZaPrijateljstvo = brojZahtjevaZaPrijateljstvo;
+	}
+
+	public String getBrojPasosa() {
+		return brojPasosa;
+	}
+
+	public void setBrojPasosa(String brojPasosa) {
+		this.brojPasosa = brojPasosa;
 	}
 
 }

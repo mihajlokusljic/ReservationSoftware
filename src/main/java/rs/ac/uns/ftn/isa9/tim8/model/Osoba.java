@@ -26,8 +26,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "korisnik")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Osoba implements UserDetails{
-	
+public class Osoba implements UserDetails {
+
 	/**
 	 * 
 	 */
@@ -36,53 +36,56 @@ public class Osoba implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long Id;
-	
+
 	@Column(name = "loznika", nullable = false)
 	protected String lozinka;
-	
+
 	@Column(name = "ime", nullable = false)
 	protected String ime;
-	
+
 	@Column(name = "prezime", nullable = false)
 	protected String prezime;
-	
+
 	@Column(name = "email", nullable = false)
 	protected String email;
-	
+
 	@Column(name = "broj_telefona", nullable = true)
 	protected String brojTelefona;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresa_id")
 	protected Adresa adresa;
-	
+
 	@Column(name = "putanja_slike", nullable = true)
 	protected String putanjaSlike;
-	
+
 	@Column(name = "enabled")
-    protected boolean enabled;
-	
-    @Column(name = "last_password_reset_date")
-    protected Timestamp lastPasswordResetDate;
-    
-    @Column(name = "lozinka_promjenjena")
-    protected boolean lozinkaPromjenjena;
-    
-    @Column(name = "verifikovan_mail")
-    protected boolean verifikovanMail = true;
-    
+	protected boolean enabled;
+
+	@Column(name = "last_password_reset_date")
+	protected Timestamp lastPasswordResetDate;
+
+	@Column(name = "lozinka_promjenjena")
+	protected boolean lozinkaPromjenjena;
+
+	@Column(name = "verifikovan_mail")
+	protected boolean verifikovanMail = true;
+
+	@Column(name = "broj_pasosa", nullable = true)
+	protected String brojPasosa;
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "korisnik_autoritet", joinColumns = @JoinColumn(name = "korisnik_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "autoritet_id", referencedColumnName = "id"))
 	protected Set<Authority> authorities;
-	
+
 	public Osoba() {
 		super();
 		authorities = new HashSet<Authority>();
 		this.lozinkaPromjenjena = false;
 	}
 
-	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
-			String brojTelefona, Adresa adresa, String putanjaSlike) {
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
+			String putanjaSlike) {
 		super();
 		this.Id = id;
 		this.lozinka = lozinka;
@@ -96,9 +99,9 @@ public class Osoba implements UserDetails{
 		this.verifikovanMail = true;
 
 	}
-	
-	public Osoba(Long id, String lozinka, String ime, String prezime, String email,
-			String brojTelefona, Adresa adresa, String putanjaSlike, boolean lozinkaPromjenjena) {
+
+	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
+			String putanjaSlike, boolean lozinkaPromjenjena) {
 		super();
 		this.Id = id;
 		this.lozinka = lozinka;
@@ -111,9 +114,8 @@ public class Osoba implements UserDetails{
 		this.lozinkaPromjenjena = lozinkaPromjenjena;
 		this.verifikovanMail = true;
 
-
 	}
-	
+
 	public Osoba(Long id, String lozinka, String ime, String prezime, String email, String brojTelefona, Adresa adresa,
 			String putanjaSlike, boolean enabled, Timestamp lastPasswordResetDate, Set<Authority> authorities) {
 		super();
@@ -130,7 +132,6 @@ public class Osoba implements UserDetails{
 		this.authorities = authorities;
 		this.lozinkaPromjenjena = false;
 		this.verifikovanMail = true;
-
 
 	}
 
@@ -233,9 +234,14 @@ public class Osoba implements UserDetails{
 		return serialVersionUID;
 	}
 
-	
-	
-	
+	public String getBrojPasosa() {
+		return brojPasosa;
+	}
+
+	public void setBrojPasosa(String brojPasosa) {
+		this.brojPasosa = brojPasosa;
+	}
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
@@ -247,8 +253,7 @@ public class Osoba implements UserDetails{
 	public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
 		this.lastPasswordResetDate = lastPasswordResetDate;
 	}
-	
-	
+
 	public Adresa getAdresa() {
 		return adresa;
 	}
@@ -272,7 +277,5 @@ public class Osoba implements UserDetails{
 	public void setVerifikovanMail(boolean verifikovanMail) {
 		this.verifikovanMail = verifikovanMail;
 	}
-	
-	
-	
+
 }

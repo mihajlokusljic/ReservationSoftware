@@ -1,5 +1,7 @@
 $(document).ready(function(e) {
 	
+	$("#duzinaPutovanja").val("");
+	
 	$("#pretragaLetovaForm").submit(function(e) {
 		e.preventDefault();
 		

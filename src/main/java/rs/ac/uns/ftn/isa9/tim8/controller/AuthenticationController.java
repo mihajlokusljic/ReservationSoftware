@@ -48,7 +48,7 @@ import rs.ac.uns.ftn.isa9.tim8.service.NevalidniPodaciException;
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
-	
+
 	@Autowired
 	TokenUtils tokenUtils;
 
@@ -57,20 +57,20 @@ public class AuthenticationController {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private EmailService mailService;
-	
+
 	@Autowired
 	private KorisnikService korisnikService;
-	
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@Valid @RequestBody Osoba korisnik) {
-		
+
 		if (this.userDetailsService.emailZauzet(korisnik.getEmail()) == true) {
-			return new ResponseEntity<String> ("Zauzet email", HttpStatus.OK);
+			return new ResponseEntity<String>("Zauzet email", HttpStatus.OK);
 		}
-		
+
 		RegistrovanKorisnik registrovaniKorisnik = new RegistrovanKorisnik();
 		registrovaniKorisnik.setIme(korisnik.getIme());
 		registrovaniKorisnik.setPrezime(korisnik.getPrezime());
@@ -83,20 +83,20 @@ public class AuthenticationController {
 		registrovaniKorisnik.setAdresa(korisnik.getAdresa());
 		registrovaniKorisnik.setPrijatelji(new HashSet<RegistrovanKorisnik>());
 		registrovaniKorisnik.setPrimljenePozivnice(new HashSet<Pozivnica>());
-		registrovaniKorisnik.setEnabled(true); 
-		registrovaniKorisnik.setVerifikovanMail(false); //ceka se verifikacija
-		
+		registrovaniKorisnik.setEnabled(true);
+		registrovaniKorisnik.setVerifikovanMail(false); // ceka se verifikacija
+		registrovaniKorisnik.setBrojPasosa(korisnik.getBrojPasosa());
+
 		String dodatKor = userDetailsService.dodajRegistrovanogKorisnika(registrovaniKorisnik);
 		try {
 			mailService.sendMailAsync(registrovaniKorisnik);
 		} catch (MailException | InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		return new ResponseEntity<String> (dodatKor,HttpStatus.OK);
+
+		return new ResponseEntity<String>(dodatKor, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/registerAvioAdmin", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> registrujAdministratoraAviokompanije(@RequestBody RegistracijaAdminaDTO adminReg) {
@@ -107,7 +107,7 @@ public class AuthenticationController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/registerHotelAdmin", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAdminaHotela(@RequestBody RegistracijaAdminaDTO adminReg) {
@@ -118,7 +118,7 @@ public class AuthenticationController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/registerRacAdmin", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajAdminaRacServisa(@RequestBody RegistracijaAdminaDTO adminReg) {
@@ -129,12 +129,11 @@ public class AuthenticationController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	/*
-	 * Napomena: postoji default-ni sistemski administrator:
-	 * email - root@root.com
+	 * Napomena: postoji default-ni sistemski administrator: email - root@root.com
 	 * lozinka: IsaMrs2019
-	 * */
+	 */
 	@RequestMapping(value = "/registerSysAdmin", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorSistema')")
 	public ResponseEntity<?> dodajSistemskogAdmina(@RequestBody RegistracijaAdminaDTO adminReg) {
@@ -145,35 +144,33 @@ public class AuthenticationController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
 			HttpServletResponse response) throws AuthenticationException, IOException {
-		
+
 		final Authentication authentication;
-		
+
 		try {
-			authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(
-							authenticationRequest.getUsername(),
-							authenticationRequest.getPassword()));
+			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<String>("",HttpStatus.OK);
+			return new ResponseEntity<String>("", HttpStatus.OK);
 		}
 		// Ubaci username + password u kontext
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		// Kreiraj token
 		Osoba user = (Osoba) authentication.getPrincipal();
-		
+
 		if (!user.isVerifikovanMail()) {
-			return new ResponseEntity<String>("verifikacija",HttpStatus.OK);
+			return new ResponseEntity<String>("verifikacija", HttpStatus.OK);
 		}
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 		TipKorisnika tipKorisnika = null;
 		String redirectionURL = "#";
-		
+
 		if (user instanceof RegistrovanKorisnik) {
 			tipKorisnika = TipKorisnika.RegistrovanKorisnik;
 			redirectionURL = "../registrovaniKorisnikPocetna/index.html";
@@ -192,27 +189,29 @@ public class AuthenticationController {
 		}
 
 		// Vrati token kao odgovor na uspesno autentifikaciju
-		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika, redirectionURL), HttpStatus.OK);
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, tipKorisnika, redirectionURL),
+				HttpStatus.OK);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/changePassword/{staraLozinka}", method = RequestMethod.PUT)
-	public ResponseEntity<?> changePassword(@PathVariable("staraLozinka") String staraLozinka, @RequestBody String novaLozinka) {
-		
+	public ResponseEntity<?> changePassword(@PathVariable("staraLozinka") String staraLozinka,
+			@RequestBody String novaLozinka) {
+
 		Osoba o = (Osoba) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		
-		if (!userDetailsService.poklapanjeLozinki(staraLozinka, o.getLozinka())){
-			return new ResponseEntity<String>("",HttpStatus.OK);
+
+		if (!userDetailsService.poklapanjeLozinki(staraLozinka, o.getLozinka())) {
+			return new ResponseEntity<String>("", HttpStatus.OK);
 		}
-		
+
 		userDetailsService.changePassword(staraLozinka, novaLozinka);
 		String jwt = tokenUtils.generateToken(o.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
 		Set<Authority> a = (Set<Authority>) o.getAuthorities();
-		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, a.iterator().next().getTipKorisnika(), true), HttpStatus.OK);
+		return new ResponseEntity<UserTokenState>(
+				new UserTokenState(jwt, expiresIn, a.iterator().next().getTipKorisnika(), true), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
 	public RedirectView confirmRegistration(@RequestParam String token) {
 		Osoba korisnik = korisnikService.vratiKorisnikaPoTokenu(token);

@@ -6,6 +6,7 @@ var korisnik = null;
 var prijatelji = [];
 var broj_zahtjeva_za_prijateljstvo = 0;
 var rezimRezervacije = false;
+var scGlobal = null;
 //podaci o periodu u kojem je korisnik na putovanju
 var datumDolaska = null;
 var datumOdlaska = null;
@@ -111,7 +112,25 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
+
 	});
+	
+	$("#letoviT").click(function(e){
+		e.preventDefault();
+		$("#tab-aviokompanije").hide();
+		$("#tab-letovi").show();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").hide();
+		$("#tab-rezervacije").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();
+	});	
 	
 	$("#hoteliT").click(function(e){
 		e.preventDefault();
@@ -127,6 +146,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 		});
 	
 	$("#rentacarT").click(function(e){
@@ -143,6 +164,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 		});
 	
 	$("#rezervacijeT").click(function(e){
@@ -158,6 +181,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		ucitajRezervacije();
 	});
 	
@@ -174,7 +198,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
-		
+		$("#tab-letovi").hide();
 		$("#pregledPrijateljaSearch").val("");
 		
 		$.ajax({
@@ -202,6 +226,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
 
 		$("#dodavanjePrijateljaSearch").val("");
 
@@ -234,7 +259,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
-		
+		$("#tab-letovi").hide();
+
 		$.ajax({
 			type: "POST",
 			url : "../korisnik/dobaviZahtjeveZaPrijateljstvo",
@@ -260,6 +286,8 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+
 	});
 	
 	$("#izmjeni_podatke_tab").click(function(e){
@@ -275,6 +303,7 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").show();
 		$("#tab-profil-lozinka").hide();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		profilKorisnika();
 	});
 	
@@ -291,9 +320,61 @@ $(document).ready(function() {
 		$("#tab-profilKorisnika").hide();
 		$("#tab-profil-lozinka").show();
 		$("#tab-odjava").hide();
+		$("#tab-letovi").hide();
 		promjeniLozinku();
 	});
 	
+	$("#duzinaPutovanja").val("");
+	
+	$("#pretragaLetovaForm").submit(function(e) {
+		e.preventDefault();
+		
+		let cijenaK = $("#cijenaKarte").val();
+		if (cijenaK == "") {
+			cijenaK = 0;
+		}
+		
+		let parametriPretrage = {
+				brojLeta : $("#brojLeta").val(),
+				nazivAviokompanije : $("#nazivAviokompanije").val(),
+				nazivPolazista : $("#nazivPolazista").val(),
+				nazivOdredista : $("#nazivOdredista").val(),
+				datumPoletanja : $("#input-start-1").val(),
+				datumSletanja : $("#input-end-1").val(),
+				duzinaPutovanja : $("#duzinaPutovanja").val(),
+				cijenaKarte : cijenaK
+		};
+		
+		  $.ajax({
+			    type : "POST",
+			    url : "../letovi/pretraziLetove",
+			    contentType: "application/json; charset=utf-8",
+			    data : JSON.stringify(parametriPretrage),
+			    success : function(response) {
+			      if (response == undefined) {
+			    		swal({
+							  title: "Došlo je do greške.",
+							  icon: "error",
+							  timer: 2500
+							})	
+			      } else {
+			        if (response.length == 0) {
+			        	swal({
+							  title: "Ne postoji ni jedan let koji zadovoljava navedeni kriterijum pretrage.",
+							  icon: "info",
+							  timer: 2500
+							})	
+			        }
+			        updateLetovi(response);
+			        $('#pretragaLetovaForm')[0].reset();
+			      }
+			    },
+			    error : function(XMLHttpRequest, textStatus, errorThrown) {
+			      alert("AJAX ERROR: " + errorThrown);
+			    }	
+			  });
+		
+	});
 	
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
@@ -383,6 +464,144 @@ $(document).ready(function() {
 	
 });
 
+function updateLetovi(letovi) {
+	let table = $("#prikazLetovaRezervacije");
+	table.empty();
+	
+	$.each(letovi, function(i, flight) {
+		let row = $("<tr></tr>");
+		
+		row.append("<td>" + flight.brojLeta + "</td>");
+		row.append("<td>" + flight.polaziste.nazivDestinacije + "</td>");
+		row.append("<td>" + flight.odrediste.nazivDestinacije + "</td>");
+		row.append("<td>" + flight.datumPoletanja + "</td>");
+		row.append("<td>" + flight.datumSletanja + "</td>");
+		row.append("<td>" + flight.presjedanja.length + "</td>");
+		row.append("<td>" + flight.cijenaKarte + "</td>");
+		if (flight.brojOcjena > 0) {
+			row.append("<td>" + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+		} else {
+			row.append("<td>Nema ocjena</td>");
+		}
+		row.append('</td><td class = "column1"><a href = "#" class = "rezervacijaSjed" id = "rsl' + flight.id + 
+		'">Rezerviši sjedišta</a></td></tr>');
+		
+		table.append(row);
+	});
+	
+	$(".rezervacijaSjed").click(function(e) {
+		e.preventDefault();
+		let idLeta = e.target.id.substring(3);
+		prikaziIzborSjedistaBrzeRezervacije(idLeta)
+	});
+}
+
+function recalculateTotal(sc) {
+	  var total = 0;
+
+	  //basically find every selected seat and sum its price
+	  sc.find('selected').each(function () {
+	    total += this.data().price;
+	  });
+	  
+	  return total;
+}
+
+function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
+	podaciOMapi = null;
+	$("#izborLetaZaRezervaciju").hide();
+	$("#izborSjedistaZaRezervaciju").show();
+	
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : "../letovi/dobaviSjedistaZaPrikazNaMapi/" + idLeta,
+		dataType : "json",
+		success: function(data){
+			podaciOMapi = data;
+		},
+	});
+	
+	var seatsData = {};
+	for(i in podaciOMapi.segmenti) {
+		let tekuciSegment = podaciOMapi.segmenti[i];
+		
+		seatsData[tekuciSegment.oznakaSegmenta] = {
+				price : tekuciSegment.cijenaSegmenta,
+				category : tekuciSegment.nazivSegmenta
+		};
+		
+	}
+	
+	firstSeatLabel = 1;
+    var $cart = $('#selected-seats'),
+    $counter = $('#counter'),
+    $total = $('#total'),
+    
+    sc = $('#seat-map').seatCharts({
+    map: podaciOMapi.sjedista,
+    seats: seatsData,
+    naming : {
+      top : false,
+      getLabel : function (character, row, column) {
+    	scGlobal = sc;
+        return firstSeatLabel++;
+      },
+    },
+    legend : {
+      node : $('#legend'),
+        items : [
+        [ '', 'available',   'Slobodno' ],
+        [ '', 'unavailable', 'Zauzeto'],
+        [ '', 'selected',   'Odabrano' ]
+        ]         
+    },
+    click: function () {
+    
+      if (this.status() == 'available') {
+
+    	  
+        //let's create a new <li> which we'll add to the cart items
+        $('<li>'+this.data().category+' Seat # '+this.settings.label+': <b>$'+this.data().price+'</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+          .attr('id', 'cart-item-'+this.settings.id)
+          .data('seatId', this.settings.id)
+          .appendTo($cart);
+
+        
+        /*
+         * Lets up<a href="https://www.jqueryscript.net/time-clock/">date</a> the counter and total
+         *
+         * .find function will not find the current seat, because it will change its stauts only after return
+         * 'selected'. This is why we have to add 1 to the length and the current seat price to the total.
+         */
+        $counter.text(sc.find('selected').length+1);
+        $total.text(recalculateTotal(sc)+this.data().price);
+        
+        return 'selected';
+      } else if (this.status() == 'selected') {
+        //update the counter
+        $counter.text(sc.find('selected').length-1);
+        //and total
+        $total.text(recalculateTotal(sc)-this.data().price);
+      
+        //remove the item from our cart
+        $('#cart-item-'+this.settings.id).remove();
+              
+        //seat has been vacated
+        return 'available';
+      } else if (this.status() == 'unavailable') {
+        //seat has been already booked
+        return 'unavailable';
+      } else {
+        return this.style();
+      }
+    }
+  });
+    scGlobal = sc;
+    sc.get(podaciOMapi.zauzetaSjedistaIds).status('unavailable');
+  
+}
+
 function korisnikInfo(){
 	let token = getJwtToken("jwtToken");
 	$.ajax({
@@ -445,7 +664,8 @@ function profilKorisnika(){
 	$("#imeAdmina").val(korisnik.ime);
 	$("#prezimeAdmina").val(korisnik.prezime);
 	$("#brTelefonaAdmina").val(korisnik.brojTelefona);
-
+	$("#brPasosa").val(korisnik.brojPasosa);
+	
 	$("#adresaAdmina").val(korisnik.adresa.punaAdresa);
 
 	$("#forma_profil_korisnika").unbind().submit(function(e){
@@ -479,6 +699,15 @@ function profilKorisnika(){
 				})
 			return;
 		}
+		var brPasosa = $("#brPasosa").val();
+		if (brPasosa == ''){
+			swal({
+				  title: "Polje za unos broja pasoša ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
 			swal({
@@ -496,6 +725,7 @@ function profilKorisnika(){
 				email: korisnik.email,
 				lozinka: korisnik.lozinka,
 				brojTelefona: brTelefonaAdmina,
+				brojPasosa : brPasosa,
 				adresa: { punaAdresa : adresaAdmina }
 		};
 		$.ajax({
