@@ -996,13 +996,13 @@ function prikaziRezervisaneLetove(rezLetova){
 		let noviRed = $('<tr></tr>');
 		noviRed.append('<td class="column1">' + rLet.nazivAviokompanije + '</td>');
 		noviRed.append('<td class="column1">' + rLet.brojLeta + '</td>');
-		noviRed.append('<td class="column1">' + rLet.originalnaCijena + '</td>');		
+		noviRed.append('<td class="column1">' + rLet.originalnaCijena.toFixed(2) + '</td>');		
 		noviRed.append('<td class="column1">' + rLet.sjediste.red + '/' + rLet.sjediste.kolona +  '</td>');
-		noviRed.append('<td class="column1">' + rLet.destinacijaPolaska + '</td>');
-		noviRed.append('<td class="column1">' + rLet.destinacijaDolaska + '</td>');
+		noviRed.append('<td class="column1">' + rLet.nazivPolazista + '</td>');
+		noviRed.append('<td class="column1">' + rLet.nazivOdredista + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rLet.id + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + rLet.idRezervacije + '">Otkaži rezervaciju</a></td></tr>')
 
 		tabela.append(noviRed);
 	});
