@@ -42,15 +42,15 @@ public class Let {
 	protected Destinacija odrediste;
 
 	@Column(name = "datum_poletanja", nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	protected Date datumPoletanja;
 
 	@Column(name = "datum_sletanja", nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
 
 	@Column(name = "duzina_putovanja", nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
