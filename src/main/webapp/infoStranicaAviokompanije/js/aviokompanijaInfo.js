@@ -24,7 +24,7 @@ $(document).ready(function(e) {
 	    	}
 		}
 	});
-	
+		
 	//reakcije na dogadjaje klika na naviogacionom baru
 	$("#info").click(function(e) {
 		e.preventDefault();
@@ -74,6 +74,8 @@ $(document).ready(function(e) {
 	});
 	
 	ucitajPodatkeAviokompanije();
+	vratiSveBrzeRezervacije();
+
 });
 
 function pretragaLetova() {
@@ -140,6 +142,7 @@ function ucitajPodatkeAviokompanije() {
 	
 	$.ajax({
 		type: "GET",
+		async : false,
 		url: "../aviokompanije/dobavi/" + id,
 		success: function(response) {
 			podaciAviokompanije = response;
@@ -279,4 +282,36 @@ function inicijalizujMape() {
     });
 	mapa.controls.add('typeSelector');
 	mapa.controls.add('zoomControl');
+}
+
+function prikaziBrzeRez(brzeRez){
+	let prikaz = $("#prikazBrzeRezervacije");
+	prikaz.empty();
+	
+	$.each(brzeRez, function(i, br) {
+		
+		let noviRed = $("<tr></tr>");
+		noviRed.append('<td class="column3">' + br.nazivPolazista + '</td>');
+		noviRed.append('<td class="column3">' + br.nazivOdredista + '</td>');
+		noviRed.append('<td class="column1">' + br.datumPolaska + '</td>');
+		noviRed.append('<td class="column1">' + br.datumDolaska + '</td>');
+		noviRed.append('<td class="column1">' + "red: " + br.sjediste.red + ", kolona: "  + br.sjediste.kolona + '</td>');
+		noviRed.append('<td class="column1">' + br.originalnaCijena + '</td>');
+		noviRed.append('<td class="column1">' + br.popust + '</td>');
+		
+		prikaz.append(noviRed);
+	})
+}
+
+function vratiSveBrzeRezervacije(){
+	$.ajax({
+		type: "GET",
+		url: "../aviokompanije/dobaviBrzeRezervacije/" + podaciAviokompanije.id,
+		success: function(response) {
+			prikaziBrzeRez(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX error: " + errorThrown);
+		}
+	});
 }
