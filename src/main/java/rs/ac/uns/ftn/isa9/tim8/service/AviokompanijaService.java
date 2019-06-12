@@ -182,6 +182,16 @@ public class AviokompanijaService {
 			throw new NevalidniPodaciException("Datum povratka mora biti nakon datuma sletanja.");
 		}
 
+		Date trenutnoVrijeme = new Date();
+
+		if (datumPoletanjaAviona.before(trenutnoVrijeme)) {
+			throw new NevalidniPodaciException("Datum poletanja je prije trenutnog datuma.");
+		}
+
+		if (datumSletanjaAviona.before(trenutnoVrijeme)) {
+			throw new NevalidniPodaciException("Datum sletanja je prije trenutnog datuma.");
+		}
+
 		// Provjera postoji li avion
 		Optional<Avion> avionSearch = avionRepository.findById(letDTO.getIdAviona());
 

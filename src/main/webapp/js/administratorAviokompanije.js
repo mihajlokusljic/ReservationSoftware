@@ -559,6 +559,22 @@ $(document).ready(function() {
 						})
 					return;
 				}
+				else if (response == "Datum poletanja je prije trenutnog datuma.") {
+					swal({
+						  title: "Let mora biti zadat u budućnosti.",
+						  icon: "warning",
+						  timer: 2500
+						})
+					return;
+				}
+				else if (response == "Datum sletanja je prije trenutnog datuma.") {
+					swal({
+						  title: "Let mora biti zadat u budućnosti.",
+						  icon: "warning",
+						  timer: 2500
+						})
+					return;
+				}
 				else {
 					swal({
 						  title: "Let je uspješno dodat.",
