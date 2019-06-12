@@ -462,6 +462,19 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#zadajSjedisteBrzeRezBtn").click(function(e) {
+		e.preventDefault();
+		if(scGlobal.find("selected").length == 0) {
+			//alert("Morate izabrati bar jedno sjediste");
+			swal({
+				  title: "Morate izabrati bar jedno sjedište.",
+				  icon: "warning",
+				  timer: 2500
+			});
+			return;
+		}
+	});
+	
 });
 
 function updateLetovi(letovi) {
