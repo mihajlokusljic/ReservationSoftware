@@ -394,7 +394,7 @@ $(document).ready(function() {
 				else {
 					swal({
 						  title: "Avion je uspješno dodat.",
-						  icon: "warning",
+						  icon: "success",
 						  timer: 2500
 						}).then(function(){
 							prikaziAvion(response, $("#OsnovniAvioniRows"));
@@ -461,7 +461,7 @@ $(document).ready(function() {
 				else {
 					swal({
 						  title: "Segment je uspješno dodat.",
-						  icon: "warning",
+						  icon: "success",
 						  timer: 2500
 						});
 					prikaziSegment(response, $("#osnovniSegmentiRows"));
@@ -596,7 +596,11 @@ $(document).ready(function() {
 
 function zadavanjePopustaBrzeRezervacije() {
 	if(tekucaBrzaRezervacija == null) {
-		alert("Morate odabrati let.");
+		swal({
+			  title: "Morate odabrati let.",
+			  icon: "warning",
+			  timer: 2500
+			});
 	}
 	let popustProc = $("#procenatPopustaBrzeRezervacije").val();
 	tekucaBrzaRezervacija.procenatPopusta = popustProc;
@@ -606,7 +610,11 @@ function zadavanjePopustaBrzeRezervacije() {
 		data : JSON.stringify(tekucaBrzaRezervacija),
 		success : function(responseBrzaRez) {
 			tekucaBrzaRezervacija = null;
-			alert("Usješno ste definisali popust za brzu rezervaciju.");
+			swal({
+				  title: "Uspješno ste definisali popust za brzu rezervaciju.",
+				  icon: "success",
+				  timer: 2500
+				});
 			resetBrzeRezervacijeView();	
 		}
 	});
@@ -683,7 +691,11 @@ function azurirajCijeneBrzeRezervacije(){
 
 function dodajBrzuRezervaciju() {	
 	if (scGlobal.find('selected').length != 1) {
-		alert("Morate odabrati jedno sjedište prije nego što pređete na sledeći korak.");
+		swal({
+			  title: "Morate odabrati jedno sjedište prije nego pređete na sledeći korak.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	
@@ -702,7 +714,11 @@ function dodajBrzuRezervaciju() {
 		data: JSON.stringify(brzaRezervacijaKarte),
 		success: function(response) {
 			tekucaBrzaRezervacija = response;
-			alert("Sjedište je uspješno dodato na brzu rezervaciju.");
+			swal({
+				  title: "Sjedište je uspješno dodato na brzu rezervaciju.",
+				  icon: "success",
+				  timer: 2500
+				});
 			$("#ukupnaCijenaBezPopustaBrzeRezervacije").val(tekucaBrzaRezervacija.cijena);
 			$("#ukupnaCijenaSaPopustomBrzeRezervacije").val(tekucaBrzaRezervacija.cijena);
 			$("#izborLetaBrzeRezervacije").hide();
@@ -742,7 +758,11 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 	});
 	
 	if (izabraniLetZaBrzuRezervacijuId == null) {
-		alert("Morate izabrati let.");
+		swal({
+			  title: "Morate izabrati let.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	
@@ -871,7 +891,11 @@ function pretraziSlobodneLetove() {
 				$("#letoviBrzeRezervacije").show();
 				prikaziLetoveZaBrzuRezervaciju(data);
 			} else {
-				alert("Nema slobodnih letova u zadatom periodu.");
+				swal({
+					  title: "Nema slobodnih letova u zadatom periodu.",
+					  icon: "info",
+					  timer: 2500
+					});
 			}
 		},
 	});
@@ -1266,11 +1290,10 @@ function profilKorisnika(){
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
 			swal({
-				  title: "Informacije o aviokompaniji su uspješno izmjenjene.",
+				  title: "Polje za unos adrese ne može biti prazno.",
 				  icon: "warning",
 				  timer: 2500
 				})
-			alert("Polje za unos adrese ne moze biti prazno.");
 			return;
 		}		
 
