@@ -49,7 +49,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 			if(response.length == 0) {
 				swal({
 					  title: "Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage",
-					  icon: "warning",
+					  icon: "info",
 					  timer: 2500
 					})	
 			}

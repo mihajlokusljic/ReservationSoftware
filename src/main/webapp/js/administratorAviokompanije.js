@@ -241,7 +241,11 @@ $(document).ready(function() {
 		let _long = $("#longitudaDestinacije").val();
 		
 		if(_lat == "" || _long == "") {
-			alert("Morate zadati lokaciju na mapi.");
+			swal({
+				  title: "Morate zadati lokaciju na mapi.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
@@ -262,20 +266,39 @@ $(document).ready(function() {
 			data: JSON.stringify(novaDestinacija),
 			success: function(response) {
 				if(response == "Takva destinacija vec postoji.") {
-					alert("Već postoji destinacija sa takvom punom adresom.");
+					swal({
+						  title: "Već postoji destinacija sa takvom punom adresom.",
+						  icon: "warning",
+						  timer: 2500
+						})
+
 					return;
 				}
 				else if (response == "Ne postoji aviokompanija sa datim id-jem.") {
-					alert("Ne postoji aviokompanija sa datim id-jem.");
+					swal({
+						  title: "Ne postoji aviokompanija sa datim id-jem.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Ne mogu postojati dvije destinacije na istoj adresi.") {
-					alert("Adresa je već zauzeta.");
+					swal({
+						  title: "Adresa je već zauzeta.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else {
-					alert("Destinacija je uspješno dodata.");
-					prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
+					swal({
+						  title: "Destinacija je uspješno dodata.",
+						  icon: "success",
+						  timer: 2500
+						}).then(function(){
+							prikaziDestinaciju(response, $("#administratorAviokompanijeDestinacijeTabela"));
+
+						});
 					popuniListuZaDestinaciju(response);
 					$("#administratorAviokompanijeDestinacijeForm")[0].reset();
 					mapaDestinacije.geoObjects.removeAll();
@@ -327,7 +350,11 @@ $(document).ready(function() {
 		let broj_segmenata = $("#avioniBrojSegmenata").val();
 		
 		if (parseInt(broj_segmenata) > parseInt(broj_vrsta)) {
-			alert("Broj segmenata ne moze biti veći od broja vrsta (redova) aviona.");
+			swal({
+				  title: "Broj segmenata ne moze biti veći od broja vrsta (redova) aviona.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
@@ -346,12 +373,21 @@ $(document).ready(function() {
 			data: JSON.stringify(novi_avion),
 			success: function(response) {
 				if(response == "Vec postoji avion sa zadatim nazivom.") {
-					alert("Već postoji avion sa zadatim nazivom.");
+					swal({
+						  title: "Već postoji avion sa zadatim nazivom.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else {
-					alert("Avion je uspješno dodat.");
-					prikaziAvion(response, $("#OsnovniAvioniRows"));
+					swal({
+						  title: "Avion je uspješno dodat.",
+						  icon: "warning",
+						  timer: 2500
+						}).then(function(){
+							prikaziAvion(response, $("#OsnovniAvioniRows"));
+						})
 					popuniListuZaAvion(response);
 				}
 			},
@@ -404,11 +440,19 @@ $(document).ready(function() {
 			data: JSON.stringify(noviSegment),
 			success: function(response) {
 				if(response == "Svi segmenti zauzeti.") {
-					alert("Svi segmenti su zauzeti, tj. već su im zadati nazivi.");
+					swal({
+						  title: "Svi segmenti su zauzeti, tj. već su im zadati nazivi.",
+						  icon: "warning",
+						  timer: 2500
+						});
 					return;
 				}
 				else {
-					alert("Segment je uspješno dodat.");
+					swal({
+						  title: "Segment je uspješno dodat.",
+						  icon: "warning",
+						  timer: 2500
+						});
 					prikaziSegment(response, $("#osnovniSegmentiRows"));
 					$("#pocetnaVrstaZaSegment").attr("min", parseInt(krajnji_red) + 1);
 					$("#pocetnaVrstaZaSegment").val(parseInt(krajnji_red) + 1);
@@ -457,31 +501,59 @@ $(document).ready(function() {
 			data: JSON.stringify(noviLet),
 			success: function(response) {
 				if(response == "Vec postoji let sa datim brojem leta.") {
-					alert("Već postoji let sa datim brojem leta.");
+					swal({
+						  title: "Već postoji let sa datim brojem leta.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Ne postoje makar dvije destinacije definisane za datu aviokompaniju.") {
-					alert("Ne postoje makar dvije destinacije definisane za datu aviokompaniju.");
+					swal({
+						  title: "Ne postoje makar dvije destinacije definisane za datu aviokompaniju.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Datum poletanja mora biti prije datuma sletanja") {
-					alert("Datum poletanja mora biti prije datuma sletanja");
+					swal({
+						  title: "Datum poletanja mora biti prije datuma sletanja.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Datum povratka mora biti nakon datuma sletanja.") {
-					alert("Datum povratka mora biti nakon datuma sletanja.");
+					swal({
+						  title: "Datum povratka mora biti nakon datuma sletanja.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Nevalidan format datuma.") {
-					alert("Nevalidan format datuma. Pokušajte ponovo.");
+					swal({
+						  title: "Nevalidan format datuma. Pokušajte ponovo.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else if (response == "Cijena karte ne moze biti negativna.") {
-					alert("Cijena karte ne moze biti negativna.");
+					swal({
+						  title: "Cijena karte ne moze biti negativna.",
+						  icon: "warning",
+						  timer: 2500
+						})
 					return;
 				}
 				else {
-					alert("Let je uspješno dodat.");
+					swal({
+						  title: "Let je uspješno dodat.",
+						  icon: "success",
+						  timer: 2500
+						})
 					updateLet(response, $("#letoviRows"));
 				}
 			},
@@ -523,7 +595,11 @@ function korisnikInfo(){
 				$("#podaciAdmina").append(data.ime + " " + data.prezime);
 			}
 			else{
-				alert("Nepostojeći korisnik");
+				swal({
+					  title: "Nepostojeći korisnik.",
+					  icon: "error",
+					  timer:2000
+					})
 			}
 		},
 	});
@@ -597,17 +673,29 @@ function izmjenaInfoStraniceAviokompanije() {
 	let _opis = $("#promotivniOpisAviokompanijeInfoStranica").val();
 	
 	if (_naziv == "") {
-		alert("Naziv aviokompanije mora biti zadat.");
+		swal({
+			  title: "Naziv aviokompanije mora biti zadat.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if (_adresa == "") {
-		alert("Adresa aviokompanije mora biti zadata.");
+		swal({
+			  title: "Adresa aviokompanije mora biti zadata.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
 	if(_lat == "" || _long == "") {
-		alert("Morate zadati lokaciju na mapi.");
+		swal({
+			  title: "Morate zadati lokaciju na mapi.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
@@ -627,7 +715,11 @@ function izmjenaInfoStraniceAviokompanije() {
 		data: JSON.stringify(izmjena_aviokompanija),
 		success: function(response) {
 			aviokompanija = response;
-			alert("Informacije o aviokompaniji su uspješno izmjenjene.");
+			swal({
+				  title: "Informacije o aviokompaniji su uspješno izmjenjene.",
+				  icon: "success",
+				  timer: 2500
+				})
 		},
 	});
 	
@@ -803,21 +895,38 @@ function profilKorisnika(){
 		e.preventDefault();
 		var imeAdmina = $("#imeAdmina").val();
 		if (imeAdmina == ''){
-			alert("Polje za unos imena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos imena ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var prezimeAdmina = $("#prezimeAdmina").val();
 		if (prezimeAdmina == ''){
-			alert("Polje za unos prezimena ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos prezimena ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var brTelefonaAdmina = $("#brTelefonaAdmina").val();
 		if (brTelefonaAdmina == ''){
-			alert("Polje za unos broja telefona ne moze biti prazno.");
+			swal({
+				  title: "Polje za unos broja telefona ne moze biti prazno.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		var adresaAdmina = $("#adresaAdmina").val();
 		if (adresaAdmina == ''){
+			swal({
+				  title: "Informacije o aviokompaniji su uspješno izmjenjene.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			alert("Polje za unos adrese ne moze biti prazno.");
 			return;
 		}		
@@ -839,10 +948,18 @@ function profilKorisnika(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success:function(response){
 				if (response == ''){
-					alert("Izmjena nije uspjela.");
+					swal({
+						  title: "Izmjena nije uspjela.",
+						  icon: "error",
+						  timer: 2500
+						})
 				}
 				else{
-					alert("Uspješno ste izmjenili profil.");
+					swal({
+						  title: "Uspješno ste izmjenili profil.",
+						  icon: "success",
+						  timer: 2500
+						})
 					podaciAdmina = response;
 					profilKorisnika();
 				}
@@ -861,12 +978,21 @@ function promjeniLozinku(){
 		var novaLozinka2 = $("#novaLozinka2").val();
 
 		if (novaLozinka == ''){
-			alert("Niste unijeli novu lozinku");
+			swal({
+				  title: "Niste unijeli novu lozinku.",
+				  icon: "warning",
+				  timer: 2500
+				})
 			return;
 		}
 		
 		if (novaLozinka != novaLozinka2){
-			alert("Greška. Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.");
+			swal({
+				  title: "Greška. ",
+				  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
+				  icon: "error",
+				  timer: 2500
+				});	
 			return;
 		}
 		
@@ -879,12 +1005,20 @@ function promjeniLozinku(){
 			data : novaLozinka,
 			success : function(data) {
 				if (data == ''){
-					alert("Pogrešna trenutna lozinka.");
+					swal({
+						  title: "Pogrešna trenutna lozinka.",
+						  icon: "error",
+						  timer: 2000
+						});				
 					return;
 				}
 				else{
 					setJwtToken("jwtToken", data.accessToken);
-					alert("Uspješno ste izmjenili lozinku");	
+					swal({
+						  title: "Uspješno ste izmjenili lozinku.",
+						  icon: "success",
+						  timer:2000
+						})
 				}
 				
 			}

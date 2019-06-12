@@ -1172,7 +1172,7 @@ function prikaziRezervisaneSobe(rezSoba){
 				if(response == true){
 					swal({
 						  title: "Vec ste ocjenili koristenu rezervaciju.",
-						  icon: "warning",
+						  icon: "info",
 						  timer:2000
 						})
 					return;

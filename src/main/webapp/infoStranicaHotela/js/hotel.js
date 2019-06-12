@@ -22,8 +22,11 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
-	    	}
+	    		swal({
+		  			  title: XMLHttpRequest.responseText,
+		  			  icon: "warning",
+		  			  timer: 2500
+		  			});	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -48,8 +51,14 @@ $(document).ready(function(e) {
 	idPutovanja = params_parser.get("idPutovanja");
 	
 	if(idHotela == null) {
-		alert("Doslo je do greske.");
-		redirectNaPocetnu();
+		swal({
+			  title: "Došlo je do greške.",
+			  icon: "error",
+			  timer: 2500
+			}).then(function(){
+				redirectNaPocetnu();
+			})
+		
 	}
 	
 	if(idKorisnika != null) {
@@ -134,7 +143,11 @@ function izvrsiRezervaciju() {
 		}
 	});
 	if(sobeIds.length == 0) {
-		alert("Morate izabrati bar jednu sobu.");
+		swal({
+			  title: "Morate izabrati bar jednu sobu.",
+			  icon: "warning",
+			  timer: 2500
+			});
 		return;
 	}
 	
@@ -150,7 +163,11 @@ function izvrsiRezervaciju() {
 	let _datumOdlaska = $("#input-end").val();
 	
 	if(_datumDolaska == "" || _datumOdlaska == "") {
-		alert("Period boravka mora biti zadat.");
+		swal({
+			  title: "Period boravka mora biti zadat.",
+			  icon: "warning",
+			  timer: 2500
+			})
 		return;
 	}
 	
@@ -168,8 +185,26 @@ function izvrsiRezervaciju() {
 		contentType : "application/json; charset=utf-8",
 		data: JSON.stringify(rezervacija),
 		success: function(response) {
-			alert(response);
-			redirectNaPocetnu();
+			if (response == ''){
+				
+				swal({
+					  title: "Uspješno ste rezervisali hotelski smještaj.",
+					  icon: "success",
+					  timer: 2500
+					}).then(function(){
+						redirectNaPocetnu();
+					});
+			}
+			
+			else{
+				swal({
+					  title: response,
+					  icon: "error",
+					  timer: 2500
+					}).then(function(){
+						redirectNaPocetnu();
+					});
+			}
 		},
 	});
 	
@@ -266,7 +301,11 @@ function pretragaSoba() {
 	
 	if(_minCijena != null && _maxCijena != null) {
 		if(_minCijena > _maxCijena) {
-			alert("Minimalna cijena ne smije biti veća od maksimalne cijene.");
+			swal({
+				  title: "Minimalna cijena ne smije biti veća od maksimalne cijene.",
+				  icon: "warning",
+				  timer: 2500
+				});
 			return;
 		}
 	}
@@ -288,7 +327,11 @@ function pretragaSoba() {
 		success: function(response) {
 			prikaziSobe(response);
 			if(response.length == 0) {
-				alert("Ne postoji ni jedna slobodna soba za dati vremenski period.");
+				swal({
+					  title: "Ne postoji ni jedna slobodna soba za dati vremenski period.",
+					  icon: "info",
+					  timer: 2500
+					});
 			}
 		},
 	});
@@ -325,7 +368,11 @@ function pretragaBrzihRezervacija() {
 			brzeRezervacije = response;
 			prikaziBrzeRezervacije(response);
 			if(response.length == 0) {
-				alert("Ne postoji ni jedna soba na popustu za dati vremenski period.");
+				swal({
+					  title: "Ne postoji ni jedna slobodna soba za dati vremenski period.",
+					  icon: "info",
+					  timer: 2500
+					});
 			}
 		},
 	});
@@ -386,7 +433,22 @@ function rezervisanjeBrzeRezervacije(idRez) {
 		data: JSON.stringify(podaciRez),
 		success: function(response) {
 			$("#brzaRez" + idRez).remove();
-			alert(response);
+		if (response == ''){
+				
+				swal({
+					  title: "Uspješno ste rezervisali hotelski smještaj.",
+					  icon: "success",
+					  timer: 2500
+					});
+			}
+			
+			else{
+				swal({
+					  title: response,
+					  icon: "error",
+					  timer: 2500
+					});
+			}
 		},
 	});
 }

@@ -44,7 +44,7 @@ $(document).ready(function() {
 				if(response.length == 0) {
 					swal({
 						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava navedeni kriterijum pretrage.",
-						  icon: "warning",
+						  icon: "info",
 						  timer: 2500
 						})	
 				}

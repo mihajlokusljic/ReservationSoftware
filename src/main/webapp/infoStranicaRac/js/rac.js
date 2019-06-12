@@ -16,7 +16,11 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
+	    		swal({
+	  			  title: XMLHttpRequest.responseText,
+	  			  icon: "warning",
+	  			  timer: 2500
+	  			});
 	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
@@ -136,7 +140,11 @@ function pretragaVozila(){
 	let _vrijemePreuzimanja = $("#input-start-time").val();
 	let _vrijemeVracanja = $("#input-end-time").val();
 	if (_vrijemePreuzimanja == '' || _vrijemeVracanja == ''){
-		alert("Niste unijeli vrijeme preuzimanja/vracanja vozila");
+		swal({
+			  title: "Niste unijeli vrijeme preuzimanja/vraćanja vozila.",
+			  icon: "warning",
+			  timer: 2500
+			});	
 	}
 	
 	let _mjestoPreuzimanja = $("#mjestoPreuzimanjaSelect").val();
@@ -184,7 +192,11 @@ function pretragaVozila(){
 		data: JSON.stringify(pretragaVozila),
 		success: function(response) {
 			if(response.length == 0) {
-				alert("Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.");
+				swal({
+					  title: "Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.",
+					  icon: "info",
+					  timer: 2500
+					});	
 			}
 			prikaziVozila(response);
 		},
@@ -243,12 +255,21 @@ function prikaziVozila(vozila) {
 			data: JSON.stringify(rezervacijaVozila),
 			success: function(response) {
 				if(response == '') {
-					alert("Uspjesno ste rezervisali vozilo.");
-					location.reload(true);
+					swal({
+						  title: "Uspješno ste rezervisali vozilo.",
+						  icon: "success",
+						  timer: 2500
+						}).then(function(){
+							location.reload(true);
+						})	
 					return;
 				}
 				else{
-					alert (response);
+					swal({
+						  title: response,
+						  icon: "warning",
+						  timer: 2500
+						})
 				}
 			},
 		});
@@ -282,7 +303,12 @@ function pretragaVozilaSaPopustom(){
 	let _vrijemePreuzimanja = $("#input-start-time-popust").val();
 	let _vrijemeVracanja = $("#input-end-time-popust").val();
 	if (_vrijemePreuzimanja == '' || _vrijemeVracanja == ''){
-		alert("Niste unijeli vrijeme preuzimanja/vracanja vozila");
+		swal({
+			  title: "Niste unijeli vrijeme preuzimanja/vracanja vozila.",
+			  icon: "warning",
+			  timer: 2500
+			});
+		return;
 	}
 	
 	let _mjestoPreuzimanja = $("#mjestoPreuzimanjaPopustSelect").val();
@@ -320,7 +346,11 @@ function pretragaVozilaSaPopustom(){
 		data: JSON.stringify(pretragaVozila),
 		success: function(response) {
 			if(response.length == 0) {
-				alert("Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.");
+				swal({
+					  title: "Ne postoji ni jedno slobodno vozilo sa unijetim karakteristikama za dati vremenski period.",
+					  icon: "info",
+					  timer: 2500
+					});
 			}
 			prikaziVozilaSaPopustom(response);
 		},
@@ -383,13 +413,22 @@ function prikaziVozilaSaPopustom(rezVozila) {
 			data: JSON.stringify(rezervacijaVozila),
 			success: function(response) {
 				if(response == '') {
-					alert("Uspjesno ste rezervisali vozilo.");
-					location.reload(true);
+					swal({
+						  title: "Uspješno ste rezervisali vozilo.",
+						  icon: "success",
+						  timer: 2500
+						}).then(function(){
+							location.reload(true);
+						});
 					return;
 				}
 				else{
-					alert (response);
-				}
+					swal({
+						  title: response,
+						  icon: "warning",
+						  timer: 2500
+						})				
+					}
 			},
 		});
 		

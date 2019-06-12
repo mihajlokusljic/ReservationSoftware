@@ -49,7 +49,7 @@ $(document).ready(function(e) {
 				if(response.length == 0) {
 					swal({
 						  title: "Ne postoji ni jedan hotel koji zadovoljava navedene kriterijume pretrage.",
-						  icon: "warning",
+						  icon: "info",
 						  timer: 2500
 						})					}
 				$('#hotelSearchForm')[0].reset();

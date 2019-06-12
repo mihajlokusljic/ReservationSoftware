@@ -36,7 +36,7 @@ $(document).ready(function(e) {
 				if(response.length == 0) {
 					swal({
 						  title: "Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.",
-						  icon: "warning",
+						  icon: "info",
 						  timer: 2500
 						})	
 				}
