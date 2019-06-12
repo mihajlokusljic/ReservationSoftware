@@ -1394,7 +1394,7 @@ function zadavanjePopustaBrzeRezervacije(){
 			tekucaBrzaRezervacija = null;
 			swal({
 				  title: "Usješno ste definisali popust za brzu rezervaciju.",
-				  icon: "warning",
+				  icon: "success",
 				  timer:2000
 				});
 			resetBrzeRezervacijeView();	
