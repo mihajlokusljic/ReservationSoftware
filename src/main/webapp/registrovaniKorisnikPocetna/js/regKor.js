@@ -508,6 +508,17 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#zadajPozivePrijateljaZaRezervacijuBtn").click(function(e) {
+		e.preventDefault();
+		if(rezervisanoSjedista - 1 - pozvaniPrijateljiIds.length > 0) {
+			prikaziUnosPodatakaZaNeregistrovanePutnike();
+		}
+		else
+		{
+			prikaziHoteleZaRezervaciju();
+		}
+	});
+	
 });
 
 function updateLetovi(letovi) {
@@ -557,6 +568,7 @@ function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
 	podaciOMapi = null;
 	$("#izborLetaZaRezervaciju").hide();
 	$("#pozivPrijateljaZaRezervaciju").hide();
+	$("#unosPodatakaPutnika").hide();
 	$("#izborSjedistaZaRezervaciju").show();
 	
 	$.ajax({
@@ -652,7 +664,15 @@ function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
 function prikaziPozivanjePrijatelja() {
 	$("#izborLetaZaRezervaciju").hide();
 	$("#izborSjedistaZaRezervaciju").hide();
+	$("#unosPodatakaPutnika").hide();
 	$("#pozivPrijateljaZaRezervaciju").show();	
+}
+
+function prikaziUnosPodatakaZaNeregistrovanePutnike() {
+	$("#izborLetaZaRezervaciju").hide();
+	$("#izborSjedistaZaRezervaciju").hide();
+	$("#pozivPrijateljaZaRezervaciju").hide();
+	$("#unosPodatakaPutnika").show();
 }
 
 function prikaziPrijateljeZaPozivanje(prijatelji) {
