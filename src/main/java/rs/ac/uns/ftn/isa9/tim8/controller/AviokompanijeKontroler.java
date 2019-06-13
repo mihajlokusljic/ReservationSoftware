@@ -17,7 +17,6 @@ import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
-import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;

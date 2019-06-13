@@ -13,18 +13,21 @@ public class IzvrsavanjeRezervacijeSjedistaDTO {
 
 	protected Long idLeta;
 
+	protected Long idKorisnika;
+
 	public IzvrsavanjeRezervacijeSjedistaDTO() {
 		super();
 	}
 
 	public IzvrsavanjeRezervacijeSjedistaDTO(List<Long> rezervisanaSjedistaIds, List<Long> pozvaniPrijateljiIds,
-			List<PodaciPutnikaDTO> podaciNeregistrovanihPutnika, Long idPutovanja, Long idLeta) {
+			List<PodaciPutnikaDTO> podaciNeregistrovanihPutnika, Long idPutovanja, Long idLeta, Long idKorisnika) {
 		super();
 		this.rezervisanaSjedistaIds = rezervisanaSjedistaIds;
 		this.pozvaniPrijateljiIds = pozvaniPrijateljiIds;
 		this.podaciNeregistrovanihPutnika = podaciNeregistrovanihPutnika;
 		this.idPutovanja = idPutovanja;
 		this.idLeta = idLeta;
+		this.idKorisnika = idKorisnika;
 	}
 
 	public List<Long> getRezervisanaSjedistaIds() {
@@ -65,6 +68,14 @@ public class IzvrsavanjeRezervacijeSjedistaDTO {
 
 	public void setIdLeta(Long idLeta) {
 		this.idLeta = idLeta;
+	}
+
+	public Long getIdKorisnika() {
+		return idKorisnika;
+	}
+
+	public void setIdKorisnika(Long idKorisnika) {
+		this.idKorisnika = idKorisnika;
 	}
 
 }

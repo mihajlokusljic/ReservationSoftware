@@ -14,7 +14,7 @@ public class ReservationSoftwareApplication {
 
 	@PostConstruct
 	static void started() {
-		// set JVM timezone as UTC
+		// podesi JVM vremensku zonu kao UTC
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 

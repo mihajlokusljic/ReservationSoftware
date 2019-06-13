@@ -39,8 +39,9 @@ public class RegistrovanKorisnik extends Osoba {
 	@JsonIgnore
 	protected Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inicijatorPutovanja")
-	protected Putovanje putovanje;
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "inicijatorPutovanja")
+	protected Set<Putovanje> putovanja;
 
 	public RegistrovanKorisnik() {
 		super();
@@ -56,14 +57,14 @@ public class RegistrovanKorisnik extends Osoba {
 	}
 
 	public RegistrovanKorisnik(double bonusPoeni, Set<RegistrovanKorisnik> prijatelji,
-			Set<Pozivnica> primljenePozivnice, Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi, Putovanje putovanje,
+			Set<Pozivnica> primljenePozivnice, Set<ZahtjevZaPrijateljstvo> primljeniZahtjevi, Set<Putovanje> putovanja,
 			String brojPasosa) {
 		super();
 		this.bonusPoeni = bonusPoeni;
 		this.prijatelji = prijatelji;
 		this.primljenePozivnice = primljenePozivnice;
 		this.primljeniZahtjevi = primljeniZahtjevi;
-		this.putovanje = putovanje;
+		this.putovanja = putovanja;
 		this.brojPasosa = brojPasosa;
 	}
 
@@ -99,14 +100,6 @@ public class RegistrovanKorisnik extends Osoba {
 		this.primljeniZahtjevi = primljeniZahtjevi;
 	}
 
-	public Putovanje getPutovanje() {
-		return putovanje;
-	}
-
-	public void setPutovanje(Putovanje putovanje) {
-		this.putovanje = putovanje;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -121,6 +114,14 @@ public class RegistrovanKorisnik extends Osoba {
 
 	public void setBrojPasosa(String brojPasosa) {
 		this.brojPasosa = brojPasosa;
+	}
+
+	public Set<Putovanje> getPutovanja() {
+		return putovanja;
+	}
+
+	public void setPutovanja(Set<Putovanje> putovanja) {
+		this.putovanja = putovanja;
 	}
 
 }

@@ -13,6 +13,8 @@ var datumOdlaska = null;
 var idPutovanja = null;
 var rezervisanoSjedista = null;
 var pozvaniPrijateljiIds = [];
+var idLetaZaRezervaciju = -1;
+var podaciRezervacijeSjedista = null;
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -476,6 +478,32 @@ $(document).ready(function() {
 			return;
 		}
 		if(rezervisanoSjedista > 1) {
+			//slanje zahtjeva za rezervaciju sjedista
+			let podaciRezervacije = {
+					rezervisanaSjedistaIds: scGlobal.find("selected").seatIds,
+					pozvaniPrijateljiIds: [],
+					podaciNeregistrovanihPutnika: [],
+					idLeta: idLetaZaRezervaciju,
+					idKorisnika : korisnik.id,
+					idPutovanja: null
+			};
+			
+			$.ajax({
+				type: "POST",
+				async: false,
+				url: "../aviokompanije/rezervisiSjedista",
+				contentType : "application/json; charset=utf-8",
+				data: JSON.stringify(podaciRezervacije),
+				success: function(response) {
+					podaciRezervacijeSjedista = response;
+					swal({
+						  title: "Uspješna rezervacija!",
+						  text: "Uspješno ste rezervisali sjedišta.",
+						  icon: "success",
+					})
+					return;
+				},
+			});
 			prikaziPozivanjePrijatelja();
 		}
 		else
@@ -549,6 +577,7 @@ function updateLetovi(letovi) {
 	$(".rezervacijaSjed").click(function(e) {
 		e.preventDefault();
 		let idLeta = e.target.id.substring(3);
+		idLetaZaRezervaciju = idLeta;
 		prikaziIzborSjedistaBrzeRezervacije(idLeta)
 	});
 }
@@ -665,7 +694,11 @@ function prikaziPozivanjePrijatelja() {
 	$("#izborLetaZaRezervaciju").hide();
 	$("#izborSjedistaZaRezervaciju").hide();
 	$("#unosPodatakaPutnika").hide();
-	$("#pozivPrijateljaZaRezervaciju").show();	
+	$("#pozivPrijateljaZaRezervaciju").show();
+	
+	//resetovanje izabranih i zauzetih sjedista
+	scGlobal.find('selected').status('available');
+	scGlobal.find('unavailable').status('available');
 }
 
 function prikaziUnosPodatakaZaNeregistrovanePutnike() {

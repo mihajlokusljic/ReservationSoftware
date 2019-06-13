@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,8 +36,12 @@ import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Pozivnica;
+import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
@@ -45,7 +50,9 @@ import rs.ac.uns.ftn.isa9.tim8.repository.AvionRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.BrzaRezervacijaSjedistaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.LetoviRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.PutovanjeRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.Rezervacija_sjedistaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.SjedisteRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
@@ -67,6 +74,9 @@ public class AviokompanijaService {
 	protected KorisnikRepository korisnikRepository;
 
 	@Autowired
+	protected SjedisteRepository sjedisteRepository;
+
+	@Autowired
 	protected UslugeRepository uslugeRepository;
 
 	@Autowired
@@ -74,6 +84,12 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected BrzaRezervacijaSjedistaRepository brzaRezervacijaSjedistaRepository;
+
+	@Autowired
+	protected PutovanjeRepository putovanjeRepository;
+
+	@Autowired
+	protected BonusSkalaService bonusSkalaService;
 
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
@@ -756,11 +772,11 @@ public class AviokompanijaService {
 					&& datumSletanja.compareTo(krajnji) == 0) {
 
 				Set<Sjediste> sjedista = l.getAvion().getSjedista();
-				Collection<BrzaRezervacijaSjedista> brzeRezervacijeZaLet = brzaRezervacijaSjedistaRepository.findAllByLet(l);
+				Collection<BrzaRezervacijaSjedista> brzeRezervacijeZaLet = brzaRezervacijaSjedistaRepository
+						.findAllByLet(l);
 				for (Sjediste s : sjedista) {
 					// kroz sjedista i gledas postoji li rezervacija za to sjediste
-					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(),
-							brzeRezervacijeZaLet)) {
+					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(), brzeRezervacijeZaLet)) {
 						rezultat.add(l);
 						break;
 					}
@@ -833,10 +849,8 @@ public class AviokompanijaService {
 				sb.setLength(0);
 				tekucaVrsta = s.getRed();
 			}
-			
-			
-			if (jeLiSjedisteRezervisano(s, let.getRezervacije(),
-					brzeRezervacijeZaLet)) {
+
+			if (jeLiSjedisteRezervisano(s, let.getRezervacije(), brzeRezervacijeZaLet)) {
 				rezervisanaSjedistaIds.add(s.getId());
 			}
 			sb.append(oznake.charAt(tekuciSegmentIndex));
@@ -922,10 +936,105 @@ public class AviokompanijaService {
 		return "Uspjesno ste otkazali rezervaciju leta";
 	}
 
+	// Funkcija koja koncertuje decimalne stepene u radijane
+	public double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+
+	// Funkcija koja konvertuje radijane u decimalne stepene
+	private double rad2deg(double rad) {
+		return (rad * 180.0 / Math.PI);
+	}
+
+	// Funkcija koja sracunava rastojanje izmedju dvije tacke u kilometrima na
+	// osnovu latitude/longitude
+	public double rastojanjeLatLongKilometri(double lat1, double lon1, double lat2, double lon2) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+				+ Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		dist = dist * 1.609344; // rastojanje u kilometrima
+		return dist;
+	}
+
 	public IzvrsavanjeRezervacijeSjedistaDTO rezervisiSjedista(IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije)
 			throws NevalidniPodaciException {
-		// TODO Auto-generated method stub
-		return null;
+		// Najveće rastojanje između dvije tačke na planeti Zemlji (po ekvatoru)
+		final double NAJVECE_RASTOJANJE = 12756; // u kilometrima
+
+		Optional<Osoba> pretragaKorisnika = korisnikRepository.findById(podaciRezervacije.getIdKorisnika());
+
+		if (!pretragaKorisnika.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik sa tim id-jem.");
+		}
+
+		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) pretragaKorisnika.get();
+
+		Optional<Let> pretragaLeta = letoviRepository.findById(podaciRezervacije.getIdLeta());
+
+		if (!pretragaLeta.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji let sa datim id-jem.");
+		}
+
+		Let let = pretragaLeta.get();
+
+		Destinacija polaziste = let.getPolaziste();
+		Destinacija odrediste = let.getOdrediste();
+
+		double rastojanjeUKilometrima = rastojanjeLatLongKilometri(polaziste.getAdresa().getLatituda(),
+				polaziste.getAdresa().getLongituda(), odrediste.getAdresa().getLatituda(),
+				odrediste.getAdresa().getLongituda());
+
+		double faktorUdaljenosti = rastojanjeUKilometrima / NAJVECE_RASTOJANJE;
+
+		double bonusPoeni = faktorUdaljenosti * 100;
+
+		Putovanje putovanje = new Putovanje(null, new LinkedHashSet<RezervacijaSjedista>(),
+				new LinkedHashSet<Pozivnica>(), new LinkedHashSet<RezervacijaSobe>(),
+				new LinkedHashSet<RezervacijaVozila>(), korisnik, new LinkedHashSet<Usluga>(), bonusPoeni);
+
+		Optional<Sjediste> pretragaSjedista = null;
+		Sjediste s = null;
+		Collection<BrzaRezervacijaSjedista> brzeRezervacijeLeta = brzaRezervacijaSjedistaRepository.findAllByLet(let);
+
+		for (Long idSjedista : podaciRezervacije.getRezervisanaSjedistaIds()) {
+			pretragaSjedista = sjedisteRepository.findById(idSjedista);
+
+			if (!pretragaSjedista.isPresent()) {
+				throw new NevalidniPodaciException("Ne postoji sjediste sa datim id-jem.");
+			}
+
+			s = pretragaSjedista.get();
+
+			if (jeLiSjedisteRezervisano(s, let.getRezervacije(), brzeRezervacijeLeta)) {
+				throw new NevalidniPodaciException("Sjediste je vec rezervisano.");
+			}
+
+			double cijenaKarte = 0;
+
+			cijenaKarte = let.getCijenaKarte() + s.getSegment().getCijena();
+			int procenatPopusta = bonusSkalaService.odrediProcenatBonusPopusta(korisnik.getBonusPoeni());
+			double popust = cijenaKarte * procenatPopusta / 100.00;
+			cijenaKarte -= popust;
+
+			RezervacijaSjedista rs = new RezervacijaSjedista(null, null, null, null, cijenaKarte, s, null,
+					let.getAvion().getAviokompanija(), let, putovanje);
+
+			putovanje.getRezervacijeSjedista().add(rs);
+			let.getRezervacije().add(rs);
+			let.getAvion().getAviokompanija().getRezervacije().add(rs);
+		}
+
+		putovanjeRepository.save(putovanje);
+
+		podaciRezervacije.setIdPutovanja(putovanje.getId());
+
+		aviokompanijaRepository.save(let.getAvion().getAviokompanija());
+		letoviRepository.save(let);
+
+		return podaciRezervacije;
 	}
 
 }
