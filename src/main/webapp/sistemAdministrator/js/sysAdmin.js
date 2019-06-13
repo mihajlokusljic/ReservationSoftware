@@ -405,7 +405,7 @@ function dodavanjeAdmina() {
 		swal({
 			  title: "Greška. ",
 			  text: "Vrijednosti polja za lozinku i njenu potvrdu moraju biti iste.",
-			  icon: "error",
+			  icon: "warning",
 			  timer: 2500
 			});
 		return;
@@ -446,11 +446,21 @@ function dodavanjeAdmina() {
 		url: tergetUrl,
 		data: JSON.stringify(noviAdmin),
 		success: function(response) {
-			swal({
-				  title: response,
-				  icon: "success",
-				  timer: 2500
-				});
+			if (response == "Administrator je uspesno dodat.") {
+				swal({
+					  title: response,
+					  icon: "success",
+					  timer: 2500
+					});
+			}
+			else{
+				swal({
+					  title: response,
+					  icon: "warning",
+					  timer: 2500
+					});
+			}
+				
 		},
 	});
 }
