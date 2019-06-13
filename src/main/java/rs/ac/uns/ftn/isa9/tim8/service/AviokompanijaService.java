@@ -31,14 +31,12 @@ import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
-import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
-import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
+
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
-import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
