@@ -44,7 +44,7 @@ public class VoziloDTO {
 		this.filijala = filijala;
 		this.Id = Id;
 	}
-
+	
 	public VoziloDTO() {
 		super();
 	}
