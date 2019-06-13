@@ -11,6 +11,8 @@ var scGlobal = null;
 var datumDolaska = null;
 var datumOdlaska = null;
 var idPutovanja = null;
+var rezervisanoSjedista = null;
+var pozvaniPrijateljiIds = [];
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -464,8 +466,8 @@ $(document).ready(function() {
 	
 	$("#zadajSjedisteBrzeRezBtn").click(function(e) {
 		e.preventDefault();
-		if(scGlobal.find("selected").length == 0) {
-			//alert("Morate izabrati bar jedno sjediste");
+		rezervisanoSjedista = scGlobal.find("selected").length;
+		if(rezervisanoSjedista == 0) {
 			swal({
 				  title: "Morate izabrati bar jedno sjedište.",
 				  icon: "warning",
@@ -473,6 +475,37 @@ $(document).ready(function() {
 			});
 			return;
 		}
+		if(rezervisanoSjedista > 1) {
+			prikaziPozivanjePrijatelja();
+		}
+		else
+		{
+			prikaziHoteleZaRezervaciju();
+		}
+	});
+	
+	$("#pretragaPrijateljaZaPozivanje").submit(function(e) {
+		e.preventDefault();
+		
+		let imePrezimeInput = $("#pretragaPrijateljaZaPozivanjeInp").val();
+		
+		let filtriranjePrijateljaDTO = {
+				idKorisnika : korisnik.id,
+				imePrezime: imePrezimeInput,
+				pregledPrijatelja: true
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "../korisnik/pretraziPrijatelje",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(filtriranjePrijateljaDTO),
+			success: function(response) {
+				prikaziPrijateljeZaPozivanje(response);
+				return;
+			},
+		});
+		
 	});
 	
 });
@@ -523,6 +556,7 @@ function recalculateTotal(sc) {
 function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
 	podaciOMapi = null;
 	$("#izborLetaZaRezervaciju").hide();
+	$("#pozivPrijateljaZaRezervaciju").hide();
 	$("#izborSjedistaZaRezervaciju").show();
 	
 	$.ajax({
@@ -613,6 +647,83 @@ function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
     scGlobal = sc;
     sc.get(podaciOMapi.zauzetaSjedistaIds).status('unavailable');
   
+}
+
+function prikaziPozivanjePrijatelja() {
+	$("#izborLetaZaRezervaciju").hide();
+	$("#izborSjedistaZaRezervaciju").hide();
+	$("#pozivPrijateljaZaRezervaciju").show();	
+}
+
+function prikaziPrijateljeZaPozivanje(prijatelji) {
+	let tabela = $("#prijateljiZaPozivanjeRows");
+	tabela.empty();
+	let noviRed = null;
+	let akcija = "";
+	
+	$.each(prijatelji, function(i, prijatelj) {
+		noviRed = $('<tr id = "prijateljPoz' + prijatelj.id + '"></tr>');
+		noviRed.append('<td class="column1">' + '<img src="http://www.logospng.com/images/64/user-pro-avatar-login-account-svg-png-icon-free-64755.png">' + 
+		"</td>");
+		noviRed.append('<td class="column1"> </td>');
+		noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
+		noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
+		akcija = "Pozovi";
+		for(var i in pozvaniPrijateljiIds) {
+			if(prijatelj.id == pozvaniPrijateljiIds[i]) {
+				akcija = "Otkaži poziv";
+			}
+		}
+		noviRed.append('<td class="column1"><button class="btn-submit pozivanjePrijatelja" type="button" id="prpoz' + prijatelj.id + 
+				'">' + akcija + '</button></td>');
+		noviRed.append('<td class="column6"> </td>');
+		tabela.append(noviRed);
+	});
+	
+	$(".pozivanjePrijatelja").click(function(e) {
+		e.preventDefault();
+		var idPrijatelja = e.target.id.substring(5); //id dugmeta je oblika "prpoz<id prijatelja>"
+		var index = pozvaniPrijateljiIds.indexOf(idPrijatelja);
+		if(index !== -1) {
+			pozvaniPrijateljiIds.splice(index, 1);
+			$(this).html("Pozovi");
+		}
+		else
+		{
+			if(pozvaniPrijateljiIds.length == rezervisanoSjedista - 1) {
+				swal({
+					  title: "Broj pozvanih prijatelja ne smije biti veći od broja rezervisanih sjedišta. Napomena: jedno sjedište već je rezervisano za Vas.",
+					  icon: "warning",
+					})
+				return;
+			}
+			pozvaniPrijateljiIds.push(idPrijatelja);
+			$(this).html('Otkaži poziv');
+		}
+		$("#brPozvanihPrijatelja").html(pozvaniPrijateljiIds.length);
+	});
+	
+	
+	
+}
+
+function prikaziHoteleZaRezervaciju() {
+	$("#izborSjedistaZaRezervaciju").hide();
+	$("#pozivPrijateljaZaRezervaciju").hide();
+	$("#izborLetaZaRezervaciju").show();
+	
+	$("#tab-aviokompanije").hide();
+	$("#tab-hoteli").show();
+	$("#tab-rac-servisi").hide();
+	$("#tab-rezervacije").hide();
+	$("#pregled-prijatelja-tab").hide();
+	$("#dodaj-prijatelje-tab").hide();
+	$("#zahtjevi-prijateljstva-tab").hide();
+	$("#tab-pozivnice").hide();
+	$("#tab-profilKorisnika").hide();
+	$("#tab-profil-lozinka").hide();
+	$("#tab-odjava").hide();	
+	$("#tab-letovi").hide();
 }
 
 function korisnikInfo(){
