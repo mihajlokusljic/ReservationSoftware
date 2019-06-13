@@ -418,8 +418,9 @@ public class KorisnikService {
 					rs.getLet().getOdrediste().getNazivDestinacije(), rs.getLet().getDatumPoletanja(),
 					rs.getLet().getDatumSletanja(), rs.getSjediste(), rs.getCijena(), rs.getAviokompanija().getNaziv(),
 					rs.getLet().getBrojLeta()));
-		}
 
+		}
+		
 		return rezSjedistaDTO;
 	}
 

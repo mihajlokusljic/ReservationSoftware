@@ -1358,11 +1358,17 @@ function prikaziRezervisaneLetove(rezLetova){
 	
 	$(".otkaziRezervacijuLeta").click(function(e){
 		e.preventDefault();
+		
 		let rezervacija = rezLetova[e.target.id];
 		var datumP = Date.parse(rezervacija.datumPolaska);
+		var dt = new Date(rezervacija.datumPolaska)
+		let sati = dt.getHours();
+		let minuti = dt.getMinutes();
 		var sadasnjiDatum = new Date();
+		let trenutnoSati = sadasnjiDatum.getHours();
+		let trenutnoMinuti = sadasnjiDatum.getMinutes();
 		var diff= (datumP - sadasnjiDatum ) / (1000*60*60*24);
-		if (diff<1){
+		if (diff<0){
 			swal({
 				  text: "Zakasnili ste sa otkazivanjem rezervacije leta.",
 				  icon: "warning",
@@ -1370,6 +1376,29 @@ function prikaziRezervisaneLetove(rezLetova){
 				})	
 			return;
 		}
+		else if (diff < 1) {
+			var razlikaSati = sati - trenutnoSati;
+			if (razlikaSati<3) {
+				swal({
+					  text: "Zakasnili ste sa otkazivanjem rezervacije leta.",
+					  icon: "warning",
+					  timer: 2000
+					})	
+				return;
+			}
+			else if (razlikaSati == 3) {
+				var razlikaMinuta = minuti - trenutnoMinuti;
+				if (razlikaMinuta<0) {
+					swal({
+						  text: "Zakasnili ste sa otkazivanjem rezervacije leta.",
+						  icon: "warning",
+						  timer: 2000
+						})	
+					return;
+				}
+			}
+		}
+		
 		$.ajax({
 			type: "POST",
 			url : "../letovi/otkaziRezervaciju",
