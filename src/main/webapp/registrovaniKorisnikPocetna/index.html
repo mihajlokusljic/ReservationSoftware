@@ -251,7 +251,34 @@
 						</div>
 						
 						<div id="unosPodatakaPutnika" hidden="hidden">
-							<h2 class="zaglavlje">Unesite podatke za neregistrovane putnike</h2>
+							<h2 class="zaglavlje">Unesite podatke za neregistrovane putnike</h2><br>
+							<h2 class="zaglavlje">Putnik &nbsp;&nbsp;<span id="brPodatakaNeregistrovanihPutnika">1</span> &nbsp;&nbsp;od &nbsp;&nbsp;<span id="brNeregistrovanihPutnika"> </span></h2><br><br>
+						
+							
+							<form id = "zadavanjePodatakaPutnikaForm">
+	                                
+	                                <div class="row row-space">
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Ime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="imePutnikaRez">
+	                                        </div>
+	                                    </div>
+	                                    <div class="col-2">
+	                                        <div class="input-group">
+	                                            <label class="label">Prezime:</label>
+	                                            <input class="input--style-2" type="text" required="required" id="prezimePutnikaRez">
+	                                        </div>
+	                                    </div>
+	                                </div>
+
+	                             	<div class="input-group">
+	                                    <label class="label">Broj pasoša:</label>
+	                                    <input class="input--style-2" type="text" id="brPasosaPutnikaRez" required = "required">
+	                                </div>
+
+	                                <button type="submit" class="btn btn-submit">Dodaj podatke putnika</button>
+                           </form>
 						</div>
                             
                         </div>
