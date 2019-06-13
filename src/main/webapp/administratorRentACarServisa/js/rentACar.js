@@ -919,6 +919,18 @@ function prikaziPodatkeServisa() {
 	$("#slikaRacServisa").attr("src", defaultSlika);
 	$("#latitudaServisa").val(rentACarServis.adresa.latituda);
 	$("#longitudaServisa").val(rentACarServis.adresa.longituda);
+	let sumaOcjena = rentACarServis.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = rentACarServis.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		var prosjek = sumaOcjena/brOcjena;
+		prosjek = prosjek.toFixed(2);
+
+		$("#ocjenaRac").val(prosjek);
+	} else {
+		$("#ocjenaRac").val("Nema ocjena");
+	}
 }
 
 function profilServisa(){
