@@ -84,5 +84,26 @@ public class LetoviKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/ocjenjenaRezervacija/{idRezervacije}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+ 	public ResponseEntity<?> OcjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
+		try {
+			return new ResponseEntity<Boolean>(servis.rezervacijaLetaOcjenjena(idRezervacije), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/ocjeniLet/{ratingValue}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> ocjeniVozilo(@RequestBody Long id, @PathVariable("ratingValue") int ratingValue){
+		try {
+			return new ResponseEntity<String >(servis.ocjeniLet(id, ratingValue), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }

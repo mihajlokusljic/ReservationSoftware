@@ -101,6 +101,7 @@ $(document).ready(function() {
 	
 	$("#aviokompanijeT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 		$("#tab-aviokompanije").show();
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
@@ -118,6 +119,7 @@ $(document).ready(function() {
 	
 	$("#letoviT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 		$("#tab-aviokompanije").hide();
 		$("#tab-letovi").show();
 		$("#tab-hoteli").hide();

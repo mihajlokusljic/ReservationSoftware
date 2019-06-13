@@ -31,11 +31,14 @@ import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
+import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
+import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
@@ -914,6 +917,64 @@ public class AviokompanijaService {
 		brs.setLet(rez.getLet());
 		brzaRezervacijaSjedistaRepository.save(brs);
 		return "Uspjesno ste otkazali rezervaciju leta";
+	}
+
+	public Boolean rezervacijaLetaOcjenjena(Long idRezervacije) throws NevalidniPodaciException {
+		Optional<RezervacijaSjedista> pretragaRez = rezervacijaSjedistaRepository.findById(idRezervacije);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaSjedista rLet = pretragaRez.get();
+		
+		if (rLet.isOcjenjeno()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	//ocjenjivanje leta nakon njegovog sletanja
+	public String ocjeniLet(Long id, int ratingValue) throws NevalidniPodaciException {
+		Optional<RezervacijaSjedista> pretragaRez = rezervacijaSjedistaRepository.findById(id);
+		if (!pretragaRez.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RezervacijaSjedista rSjed = pretragaRez.get();
+		
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(rSjed.getAviokompanija().getId());
+		if (!pretragaAviokompanije.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je obrisana aviokompanija cije su usluge koristene.");
+		}
+		
+		Aviokompanija aviokompanija = pretragaAviokompanije.get();
+		
+		Optional<Let> pretragaLet = letoviRepository.findById(rSjed.getLet().getId());
+		if (!pretragaLet.isPresent()) {
+			throw new NevalidniPodaciException("U medjuvremenu je uklonjen let cije su usluge koristene.");
+		}
+		
+		Let let = pretragaLet.get();
+		
+		Date danasnjiDatum = new Date();
+		if (rSjed.getLet().getDatumSletanja().after(danasnjiDatum)) {
+			return "Ne mozete da ocjenite let prije njegovog sletanja.";
+		}
+		
+		let.setSumaOcjena(let.getSumaOcjena() + ratingValue);
+		let.setBrojOcjena(let.getBrojOcjena() + 1);
+		rSjed.setOcjenjeno(true);
+		
+		aviokompanija.setSumaOcjena(aviokompanija.getSumaOcjena() + ratingValue);
+		aviokompanija.setBrojOcjena(aviokompanija.getBrojOcjena() + 1);
+		
+		aviokompanijaRepository.save(aviokompanija);
+		letoviRepository.save(let);
+		rezervacijaSjedistaRepository.save(rSjed);
+		
+		return null;
 	}
 
 }
