@@ -45,27 +45,6 @@ public class VoziloDTO {
 		this.Id = Id;
 	}
 	
-	
-	public VoziloDTO(String naziv, String marka, String model, int godina_proizvodnje, int broj_sjedista,
-			String tip_vozila, int broj_vrata, int kilovati, int cijena_po_danu, int brojOcjena, int sumaOcjena,
-			String filijala, Long id) {
-		super();
-		this.naziv = naziv;
-		this.marka = marka;
-		this.model = model;
-		this.godina_proizvodnje = godina_proizvodnje;
-		this.broj_sjedista = broj_sjedista;
-		this.tip_vozila = tip_vozila;
-		this.broj_vrata = broj_vrata;
-		this.kilovati = kilovati;
-		this.cijena_po_danu = cijena_po_danu;
-		this.brojOcjena = brojOcjena;
-		this.sumaOcjena = sumaOcjena;
-		this.filijala = filijala;
-		this.Id = id;
-	}
-
-
 	public VoziloDTO() {
 		super();
 	}
