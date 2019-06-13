@@ -374,8 +374,13 @@ function prikaziVozila(vozila){
 	let tbody = $("#tbody_vozila");
 	tbody.empty();
 	$.each(vozila, function(i,vozilo){
+		var prosjecnaOcjena = 0;
+		if (vozilo.sumaOcjena != 0) {
+			prosjecnaOcjena = (vozilo.sumaOcjena/vozilo.brojOcjena).toFixed(2);
+		}
 		tbody.append('<tr><td class = "column1">' + vozilo["naziv"] + '</td><td class = "column2">' + vozilo["marka"] + '</td><td class = "column3">' + vozilo["model"]
 		 + '</td><td class = "column4">' + vozilo["tip_vozila"]  + '</td><td class = "column5">' + vozilo["godina_proizvodnje"] + '</td><td class = "column6">' + vozilo["cijena_po_danu"] +
+		 '</td><td class = "column6">' +  prosjecnaOcjena + 
 		 '</td><td class = "column7"><a href = "javascript:void(0)" class = "detaljan_prikaz" id = "' + i + '">Detaljan prikaz</a></td></tr>')
 	});
 	
