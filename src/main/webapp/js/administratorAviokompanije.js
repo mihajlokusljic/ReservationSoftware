@@ -742,6 +742,11 @@ function dodajBrzuRezervaciju() {
 			$("#definisanjePopustaBrzeRezervacije").show();
 			$("#izborLetaBrzeRezervacijeBtn")[0].checked = false;
 			$("#definisanjePopustaBrzeRezervacijeBtn")[0].checked = true;
+			
+			//resetovanje zauzetih i selektovanih sjedista
+			scGlobal.find('selected').status('available');
+			scGlobal.find('unavailable').status('available');
+			
 			return;
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {

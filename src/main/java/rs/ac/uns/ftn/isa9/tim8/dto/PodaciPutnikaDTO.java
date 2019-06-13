@@ -2,7 +2,9 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 
 public class PodaciPutnikaDTO {
 	protected String ime;
+	
 	protected String prezime;
+	
 	protected String brojPasosa;
 	
 	public PodaciPutnikaDTO() {

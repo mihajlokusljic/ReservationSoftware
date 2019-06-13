@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
@@ -756,10 +757,11 @@ public class AviokompanijaService {
 					&& datumSletanja.compareTo(krajnji) == 0) {
 
 				Set<Sjediste> sjedista = l.getAvion().getSjedista();
+				Collection<BrzaRezervacijaSjedista> brzeRezervacijeZaLet = brzaRezervacijaSjedistaRepository.findAllByLet(l);
 				for (Sjediste s : sjedista) {
 					// kroz sjedista i gledas postoji li rezervacija za to sjediste
 					if (!jeLiSjedisteRezervisano(s, l.getRezervacije(),
-							l.getAvion().getAviokompanija().getBrzeRezervacije())) {
+							brzeRezervacijeZaLet)) {
 						rezultat.add(l);
 						break;
 					}
@@ -805,6 +807,7 @@ public class AviokompanijaService {
 		}
 
 		Let let = pretragaLetova.get();
+		Collection<BrzaRezervacijaSjedista> brzeRezervacijeZaLet = brzaRezervacijaSjedistaRepository.findAllByLet(let);
 
 		Collection<String> sjedista = new ArrayList<String>();
 		Collection<PrikazSegmentaDTO> segmenti = new ArrayList<PrikazSegmentaDTO>();
@@ -831,8 +834,10 @@ public class AviokompanijaService {
 				sb.setLength(0);
 				tekucaVrsta = s.getRed();
 			}
+			
+			
 			if (jeLiSjedisteRezervisano(s, let.getRezervacije(),
-					let.getAvion().getAviokompanija().getBrzeRezervacije())) {
+					brzeRezervacijeZaLet)) {
 				rezervisanaSjedistaIds.add(s.getId());
 			}
 			sb.append(oznake.charAt(tekuciSegmentIndex));
@@ -897,24 +902,31 @@ public class AviokompanijaService {
 		return "Rezervacija je uspjesno izvrsena.";
 	}
 
-	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException{
-		
+	public String otkaziRezervaciju(Long id) throws NevalidniPodaciException {
+
 		Optional<RezervacijaSjedista> pretragaRez = rezervacijaSjedistaRepository.findById(id);
-		
+
 		if (!pretragaRez.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji rezervacija zadatim id-em");
 		}
-		
+
 		RezervacijaSjedista rez = pretragaRez.get();
 		rezervacijaSjedistaRepository.delete(rez);
-		
-		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(rez.getSjediste(), rez.getLet().getDatumPoletanja(), rez.getLet().getDatumSletanja(), 0, 0);
+
+		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(rez.getSjediste(), rez.getLet().getDatumPoletanja(),
+				rez.getLet().getDatumSletanja(), 0, 0);
 
 		brs.setCijena(rez.getLet().getCijenaKarte() + rez.getSjediste().getSegment().getCijena());
 		brs.setAviokompanija(rez.getAviokompanija());
 		brs.setLet(rez.getLet());
 		brzaRezervacijaSjedistaRepository.save(brs);
 		return "Uspjesno ste otkazali rezervaciju leta";
+	}
+
+	public IzvrsavanjeRezervacijeSjedistaDTO rezervisiSjedista(IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije)
+			throws NevalidniPodaciException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

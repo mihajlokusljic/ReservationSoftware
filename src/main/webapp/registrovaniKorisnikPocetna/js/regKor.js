@@ -673,6 +673,7 @@ function prikaziUnosPodatakaZaNeregistrovanePutnike() {
 	$("#izborSjedistaZaRezervaciju").hide();
 	$("#pozivPrijateljaZaRezervaciju").hide();
 	$("#unosPodatakaPutnika").show();
+	$("#brNeregistrovanihPutnika").html(rezervisanoSjedista - 1 - pozvaniPrijateljiIds.length);
 }
 
 function prikaziPrijateljeZaPozivanje(prijatelji) {
