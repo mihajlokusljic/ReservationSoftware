@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateTimeSerializer;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 
 public class PrikazRezSjedistaDTO {
@@ -15,10 +15,10 @@ public class PrikazRezSjedistaDTO {
 
 	protected String nazivOdredista;
 
-	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	protected Date datumPolaska;
 
-	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	protected Date datumDolaska;
 
 	protected Sjediste sjediste;
