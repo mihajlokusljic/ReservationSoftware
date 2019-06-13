@@ -101,6 +101,7 @@ $(document).ready(function() {
 	
 	$("#aviokompanijeT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 		$("#tab-aviokompanije").show();
 		$("#tab-hoteli").hide();
 		$("#tab-rac-servisi").hide();
@@ -118,6 +119,7 @@ $(document).ready(function() {
 	
 	$("#letoviT").click(function(e){
 		e.preventDefault();
+		ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
 		$("#tab-aviokompanije").hide();
 		$("#tab-letovi").show();
 		$("#tab-hoteli").hide();
@@ -1352,9 +1354,154 @@ function prikaziRezervisaneLetove(rezLetova){
 		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
 		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniLet" id = "' + i + '">Ocjeni let</a></td></tr>')
 
 		tabela.append(noviRed);
 	});
+	
+	// okvir popup-a
+	var modal = document.getElementById("myModal");
+
+	// <span> za zatvaranje
+	var span = document.getElementsByClassName("close")[0];
+	
+	
+	
+	$(".ocjeniLet").click(function(e){
+		
+		e.preventDefault();
+		
+		var ratingValue = 0;
+		let rezervacija = rezLetova[e.target.id];
+		
+		var ocjenjeno = false;
+		//provjera da li je vec ocjenjeno
+		$.ajax({
+			type : 'GET',
+			url : "../letovi/ocjenjenaRezervacija/" + rezervacija.idRezervacije,
+			dataType : "json",
+			async : false,
+			success: function(response){
+				ocjenjeno = response;
+				if(response == true){
+					swal({
+						  title: "Vec ste ocjenili koristenu rezervaciju.",
+						  icon: "info",
+						  timer:2000
+						})
+					return;
+				}
+			},
+		});
+		
+		if (ocjenjeno == true){
+			return;
+		}
+		
+		var trenutniDatum = new Date();
+		var datumVracanja = Date.parse(rezervacija.datumDolaska);
+		
+		if (datumVracanja>trenutniDatum) {
+			swal({
+				  title: "Ne mozete ocjeniti let prije njegovog sletanja.",
+				  icon: "warning",
+				  timer:2000
+				})
+			return;
+		}
+		
+		modal.style.display = "block";
+		// kad korisnik klikne na "x" zatvara se prozor
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+		 var stars = $('#stars li').parent().children('li.star');
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		// kad korisnik klikne bilo gdje izvan prozora prozor se zatvara
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		/* 1. Prelazak preko zvjezdica */
+		  $('#stars li').on('mouseover', function(){
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda na kojoj je trenutno kursor misa
+		   
+		    // highlight zvjezdica preko kojih je predjeno
+		    $(this).parent().children('li.star').each(function(e){
+		      if (e < onStar) {
+		        $(this).addClass('hover');
+		      }
+		      else {
+		        $(this).removeClass('hover');
+		      }
+		    });
+		    
+		  }).on('mouseout', function(){
+		    $(this).parent().children('li.star').each(function(e){
+		      $(this).removeClass('hover');
+		    });
+		  });
+		  
+		  
+		  /* 2. Akcije za klik */
+		  $('#stars li').click(function(e){
+			  e.preventDefault();
+		    var onStar = parseInt($(this).data('value'), 10); // Zvijezda koja je odabrana
+		    var stars = $(this).parent().children('li.star');
+		    
+		    for (i = 0; i < stars.length; i++) {
+		      $(stars[i]).removeClass('selected');
+		    }
+		    
+		    for (i = 0; i < onStar; i++) {
+		      $(stars[i]).addClass('selected');
+		    }
+		    
+		    // Vrijednost odabrane zvjezdice
+		     ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+		    var msg = "";
+		    if (ratingValue > 1) {
+		        msg = "Hvala! Glasali se sa " + ratingValue + " zvjezdica.";
+		    }
+		    else {
+		        msg = "Pokušaćemo da poboljšamo svoje usluge. Glasali ste sa " + ratingValue + " zvjezdica.";
+		    }
+		    
+		    $("#potvrdi_ocjenu").unbind().click(function(e){
+		    	e.preventDefault();
+			    modal.style.display = "none";
+			    $.ajax({
+					type: "POST",
+					url : "../letovi/ocjeniLet/" + ratingValue,
+					contentType : "application/json; charset=utf-8",
+					data: JSON.stringify(rezervacija.idRezervacije),
+					async : false,
+					success: function(response) {
+						if (response == ''){
+							swal({
+								  title: "Uspješno ste ocjenili let.",
+								  icon: "success",
+								  timer:2000
+								})
+						}
+						else{
+							swal({
+								  title: response,
+								  icon: "warning",
+								  timer:2000
+								})
+						}
+					},
+				});
+
+		    });
+		  });
+	})
+	
 	
 	$(".otkaziRezervacijuLeta").click(function(e){
 		e.preventDefault();
