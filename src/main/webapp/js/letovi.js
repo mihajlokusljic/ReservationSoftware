@@ -28,7 +28,7 @@ $(document).ready(function() {
 				  title: "Polja ne smiju biti prazna. Pokušajte ponovo.",
 				  icon: "warning",
 				  timer: 2500
-				})
+				});
 			return;
 		}
 		
@@ -65,7 +65,7 @@ $(document).ready(function() {
 		});
 	});
 	
-})
+});
 
 
 function ucitajPodatke(putanjaController, idTabeleZaPrikaz) {

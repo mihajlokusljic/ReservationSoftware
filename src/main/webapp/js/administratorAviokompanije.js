@@ -17,7 +17,7 @@ $(document).ready(function() {
 	$.ajaxSetup({
 		headers: createAuthorizationTokenHeader(tokenKey),
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown)
+			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 		}
 	});
 	
@@ -1411,7 +1411,7 @@ function promjeniLozinku(){
 						  title: "Uspješno ste izmjenili lozinku.",
 						  icon: "success",
 						  timer:2000
-						})
+						});
 					if(!lozinkaMijenjana) {
 						$("#izmjenaInicijalneLozinkePoruka").hide();
 						$("#tab-profil-lozinka").hide();
@@ -1442,7 +1442,7 @@ function dodavanjeUsluge() {
 		cijena: cijenaUsluge,
 		procenatPopusta: popustUsluge,
 		opis: opisUsluge
-	}
+	};
 	
 	$.ajax({
 		type: "POST",
@@ -1460,7 +1460,7 @@ function dodavanjeUsluge() {
 function prikaziUsluge(usluge) {
 	$.each(usluge, function(i, usluga) {
 		prikaziUslugu(usluga);
-	})
+	});
 }
 
 function prikaziUslugu(usluga) {

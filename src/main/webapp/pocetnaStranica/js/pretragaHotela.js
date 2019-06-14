@@ -39,7 +39,7 @@ $(document).ready(function(e) {
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
 				potrebneSobe: _potrebneSobe
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -53,7 +53,7 @@ $(document).ready(function(e) {
 						  title: "Ne postoji ni jedan hotel koji zadovoljava navedene kriterijume pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})					}
+						});					}
 				$('#hotelSearchForm')[0].reset();
 				resetujZahtjeveSoba();
 			},
@@ -133,7 +133,7 @@ function azurirajSobeZahtjev() {
     var infoText = "";
     var potrebneSobe = prebrojPotrebneSobe();
     
-    var tipoviSoba = []
+    var tipoviSoba = [];
     for(var brKreveta in potrebneSobe) {
     	tipoviSoba.push(brKreveta);
     }
@@ -163,7 +163,7 @@ function prebrojPotrebneSobe() {
     var brojKreveta = 0;
     var brojSoba = 0;
     
-    var potrebneSobe = {} //  rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
+    var potrebneSobe = {}; //  rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
     listRoomItem.each(function () {
         var that = $(this);
         brojKreveta = parseInt(that.find('.quantity1 > input').val());

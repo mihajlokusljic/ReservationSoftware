@@ -355,14 +355,14 @@ function prikaziBrzeRez(brzeRez){
 						  timer:2000
 						}).then(function(){
 							window.location.replace("../registrovaniKorisnikPocetna/index.html");
-						})
+						});
 					return;
 				} else {
 					swal({
 						  title: "Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.",
 						  icon: "error",
 						  timer:2000
-						})
+						});
 					return;
 				}
 			},

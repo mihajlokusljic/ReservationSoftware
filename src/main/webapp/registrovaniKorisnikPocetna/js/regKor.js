@@ -643,7 +643,7 @@ function updateLetovi(letovi) {
 		e.preventDefault();
 		let idLeta = e.target.id.substring(3);
 		idLetaZaRezervaciju = idLeta;
-		prikaziIzborSjedistaBrzeRezervacije(idLeta)
+		prikaziIzborSjedistaBrzeRezervacije(idLeta);
 	});
 }
 
@@ -1363,7 +1363,6 @@ function ucitajRezervisaneLetove(){
 		success: function(data){
 			prikaziRezervisaneLetove(data);
 		},
-		async: false,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + textStatus);
 		}
@@ -1380,7 +1379,6 @@ function ucitajRezervisaneSobe(){
 		success: function(data){
 			prikaziRezervisaneSobe(data);
 		},
-		async: false,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + textStatus);
 		}
@@ -1416,8 +1414,8 @@ function prikaziRezVozila(vozila){
 		noviRed.append('<td class="column1">' + vozilo.mjestoVracanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniVozilo" id = "' + i + '">Ocjeni vozilo</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervaciju" id = "' + i + '">Otkaži rezervaciju</a></td></tr>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniVozilo" id = "' + i + '">Ocjeni vozilo</a></td></tr>');
 
 		tabela.append(noviRed);
 	});
@@ -1614,8 +1612,8 @@ function prikaziRezervisaneLetove(rezLetova){
 		noviRed.append('<td class="column1">' + rLet.nazivOdredista + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumPolaska + '</td>');
 		noviRed.append('<td class="column1">' + rLet.datumDolaska + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniLet" id = "' + i + '">Ocjeni let</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuLeta" id = "' + i + '">Otkaži rezervaciju</a></td></tr>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniLet" id = "' + i + '">Ocjeni let</a></td></tr>');
 
 		tabela.append(noviRed);
 	});
@@ -1769,7 +1767,7 @@ function prikaziRezervisaneLetove(rezLetova){
 		
 		let rezervacija = rezLetova[e.target.id];
 		var datumP = Date.parse(rezervacija.datumPolaska);
-		var dt = new Date(rezervacija.datumPolaska)
+		var dt = new Date(rezervacija.datumPolaska);
 		let sati = dt.getHours();
 		let minuti = dt.getMinutes();
 		var sadasnjiDatum = new Date();
@@ -1838,8 +1836,8 @@ function prikaziRezervisaneSobe(rezSoba){
 		noviRed.append('<td class="column1">' + rSoba.cijena + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumDolaksa + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumOdlaksa + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuSobe" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniSobu" id = "' + i + '">Ocjeni sobu</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuSobe" id = "' + i + '">Otkaži rezervaciju</a></td></tr>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniSobu" id = "' + i + '">Ocjeni sobu</a></td></tr>');
 
 		tabela.append(noviRed);
 	});
@@ -1899,7 +1897,7 @@ function prikaziRezervisaneSobe(rezSoba){
 		// kad korisnik klikne na "x" zatvara se prozor
 		span.onclick = function() {
 		  modal.style.display = "none";
-		}
+		};
 		 var stars = $('#stars li').parent().children('li.star');
 		    for (i = 0; i < stars.length; i++) {
 		      $(stars[i]).removeClass('selected');
@@ -1909,7 +1907,7 @@ function prikaziRezervisaneSobe(rezSoba){
 		  if (event.target == modal) {
 		    modal.style.display = "none";
 		  }
-		}
+		};
 		
 		/* 1. Prelazak preko zvjezdica */
 		  $('#stars li').on('mouseover', function(){
@@ -1999,7 +1997,7 @@ function prikaziRezervisaneSobe(rezSoba){
 				  text: "Zakasnili ste sa otkazivanjem rezervacije sobe..",
 				  icon: "warning",
 				  timer: 2000
-				})	
+				});	
 			return;
 		}
 		
@@ -2014,7 +2012,7 @@ function prikaziRezervisaneSobe(rezSoba){
 					  title: response,
 					  icon: "success",
 					  timer:2000
-					})
+					});
 				ucitajRezervisaneSobe();
 			},
 		});

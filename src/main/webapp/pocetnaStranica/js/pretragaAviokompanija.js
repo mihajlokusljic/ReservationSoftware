@@ -24,7 +24,7 @@ $(document).ready(function(e) {
 	
 		let pretragaAviokompanije = {
 				nazivAviokompanije: nazivAviokompanije
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -38,7 +38,7 @@ $(document).ready(function(e) {
 						  title: "Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})	
+						});	
 				}
 				$('#aviokompanijeSearchForm')[0].reset();
 			}
