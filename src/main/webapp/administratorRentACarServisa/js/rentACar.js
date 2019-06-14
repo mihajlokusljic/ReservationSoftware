@@ -268,6 +268,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#chartContainer").hide();
 		
 		grafikRezervisanihVozila();
 	})
@@ -1594,18 +1595,18 @@ function grafikRezervisanihVozila(){
 		
 		if($("#grafikDnevniBtn").is(":checked")) {
 			tergetUrl = "../rentACar/dnevniIzvjestaj";
-			text = "Broj rezervisanih vozila po danu";
+			text = "Broj rezervisanih vozila na dnevnom nivou";
 			axisX = "Dani";
 		}
 		
 		if($("#grafikNedeljniBtn").is(":checked")) {
 			tergetUrl = "../rentACar/nedeljniIzvjestaj";
-			text = "Broj rezervisanih vozila po nedelji";
+			text = "Broj rezervisanih vozila na svakih 7 dana";
 			axisX = "Nedelje";
 		}
 		else if ($("#grafikMjesecniBtn").is(":checked")) {
 			tergetUrl = "../rentACar/mjesecniIzvjestaj";
-			text = "Broj rezervisanih vozila po mjesecu";
+			text = "Broj rezervisanih vozila nas svakih mjesec dana";
 			axisX = "Mjeseci";
 		}
 		
@@ -1620,7 +1621,6 @@ function grafikRezervisanihVozila(){
 			data : JSON.stringify(datumiZaIzvjestaj),
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
-				alert(response.brojeviYOsa.length);
 				prikaziGrafik(response,text,axisX);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1657,5 +1657,6 @@ function prikaziGrafik (izvjestaj,text,axisX) {
 				dataPoints: dataP
 		    }]
 		};
+	$("#chartContainer").show();
 	$("#chartContainer").CanvasJSChart(options);
 }
