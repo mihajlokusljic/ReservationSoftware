@@ -20,12 +20,14 @@ $(document).ready(function() {
 		
 		e.preventDefault();
 	   
-		let nazivLokacije = $("#racNaziv").val();
+		let _nazivRacServisa= $("#racNaziv").val();
+		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
 		let dolazak = $("#input-start-2").val();
 		let odlazak = $("#input-end-2").val();
 		
 		let pretragaRac = {
-				nazivRacIliDestinacije: nazivLokacije,
+				nazivRacServisa: _nazivRacServisa,
+				nazivDestinacije: _nazivDestinacije,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
 		}
