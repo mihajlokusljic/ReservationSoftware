@@ -17,18 +17,18 @@ var idLetaZaRezervaciju = -1;
 var podaciRezervacijeSjedista = null;
 var _podaciNeregistrovanihPutnika = [];
 var podaciBoravka = null;
-//spring.datasource.initialization-mode=always
+//  spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
 	
-	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
+	//  dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
 	$.ajaxSetup({
 	    headers: createAuthorizationTokenHeader(),
 	    error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	let statusCode = XMLHttpRequest.status;
 	    	if(statusCode == 400) {
-	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
-	    		//poruka o greski koju je server poslao
+	    		//  u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//  poruka o greski koju je server poslao
 	    		alert(XMLHttpRequest.responseText);
 	    	}
 	    	else {
@@ -38,6 +38,35 @@ $(document).ready(function() {
 	});
 	
 	korisnikInfo();
+	
+	//  ocitavanje opcionih parametara putanje za rezervaciju
+	var url = window.location.href;
+	var parametri = url.substring(url.indexOf("?") + 1);
+	var params_parser = new URLSearchParams(parametri);
+	
+	idPutovanja = params_parser.get("idPutovanja");
+	idLetaZaRezervaciju = params_parser.get("idLetaRez");
+	if(idPutovanja != null && idLetaZaRezervaciju != null) {
+		//  korisnik dolazi sa rezervacije hotelskog smjestaja i treba da mu se ponudi rezervacija vozila
+		rezimRezervacije = true;
+		$("#rezervacijaVozilaPoruka").show();
+		$("#zavrsetakrezervacijeBtn").show();
+		
+		//  prikaz taba za rezervaciju vozila
+		$("#tab-aviokompanije").hide();
+		$("#tab-hoteli").hide();
+		$("#tab-rac-servisi").show();
+		$("#tab-rezervacije").hide();
+		$("#pregled-prijatelja-tab").hide();
+		$("#dodaj-prijatelje-tab").hide();
+		$("#zahtjevi-prijateljstva-tab").hide();
+		$("#tab-pozivnice").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-odjava").hide();	
+		$("#tab-letovi").hide();
+		
+	}
 	
 	broj_zahtjeva_za_prijateljstvo = korisnik.brojZahtjevaZaPrijateljstvo;
 	switch (broj_zahtjeva_za_prijateljstvo) {
@@ -97,12 +126,12 @@ $(document).ready(function() {
 		//funkcija iz modula hotelSearch.js
 		//paramteri su potrebni za pozivanje info stranice hotela
 		if(!rezimRezervacije) {
-			pretragaHotela(korisnik.id, null, null, null);
+			pretragaHotela(korisnik.id, null, null, null, null);
 		}
 		else 
 		{
 			pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
-					podaciRezervacijeSjedista.idPutovanja);
+					podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
 		}
 		
 	});
@@ -850,7 +879,7 @@ function prikaziHoteleZaRezervaciju() {
 	$("#nazivOdredistaPretragaHotela").attr("readonly", "readonly");
 	$("#input-start").val(podaciBoravka.datumDolaska);
 	$("#input-end").val(podaciBoravka.datumPovratka);
-	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja);
+	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
 	
 	$("#tab-aviokompanije").hide();
 	$("#tab-hoteli").show();

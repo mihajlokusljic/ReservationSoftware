@@ -598,7 +598,7 @@ function prikaziSobu(soba) {
 function prikaziIzmjenuSobe(idSobe) {
 	let indeksSobe = 0;
 	let soba = null;
-	for(var indeksSobe in podaciHotela.sobe) {
+	for(indeksSobe in podaciHotela.sobe) {
 		soba = podaciHotela.sobe[indeksSobe];
 		if(soba.id == idSobe) {
 			break;

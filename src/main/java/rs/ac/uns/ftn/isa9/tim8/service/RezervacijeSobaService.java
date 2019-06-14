@@ -225,6 +225,7 @@ public class RezervacijeSobaService {
 		rezervacija.setPutnik(korisnik);
 		if (putovanje != null) {
 			putovanje.getRezervacijeSoba().add(rezervacija);
+			rezervacija.setPutovanje(putovanje);
 			for (Usluga dodatnaUsluga : brzaRez.getDodatneUsluge()) {
 				putovanje.getDodatneUsluge().add(dodatnaUsluga);
 			}
