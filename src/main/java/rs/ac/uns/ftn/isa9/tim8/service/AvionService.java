@@ -1,13 +1,11 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import rs.ac.uns.ftn.isa9.tim8.controller.AviokompanijeKontroler;
 import rs.ac.uns.ftn.isa9.tim8.dto.AvionDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.SjedisteDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;

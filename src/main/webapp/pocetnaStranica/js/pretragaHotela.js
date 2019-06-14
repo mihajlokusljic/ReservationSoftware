@@ -26,7 +26,7 @@ $(document).ready(function(e) {
 		let sobeZahtjevi = prebrojPotrebneSobe();
 		let _potrebneSobe = [];
 		
-		for(brKrevetaSobe in sobeZahtjevi) {
+		for(var brKrevetaSobe in sobeZahtjevi) {
 			_potrebneSobe.push({
 				brKrevetaPoSobi : brKrevetaSobe,
 				brSoba : sobeZahtjevi[brKrevetaSobe]
@@ -67,7 +67,7 @@ function refreshHotels(hotels) {
 	let hotelsTableBody = $("#hotelsView");
 	hotelsTableBody.empty();
 	let hotel = null;
-	for(i in hotels) {
+	for(var i in hotels) {
 		hotel = hotels[i];
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
@@ -164,7 +164,7 @@ function prebrojPotrebneSobe() {
     var brojKreveta = 0;
     var brojSoba = 0;
     
-    var potrebneSobe = {} //rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
+    var potrebneSobe = {} //  rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
     listRoomItem.each(function () {
         var that = $(this);
         brojKreveta = parseInt(that.find('.quantity1 > input').val());

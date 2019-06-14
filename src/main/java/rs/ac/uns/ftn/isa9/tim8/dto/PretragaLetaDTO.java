@@ -1,7 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
-import java.util.Date;
-
 public class PretragaLetaDTO {
 	protected String brojLeta;
 	protected String nazivAviokompanije;

@@ -1,9 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +65,7 @@ public class AuthenticationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@Valid @RequestBody Osoba korisnik) {
 
-		if (this.userDetailsService.emailZauzet(korisnik.getEmail()) == true) {
+		if (this.userDetailsService.emailZauzet(korisnik.getEmail())) {
 			return new ResponseEntity<String>("Zauzet email", HttpStatus.OK);
 		}
 

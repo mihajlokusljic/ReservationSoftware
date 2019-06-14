@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

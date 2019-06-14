@@ -77,7 +77,7 @@ $(document).ready(function() {
 	default:
 		$("#brojZahtjevaZaPrijateljstvo").append("🔟➕");
 		break;
-	};
+	}
 	
 	//ucitavanje aviokompanija
 	ucitajPodatke("../aviokompanije/dobaviSve", "prikazAviokompanija", "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/1_big-768x591.jpg", "infoStranicaAviokompanije");
