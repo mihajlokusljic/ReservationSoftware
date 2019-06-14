@@ -65,7 +65,7 @@ $(document).ready(function() {
 		});
 	});
 	
-})
+});
 
 
 function ucitajPodatke(putanjaController, idTabeleZaPrikaz) {

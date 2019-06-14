@@ -404,7 +404,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 			    cijena : cijenaSaPopustom,
 			    putnik : korisnikId ,
 			    putovanje : null
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -427,7 +427,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 						  title: response,
 						  icon: "warning",
 						  timer: 2500
-						})				
+						});			
 					}
 			},
 		});

@@ -62,7 +62,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 					  title: "Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage",
 					  icon: "info",
 					  timer: 2500
-					})	
+					});	
 			}
 			if(datumDolaska == null || datumOdlaska == null || datumOdlaska == null) {
 				//ako nije rezim rezervacije, forma se resetuje
@@ -152,11 +152,10 @@ function azurirajSobeZahtjev() {
     var dropdownSelect = selectSpecial.parent().find('.dropdown-select');
     var listRoom = dropdownSelect.find('.list-room');
     var listRoomItem = listRoom.find('.list-room__item');
-	var info = selectSpecial.find('#info');
     var infoText = "";
     var potrebneSobe = prebrojPotrebneSobe();
     
-    var tipoviSoba = []
+    var tipoviSoba = [];
     for(var brKreveta in potrebneSobe) {
     	tipoviSoba.push(brKreveta);
     }

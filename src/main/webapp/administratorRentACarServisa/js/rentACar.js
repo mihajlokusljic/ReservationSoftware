@@ -1501,7 +1501,7 @@ function prihodiServisa(){
 		let datumiZaPrihod = {
 				datumPocetni : _datumPocetni,
 				datumKrajnji : _datumKrajnji
-		}
+		};
 		
 		let idServisa = rentACarServis.id;
 		$.ajax({
@@ -1517,5 +1517,5 @@ function prihodiServisa(){
 				alert("AJAX error: " + errorThrown);
 			}
 		});
-	})
+	});
 }

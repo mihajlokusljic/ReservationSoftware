@@ -199,7 +199,7 @@ $(document).ready(function(e) {
 });
 
 function prikaziTab(idTaba) {
-	for(i in tabovi) {
+	for(var i in tabovi) {
 		if(idTaba == tabovi[i]) {
 			$("#" + tabovi[i]).addClass("active");
 		} else {

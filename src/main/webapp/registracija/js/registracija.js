@@ -98,7 +98,7 @@ $(document).ready(function() {
 						  timer: 2500
 						}).then(function(){
 							window.location.replace("../login/login.html");
-						})	
+						});	
 					
 				} else {
 					swal({

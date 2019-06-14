@@ -168,7 +168,7 @@ function izvrsiRezervaciju() {
 			  title: "Period boravka mora biti zadat.",
 			  icon: "warning",
 			  timer: 2500
-			})
+			});
 		return;
 	}
 	
@@ -318,7 +318,7 @@ function pretragaSoba() {
 			datumOdlaska: _datumOdlaska,
 			minCijenaBoravka: _minCijena,
 			maxCijenaBoravka: _maxCijena
-	}
+	};
 	
 	$.ajax({
 		type: "POST",

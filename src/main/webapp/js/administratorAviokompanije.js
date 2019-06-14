@@ -17,7 +17,7 @@ $(document).ready(function() {
 	$.ajaxSetup({
 		headers: createAuthorizationTokenHeader(tokenKey),
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown)
+			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 		}
 	});
 	
@@ -1460,7 +1460,7 @@ function dodavanjeUsluge() {
 function prikaziUsluge(usluge) {
 	$.each(usluge, function(i, usluga) {
 		prikaziUslugu(usluga);
-	})
+	});
 }
 
 function prikaziUslugu(usluga) {

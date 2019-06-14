@@ -362,7 +362,7 @@ function prikaziBrzeRez(brzeRez){
 						  title: "Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.",
 						  icon: "error",
 						  timer:2000
-						})
+						});
 					return;
 				}
 			},
