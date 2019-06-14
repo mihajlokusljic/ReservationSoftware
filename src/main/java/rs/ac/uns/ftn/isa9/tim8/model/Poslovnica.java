@@ -76,6 +76,18 @@ public class Poslovnica {
 		this.brojOcjena = brojOcjena;
 		this.cjenovnikDodatnihUsluga = cjenovnikDodatnihUsluga;
 	}
+	
+	public Poslovnica(Long id, String naziv, String promotivniOpis, Adresa adresa, int sumaOcjena, int brojOcjena,
+			Set<Usluga> cjenovnikDodatnihUsluga) {
+		super();
+		this.Id = id;
+		this.naziv = naziv;
+		this.promotivniOpis = promotivniOpis;
+		this.adresa = adresa;
+		this.sumaOcjena = sumaOcjena;
+		this.brojOcjena = brojOcjena;
+		this.cjenovnikDodatnihUsluga = cjenovnikDodatnihUsluga;
+	}
 
 	public String getNaziv() {
 		return naziv;

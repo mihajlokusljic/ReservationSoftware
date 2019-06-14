@@ -177,4 +177,12 @@ public class RezervacijaSjedista {
 		this.putovanje = putovanje;
 	}
 
+	public boolean isOcjenjeno() {
+		return ocjenjeno;
+	}
+
+	public void setOcjenjeno(boolean ocjenjeno) {
+		this.ocjenjeno = ocjenjeno;
+	}	
+
 }

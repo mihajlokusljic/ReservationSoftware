@@ -135,6 +135,8 @@ public class RentACarServisService {
 			}
 			VoziloDTO vozDto = new VoziloDTO(vozilo.getNaziv(), vozilo.getMarka(), vozilo.getModel(), vozilo.getGodina_proizvodnje(), vozilo.getBroj_sjedista(), 
 					vozilo.getTip_vozila(), vozilo.getBroj_vrata(), vozilo.getKilovati(), vozilo.getCijena_po_danu(), adresa, vozilo.getId());
+			vozDto.setSumaOcjena(vozilo.getSumaOcjena());
+			vozDto.setBrojOcjena(vozilo.getBrojOcjena());
 			vozilaDTO.add(vozDto);
 		}
 		

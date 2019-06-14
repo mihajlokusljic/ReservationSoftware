@@ -974,9 +974,13 @@ function korisnikInfo(){
 		async: false,
 		url : "../korisnik/getInfo",
 		dataType : "json",
+		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(data){
 			if(data != null){
 				podaciAdmina = data;
+				if(!podaciAdmina.lozinkaPromjenjena) {
+					izmjenaInicijalneLozinke();
+				}
 				$("#podaciAdmina").append(data.ime + " " + data.prezime);
 			}
 			else{
@@ -1363,6 +1367,7 @@ function promjeniLozinku(){
 		var staraLozinka = $("#staraLozinka").val();
 		var novaLozinka = $("#novaLozinka").val();
 		var novaLozinka2 = $("#novaLozinka2").val();
+		var lozinkaMijenjana = podaciAdmina.lozinkaPromjenjena;
 
 		if (novaLozinka == ''){
 			swal({
@@ -1406,6 +1411,13 @@ function promjeniLozinku(){
 						  icon: "success",
 						  timer:2000
 						})
+					if(!lozinkaMijenjana) {
+						$("#izmjenaInicijalneLozinkePoruka").hide();
+						$("#tab-profil-lozinka").hide();
+						$("#meni").show();					
+						podaciAdmina.lozinkaPromjenjena = true;
+						$("#tab-destinacije").show();
+					}
 				}
 				
 			}
@@ -1519,3 +1531,12 @@ function inicijalizujMape() {
 		$("#longitudaDestinacije").val(coords[1]);
 	});
 }
+
+function izmjenaInicijalneLozinke(){
+	$("#tab-destinacije").hide();
+	$("#meni").hide();
+	$("#izmjenaInicijalneLozinkePoruka").show();
+	$("#tab-profil-lozinka").show();
+	promjeniLozinku();
+}
+

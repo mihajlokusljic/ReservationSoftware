@@ -169,8 +169,8 @@ public class RentACarKontroler {
 	public ResponseEntity<Poslovnica> podaciOServisu() {
 		AdministratorRentACar admin = (AdministratorRentACar) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<Poslovnica>(
-				new Poslovnica(admin.getRentACarServis().getId(),admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa()),
-				HttpStatus.OK);
+				new Poslovnica(admin.getRentACarServis().getId(),admin.getRentACarServis().getNaziv(), admin.getRentACarServis().getPromotivniOpis(), admin.getRentACarServis().getAdresa(),
+						 admin.getRentACarServis().getSumaOcjena(),admin.getRentACarServis().getBrojOcjena(),null),HttpStatus.OK);
 	}
 	@RequestMapping(value = "/izmjeniProfilKorisnika", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")

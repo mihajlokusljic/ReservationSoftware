@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.isa9.tim8.controller;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -90,6 +89,27 @@ public class LetoviKontroler {
 	public ResponseEntity<?> dobaviPodatkeBoravka(@PathVariable("idLeta") Long idLeta) {
 		try {
 			return new ResponseEntity<BoravakDTO>(servis.dobaviPodatkeBoravka(idLeta), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/ocjenjenaRezervacija/{idRezervacije}", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+ 	public ResponseEntity<?> OcjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
+		try {
+			return new ResponseEntity<Boolean>(servis.rezervacijaLetaOcjenjena(idRezervacije), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/ocjeniLet/{ratingValue}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> ocjeniVozilo(@RequestBody Long id, @PathVariable("ratingValue") int ratingValue){
+		try {
+			return new ResponseEntity<String >(servis.ocjeniLet(id, ratingValue), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
