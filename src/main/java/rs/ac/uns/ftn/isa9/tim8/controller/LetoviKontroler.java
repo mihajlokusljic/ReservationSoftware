@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazSjedistaDTO;
@@ -79,6 +80,15 @@ public class LetoviKontroler {
 	public ResponseEntity<?> otkaziRezervaciju(@RequestBody Long id) {
 		try {
 			return new ResponseEntity<String >(servis.otkaziRezervaciju(id), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/podaciBoravkaZaLet/{idLeta}", method = RequestMethod.GET)
+	public ResponseEntity<?> dobaviPodatkeBoravka(@PathVariable("idLeta") Long idLeta) {
+		try {
+			return new ResponseEntity<BoravakDTO>(servis.dobaviPodatkeBoravka(idLeta), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

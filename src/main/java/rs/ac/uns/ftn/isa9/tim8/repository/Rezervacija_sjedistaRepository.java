@@ -15,4 +15,5 @@ public interface Rezervacija_sjedistaRepository extends JpaRepository<Rezervacij
 	Collection<RezervacijaSjedista> findAllByPutnik(RegistrovanKorisnik registrovaniKorisnik);
 
 	Collection<RezervacijaSjedista> findAllByLet(Let let);
+	
 }

@@ -17,46 +17,64 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "putovanje")
 public class Putovanje {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected long Id;
-	
+	protected Long Id;
+
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSjedista> rezervacijeSjedista;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
 	protected Set<Pozivnica> pozivnice;
-	
+
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaSobe> rezervacijeSoba;
-	
+
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	protected Set<RezervacijaVozila> rezervacijeVozila;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "inicijator_putovanja_id", referencedColumnName = "id")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "inicijator_putovanja_id")
+	@JsonIgnore
 	protected RegistrovanKorisnik inicijatorPutovanja;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name="putovanje_usluga", joinColumns=@JoinColumn(name="putovanje_id"), inverseJoinColumns=@JoinColumn(name="usluga_id"))
+	@JoinTable(name = "putovanje_usluga", joinColumns = @JoinColumn(name = "putovanje_id"), inverseJoinColumns = @JoinColumn(name = "usluga_id"))
 	protected Set<Usluga> dodatneUsluge;
 
 	@Column(name = "bonus_poeni", nullable = true)
 	protected double bonusPoeni;
 
-	
 	public Putovanje() {
 		super();
 	}
 
-	public long getId() {
+	public Putovanje(Long id, Set<RezervacijaSjedista> rezervacijeSjedista, Set<Pozivnica> pozivnice,
+			Set<RezervacijaSobe> rezervacijeSoba, Set<RezervacijaVozila> rezervacijeVozila,
+			RegistrovanKorisnik inicijatorPutovanja, Set<Usluga> dodatneUsluge, double bonusPoeni) {
+		super();
+		Id = id;
+		this.rezervacijeSjedista = rezervacijeSjedista;
+		this.pozivnice = pozivnice;
+		this.rezervacijeSoba = rezervacijeSoba;
+		this.rezervacijeVozila = rezervacijeVozila;
+		this.inicijatorPutovanja = inicijatorPutovanja;
+		this.dodatneUsluge = dodatneUsluge;
+		this.bonusPoeni = bonusPoeni;
+	}
+
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 
@@ -106,6 +124,14 @@ public class Putovanje {
 
 	public void setDodatneUsluge(Set<Usluga> dodatneUsluge) {
 		this.dodatneUsluge = dodatneUsluge;
+	}
+
+	public double getBonusPoeni() {
+		return bonusPoeni;
+	}
+
+	public void setBonusPoeni(double bonusPoeni) {
+		this.bonusPoeni = bonusPoeni;
 	}
 
 }

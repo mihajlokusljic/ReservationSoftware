@@ -21,6 +21,10 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateTimeSerializer;
 
 @Entity
 @Table(name = "let")
@@ -43,14 +47,17 @@ public class Let {
 
 	@Column(name = "datum_poletanja", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	protected Date datumPoletanja;
 
 	@Column(name = "datum_sletanja", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	protected Date datumSletanja; // Napisan u formatu dd.MM.yyyy HH:mm
 
 	@Column(name = "duzina_putovanja", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	protected Date duzinaPutovanja; // Kojeg datuma i u koliko casova se ocekivano vracamo
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

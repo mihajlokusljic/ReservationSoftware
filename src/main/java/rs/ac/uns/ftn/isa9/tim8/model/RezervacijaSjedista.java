@@ -21,13 +21,13 @@ public class RezervacijaSjedista {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long Id;
 
-	@Column(name = "ime_putnika", nullable = false)
+	@Column(name = "ime_putnika")
 	protected String imePutnika;
 
-	@Column(name = "prezime_putnika", nullable = false)
+	@Column(name = "prezime_putnika")
 	protected String prezimePutnika;
 
-	@Column(name = "broj_pasosa_putnika", nullable = false)
+	@Column(name = "broj_pasosa_putnika")
 	protected String brojPasosaPutnika;
 
 	@Column(name = "cijena", nullable = false)
