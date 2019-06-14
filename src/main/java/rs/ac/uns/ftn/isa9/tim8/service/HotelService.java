@@ -125,7 +125,7 @@ public class HotelService {
 	 * broj kreveta. Kljuc je broj kreveta u sobi a vrijednost je broj slobodnih
 	 * soba sa tim brojem kreveta.
 	 */
-	HashMap<Integer, Integer> slobodneSobe(Hotel hotel, Date pocetniDatum, Date krajnjiDatum) {
+	public HashMap<Integer, Integer> slobodneSobe(Hotel hotel, Date pocetniDatum, Date krajnjiDatum) {
 		HashMap<Integer, Integer> rezultat = new HashMap<Integer, Integer>();
 		int slobodnoSoba = 0;
 		for (HotelskaSoba soba : hotel.getSobe()) {
@@ -182,12 +182,13 @@ public class HotelService {
 
 		while (it.hasNext()) {
 			tekuciHotel = it.next();
-			if (!tekuciHotel.getNaziv().toUpperCase()
-					.contains(kriterijumiPretrage.getNazivHotelaIliDestinacije().toUpperCase())
-					&& !tekuciHotel.getAdresa().getPunaAdresa().toUpperCase()
-							.contains(kriterijumiPretrage.getNazivHotelaIliDestinacije().toUpperCase())) {
+			
+			if (!tekuciHotel.getAdresa().getPunaAdresa().toUpperCase().contains(kriterijumiPretrage.getNazivDestinacije().toUpperCase())) {
+				it.remove();
+			} else if(!tekuciHotel.getNaziv().toUpperCase().contains(kriterijumiPretrage.getNazivHotela().toUpperCase())) {
 				it.remove();
 			}
+			
 		}
 
 		// odbacujemo hotele koji ne sadrze potreban broj slobodnih soba
@@ -201,7 +202,7 @@ public class HotelService {
 			ukloniHotel = false;
 			raspoloziveSobe = this.slobodneSobe(tekuciHotel, pocetniDatum, krajnjiDatum);
 
-			// za svaki hotel provjeriti svaki zahtjev za bro slobodnih n-krevetnih soba
+			// za svaki hotel provjeriti svaki zahtjev za broj slobodnih n-krevetnih soba
 			for (PotrebnoSobaDTO zahtjev : kriterijumiPretrage.getPotrebneSobe()) {
 				if (!raspoloziveSobe.containsKey(zahtjev.getBrKrevetaPoSobi())) {
 					ukloniHotel = true;

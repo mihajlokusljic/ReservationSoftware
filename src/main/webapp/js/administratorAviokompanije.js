@@ -379,6 +379,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
+			async: false,
 			url: "../avioni/dodaj/",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(novi_avion),

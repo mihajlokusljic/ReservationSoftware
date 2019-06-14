@@ -383,7 +383,8 @@ public class RentACarServisService {
 		// inicijalno su svi servisi u rezultatu
 		Collection<RentACarServis> rezultat = this.rentACarRepository.findAll();
 		
-		if (kriterijumiPretrage.getNazivRacIliDestinacije().isEmpty() && pocetniDatum == null && krajnjiDatum == null) {
+		if (kriterijumiPretrage.getNazivRacServisa().isEmpty() && kriterijumiPretrage.getNazivDestinacije().isEmpty()
+				&& pocetniDatum == null && krajnjiDatum == null) {
 			Collection<Poslovnica> p = new ArrayList<>();
 			for (RentACarServis r:rezultat) {
 				Poslovnica posl = new Poslovnica(r.getId(),r.getNaziv(), r.getPromotivniOpis(), r.getAdresa());
@@ -401,12 +402,13 @@ public class RentACarServisService {
 
 		while (it.hasNext()) {
 			tekuciRac = it.next();
-			if (!tekuciRac.getNaziv().toUpperCase()
-					.contains(kriterijumiPretrage.getNazivRacIliDestinacije().toUpperCase())
-					&& !tekuciRac.getAdresa().getPunaAdresa().toUpperCase()
-							.contains(kriterijumiPretrage.getNazivRacIliDestinacije().toUpperCase())) {
+			
+			if (!tekuciRac.getAdresa().getPunaAdresa().toUpperCase().contains(kriterijumiPretrage.getNazivDestinacije().toUpperCase())) {
+				it.remove();
+			} else if(!tekuciRac.getNaziv().toUpperCase().contains(kriterijumiPretrage.getNazivRacServisa().toUpperCase())) {
 				it.remove();
 			}
+			
 		}
 	
 		

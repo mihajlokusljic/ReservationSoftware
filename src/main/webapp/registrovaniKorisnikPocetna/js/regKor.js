@@ -96,7 +96,15 @@ $(document).ready(function() {
 		e.preventDefault();
 		//funkcija iz modula hotelSearch.js
 		//paramteri su potrebni za pozivanje info stranice hotela
-		pretragaHotela(korisnik.id, datumDolaska, datumOdlaska, idPutovanja);
+		if(!rezimRezervacije) {
+			pretragaHotela(korisnik.id, null, null, null);
+		}
+		else 
+		{
+			pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+					podaciRezervacijeSjedista.idPutovanja);
+		}
+		
 	});
 	
 	//odjavljivanje
@@ -438,12 +446,14 @@ $(document).ready(function() {
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
 	   
-		let nazivLokacije = $("#racNaziv").val();
+		let _nazivRacServisa= $("#racNaziv").val();
+		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
 		let dolazak = $("#input-start-rac").val();
 		let odlazak = $("#input-end-rac").val();
 		
 		let pretragaRac = {
-				nazivRacIliDestinacije: nazivLokacije,
+				nazivRacServisa: _nazivRacServisa,
+				nazivDestinacije: _nazivDestinacije,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
 		}
@@ -649,6 +659,7 @@ function recalculateTotal(sc) {
 }
 
 function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
+	rezimRezervacije = true;
 	podaciOMapi = null;
 	$("#izborLetaZaRezervaciju").hide();
 	$("#pozivPrijateljaZaRezervaciju").hide();
@@ -835,7 +846,8 @@ function prikaziHoteleZaRezervaciju() {
 	//pretraga hotela i podesavanje izgleda stranice za rezervaciju
 	$("#rezervacijaHotelaPoruka").show();
 	$("#prelazakNaRezervacijuVozilaBtn").show();
-	$("#hotelNaziv").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaHotela").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaHotela").attr("readonly", "readonly");
 	$("#input-start").val(podaciBoravka.datumDolaska);
 	$("#input-end").val(podaciBoravka.datumPovratka);
 	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja);

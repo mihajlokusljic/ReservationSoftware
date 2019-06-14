@@ -19,7 +19,8 @@ $(document).ready(function(e) {
 	$("#hotelSearchForm").submit(function(e) {
 		e.preventDefault();
 	   
-		let nazivOdredista = $("#hotelNaziv").val();
+		let nazivOdredista = $("#nazivOdredistaPretragaHotela").val();
+		let _nazivHotela = $("#hotelNaziv").val();
 		let dolazak = $("#input-start").val();
 		let odlazak = $("#input-end").val();
 		let sobeZahtjevi = prebrojPotrebneSobe();
@@ -33,7 +34,8 @@ $(document).ready(function(e) {
 		}
 		
 		let pretragaHotela = {
-				nazivHotelaIliDestinacije: nazivOdredista,
+				nazivHotela: _nazivHotela,
+				nazivDestinacije: nazivOdredista,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
 				potrebneSobe: _potrebneSobe
