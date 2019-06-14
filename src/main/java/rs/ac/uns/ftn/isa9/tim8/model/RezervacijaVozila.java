@@ -1,8 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Date;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,6 +46,10 @@ public class RezervacijaVozila {
 	@Temporal(TemporalType.DATE)
 	protected Date datumVracanjaVozila;
 	
+	@Column(name = "datum_rezervacije")
+	@Temporal(TemporalType.DATE)
+	protected Date datumRezervacije;
+	
 	@Column(name = "cijena", nullable = false)
 	@ColumnDefault("0")
 	protected double cijena;
@@ -71,6 +73,7 @@ public class RezervacijaVozila {
 	public RezervacijaVozila() {
 		super();
 		this.ocjenjeno = false;
+		this.datumRezervacije = new Date();
 	}
 
 	public RezervacijaVozila(Vozilo rezervisanoVozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
@@ -83,6 +86,7 @@ public class RezervacijaVozila {
 		this.datumVracanjaVozila = datumVracanjaVozila;
 		this.cijena = cijena;
 		this.ocjenjeno = false;
+		this.datumRezervacije = new Date();
 	}
 	
 	public RezervacijaVozila(Vozilo rezervisanoVozilo, Filijala mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
@@ -95,6 +99,7 @@ public class RezervacijaVozila {
 		this.datumVracanjaVozila = datumVracanjaVozila;
 		this.cijena = cijena;
 		this.ocjenjeno = ocjenjeno;
+		this.datumRezervacije = new Date();
 	}
 	
 	public Vozilo getRezervisanoVozilo() {
@@ -183,6 +188,14 @@ public class RezervacijaVozila {
 
 	public void setOcjenjeno(boolean ocjenjeno) {
 		this.ocjenjeno = ocjenjeno;
+	}
+
+	public Date getDatumRezervacije() {
+		return datumRezervacije;
+	}
+
+	public void setDatumRezervacije(Date datumRezervacije) {
+		this.datumRezervacije = datumRezervacije;
 	}
 
 	
