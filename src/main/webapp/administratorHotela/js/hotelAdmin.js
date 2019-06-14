@@ -826,6 +826,19 @@ function prikaziPodatkeHotela() {
 	$("#longitudaHotela").val(podaciHotela.adresa.longituda);
 	$("#opisHotela").val(podaciHotela.promotivniOpis);
 	$("#slikaHotela").attr("src", defaultSlika);
+	
+	let sumaOcjena = podaciHotela.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = podaciHotela.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		var prosjek = sumaOcjena/brOcjena;
+		prosjek = prosjek.toFixed(2);
+
+		$("#ocjenaHotela").val(prosjek);
+	} else {
+		$("#ocjenaHotela").val("Nema ocjena");
+	}
 }
 
 function prikaziPodatkeAdmina() {
