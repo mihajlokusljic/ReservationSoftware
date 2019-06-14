@@ -952,7 +952,6 @@ function zadajSobuBrzeRez() {
 			  icon: "warning",
 			  timer: 2000
 			});			
-		
 	}
 }
 
