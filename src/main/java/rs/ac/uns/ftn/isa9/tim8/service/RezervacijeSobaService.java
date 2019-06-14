@@ -339,6 +339,7 @@ public class RezervacijeSobaService {
 			cijenaBoravka -= popust;
 			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
 			rezervacijaSobe.setPutnik(korisnik);
+			rezervacijaSobe.setPutovanje(putovanje);
 			rezervacijeRepository.save(rezervacijaSobe);
 			if (putovanje != null) {
 				putovanje.getRezervacijeSoba().add(rezervacijaSobe);
