@@ -52,7 +52,7 @@ function refreshAviokompanije(aviokompanije) {
 	let aviokompanijeTable = $("#aviokompanijeRows");
 	aviokompanijeTable.empty();
 	let aviokompanija = null;
-	for(i in aviokompanije) {
+	for(var i in aviokompanije) {
 		aviokompanija = aviokompanije[i];
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
