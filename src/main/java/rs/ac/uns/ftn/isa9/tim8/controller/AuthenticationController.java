@@ -111,7 +111,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> dodajAdminaHotela(@RequestBody RegistracijaAdminaDTO adminReg) {
 		try {
 			this.userDetailsService.dodajAdminaHotela(adminReg);
-			return new ResponseEntity<String>("Administrator je uspesno dodat", HttpStatus.OK);
+			return new ResponseEntity<String>("Administrator je uspesno dodat.", HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
 		}
