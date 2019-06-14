@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
 import java.util.Collection;
-import java.util.Date;
 
 public class PretragaHotelaDTO {
 	protected String nazivHotelaIliDestinacije;
