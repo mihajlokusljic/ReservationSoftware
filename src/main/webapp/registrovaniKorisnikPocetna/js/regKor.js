@@ -446,12 +446,14 @@ $(document).ready(function() {
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
 	   
-		let nazivLokacije = $("#racNaziv").val();
+		let _nazivRacServisa= $("#racNaziv").val();
+		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
 		let dolazak = $("#input-start-rac").val();
 		let odlazak = $("#input-end-rac").val();
 		
 		let pretragaRac = {
-				nazivRacIliDestinacije: nazivLokacije,
+				nazivRacServisa: _nazivRacServisa,
+				nazivDestinacije: _nazivDestinacije,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
 		}
