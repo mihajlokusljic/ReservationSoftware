@@ -829,10 +829,10 @@ function prikaziPodatkeHotela() {
 	
 	let sumaOcjena = podaciHotela.sumaOcjena;
 	sumaOcjena = parseFloat(sumaOcjena);
-	let brOcjena = podaciHotela.brojOcjena;
-	brOcjena = parseInt(brOcjena);
-	if(brOcjena > 0) {
-		var prosjek = sumaOcjena/brOcjena;
+	let brojOcjena = podaciHotela.brojOcjena;
+	brojOcjena = parseInt(brojOcjena);
+	if(brojOcjena > 0) {
+		var prosjek = sumaOcjena/brojOcjena;
 		prosjek = prosjek.toFixed(2);
 
 		$("#ocjenaHotela").val(prosjek);
