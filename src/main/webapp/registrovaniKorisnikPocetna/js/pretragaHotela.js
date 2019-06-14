@@ -161,7 +161,7 @@ function azurirajSobeZahtjev() {
     	tipoviSoba.push(brKreveta);
     }
     
-    for(i in tipoviSoba) {
+    for(var i in tipoviSoba) {
     	infoText += potrebneSobe[tipoviSoba[i]] + " x " + tipoviSoba[i] + "-krevetnih soba";
     	if(i != tipoviSoba.length - 1) {
     		infoText += ", ";

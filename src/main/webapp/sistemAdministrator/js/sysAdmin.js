@@ -209,7 +209,7 @@ function prikaziTab(idTaba) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {

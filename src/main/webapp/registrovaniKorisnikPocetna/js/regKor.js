@@ -677,7 +677,7 @@ function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
 	});
 	
 	var seatsData = {};
-	for(i in podaciOMapi.segmenti) {
+	for(var i in podaciOMapi.segmenti) {
 		let tekuciSegment = podaciOMapi.segmenti[i];
 		
 		seatsData[tekuciSegment.oznakaSegmenta] = {
@@ -1397,7 +1397,6 @@ function ucitajRezervisanaVozila(){
 		success: function(data){
 			prikaziRezVozila(data);
 		},
-		async: false,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + textStatus);
 		}

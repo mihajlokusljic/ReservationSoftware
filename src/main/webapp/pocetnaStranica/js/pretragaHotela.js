@@ -130,16 +130,15 @@ function azurirajSobeZahtjev() {
     var dropdownSelect = selectSpecial.parent().find('.dropdown-select');
     var listRoom = dropdownSelect.find('.list-room');
     var listRoomItem = listRoom.find('.list-room__item');
-	var info = selectSpecial.find('#info');
     var infoText = "";
     var potrebneSobe = prebrojPotrebneSobe();
     
     var tipoviSoba = []
-    for(brKreveta in potrebneSobe) {
+    for(var brKreveta in potrebneSobe) {
     	tipoviSoba.push(brKreveta);
     }
     
-    for(i in tipoviSoba) {
+    for(var i in tipoviSoba) {
     	infoText += potrebneSobe[tipoviSoba[i]] + " x " + tipoviSoba[i] + "-krevetnih soba";
     	if(i != tipoviSoba.length - 1) {
     		infoText += ", ";

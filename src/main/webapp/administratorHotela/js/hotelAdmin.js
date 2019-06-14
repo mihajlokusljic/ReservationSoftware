@@ -294,7 +294,7 @@ function izmjenaSobe() {
 		success: function(response) {
 			let updated = false;
 			
-			for(i in podaciHotela.sobe) {
+			for(var i in podaciHotela.sobe) {
 				if(podaciHotela.sobe[i].id == _id) {
 					podaciHotela.sobe[i] = response;
 					updated = true;
@@ -598,7 +598,7 @@ function prikaziSobu(soba) {
 function prikaziIzmjenuSobe(idSobe) {
 	let indeksSobe = 0;
 	let soba = null;
-	for(indeksSobe in podaciHotela.sobe) {
+	for(var indeksSobe in podaciHotela.sobe) {
 		soba = podaciHotela.sobe[indeksSobe];
 		if(soba.id == idSobe) {
 			break;

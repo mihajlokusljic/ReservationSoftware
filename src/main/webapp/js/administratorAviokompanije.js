@@ -802,7 +802,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 	});
 	
 	var seatsData = {};
-	for(i in podaciOMapi.segmenti) {
+	for(var i in podaciOMapi.segmenti) {
 		let tekuciSegment = podaciOMapi.segmenti[i];
 		
 		seatsData[tekuciSegment.oznakaSegmenta] = {
@@ -1473,7 +1473,7 @@ function prikaziUslugu(usluga) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {
