@@ -32,13 +32,15 @@
 <body>
   <!-- Jquery JS-->
     <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- Vendor JS-->
+  <!-- Vendor JS-->
     <script src="vendor/select2/select2.min.js"></script>
     <script src="vendor/jquery-validate/jquery.validate.min.js"></script>
     <script src="vendor/bootstrap-wizard/bootstrap.min.js"></script>
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
+  <!-- Chart JS-->
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
 	
 	    <div class="page-wrapper bg-img-1 p-t-165 p-b-100">
 	    	<!-- Mapa za prikaz adrese -->
@@ -561,6 +563,46 @@
                                 <br>
                                 <h3 hidden class = "prihod" id = "prihod_id">Ostvareni prihod: 5000.00</h3>
                         	</div>
+                        	
+							<!--Prikaz grafika na dnevnom, nedeljnom i mjesecnom nivou -->
+							<div class="tab-pane" id="grafik_rez_vozila">
+								<form method="POST" action="#" id="prikazGrafika">
+									<div class="radio-row">
+                                    <label class="radio-container m-r-70">Vozila na dnevnom nivou
+                                        <input type="radio" checked="checked" name="class" id="grafikDnevniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                    <label class="radio-container m-r-70">Vozila na nedeljnom nivou
+                                        <input type="radio" name="class" id="grafikNedeljniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                    <label class="radio-container">Vozila na mjesečnom nivou
+                                        <input type="radio" name="class" id="grafikMjesecniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                </div>
+                                <p>&nbsp</p>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Od</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-3">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Do</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-3">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-submit">Prikaži</button>
+                              </form>
+                               <br><br>
+                              <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+							</div>
 	                    </div>                    
                 	</div>
             	</div>

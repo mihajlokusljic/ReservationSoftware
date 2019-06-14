@@ -4,19 +4,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazBrzeRezVozilaDTO;
@@ -1014,5 +1014,241 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		else {
 			return false;
 		}
+	}
+
+	public IzvjestajDTO dnevniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		
+		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Collection<RezervacijaVozila> sveRezervacije = rezervacijaVozilaRepository.findAllByRentACarServis(rac);
+		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
+		
+		for (RezervacijaVozila rv : sveRezervacije) {
+			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+				rezervacijeUOkviruDatuma.add(rv);
+			}
+		}
+		
+		while (!pocetniDatum.after(krajnjiDatum)) {		
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
+			izvjestajDTO.getVrijednostiXOse().add(sdf.format(pocetniDatum));
+			
+			int broj = 0;
+			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
+				if (rv.getDatumRezervacije().equals(pocetniDatum)) {
+					broj ++;
+				}
+			}
+			izvjestajDTO.getBrojeviYOsa().add(broj);
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(pocetniDatum); 
+			c.add(Calendar.DATE, 1);
+			pocetniDatum = c.getTime();
+		}
+				
+		return izvjestajDTO;
+	}
+
+	public IzvjestajDTO nedeljniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		
+		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Collection<RezervacijaVozila> sveRezervacije = rezervacijaVozilaRepository.findAllByRentACarServis(rac);
+		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
+		
+		for (RezervacijaVozila rv : sveRezervacije) {
+			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+				rezervacijeUOkviruDatuma.add(rv);
+			}
+		}
+		
+		while (!pocetniDatum.after(krajnjiDatum)) {
+			
+			Object zaMjesec_ = pocetniDatum.clone();
+			
+			Date zaMjesec = (Date) zaMjesec_;
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(pocetniDatum); 
+			c.add(Calendar.DATE, 7);
+			zaMjesec = c.getTime();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
+			
+			String xOsa =  sdf.format(pocetniDatum);
+			
+			int broj = 0;
+			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
+				if (!zaMjesec.after(krajnjiDatum)) {
+					
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec)) {
+						broj ++;
+					}
+
+				}
+				else {
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+						broj ++;
+					}
+				}						
+			}
+			
+			if (!zaMjesec.after(krajnjiDatum)) {
+				pocetniDatum = zaMjesec;
+			}
+			else {
+				pocetniDatum = krajnjiDatum;
+			}
+			izvjestajDTO.getBrojeviYOsa().add(broj);
+			xOsa = xOsa + "-" + sdf.format(pocetniDatum);
+			c.setTime(pocetniDatum); 
+			c.add(Calendar.DATE, 1);
+			pocetniDatum = c.getTime();
+			izvjestajDTO.getVrijednostiXOse().add(xOsa);
+
+		}
+				
+		return izvjestajDTO;
+	}
+
+	public IzvjestajDTO mjesecniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
+IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Collection<RezervacijaVozila> sveRezervacije = rezervacijaVozilaRepository.findAllByRentACarServis(rac);
+		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
+		
+		for (RezervacijaVozila rv : sveRezervacije) {
+			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+				rezervacijeUOkviruDatuma.add(rv);
+			}
+		}
+		
+		while (!pocetniDatum.after(krajnjiDatum)) {
+			
+			Object zaSedam_ = pocetniDatum.clone();
+			
+			Date zaSedam = (Date) zaSedam_;
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(pocetniDatum); 
+			c.add(Calendar.MONTH, 1);
+			zaSedam = c.getTime();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
+			
+			String xOsa =  sdf.format(pocetniDatum);
+			
+			int broj = 0;
+			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
+				if (!zaSedam.after(krajnjiDatum)) {
+					
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaSedam)) {
+						broj ++;
+					}
+
+				}
+				else {
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+						broj ++;
+					}
+				}						
+			}
+			
+			if (!zaSedam.after(krajnjiDatum)) {
+				pocetniDatum = zaSedam;
+			}
+			else {
+				pocetniDatum = krajnjiDatum;
+			}
+			izvjestajDTO.getBrojeviYOsa().add(broj);
+			xOsa = xOsa + "-" + sdf.format(pocetniDatum);
+			c.setTime(pocetniDatum); 
+			c.add(Calendar.DATE, 1);
+			pocetniDatum = c.getTime();
+			izvjestajDTO.getVrijednostiXOse().add(xOsa);
+
+		}
+				
+		return izvjestajDTO;
 	}
 }

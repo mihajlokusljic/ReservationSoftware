@@ -49,6 +49,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
 
 		dobaviSvaVozilaServisa();
 		ponudiFilijale();
@@ -72,6 +73,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
 
 		dobaviSveFilijale();
 	
@@ -94,6 +96,8 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
+
 		profilServisa();
 	});
 	
@@ -120,6 +124,8 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
+
 		profilKorisnika();
 	})
 	
@@ -140,6 +146,8 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
+
 		promjeniLozinku();
 	})
 	$("#dodaj_vozilo_dugme").click(function(e){
@@ -194,6 +202,7 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
 
 	});
 	
@@ -215,6 +224,7 @@ $(document).ready(function() {
 		$("#tab-dodaj-filijalu").hide();
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-prihodi-servisa").hide();
+		$("#grafik_rez_vozila").hide();
 
 	});
 	
@@ -235,7 +245,32 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#grafik_rez_vozila").hide();
+
 		prihodiServisa();
+	})
+	
+	$("#grafik_rez_vozila_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_izvjestaj");
+		$("#grafik_rez_vozila").show();
+		$("#tab-prihodi-servisa").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#chartContainer").hide();
+		
+		grafikRezervisanihVozila();
 	})
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -1153,15 +1188,17 @@ function promjeniLozinku(){
 						  title: "Uspješno ste izmjenili lozinku.",
 						  icon: "success",
 						  timer:2000
-						});
-					if(!lozinkaMijenjana) {
-						$("#izmjenaInicijalneLozinkePoruka").hide();
-						$("#tab-profil-lozinka").hide();
-						$("#meni").show();					
-						korisnik.lozinkaPromjenjena = true;
-						dobaviSvaVozilaServisa();
-						ponudiFilijale();
-					}
+						}).then(function(){
+							if(!lozinkaMijenjana) {
+								$("#izmjenaInicijalneLozinkePoruka").hide();
+								$("#tab-profil-lozinka").hide();
+								$("#meni").show();					
+								korisnik.lozinkaPromjenjena = true;
+								dobaviSvaVozilaServisa();
+								ponudiFilijale();
+							}
+						})
+					
 				}
 				
 			}
@@ -1466,7 +1503,11 @@ function vratiSveBrzeRezervacije(){
 			prikaziBrzeRez(response);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
+			swal({
+				  title: "AJAX error: " + errorThrown,
+				  icon: "error",
+				  timer: 2500
+				})
 		}
 	});
 }
@@ -1517,5 +1558,104 @@ function prihodiServisa(){
 				alert("AJAX error: " + errorThrown);
 			}
 		});
-	});
+	})
+}
+
+function grafikRezervisanihVozila(){
+	
+	$("#prikazGrafika").submit(function(e){
+		e.preventDefault();
+		let idServisa = rentACarServis.id;
+
+		let _datumPocetni = $("#input-start-3").val();
+		let _datumKrajnji = $("#input-end-3").val();
+		
+		if (_datumPocetni == '') {
+			swal({
+				  title: "Morate unijeti početni datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		if (_datumKrajnji == '') {
+			swal({
+				  title: "Morate unijeti krajnji datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		let tergetUrl = "../rentACar/dnevniIzvjestaj";
+		let text = "Broj rezervisanih vozila po danu";
+		let axisX = "Dani";
+		
+		if($("#grafikDnevniBtn").is(":checked")) {
+			tergetUrl = "../rentACar/dnevniIzvjestaj";
+			text = "Broj rezervisanih vozila na dnevnom nivou";
+			axisX = "Dani";
+		}
+		
+		if($("#grafikNedeljniBtn").is(":checked")) {
+			tergetUrl = "../rentACar/nedeljniIzvjestaj";
+			text = "Broj rezervisanih vozila na svakih 7 dana";
+			axisX = "Nedelje";
+		}
+		else if ($("#grafikMjesecniBtn").is(":checked")) {
+			tergetUrl = "../rentACar/mjesecniIzvjestaj";
+			text = "Broj rezervisanih vozila nas svakih mjesec dana";
+			axisX = "Mjeseci";
+		}
+		
+		
+		let datumiZaIzvjestaj = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		}
+		$.ajax({
+			type : 'POST',
+			url : tergetUrl+ "/" + idServisa,
+			data : JSON.stringify(datumiZaIzvjestaj),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				prikaziGrafik(response,text,axisX);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({
+					  title: textStatus,
+					  icon: "error",
+					  timer: 2500
+					})
+				return;
+			}
+		});
+		
+	})
+}
+
+function prikaziGrafik (izvjestaj,text,axisX) {
+	var dataP = [];
+	
+	for (var i = 0; i < izvjestaj.brojeviYOsa.length; i++) {
+		dataP.push({"y": izvjestaj.brojeviYOsa[i], "label" : izvjestaj.vrijednostiXOse[i]});
+	}
+	
+	var options = {
+			title:{
+				text: text  
+			},
+			axisY:{
+				title:"Broj vozila"
+			},
+			axisX:{
+				title:axisX
+			},
+			data: [{
+				dataPoints: dataP
+		    }]
+		};
+	$("#chartContainer").show();
+	$("#chartContainer").CanvasJSChart(options);
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.FilijalaDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaRacDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaVozilaDTO;
@@ -301,4 +302,38 @@ public class RentACarKontroler {
 		}
 		
 	}
+	
+	@RequestMapping(value = "/dnevniIzvjestaj/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> dnevniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.dnevniIzvjestaj(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	@RequestMapping(value = "/nedeljniIzvjestaj/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> nedeljniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.nedeljniIzvjestaj(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/mjesecniIzvjestaj/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> mjesecniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.mjesecniIzvjestaj(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	
 }
