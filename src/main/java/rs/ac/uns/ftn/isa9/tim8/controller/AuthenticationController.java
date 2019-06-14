@@ -1,9 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;

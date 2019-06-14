@@ -23,7 +23,6 @@ import org.hibernate.annotations.ColumnDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 import rs.ac.uns.ftn.isa9.tim8.common.CustomDateTimeSerializer;
 
 @Entity
