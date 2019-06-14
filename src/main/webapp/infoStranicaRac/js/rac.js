@@ -170,10 +170,10 @@ function pretragaVozila(){
 			
 	}
 	
-	if (_minCijena != ''){
+	if (_minCijena != ""){
 		pretragaVozila.minimalnaCijenaPoDanu = _minCijena;
 	}
-	if (_maxCijena != ''){
+	if (_maxCijena != ""){
 		pretragaVozila.maksimalnaCijenaPoDanu = _maxCijena;
 
 	}

@@ -217,7 +217,7 @@ $(document).ready(function(e) {
 });
 
 function prikaziTab(idTaba) {
-	for(i in tabovi) {
+	for(var i in tabovi) {
 		if(idTaba == tabovi[i]) {
 			$("#" + tabovi[i]).addClass("active");
 		} else {
@@ -227,7 +227,7 @@ function prikaziTab(idTaba) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {
@@ -459,7 +459,7 @@ function prikaziBrzuRezervaciju(tabela, rezervacija) {
 
 function nadjiBrzuRezervaciju(id) {
 	let brzaRez = null;
-	for(i in brzeRezervacije) {
+	for(var i in brzeRezervacije) {
 		brzaRez = brzeRezervacije[i];
 		if(brzaRez.id == id) {
 			return brzaRez;
@@ -627,7 +627,7 @@ function prikaziIzmjenuSobe(idSobe) {
 }
 
 function nadjiSobu(idSobe) {
-	for(indeksSobe in podaciHotela.sobe) {
+	for(var indeksSobe in podaciHotela.sobe) {
 		soba = podaciHotela.sobe[indeksSobe];
 		if(soba.id == idSobe) {
 			return soba;
@@ -662,7 +662,7 @@ function brisanjeSobe(idSobe) {
 				  timer: 2500
 				})	
 			//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
-			for(i in podaciHotela.sobe) {
+			for(var i in podaciHotela.sobe) {
 				if(podaciHotela.sobe[i].id == idSobe) {
 					podaciHotela.sobe.pop(i);
 				}

@@ -330,7 +330,6 @@ function ucitajPodatkeSistema(){
 				rentACarServis = data;
 			}
 		},
-		async: false,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + textStatus);
 		}

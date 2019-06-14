@@ -26,7 +26,8 @@ $(document).ready(function(e) {
 		  			  title: XMLHttpRequest.responseText,
 		  			  icon: "warning",
 		  			  timer: 2500
-		  			});	    	}
+		  			});	    	
+	    		}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -340,7 +341,7 @@ function pretragaSoba() {
 
 function nadjiBrzuRezervaciju(id) {
 	let brzaRez = null;
-	for(i in brzeRezervacije) {
+	for(var i in brzeRezervacije) {
 		brzaRez = brzeRezervacije[i];
 		if(brzaRez.id == id) {
 			return brzaRez;

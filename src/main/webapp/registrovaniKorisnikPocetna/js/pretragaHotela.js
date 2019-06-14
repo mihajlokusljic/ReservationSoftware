@@ -25,7 +25,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 	let sobeZahtjevi = prebrojPotrebneSobe();
 	let _potrebneSobe = [];
 	
-	for(brKrevetaSobe in sobeZahtjevi) {
+	for(var brKrevetaSobe in sobeZahtjevi) {
 		_potrebneSobe.push({
 			brKrevetaPoSobi : brKrevetaSobe,
 			brSoba : sobeZahtjevi[brKrevetaSobe]
@@ -71,7 +71,7 @@ function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutova
 	hotelsTableBody.empty();
 	let hotel, noviRed = null;
 	let putanja, poruka = "";
-	for(i in hotels) {
+	for(var i in hotels) {
 		hotel = hotels[i];
 		noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
@@ -146,7 +146,7 @@ function azurirajSobeZahtjev() {
     var potrebneSobe = prebrojPotrebneSobe();
     
     var tipoviSoba = []
-    for(brKreveta in potrebneSobe) {
+    for(var brKreveta in potrebneSobe) {
     	tipoviSoba.push(brKreveta);
     }
     
