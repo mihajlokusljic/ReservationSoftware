@@ -324,4 +324,16 @@ public class RentACarKontroler {
 		
 	}
 	
+	@RequestMapping(value = "/mjesecniIzvjestaj/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> mjesecniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.mjesecniIzvjestaj(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	
 }
