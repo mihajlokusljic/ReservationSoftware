@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
@@ -1103,6 +1104,16 @@ public class AviokompanijaService {
 		putovanjeRepository.save(putovanje);
 
 		return podaciRezervacije;
+	}
+
+	public BoravakDTO dobaviPodatkeBoravka(Long idLeta) throws NevalidniPodaciException {
+		Optional<Let> letSearch = letoviRepository.findById(idLeta);
+		if(!letSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji let sa datim id-em.");
+		}
+		Let let = letSearch.get();
+		BoravakDTO rezultat = new BoravakDTO(let.getDatumSletanja(), let.getDuzinaPutovanja(), let.getOdrediste().getNazivDestinacije());
+		return rezultat;
 	}
 
 }

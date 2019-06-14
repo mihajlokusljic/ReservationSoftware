@@ -16,6 +16,7 @@ var pozvaniPrijateljiIds = [];
 var idLetaZaRezervaciju = -1;
 var podaciRezervacijeSjedista = null;
 var _podaciNeregistrovanihPutnika = [];
+var podaciBoravka = null;
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -419,6 +420,7 @@ $(document).ready(function() {
 					})
 					
 					$("#zadavanjePodatakaPutnikaForm")[0].reset();
+					prikaziHoteleZaRezervaciju();
 					return;
 				},
 			});
@@ -813,9 +815,28 @@ function prikaziPrijateljeZaPozivanje(prijatelji) {
 }
 
 function prikaziHoteleZaRezervaciju() {
+	
+	$.ajax({
+		type : 'GET',
+		url : "../letovi/podaciBoravkaZaLet/" + idLetaZaRezervaciju,
+		dataType : "json",
+		async : false,
+		success: function(data){
+			podaciBoravka = data;
+		},
+	});
+	
 	$("#izborSjedistaZaRezervaciju").hide();
 	$("#pozivPrijateljaZaRezervaciju").hide();
 	$("#izborLetaZaRezervaciju").show();
+	
+	//pretraga hotela i podesavanje izgleda stranice za rezervaciju
+	$("#rezervacijaHotelaPoruka").show();
+	$("#prelazakNaRezervacijuVozilaBtn").show();
+	$("#hotelNaziv").val(podaciBoravka.nazivDestinacije);
+	$("#input-start").val(podaciBoravka.datumDolaska);
+	$("#input-end").val(podaciBoravka.datumPovratka);
+	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja);
 	
 	$("#tab-aviokompanije").hide();
 	$("#tab-hoteli").show();
