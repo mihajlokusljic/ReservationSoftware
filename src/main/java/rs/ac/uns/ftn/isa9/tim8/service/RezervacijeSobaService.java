@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -265,14 +266,15 @@ public class RezervacijeSobaService {
 			}
 		}
 		long diff = datumOdlaska.getTime() - datumDolaska.getTime(); // razlika u milisekundama
-		long brojNocenja = diff / (24 * 60 * 60 * 1000); // razlika u danima
+		long brojNocenja = diff / (24 * 60 * 60 * 1000); 			 // razlika u danima
 		if (brojNocenja == 0) {
 			brojNocenja = 1;
 		}
-		double ukupnaCijena = 0;
+		//  obrada izabranih usluga
 		int ukupanProcenatPopusta = 0;
 		Optional<Usluga> uslugaSearch = null;
 		Usluga usluga = null;
+		ArrayList<Usluga> izabraneDodatneUsluge = new ArrayList<Usluga>();
 		if (putovanje != null) {
 			for (Long idUsluge : rezervacijaPodaci.getDodatneUslugeIds()) {
 				uslugaSearch = uslugeRepository.findById(idUsluge);
@@ -281,31 +283,16 @@ public class RezervacijeSobaService {
 				}
 				usluga = uslugaSearch.get();
 				putovanje.getDodatneUsluge().add(usluga);
+				izabraneDodatneUsluge.add(usluga);
 				ukupanProcenatPopusta += usluga.getProcenatPopusta();
-				switch (usluga.getNacinPlacanja()) {
-				case DNEVNO: {
-					ukupnaCijena += usluga.getCijena() * brojNocenja;
-					break;
-				}
-				case DNEVNO_PO_OSOBI: {
-					ukupnaCijena += usluga.getCijena() * brojNocenja * brojOsoba;
-					break;
-				}
-				case FIKSNO: {
-					ukupnaCijena += usluga.getCijena();
-					break;
-				}
-				case FIKSNO_PO_OSOBI: {
-					ukupnaCijena += usluga.getCijena() * brojOsoba;
-					break;
-				}
-				default:
-					break;
-				}
-
 			}
 		}
 
+		if(ukupanProcenatPopusta > 100) {
+			ukupanProcenatPopusta = 100;
+		}
+		
+		//  obrada rezervacija soba
 		Optional<HotelskaSoba> sobaSearch = null;
 		HotelskaSoba soba = null;
 		RezervacijaSobe rezervacijaSobe = null;
@@ -324,11 +311,35 @@ public class RezervacijeSobaService {
 						"Ukupan broj kreveta rezervisanih soba premašuje broj rezervisanih karata.");
 			}
 			cijenaBoravka = soba.getCijena() * brojNocenja;
+			//  naplata dodatnih usluga za rezervaciju sobe
+			for (Usluga u : izabraneDodatneUsluge) {
+				switch (u.getNacinPlacanja()) {
+				case DNEVNO: {
+					cijenaBoravka += u.getCijena() * brojNocenja;
+					break;
+				}
+				case DNEVNO_PO_OSOBI: {
+					cijenaBoravka += u.getCijena() * brojNocenja * soba.getBrojKreveta();
+					break;
+				}
+				case FIKSNO: {
+					cijenaBoravka += u.getCijena();
+					break;
+				}
+				case FIKSNO_PO_OSOBI: {
+					cijenaBoravka += u.getCijena() * soba.getBrojKreveta();
+					break;
+				}
+				default:
+					break;
+				}
+			}
+			//  racunanje popusta ostvarenog izborom dodatnih usluga
 			popust = cijenaBoravka * ukupanProcenatPopusta / 100.0;
 			cijenaBoravka -= popust;
-			ukupnaCijena += cijenaBoravka;
 			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
 			rezervacijaSobe.setPutnik(korisnik);
+			rezervacijaSobe.setPutovanje(putovanje);
 			rezervacijeRepository.save(rezervacijaSobe);
 			if (putovanje != null) {
 				putovanje.getRezervacijeSoba().add(rezervacijaSobe);

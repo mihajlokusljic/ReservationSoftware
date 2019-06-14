@@ -62,15 +62,16 @@ $(document).ready(function(e) {
 		
 	}
 	
-	if(idKorisnika != null) {
-		rezimRezervacije = true;
-		$("#rezervacijaSobaKoraci").show();
-		$("#izborSobeCol").show();
-	}
-	
-	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
+	if(idKorisnika != null && datumDolaskaPutovanje != null && datumOdlaskaPutovanje != null) {
 		rezimRezervacije = true;
 		prikaziBrzeRezervacijeZaPutovanje();
+		$("#rezervacijaSobaKoraci").show();
+		$("#izborSobeCol").show();
+		//odvodi korisnika na pretragu soba za rezervaciju
+		$("#tab-info").removeClass("active");
+		$("#stavka-info").removeClass("active");
+		$("#tab-sobe").addClass("active");
+		$("#stavka-sobe").addClass("active");
 	}
 	
 	//pretraga soba
