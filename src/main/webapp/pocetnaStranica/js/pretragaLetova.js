@@ -39,7 +39,7 @@ $(document).ready(function(e) {
 							  title: "Ne postoji ni jedan let koji zadovoljava navedeni kriterijum pretrage.",
 							  icon: "info",
 							  timer: 2500
-							})	
+							});	
 			        }
 			        updateLetovi(response);
 			        $('#pretragaLetovaForm')[0].reset();

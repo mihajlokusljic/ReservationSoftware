@@ -20,15 +20,17 @@ $(document).ready(function() {
 		
 		e.preventDefault();
 	   
-		let nazivLokacije = $("#racNaziv").val();
+		let _nazivRacServisa= $("#racNaziv").val();
+		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
 		let dolazak = $("#input-start-2").val();
 		let odlazak = $("#input-end-2").val();
 		
 		let pretragaRac = {
-				nazivRacIliDestinacije: nazivLokacije,
+				nazivRacServisa: _nazivRacServisa,
+				nazivDestinacije: _nazivDestinacije,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -46,7 +48,7 @@ $(document).ready(function() {
 						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava navedeni kriterijum pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})	
+						});	
 				}
 				$('#racSearchForm')[0].reset();
 			},

@@ -9,6 +9,7 @@ public class DodavanjeSobeDTO {
 	protected int kolona;
 	protected int brojKreveta;
 	protected double cijenaNocenja;
+	
 	public DodavanjeSobeDTO() {
 		super();
 	}

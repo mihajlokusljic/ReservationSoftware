@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
-import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 
 public class RegistracijaAdminaDTO {
 	

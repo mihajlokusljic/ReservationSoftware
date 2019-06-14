@@ -87,7 +87,7 @@ $(document).ready(function() {
 							  icon: "success",
 							}).then(function(){
 							window.location.replace(response.redirectionUrl);
-						})
+						});
 					}
 				}
 			},

@@ -24,7 +24,7 @@ $(document).ready(function(e) {
 	
 		let pretragaAviokompanije = {
 				nazivAviokompanije: nazivAviokompanije
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -38,7 +38,7 @@ $(document).ready(function(e) {
 						  title: "Ne postoji ni jedna aviokompanija koja zadovoljava navedeni kriterijum pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})	
+						});	
 				}
 				$('#aviokompanijeSearchForm')[0].reset();
 			}
@@ -52,7 +52,7 @@ function refreshAviokompanije(aviokompanije) {
 	let aviokompanijeTable = $("#aviokompanijeRows");
 	aviokompanijeTable.empty();
 	let aviokompanija = null;
-	for(i in aviokompanije) {
+	for(var i in aviokompanije) {
 		aviokompanija = aviokompanije[i];
 		let noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');

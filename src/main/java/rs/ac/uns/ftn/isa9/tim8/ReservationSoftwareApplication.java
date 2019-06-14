@@ -12,6 +12,12 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class ReservationSoftwareApplication {
 
+	/*
+	 * Ukoliko je potreban drop baze radi promjene modela:
+	   		spring.jpa.hibernate.ddl-auto=create-drop
+	   		spring.datasource.initialization-mode=always
+	 */
+	
 	@PostConstruct
 	static void started() {
 		// podesi JVM vremensku zonu kao UTC
@@ -24,9 +30,3 @@ public class ReservationSoftwareApplication {
 	}
 
 }
-
-/*
- * Ukoliko je potreban drop baze radi promjene modela:
- * spring.jpa.hibernate.ddl-auto=create-drop
- * spring.datasource.initialization-mode=always
- */

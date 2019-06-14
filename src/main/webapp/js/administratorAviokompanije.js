@@ -17,7 +17,7 @@ $(document).ready(function() {
 	$.ajaxSetup({
 		headers: createAuthorizationTokenHeader(tokenKey),
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown)
+			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 		}
 	});
 	
@@ -379,6 +379,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
+			async: false,
 			url: "../avioni/dodaj/",
 			contentType : "application/json; charset=utf-8",
 			data: JSON.stringify(novi_avion),
@@ -801,7 +802,7 @@ function prikaziIzborSjedistaBrzeRezervacije() {
 	});
 	
 	var seatsData = {};
-	for(i in podaciOMapi.segmenti) {
+	for(var i in podaciOMapi.segmenti) {
 		let tekuciSegment = podaciOMapi.segmenti[i];
 		
 		seatsData[tekuciSegment.oznakaSegmenta] = {
@@ -1410,7 +1411,7 @@ function promjeniLozinku(){
 						  title: "Uspješno ste izmjenili lozinku.",
 						  icon: "success",
 						  timer:2000
-						})
+						});
 					if(!lozinkaMijenjana) {
 						$("#izmjenaInicijalneLozinkePoruka").hide();
 						$("#tab-profil-lozinka").hide();
@@ -1441,7 +1442,7 @@ function dodavanjeUsluge() {
 		cijena: cijenaUsluge,
 		procenatPopusta: popustUsluge,
 		opis: opisUsluge
-	}
+	};
 	
 	$.ajax({
 		type: "POST",
@@ -1459,7 +1460,7 @@ function dodavanjeUsluge() {
 function prikaziUsluge(usluge) {
 	$.each(usluge, function(i, usluga) {
 		prikaziUslugu(usluga);
-	})
+	});
 }
 
 function prikaziUslugu(usluga) {
@@ -1472,7 +1473,7 @@ function prikaziUslugu(usluga) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {

@@ -26,7 +26,8 @@ $(document).ready(function(e) {
 		  			  title: XMLHttpRequest.responseText,
 		  			  icon: "warning",
 		  			  timer: 2500
-		  			});	    	}
+		  			});	    	
+	    		}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -57,19 +58,20 @@ $(document).ready(function(e) {
 			  timer: 2500
 			}).then(function(){
 				redirectNaPocetnu();
-			})
+			});
 		
 	}
 	
-	if(idKorisnika != null) {
-		rezimRezervacije = true;
-		$("#rezervacijaSobaKoraci").show();
-		$("#izborSobeCol").show();
-	}
-	
-	if(datumDolaskaPutovanje != null & datumOdlaskaPutovanje != null) {
+	if(idKorisnika != null && datumDolaskaPutovanje != null && datumOdlaskaPutovanje != null) {
 		rezimRezervacije = true;
 		prikaziBrzeRezervacijeZaPutovanje();
+		$("#rezervacijaSobaKoraci").show();
+		$("#izborSobeCol").show();
+		//odvodi korisnika na pretragu soba za rezervaciju
+		$("#tab-info").removeClass("active");
+		$("#stavka-info").removeClass("active");
+		$("#tab-sobe").addClass("active");
+		$("#stavka-sobe").addClass("active");
 	}
 	
 	//pretraga soba
@@ -167,7 +169,7 @@ function izvrsiRezervaciju() {
 			  title: "Period boravka mora biti zadat.",
 			  icon: "warning",
 			  timer: 2500
-			})
+			});
 		return;
 	}
 	
@@ -317,7 +319,7 @@ function pretragaSoba() {
 			datumOdlaska: _datumOdlaska,
 			minCijenaBoravka: _minCijena,
 			maxCijenaBoravka: _maxCijena
-	}
+	};
 	
 	$.ajax({
 		type: "POST",
@@ -340,7 +342,7 @@ function pretragaSoba() {
 
 function nadjiBrzuRezervaciju(id) {
 	let brzaRez = null;
-	for(i in brzeRezervacije) {
+	for(var i in brzeRezervacije) {
 		brzaRez = brzeRezervacije[i];
 		if(brzaRez.id == id) {
 			return brzaRez;

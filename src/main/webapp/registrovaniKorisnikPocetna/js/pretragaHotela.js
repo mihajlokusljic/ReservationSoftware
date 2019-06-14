@@ -8,10 +8,19 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
+	    		swal({
+					  title: "Došlo je do greške",
+					  text: XMLHttpRequest.responseText,
+					  icon: "warning",
+					  timer: 2500
+					})
 	    	}
 	    	else {
-	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    		swal({
+					  title: "Došlo je do greške",
+					  icon: "warning",
+					  timer: 2500
+					});	
 	    	}
 		}
 	});
@@ -19,13 +28,14 @@ $(document).ready(function(e) {
 });
 
 function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
-	let nazivOdredista = $("#hotelNaziv").val();
+	let _nazivOdredista = $("#nazivOdredistaPretragaHotela").val();
+	let _nazivHotela = $("#hotelNaziv").val();
 	let dolazak = $("#input-start").val();
 	let odlazak = $("#input-end").val();
 	let sobeZahtjevi = prebrojPotrebneSobe();
 	let _potrebneSobe = [];
 	
-	for(brKrevetaSobe in sobeZahtjevi) {
+	for(var brKrevetaSobe in sobeZahtjevi) {
 		_potrebneSobe.push({
 			brKrevetaPoSobi : brKrevetaSobe,
 			brSoba : sobeZahtjevi[brKrevetaSobe]
@@ -33,11 +43,12 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 	}
 	
 	let pretragaHotela = {
-			nazivHotelaIliDestinacije: nazivOdredista,
+			nazivHotela: _nazivHotela,
+			nazivDestinacije: _nazivOdredista,
 			datumDolaska: dolazak,
 			datumOdlaska: odlazak,
 			potrebneSobe: _potrebneSobe
-	}
+	};
 	
 	$.ajax({
 		type: "POST",
@@ -51,7 +62,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 					  title: "Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage",
 					  icon: "info",
 					  timer: 2500
-					})	
+					});	
 			}
 			if(datumDolaska == null || datumOdlaska == null || datumOdlaska == null) {
 				//ako nije rezim rezervacije, forma se resetuje
@@ -71,7 +82,7 @@ function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutova
 	hotelsTableBody.empty();
 	let hotel, noviRed = null;
 	let putanja, poruka = "";
-	for(i in hotels) {
+	for(var i in hotels) {
 		hotel = hotels[i];
 		noviRed = $("<tr></tr>");
 		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
@@ -141,16 +152,15 @@ function azurirajSobeZahtjev() {
     var dropdownSelect = selectSpecial.parent().find('.dropdown-select');
     var listRoom = dropdownSelect.find('.list-room');
     var listRoomItem = listRoom.find('.list-room__item');
-	var info = selectSpecial.find('#info');
     var infoText = "";
     var potrebneSobe = prebrojPotrebneSobe();
     
-    var tipoviSoba = []
-    for(brKreveta in potrebneSobe) {
+    var tipoviSoba = [];
+    for(var brKreveta in potrebneSobe) {
     	tipoviSoba.push(brKreveta);
     }
     
-    for(i in tipoviSoba) {
+    for(var i in tipoviSoba) {
     	infoText += potrebneSobe[tipoviSoba[i]] + " x " + tipoviSoba[i] + "-krevetnih soba";
     	if(i != tipoviSoba.length - 1) {
     		infoText += ", ";
@@ -175,7 +185,7 @@ function prebrojPotrebneSobe() {
     var brojKreveta = 0;
     var brojSoba = 0;
     
-    var potrebneSobe = {} //rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
+    var potrebneSobe = {}; //rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
     listRoomItem.each(function () {
         var that = $(this);
         brojKreveta = parseInt(that.find('.quantity1 > input').val());

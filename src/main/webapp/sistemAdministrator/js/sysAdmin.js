@@ -199,7 +199,7 @@ $(document).ready(function(e) {
 });
 
 function prikaziTab(idTaba) {
-	for(i in tabovi) {
+	for(var i in tabovi) {
 		if(idTaba == tabovi[i]) {
 			$("#" + tabovi[i]).addClass("active");
 		} else {
@@ -209,7 +209,7 @@ function prikaziTab(idTaba) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {
@@ -767,7 +767,7 @@ function promjenaLozinke() {
 			  title: "Niste unijeli novu lozinku.",
 			  icon: "warning",
 			  timer: 2500
-			})
+			});
 		return;
 	}
 	

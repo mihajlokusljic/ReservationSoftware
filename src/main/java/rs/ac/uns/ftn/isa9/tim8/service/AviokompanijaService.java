@@ -286,6 +286,7 @@ public class AviokompanijaService {
 
 	}
 
+	@SuppressWarnings("unused")
 	public Collection<Let> pretraziLetove(PretragaLetaDTO kriterijumiPretrage) throws NevalidniPodaciException {
 		/*
 		 * String brojLeta; String nazivAviokompanije; String nazivPolazista; String

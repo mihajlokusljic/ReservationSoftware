@@ -170,10 +170,10 @@ function pretragaVozila(){
 			
 	}
 	
-	if (_minCijena != ''){
+	if (_minCijena != ""){
 		pretragaVozila.minimalnaCijenaPoDanu = _minCijena;
 	}
-	if (_maxCijena != ''){
+	if (_maxCijena != ""){
 		pretragaVozila.maksimalnaCijenaPoDanu = _maxCijena;
 
 	}
@@ -269,7 +269,7 @@ function prikaziVozila(vozila) {
 						  title: response,
 						  icon: "warning",
 						  timer: 2500
-						})
+						});
 				}
 			},
 		});
@@ -329,7 +329,7 @@ function pretragaVozilaSaPopustom(){
 			tipVozila: _tipVozila,
 			brojPutnika: _brojPutnika,
 			
-	}
+	};
 
 	if (_datumPreuzimanja != '' && _datumVracanja != ''){
 		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);
@@ -404,7 +404,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 			    cijena : cijenaSaPopustom,
 			    putnik : korisnikId ,
 			    putovanje : null
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -427,7 +427,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 						  title: response,
 						  icon: "warning",
 						  timer: 2500
-						})				
+						});			
 					}
 			},
 		});

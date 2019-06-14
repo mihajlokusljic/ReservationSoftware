@@ -148,7 +148,7 @@ function pretragaLetova() {
 }
 
 function prikaziTab(idTaba) {
-	for(i in tabovi) {
+	for(var i in tabovi) {
 		if(idTaba == tabovi[i]) {
 			$("#" + tabovi[i]).addClass("active");
 		} else {
@@ -158,7 +158,7 @@ function prikaziTab(idTaba) {
 }
 
 function aktivirajStavkuMenija(idStavke) {
-	for(i in stavkeMenija) {
+	for(var i in stavkeMenija) {
 		if(idStavke == stavkeMenija[i]) {
 			$("#" + stavkeMenija[i]).addClass("active");
 		} else {
@@ -355,14 +355,14 @@ function prikaziBrzeRez(brzeRez){
 						  timer:2000
 						}).then(function(){
 							window.location.replace("../registrovaniKorisnikPocetna/index.html");
-						})
+						});
 					return;
 				} else {
 					swal({
 						  title: "Došlo je do greške prilikom rezervisanja avionske karte. Molimo, pokušajte ponovo.",
 						  icon: "error",
 						  timer:2000
-						})
+						});
 					return;
 				}
 			},

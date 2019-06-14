@@ -288,10 +288,14 @@
                         <h2 class="zaglavlje" id="rezervacijaHotelaPoruka" hidden="hidden">Izaberite hotel za rezervaciju smještaja</h2><br>
                         <form method="POST" action="#" id="hotelSearchForm" name="pretragaHotelaForma">
                                <div class="input-group">
-                                   <label class="label">Odredište</label>
-                                   <input class="input--style-2" type="text" name="address" placeholder="Naziv hotela ili destinacije" id="hotelNaziv">
-                                   <i class="zmdi zmdi-pin input-group-symbol"></i>
-                               </div>
+                                    <label class="label">Odredište</label>
+                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite naziv destinacije ili ostavite prazno" id="nazivOdredistaPretragaHotela">
+                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+                                </div>
+                                <div class="input-group">
+                                    <label class="label">Naziv</label>
+                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite naziv hotela ili ostavite prazno" id="hotelNaziv">
+                                </div>
                                <div class="row row-space">
                                    <div class="col-2">
                                        <div class="input-group">
@@ -360,17 +364,21 @@
 									
 								</tbody>
 							</table>
-							<button type="submit" class="btn btn-submit" id="prelazakNaRezervacijuVozilaBtn" hidden="hidden">Pređi na rezervaciju vozila</button>
+							<button type="submit" class="btn btn-submit" id="prelazakNaRezervacijuVozilaBtn" style="display: none;">Pređi na rezervaciju vozila</button>
                     	</div>
                         
                         <!-- Lista RAC servisa -->
                     	<div class="tab-pane" id="tab-rac-servisi">
 	                  	  <form method="POST" action="#" id="racSearchForm" name="pretragaRacForma">
                     	
-	                    	<div class="input-group">
+	                    			<div class="input-group">
 	                                    <label class="label">Odredište</label>
-	                                    <input class="input--style-2" type="text" name="address" placeholder="Naziv rent-a-car servisa ili lokacija" id="racNaziv">
+	                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite naziv destinacije ili ostavite prazno" id="nazivOdredistaPretragaRacServisa">
 	                                    <i class="zmdi zmdi-pin input-group-symbol"></i>
+	                                </div>
+	                                <div class="input-group">
+	                                    <label class="label">Naziv</label>
+	                                    <input class="input--style-2" type="text" name="address" placeholder="Unesite naziv rent-a-car servisa ili ostavite prazno" id="racNaziv">
 	                                </div>
 	                                <div class="row row-space">
 	                                    <div class="col-2">
