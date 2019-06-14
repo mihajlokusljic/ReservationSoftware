@@ -269,7 +269,7 @@ function prikaziVozila(vozila) {
 						  title: response,
 						  icon: "warning",
 						  timer: 2500
-						})
+						});
 				}
 			},
 		});
@@ -329,7 +329,7 @@ function pretragaVozilaSaPopustom(){
 			tipVozila: _tipVozila,
 			brojPutnika: _brojPutnika,
 			
-	}
+	};
 
 	if (_datumPreuzimanja != '' && _datumVracanja != ''){
 		ukupno = Math.abs(Date.parse(_datumPreuzimanja) - Date.parse(_datumVracanja)) / (1000*60*60*24);

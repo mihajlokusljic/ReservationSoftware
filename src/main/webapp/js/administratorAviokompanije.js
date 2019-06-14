@@ -1411,7 +1411,7 @@ function promjeniLozinku(){
 						  title: "Uspješno ste izmjenili lozinku.",
 						  icon: "success",
 						  timer:2000
-						})
+						});
 					if(!lozinkaMijenjana) {
 						$("#izmjenaInicijalneLozinkePoruka").hide();
 						$("#tab-profil-lozinka").hide();
@@ -1442,7 +1442,7 @@ function dodavanjeUsluge() {
 		cijena: cijenaUsluge,
 		procenatPopusta: popustUsluge,
 		opis: opisUsluge
-	}
+	};
 	
 	$.ajax({
 		type: "POST",

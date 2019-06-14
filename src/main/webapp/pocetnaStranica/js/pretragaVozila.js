@@ -30,7 +30,7 @@ $(document).ready(function() {
 				nazivDestinacije: _nazivDestinacije,
 				datumDolaska: dolazak,
 				datumOdlaska: odlazak,
-		}
+		};
 		
 		$.ajax({
 			type: "POST",
@@ -48,7 +48,7 @@ $(document).ready(function() {
 						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava navedeni kriterijum pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})	
+						});	
 				}
 				$('#racSearchForm')[0].reset();
 			},

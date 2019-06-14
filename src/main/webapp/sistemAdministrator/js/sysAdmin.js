@@ -767,7 +767,7 @@ function promjenaLozinke() {
 			  title: "Niste unijeli novu lozinku.",
 			  icon: "warning",
 			  timer: 2500
-			})
+			});
 		return;
 	}
 	

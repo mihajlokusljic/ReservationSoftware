@@ -380,7 +380,7 @@ function prikaziVozila(vozila){
 		tbody.append('<tr><td class = "column1">' + vozilo["naziv"] + '</td><td class = "column2">' + vozilo["marka"] + '</td><td class = "column3">' + vozilo["model"]
 		 + '</td><td class = "column4">' + vozilo["tip_vozila"]  + '</td><td class = "column5">' + vozilo["godina_proizvodnje"] + '</td><td class = "column6">' + vozilo["cijena_po_danu"] +
 		 '</td><td class = "column6">' +  prosjecnaOcjena + 
-		 '</td><td class = "column7"><a href = "javascript:void(0)" class = "detaljan_prikaz" id = "' + i + '">Detaljan prikaz</a></td></tr>')
+		 '</td><td class = "column7"><a href = "javascript:void(0)" class = "detaljan_prikaz" id = "' + i + '">Detaljan prikaz</a></td></tr>');
 	});
 	
 	$(".detaljan_prikaz").click(function(e){
@@ -1488,7 +1488,7 @@ function prikaziBrzeRez(brzeRez){
 		noviRed.append('<td class="column1">' + br.cijenaSaPopustom + '</td>');
 		
 		prikaz.append(noviRed);
-	})
+	});
 }
 
 function prihodiServisa(){

@@ -58,7 +58,7 @@ $(document).ready(function(e) {
 			  timer: 2500
 			}).then(function(){
 				redirectNaPocetnu();
-			})
+			});
 		
 	}
 	

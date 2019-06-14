@@ -53,7 +53,7 @@ $(document).ready(function(e) {
 						  title: "Ne postoji ni jedan hotel koji zadovoljava navedene kriterijume pretrage.",
 						  icon: "info",
 						  timer: 2500
-						})					}
+						});					}
 				$('#hotelSearchForm')[0].reset();
 				resetujZahtjeveSoba();
 			},

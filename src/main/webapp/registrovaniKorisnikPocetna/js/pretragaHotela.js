@@ -20,7 +20,7 @@ $(document).ready(function(e) {
 					  title: "Došlo je do greške",
 					  icon: "warning",
 					  timer: 2500
-					})	
+					});	
 	    	}
 		}
 	});
@@ -48,7 +48,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 			datumDolaska: dolazak,
 			datumOdlaska: odlazak,
 			potrebneSobe: _potrebneSobe
-	}
+	};
 	
 	$.ajax({
 		type: "POST",
@@ -185,7 +185,7 @@ function prebrojPotrebneSobe() {
     var brojKreveta = 0;
     var brojSoba = 0;
     
-    var potrebneSobe = {} //rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
+    var potrebneSobe = {}; //rijecnik koji za za svaki tip sobe (broj kreveta) cuva broj potrebnih takvih soba
     listRoomItem.each(function () {
         var that = $(this);
         brojKreveta = parseInt(that.find('.quantity1 > input').val());

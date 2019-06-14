@@ -71,7 +71,7 @@ $(document).ready(function() {
 				  title: "Ne poklapaju se lozinke.",
 				  icon: "warning",
 				  timer: 2500
-				})	
+				});	
 			return;
 		}
 

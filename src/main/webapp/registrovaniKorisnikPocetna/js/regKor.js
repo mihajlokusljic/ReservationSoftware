@@ -789,7 +789,7 @@ function prikaziPrijateljeZaPozivanje(prijatelji) {
 		noviRed.append('<td class="column1">' + prijatelj.ime + '</td>');
 		noviRed.append('<td class="column1">' + prijatelj.prezime + '</td>');
 		akcija = "Pozovi";
-		for(i in pozvaniPrijateljiIds) {
+		for(var i in pozvaniPrijateljiIds) {
 			if(prijatelj.id == pozvaniPrijateljiIds[i]) {
 				akcija = "Otkaži poziv";
 			}
@@ -1363,7 +1363,6 @@ function ucitajRezervisaneLetove(){
 		success: function(data){
 			prikaziRezervisaneLetove(data);
 		},
-		async: false,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + textStatus);
 		}
@@ -1768,7 +1767,7 @@ function prikaziRezervisaneLetove(rezLetova){
 		
 		let rezervacija = rezLetova[e.target.id];
 		var datumP = Date.parse(rezervacija.datumPolaska);
-		var dt = new Date(rezervacija.datumPolaska)
+		var dt = new Date(rezervacija.datumPolaska);
 		let sati = dt.getHours();
 		let minuti = dt.getMinutes();
 		var sadasnjiDatum = new Date();
@@ -1837,8 +1836,8 @@ function prikaziRezervisaneSobe(rezSoba){
 		noviRed.append('<td class="column1">' + rSoba.cijena + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumDolaksa + '</td>');
 		noviRed.append('<td class="column1">' + rSoba.datumOdlaksa + '</td>');
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuSobe" id = "' + i + '">Otkaži rezervaciju</a></td></tr>')
-		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniSobu" id = "' + i + '">Ocjeni sobu</a></td></tr>')
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "otkaziRezervacijuSobe" id = "' + i + '">Otkaži rezervaciju</a></td></tr>');
+		noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "ocjeniSobu" id = "' + i + '">Ocjeni sobu</a></td></tr>');
 
 		tabela.append(noviRed);
 	});
@@ -1898,7 +1897,7 @@ function prikaziRezervisaneSobe(rezSoba){
 		// kad korisnik klikne na "x" zatvara se prozor
 		span.onclick = function() {
 		  modal.style.display = "none";
-		}
+		};
 		 var stars = $('#stars li').parent().children('li.star');
 		    for (i = 0; i < stars.length; i++) {
 		      $(stars[i]).removeClass('selected');
@@ -1998,7 +1997,7 @@ function prikaziRezervisaneSobe(rezSoba){
 				  text: "Zakasnili ste sa otkazivanjem rezervacije sobe..",
 				  icon: "warning",
 				  timer: 2000
-				})	
+				});	
 			return;
 		}
 		

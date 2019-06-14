@@ -355,7 +355,7 @@ function prikaziBrzeRez(brzeRez){
 						  timer:2000
 						}).then(function(){
 							window.location.replace("../registrovaniKorisnikPocetna/index.html");
-						})
+						});
 					return;
 				} else {
 					swal({
