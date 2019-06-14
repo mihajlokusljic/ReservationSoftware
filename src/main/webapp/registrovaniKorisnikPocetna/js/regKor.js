@@ -96,7 +96,15 @@ $(document).ready(function() {
 		e.preventDefault();
 		//funkcija iz modula hotelSearch.js
 		//paramteri su potrebni za pozivanje info stranice hotela
-		pretragaHotela(korisnik.id, datumDolaska, datumOdlaska, idPutovanja);
+		if(!rezimRezervacije) {
+			pretragaHotela(korisnik.id, null, null, null);
+		}
+		else 
+		{
+			pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+					podaciRezervacijeSjedista.idPutovanja);
+		}
+		
 	});
 	
 	//odjavljivanje
@@ -649,6 +657,7 @@ function recalculateTotal(sc) {
 }
 
 function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
+	rezimRezervacije = true;
 	podaciOMapi = null;
 	$("#izborLetaZaRezervaciju").hide();
 	$("#pozivPrijateljaZaRezervaciju").hide();
