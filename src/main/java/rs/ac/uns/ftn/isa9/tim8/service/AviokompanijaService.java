@@ -21,6 +21,7 @@ import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PodaciPutnikaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaLetaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
@@ -1033,6 +1034,73 @@ public class AviokompanijaService {
 
 		aviokompanijaRepository.save(let.getAvion().getAviokompanija());
 		letoviRepository.save(let);
+
+		return podaciRezervacije;
+	}
+
+	public IzvrsavanjeRezervacijeSjedistaDTO popuniPodatkeZaPutnike(IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije)
+			throws NevalidniPodaciException {
+		Optional<Putovanje> pretragaPutovanja = putovanjeRepository.findById(podaciRezervacije.getIdPutovanja());
+
+		if (!pretragaPutovanja.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji putovanje sa tim id-jem.");
+		}
+
+		Putovanje putovanje = pretragaPutovanja.get();
+
+		int prijateljIdIndex = 0;
+		int neregistrovanPutnikIndex = 0;
+
+		Optional<Osoba> korisnikPretraga = null;
+		RegistrovanKorisnik pozvaniPrijatelj = null;
+		PodaciPutnikaDTO podaciNeregistrovanogPutnika = null;
+
+		for (RezervacijaSjedista rez : putovanje.getRezervacijeSjedista()) {
+			korisnikPretraga = korisnikRepository.findById(podaciRezervacije.getIdKorisnika());
+			if (!korisnikPretraga.isPresent()) {
+				throw new NevalidniPodaciException("Nije prepoznat autor rezervacije.");
+			}
+
+			RegistrovanKorisnik inicijatorPutovanja = (RegistrovanKorisnik) korisnikPretraga.get();
+			rez.setPutnik(inicijatorPutovanja);
+			rez.setImePutnika(inicijatorPutovanja.getIme());
+			rez.setPrezimePutnika(inicijatorPutovanja.getPrezime());
+			rez.setBrojPasosaPutnika(inicijatorPutovanja.getBrojPasosa());
+			
+			// Pozvani prijatelji
+			if (prijateljIdIndex < podaciRezervacije.getPozvaniPrijateljiIds().size()) {
+				korisnikPretraga = korisnikRepository
+						.findById(podaciRezervacije.getPozvaniPrijateljiIds().get(prijateljIdIndex));
+
+				if (!korisnikPretraga.isPresent()) {
+					throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-jem.");
+				}
+
+				pozvaniPrijatelj = (RegistrovanKorisnik) korisnikPretraga.get();
+				rez.setPutnik(pozvaniPrijatelj);
+				rez.setImePutnika(pozvaniPrijatelj.getIme());
+				rez.setPrezimePutnika(pozvaniPrijatelj.getPrezime());
+				rez.setBrojPasosaPutnika(pozvaniPrijatelj.getBrojPasosa());
+
+				prijateljIdIndex++;
+			} else {
+				// Neregistrovani putnici
+				if (neregistrovanPutnikIndex < podaciRezervacije.getPodaciNeregistrovanihPutnika().size()) {
+					rez.setPutnik(putovanje.getInicijatorPutovanja());
+					podaciNeregistrovanogPutnika = podaciRezervacije.getPodaciNeregistrovanihPutnika()
+							.get(neregistrovanPutnikIndex);
+					rez.setImePutnika(podaciNeregistrovanogPutnika.getIme());
+					rez.setPrezimePutnika(podaciNeregistrovanogPutnika.getPrezime());
+					rez.setBrojPasosaPutnika(podaciNeregistrovanogPutnika.getBrojPasosa());
+
+					neregistrovanPutnikIndex++;
+				}
+			}
+
+			rezervacijaSjedistaRepository.save(rez);
+		}
+
+		putovanjeRepository.save(putovanje);
 
 		return podaciRezervacije;
 	}

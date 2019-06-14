@@ -160,6 +160,16 @@ public class AviokompanijeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/popuniPodatkeZaPutnike", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> popuniPodatkeZaPutnike(@RequestBody IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije) {
+		try {
+			return new ResponseEntity<IzvrsavanjeRezervacijeSjedistaDTO>(servis.popuniPodatkeZaPutnike(podaciRezervacije), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	/*
 	 * SecurityContextHolder - omogucuje koriscenje statickih metoda koje delegiraju

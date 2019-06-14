@@ -11,10 +11,11 @@ var scGlobal = null;
 var datumDolaska = null;
 var datumOdlaska = null;
 var idPutovanja = null;
-var rezervisanoSjedista = null;
+var rezervisanoSjedista = 0;
 var pozvaniPrijateljiIds = [];
 var idLetaZaRezervaciju = -1;
 var podaciRezervacijeSjedista = null;
+var _podaciNeregistrovanihPutnika = [];
 //spring.datasource.initialization-mode=always
 
 $(document).ready(function() {	
@@ -378,6 +379,56 @@ $(document).ready(function() {
 			    }	
 			  });
 		
+	});
+	
+	$("#zadavanjePodatakaPutnikaForm").submit(function(e) {
+		e.preventDefault();
+
+		let _ime = $("#imePutnikaRez").val();
+		let _prezime = $("#prezimePutnikaRez").val();
+		let _brojPasosa = $("#brPasosaPutnikaRez").val();
+		
+		let podaciPutnika = {
+				brojPasosa : _brojPasosa,
+				ime : _ime,
+				prezime : _prezime
+		}
+		
+		_podaciNeregistrovanihPutnika.push(podaciPutnika);
+		$("#zadavanjePodatakaPutnikaForm")[0].reset();
+		
+		if (_podaciNeregistrovanihPutnika.length === rezervisanoSjedista - 1 - pozvaniPrijateljiIds.length) {
+			// Izvrsava se sve dok se ne unesu podaci svih neregistrovanih putnika
+			
+			podaciRezervacijeSjedista.pozvaniPrijateljiIds = pozvaniPrijateljiIds;
+			podaciRezervacijeSjedista.podaciNeregistrovanihPutnika = _podaciNeregistrovanihPutnika;
+			
+			$.ajax({
+				type: "POST",
+				async: false,
+				url: "../aviokompanije/popuniPodatkeZaPutnike",
+				contentType : "application/json; charset=utf-8",
+				data: JSON.stringify(podaciRezervacijeSjedista),
+				success: function(response) {
+					podaciRezervacijeSjedista = response;
+					
+					swal({
+						  title: "Uspješno uneseni podaci!",
+						  text: "Uspješno ste unijeli podatke za putnike.",
+						  icon: "success",
+					})
+					
+					$("#zadavanjePodatakaPutnikaForm")[0].reset();
+					return;
+				},
+			});
+			
+			$("#brPodatakaNeregistrovanihPutnika").html(1); // jer je zavrsen unos
+			
+		} else {
+			$("#brPodatakaNeregistrovanihPutnika").html(parseInt(_podaciNeregistrovanihPutnika.length + 1));
+		}
+				
 	});
 	
 	$("#racSearchForm").submit(function(e) {
