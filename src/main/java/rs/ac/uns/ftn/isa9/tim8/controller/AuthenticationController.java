@@ -65,7 +65,7 @@ public class AuthenticationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@Valid @RequestBody Osoba korisnik) {
 
-		if (this.userDetailsService.emailZauzet(korisnik.getEmail()) == true) {
+		if (this.userDetailsService.emailZauzet(korisnik.getEmail())) {
 			return new ResponseEntity<String>("Zauzet email", HttpStatus.OK);
 		}
 
