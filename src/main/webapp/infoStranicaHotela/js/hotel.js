@@ -10,6 +10,7 @@ let rezimRezervacije = false;
 let datumDolaskaPutovanje = null;
 let datumOdlaskaPutovanje = null;
 let idPutovanja = null;
+let idLetaRez = null;
 
 
 $(document).ready(function(e) {
@@ -25,7 +26,6 @@ $(document).ready(function(e) {
 	    		swal({
 		  			  title: XMLHttpRequest.responseText,
 		  			  icon: "warning",
-		  			  timer: 2500
 		  			});	    	
 	    		}
 	    	else {
@@ -50,6 +50,7 @@ $(document).ready(function(e) {
 	datumDolaskaPutovanje = params_parser.get("datumDolaska");
 	datumOdlaskaPutovanje = params_parser.get("datumOdlaska");
 	idPutovanja = params_parser.get("idPutovanja");
+	idLetaRez = params_parser.get("idLetaRez");
 	
 	if(idHotela == null) {
 		swal({
@@ -192,9 +193,8 @@ function izvrsiRezervaciju() {
 				swal({
 					  title: "Uspješno ste rezervisali hotelski smještaj.",
 					  icon: "success",
-					  timer: 2500
 					}).then(function(){
-						redirectNaPocetnu();
+						nastavakRezervacije();
 					});
 			}
 			
@@ -440,8 +440,10 @@ function rezervisanjeBrzeRezervacije(idRez) {
 				swal({
 					  title: "Uspješno ste rezervisali hotelski smještaj.",
 					  icon: "success",
-					  timer: 2500
+					}).then(function(){
+						nastavakRezervacije();			
 					});
+				
 			}
 			
 			else{
@@ -530,6 +532,10 @@ function redirectNaPocetnu() {
 	} else {
 		window.location.replace(pocetnaStranicaRegistrovanogKor);
 	}
+}
+
+function nastavakRezervacije() {
+	window.location.replace(pocetnaStranicaRegistrovanogKor + "?idPutovanja=" + idPutovanja + "&idLetaRez=" + idLetaRez);
 }
 
 function inicijalizujMapu() {

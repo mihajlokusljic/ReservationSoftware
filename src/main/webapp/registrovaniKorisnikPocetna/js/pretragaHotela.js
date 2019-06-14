@@ -27,7 +27,7 @@ $(document).ready(function(e) {
 	
 });
 
-function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
+function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja, idLetaRez) {
 	let _nazivOdredista = $("#nazivOdredistaPretragaHotela").val();
 	let _nazivHotela = $("#hotelNaziv").val();
 	let dolazak = $("#input-start").val();
@@ -56,7 +56,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 		contentType : "application/json; charset=utf-8",
 		data: JSON.stringify(pretragaHotela),
 		success: function(response) {
-			refreshHotels(response, idKorisnika, datumDolaska, datumOdlaska, idPutovanja);
+			refreshHotels(response, idKorisnika, datumDolaska, datumOdlaska, idPutovanja, idLetaRez);
 			if(response.length == 0) {
 				swal({
 					  title: "Ne postoji ni jedan hotel koji zadovoljava kriterijume pretrage",
@@ -64,7 +64,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 					  timer: 2500
 					});	
 			}
-			if(datumDolaska == null || datumOdlaska == null || datumOdlaska == null) {
+			if(datumDolaska == null || datumOdlaska == null || idPutovanja == null) {
 				//ako nije rezim rezervacije, forma se resetuje
 				$('#hotelSearchForm')[0].reset();
 				resetujZahtjeveSoba();
@@ -77,7 +77,7 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
  * Prikazuje rezeultate pretrage hotela.
  * U rezimu rezervacije proslijedjuje potrebne parametre info stranici hotela kroz putanju
  */
-function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
+function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutovanja, idLetaRez) {
 	let hotelsTableBody = $("#prikazHotela");
 	hotelsTableBody.empty();
 	let hotel, noviRed = null;
@@ -95,8 +95,9 @@ function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutova
 		}
 		putanja = '../infoStranicaHotela/index.html?id=' + hotel.id + '&korisnik=' + idKorisnika;
 		poruka = 'Pogledaj detalje';
-		if(datumDolaska != null && datumOdlaska != null && datumOdlaska != null) {
-			putanja += '&datumDolaska=' + datumDolaska + '&datumOdlaska=' + datumOdlaska + '&idPutovanja=' + idPutovanja;
+		if(datumDolaska != null && datumOdlaska != null && idPutovanja != null) {
+			putanja += '&datumDolaska=' + datumDolaska + '&datumOdlaska=' + datumOdlaska + 
+			'&idPutovanja=' + idPutovanja + "&idLetaRez=" + idLetaRez;
 			poruka = 'Rezerviši sobe';
 		}
 		noviRed.append('<td class="column1"><a href="' + putanja + '">' + poruka + '</a></td>');
