@@ -8,10 +8,19 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
+	    		swal({
+					  title: "Došlo je do greške",
+					  text: XMLHttpRequest.responseText,
+					  icon: "warning",
+					  timer: 2500
+					})
 	    	}
 	    	else {
-	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    		swal({
+					  title: "Došlo je do greške",
+					  icon: "warning",
+					  timer: 2500
+					})	
 	    	}
 		}
 	});
@@ -19,7 +28,8 @@ $(document).ready(function(e) {
 });
 
 function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
-	let nazivOdredista = $("#hotelNaziv").val();
+	let _nazivOdredista = $("#nazivOdredistaPretragaHotela").val();
+	let _nazivHotela = $("#hotelNaziv").val();
 	let dolazak = $("#input-start").val();
 	let odlazak = $("#input-end").val();
 	let sobeZahtjevi = prebrojPotrebneSobe();
@@ -33,7 +43,8 @@ function pretragaHotela(idKorisnika, datumDolaska, datumOdlaska, idPutovanja) {
 	}
 	
 	let pretragaHotela = {
-			nazivHotelaIliDestinacije: nazivOdredista,
+			nazivHotela: _nazivHotela,
+			nazivDestinacije: _nazivOdredista,
 			datumDolaska: dolazak,
 			datumOdlaska: odlazak,
 			potrebneSobe: _potrebneSobe

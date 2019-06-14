@@ -835,7 +835,8 @@ function prikaziHoteleZaRezervaciju() {
 	//pretraga hotela i podesavanje izgleda stranice za rezervaciju
 	$("#rezervacijaHotelaPoruka").show();
 	$("#prelazakNaRezervacijuVozilaBtn").show();
-	$("#hotelNaziv").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaHotela").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaHotela").attr("readonly", "readonly");
 	$("#input-start").val(podaciBoravka.datumDolaska);
 	$("#input-end").val(podaciBoravka.datumPovratka);
 	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja);
