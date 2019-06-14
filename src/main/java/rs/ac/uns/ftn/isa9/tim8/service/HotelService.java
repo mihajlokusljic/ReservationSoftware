@@ -127,7 +127,7 @@ public class HotelService {
 	 * broj kreveta. Kljuc je broj kreveta u sobi a vrijednost je broj slobodnih
 	 * soba sa tim brojem kreveta.
 	 */
-	HashMap<Integer, Integer> slobodneSobe(Hotel hotel, Date pocetniDatum, Date krajnjiDatum) {
+	public HashMap<Integer, Integer> slobodneSobe(Hotel hotel, Date pocetniDatum, Date krajnjiDatum) {
 		HashMap<Integer, Integer> rezultat = new HashMap<Integer, Integer>();
 		int slobodnoSoba = 0;
 		for (HotelskaSoba soba : hotel.getSobe()) {
