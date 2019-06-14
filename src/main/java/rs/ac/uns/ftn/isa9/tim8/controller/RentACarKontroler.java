@@ -293,7 +293,7 @@ public class RentACarKontroler {
 	}
 	@RequestMapping(value = "/ocjenjenaRezervacija/{idRezervacije}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
- 	public ResponseEntity<?> OcjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
+ 	public ResponseEntity<?> ocjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
 		try {
 			return new ResponseEntity<Boolean>(servis.rezervacijaVozilaOcjenjena(idRezervacije), HttpStatus.OK);
 		}catch (NevalidniPodaciException e) {

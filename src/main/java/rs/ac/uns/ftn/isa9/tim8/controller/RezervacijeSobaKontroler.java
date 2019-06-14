@@ -116,7 +116,7 @@ public class RezervacijeSobaKontroler {
 	}
 	@RequestMapping(value = "/ocjenjenaRezervacija/{idRezervacije}", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
- 	public ResponseEntity<?> OcjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
+ 	public ResponseEntity<?> ocjenjenaRezervacija(@PathVariable("idRezervacije") Long idRezervacije){
 		try {
 			return new ResponseEntity<Boolean>(rezervacijeServis.rezervacijaSobeOcjenjena(idRezervacije), HttpStatus.OK);
 		}catch (NevalidniPodaciException e) {
