@@ -49,22 +49,17 @@ $(document).ready(function() {
 	if(idPutovanja != null && idLetaZaRezervaciju != null) {
 		//  korisnik dolazi sa rezervacije hotelskog smjestaja i treba da mu se ponudi rezervacija vozila
 		rezimRezervacije = true;
-		$("#rezervacijaVozilaPoruka").show();
-		$("#zavrsetakrezervacijeBtn").show();
+		$.ajax({
+			type: "GET",
+			async: false,
+			url: "../letovi/podaciBoravkaZaLet/" + idLetaZaRezervaciju,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				podaciBoravka = response;
+			},
+		});
 		
-		//  prikaz taba za rezervaciju vozila
-		$("#tab-aviokompanije").hide();
-		$("#tab-hoteli").hide();
-		$("#tab-rac-servisi").show();
-		$("#tab-rezervacije").hide();
-		$("#pregled-prijatelja-tab").hide();
-		$("#dodaj-prijatelje-tab").hide();
-		$("#zahtjevi-prijateljstva-tab").hide();
-		$("#tab-pozivnice").hide();
-		$("#tab-profilKorisnika").hide();
-		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
-		$("#tab-letovi").hide();
+		prikaziRacServiseZaRezervaciju();
 		
 	}
 	
@@ -876,7 +871,7 @@ function prikaziHoteleZaRezervaciju() {
 	$("#rezervacijaHotelaPoruka").show();
 	$("#prelazakNaRezervacijuVozilaBtn").show();
 	$("#nazivOdredistaPretragaHotela").val(podaciBoravka.nazivDestinacije);
-	$("#nazivOdredistaPretragaHotela").attr("readonly", "readonly");
+	$("#nazivOdredistaPretragaHotela").attr("readonly", true);
 	$("#input-start").val(podaciBoravka.datumDolaska);
 	$("#input-end").val(podaciBoravka.datumPovratka);
 	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
@@ -884,6 +879,35 @@ function prikaziHoteleZaRezervaciju() {
 	$("#tab-aviokompanije").hide();
 	$("#tab-hoteli").show();
 	$("#tab-rac-servisi").hide();
+	$("#tab-rezervacije").hide();
+	$("#pregled-prijatelja-tab").hide();
+	$("#dodaj-prijatelje-tab").hide();
+	$("#zahtjevi-prijateljstva-tab").hide();
+	$("#tab-pozivnice").hide();
+	$("#tab-profilKorisnika").hide();
+	$("#tab-profil-lozinka").hide();
+	$("#tab-odjava").hide();	
+	$("#tab-letovi").hide();
+}
+
+function prikaziRacServiseZaRezervaciju() {
+	//prikazivanje poruka i dugmeta za korake rezervacije
+	$("#rezervacijaVozilaPoruka").show();
+	$("#zavrsetakrezervacijeBtn").show();
+	
+	//pretraga RAC servisa na odredistu leta
+	$("#nazivOdredistaPretragaRacServisa").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaRacServisa").attr("readonly", true);
+	$("#input-start-rac").val(podaciBoravka.datumDolaska);
+	$("#input-end-rac").val(podaciBoravka.datumPovratka);
+	
+	
+	
+	
+	//  prikaz taba za rezervaciju vozila
+	$("#tab-aviokompanije").hide();
+	$("#tab-hoteli").hide();
+	$("#tab-rac-servisi").show();
 	$("#tab-rezervacije").hide();
 	$("#pregled-prijatelja-tab").hide();
 	$("#dodaj-prijatelje-tab").hide();

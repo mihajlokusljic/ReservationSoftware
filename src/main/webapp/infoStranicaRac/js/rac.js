@@ -2,6 +2,9 @@ let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
 let korisnikId = null;
+let idPutovanja = null;
+let idLetaRez = null;
+let podaciBoravka = null;
 let mapa = null;
 let zoomLevel = 17;
 
@@ -67,7 +70,23 @@ function ucitajPodatkeRac() {
 	
 	var id = params_parser.get("id");
 	var kor =  params_parser.get("korisnik");
+	idPutovanja = params_parser.get("idPutovanja");
+	idLetaRez = params_parser.get("idLetaRez");
 	korisnikId = kor;
+	
+	if(idPutovanja != null) {
+		//  rezim rezervacije, dobavljamo podatke o periodu boravka
+		$.ajax({
+			type: "GET",
+			async: false,
+			url: "../letovi/podaciBoravkaZaLet/" + idLetaRez,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				podaciBoravka = response;
+			},
+		});
+		
+	}
 	
 	$.ajax({
 		type: "GET",
