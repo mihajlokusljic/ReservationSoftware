@@ -6,51 +6,38 @@ import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 
 public class RezervacijaVozilaDTO {
-	
+
 	protected Vozilo rezervisanoVozilo;
 
 	protected Long mjestoPreuzimanjaVozila;
-	
+
 	protected Date datumPreuzimanjaVozila;
-	
+
 	protected Long mjestoVracanjaVozila;
-	
+
 	protected Date datumVracanjaVozila;
-	
+
 	protected double cijena;
-	
-	protected Long putnik; //opciono, ne mora se rezervisati za registrovanog korisnika
-	
-	protected Putovanje putovanje;
 
-	public RezervacijaVozilaDTO(Vozilo rezervisanoVozilo, Long mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
-			Long mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena, Long putnik,
-			Putovanje putovanje) {
-		super();
-		this.rezervisanoVozilo = rezervisanoVozilo;
-		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
-		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
-		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
-		this.datumVracanjaVozila = datumVracanjaVozila;
-		this.cijena = cijena;
-		this.putnik = putnik;
-		this.putovanje = putovanje;
-	}
+	protected Long putnik; // opciono, ne mora se rezervisati za registrovanog korisnika
 
-	public RezervacijaVozilaDTO(Vozilo rezervisanoVozilo, Long mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
-			Long mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena, Long putnik) {
-		super();
-		this.rezervisanoVozilo = rezervisanoVozilo;
-		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
-		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
-		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
-		this.datumVracanjaVozila = datumVracanjaVozila;
-		this.cijena = cijena;
-		this.putnik = putnik;
-	}
+	protected Long idPutovanja;
 
 	public RezervacijaVozilaDTO() {
 		super();
+	}
+
+	public RezervacijaVozilaDTO(Vozilo rezervisanoVozilo, Long mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
+			Long mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena, Long putnik, Long idPutovanja) {
+		super();
+		this.rezervisanoVozilo = rezervisanoVozilo;
+		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
+		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
+		this.datumVracanjaVozila = datumVracanjaVozila;
+		this.cijena = cijena;
+		this.putnik = putnik;
+		this.idPutovanja = idPutovanja;
 	}
 
 	public Vozilo getRezervisanoVozilo() {
@@ -101,7 +88,6 @@ public class RezervacijaVozilaDTO {
 		this.cijena = cijena;
 	}
 
-
 	public Long getPutnik() {
 		return putnik;
 	}
@@ -110,15 +96,12 @@ public class RezervacijaVozilaDTO {
 		this.putnik = putnik;
 	}
 
-	public Putovanje getPutovanje() {
-		return putovanje;
+	public Long getIdPutovanja() {
+		return idPutovanja;
 	}
 
-	public void setPutovanje(Putovanje putovanje) {
-		this.putovanje = putovanje;
+	public void setIdPutovanja(Long idPutovanja) {
+		this.idPutovanja = idPutovanja;
 	}
-	
-	
+
 }
-
-

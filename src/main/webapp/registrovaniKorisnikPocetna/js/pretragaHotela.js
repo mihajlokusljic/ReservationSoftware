@@ -1,5 +1,3 @@
-var defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
-
 $(document).ready(function(e) {
 	
 	$.ajaxSetup({
@@ -85,7 +83,7 @@ function refreshHotels(hotels, idKorisnika, datumDolaska, datumOdlaska, idPutova
 	for(var i in hotels) {
 		hotel = hotels[i];
 		noviRed = $("<tr></tr>");
-		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
+		noviRed.append('<td class="column1"><img src="https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg"/></td>');
 		noviRed.append('<td class="column1">' + hotel.naziv + "</td>");
 		noviRed.append('<td class="column1">' + hotel.adresa.punaAdresa + "</td>");
 		if(hotel.brojOcjena > 0) {
