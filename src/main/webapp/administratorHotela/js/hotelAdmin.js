@@ -59,12 +59,6 @@ $(document).ready(function(e) {
 		prikaziTab("tab-brze-rezervacije-pregledanje");
 	});
 	
-	$("#izvjestaji").click(function(e) {
-		e.preventDefault();
-		aktivirajStavkuMenija("stavkaIzvjestaji");
-		prikaziTab("tab-izvjestaji");
-	});
-	
 	$("#izmjeni_podatke").click(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaProfilKorisnika");
