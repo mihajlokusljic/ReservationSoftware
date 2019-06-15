@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
@@ -180,6 +182,38 @@ public class AviokompanijeKontroler {
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@RequestMapping(value = "/dnevniIzvjestaj/{idAviokompanije}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+ 	public ResponseEntity<?> dnevniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idAviokompanije") Long idAviokompanije){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.dnevniIzvjestaj(idAviokompanije, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	@RequestMapping(value = "/nedeljniIzvjestaj/{idAviokompanije}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+ 	public ResponseEntity<?> nedeljniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idAviokompanije") Long idAviokompanije){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.nedeljniIzvjestaj(idAviokompanije, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/mjesecniIzvjestaj/{idAviokompanije}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+ 	public ResponseEntity<?> mjesecniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idAviokompanije") Long idAviokompanije){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(servis.mjesecniIzvjestaj(idAviokompanije, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	/*

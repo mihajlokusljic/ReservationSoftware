@@ -1638,7 +1638,7 @@ function grafikRezervisanihVozila(){
 		}
 		else if ($("#grafikMjesecniBtn").is(":checked")) {
 			tergetUrl = "../rentACar/mjesecniIzvjestaj";
-			text = "Broj rezervisanih vozila nas svakih mjesec dana";
+			text = "Broj rezervisanih vozila na svakih mjesec dana";
 			axisX = "Mjeseci";
 		}
 		

@@ -43,6 +43,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 	});
 	
@@ -60,6 +61,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 	});
 	
@@ -77,6 +79,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 	});
 
@@ -95,6 +98,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").show();
 		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 		podesiDivoveBrzeRez();
 	});
@@ -115,6 +119,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").show();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 	});
 	
@@ -134,6 +139,8 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").show();
 		$("#prihod_id").hide();
+		$("#grafik_prodatih_karata").hide();
+
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -194,6 +201,9 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
+
 		profilKorisnika();
 	});
 	
@@ -211,6 +221,9 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
+
 		promjeniLozinku();
 
 	});
@@ -228,6 +241,8 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
 	});
 	
@@ -244,7 +259,30 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").hide();
 
+
+	});
+	
+	$("#grafik_prodatih_karata_tab").click(function(e){
+		e.preventDefault();
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
+		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+		$("#grafik_prodatih_karata").show();
+		
+		grafikProdatihKarata();
+		
 	});
 	
 	$("#dodavanjeDodatneUslugeForm").submit(function(e) {
@@ -1590,3 +1628,99 @@ function izmjenaInicijalneLozinke(){
 	promjeniLozinku();
 }
 
+function grafikProdatihKarata(){
+	$("#prikazGrafika").submit(function(e){
+		e.preventDefault();
+
+		let _datumPocetni = $("#input-start-4").val();
+		let _datumKrajnji = $("#input-end-4").val();
+		
+		if (_datumPocetni == '') {
+			swal({
+				  title: "Morate unijeti početni datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		if (_datumKrajnji == '') {
+			swal({
+				  title: "Morate unijeti krajnji datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		let tergetUrl = "../rentACar/dnevniIzvjestaj";
+		let text = "Broj prodatih karata po danu";
+		let axisX = "Dani";
+		
+		if($("#grafikDnevniBtn").is(":checked")) {
+			tergetUrl = "../aviokompanije/dnevniIzvjestaj";
+			text = "Broj prodatih karata na dnevnom nivou";
+			axisX = "Dani";
+		}
+		
+		if($("#grafikNedeljniBtn").is(":checked")) {
+			tergetUrl = "../aviokompanije/nedeljniIzvjestaj";
+			text = "Broj prodatih karata na svakih 7 dana";
+			axisX = "Nedelje";
+		}
+		else if ($("#grafikMjesecniBtn").is(":checked")) {
+			tergetUrl = "../aviokompanije/mjesecniIzvjestaj";
+			text = "Broj prodatih karata na svakih mjesec dana";
+			axisX = "Mjeseci";
+		}
+		
+		
+		let datumiZaIzvjestaj = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		}
+		$.ajax({
+			type : 'POST',
+			url : tergetUrl+ "/" + aviokompanija.id,
+			data : JSON.stringify(datumiZaIzvjestaj),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				prikaziGrafik(response,text,axisX);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({
+					  title: textStatus+ " " +errorThrown,
+					  icon: "error",
+					  timer: 2500
+					});
+				return;
+			}
+		});
+		
+	});
+}
+
+function prikaziGrafik (izvjestaj,text,axisX) {
+	var dataP = [];
+	
+	for (var i = 0; i < izvjestaj.brojeviYOsa.length; i++) {
+		dataP.push({"y": izvjestaj.brojeviYOsa[i], "label" : izvjestaj.vrijednostiXOse[i]});
+	}
+	
+	var options = {
+			title:{
+				text: text  
+			},
+			axisY:{
+				title:"Broj prodatih karata"
+			},
+			axisX:{
+				title:axisX
+			},
+			data: [{
+				dataPoints: dataP
+		    }]
+		};
+	$("#chartContainer").show();
+	$("#chartContainer").CanvasJSChart(options);
+}
