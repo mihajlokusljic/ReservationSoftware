@@ -1624,15 +1624,15 @@ function grafikRezervisanihVozila(){
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				swal({
-					  title: textStatus,
+					  title: textStatus+ " " +errorThrown,
 					  icon: "error",
 					  timer: 2500
-					})
+					});
 				return;
 			}
 		});
 		
-	})
+	});
 }
 
 function prikaziGrafik (izvjestaj,text,axisX) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaHotelaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.AdministratorHotela;
@@ -110,5 +111,16 @@ public class HoteliKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@RequestMapping(value = "/dnevniIzvjestaj/{idHotela}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+ 	public ResponseEntity<?> dnevniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idHotela") Long idHotela){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(this.servis.dnevniIzvjestaj(idHotela, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 
 }

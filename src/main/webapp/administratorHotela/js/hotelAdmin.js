@@ -6,7 +6,7 @@ let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
 let tabovi = ["tab-sobe", "tab-dodatne-usluge", "tab-info-stranica", "tab-brze-rezervacije-dodavanje",
-	"tab-brze-rezervacije-pregledanje", "tab-prihodi-hotela", "tab-profil-kor", "tab-profil-lozinka"];
+	"tab-brze-rezervacije-pregledanje", "tab-prihodi-hotela", "tab-profil-kor", "tab-profil-lozinka", "grafik_posjecenosti_hotela"];
 let mapaHotela = null;
 let zoomLevel = 17;
 
@@ -75,7 +75,12 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaIzvjestaji");
 		prikaziTab("tab-prihodi-hotela");
-		prihodiHotela();
+	});
+	
+	$("#grafik_posjecenosti_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaIzvjestaji");
+		prikaziTab("grafik_posjecenosti_hotela");
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -233,6 +238,12 @@ $(document).ready(function(e) {
 				alert("AJAX error: " + errorThrown);
 			}
 		});
+	});
+	
+	//prikaz grafika posjecenosti hotela
+	$("#prikazGrafika").submit(function(e){
+		e.preventDefault();
+		ucitavanjeGrafika();
 	});
 	
 	//odjavljivanje
@@ -1129,4 +1140,97 @@ function inicijalizujMapu() {
 		$("#latitudaHotela").val(coords[0]);
 		$("#longitudaHotela").val(coords[1]);
 	});
+}
+
+function ucitavanjeGrafika(){
+
+	let _datumPocetni = $("#input-start-3").val();
+	let _datumKrajnji = $("#input-end-3").val();
+	
+	if (_datumPocetni == '') {
+		swal({
+			  title: "Morate unijeti početni datum",
+			  icon: "warning",
+			  timer: 2500
+			})
+		return;
+	}
+	
+	if (_datumKrajnji == '') {
+		swal({
+			  title: "Morate unijeti krajnji datum",
+			  icon: "warning",
+			  timer: 2500
+			})
+		return;
+	}
+	
+	let tergetUrl = "../hoteli/dnevniIzvjestaj";
+	let text = "Posjećenost hotela po danu";
+	let axisX = "Dani";
+	
+	if($("#grafikDnevniBtn").is(":checked")) {
+		tergetUrl = "../hoteli/dnevniIzvjestaj";
+		text = "Posjećenost hotela na dnevnom nivou";
+		axisX = "Dani";
+	}
+	
+	if($("#grafikNedeljniBtn").is(":checked")) {
+		tergetUrl = "../hoteli/nedeljniIzvjestaj";
+		text = "Posjećenost hotela na svakih 7 dana";
+		axisX = "Nedelje";
+	}
+	else if ($("#grafikMjesecniBtn").is(":checked")) {
+		tergetUrl = "../hoteli/mjesecniIzvjestaj";
+		text = "Posjećenost hotela na svakih mjesec dana";
+		axisX = "Mjeseci";
+	}
+	
+	
+	let datumiZaIzvjestaj = {
+			datumPocetni : _datumPocetni,
+			datumKrajnji : _datumKrajnji
+	}
+	$.ajax({
+		type : 'POST',
+		url : tergetUrl+ "/" + podaciHotela.id,
+		data : JSON.stringify(datumiZaIzvjestaj),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikaziGrafik(response,text,axisX);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			swal({
+				  title: textStatus,
+				  icon: "error",
+				  timer: 2500
+				})
+			return;
+		}
+	});
+}
+
+function prikaziGrafik (izvjestaj,text,axisX) {
+	var dataP = [];
+	
+	for (var i = 0; i < izvjestaj.brojeviYOsa.length; i++) {
+		dataP.push({"y": izvjestaj.brojeviYOsa[i], "label" : izvjestaj.vrijednostiXOse[i]});
+	}
+	
+	var options = {
+			title:{
+				text: text  
+			},
+			axisY:{
+				title:"Broj posjeta"
+			},
+			axisX:{
+				title:axisX
+			},
+			data: [{
+				dataPoints: dataP
+		    }]
+		};
+	$("#chartContainer").show();
+	$("#chartContainer").CanvasJSChart(options);
 }
