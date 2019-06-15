@@ -49,18 +49,6 @@ $(document).ready(function() {
 	if(idPutovanja != null && idLetaZaRezervaciju != null) {
 		//  korisnik dolazi sa rezervacije hotelskog smjestaja i treba da mu se ponudi rezervacija vozila
 		rezimRezervacije = true;
-		$.ajax({
-			type: "GET",
-			async: false,
-			url: "../letovi/podaciBoravkaZaLet/" + idLetaZaRezervaciju,
-			contentType : "application/json; charset=utf-8",
-			success: function(response) {
-				podaciBoravka = response;
-			},
-		});
-		datumDolaska = podaciBoravka.datumDolaska;
-		datumOdlaska = podaciBoravka.datumPovratka;
-		
 		prikaziRacServiseZaRezervaciju();
 		
 	}
@@ -485,6 +473,12 @@ $(document).ready(function() {
 		
 	});
 	
+	//  preskakanje rezervacije hotelskog smjestaja
+	$("#prelazakNaRezervacijuVozilaBtn").click(function(e) {
+		e.preventDefault();
+		prikaziRacServiseZaRezervaciju();
+	});
+	
 	$("#dodavanjePrijateljaForm").submit(function(e) {
 		e.preventDefault();
 		
@@ -563,6 +557,7 @@ $(document).ready(function() {
 				data: JSON.stringify(podaciRezervacije),
 				success: function(response) {
 					podaciRezervacijeSjedista = response;
+					idPutovanja = podaciRezervacijeSjedista.idPutovanja;
 					swal({
 						  title: "Uspješna rezervacija!",
 						  text: "Uspješno ste rezervisali sjedišta.",
@@ -869,11 +864,24 @@ function prikaziHoteleZaRezervaciju() {
 }
 
 function prikaziRacServiseZaRezervaciju() {
-	//prikazivanje poruka i dugmeta za korake rezervacije
+	//  prikazivanje poruka i dugmeta za korake rezervacije
 	$("#rezervacijaVozilaPoruka").show();
 	$("#zavrsetakrezervacijeBtn").show();
 	
-	//pretraga RAC servisa na odredistu leta
+	//  ucitavanje podataka o odredistu i periodu boravka
+	$.ajax({
+		type: "GET",
+		async: false,
+		url: "../letovi/podaciBoravkaZaLet/" + idLetaZaRezervaciju,
+		contentType : "application/json; charset=utf-8",
+		success: function(response) {
+			podaciBoravka = response;
+		},
+	});
+	datumDolaska = podaciBoravka.datumDolaska;
+	datumOdlaska = podaciBoravka.datumPovratka;
+	
+	//  pretraga RAC servisa na odredistu leta
 	$("#nazivOdredistaPretragaRacServisa").val(podaciBoravka.nazivDestinacije);
 	$("#nazivOdredistaPretragaRacServisa").attr("readonly", true);
 	$("#input-start-rac").val(podaciBoravka.datumDolaska);

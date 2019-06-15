@@ -287,7 +287,8 @@ function prikaziVozila(vozila) {
 						  icon: "success",
 						  timer: 2500
 						}).then(function(){
-							location.reload(true);
+							window.location.replace("../registrovaniKorisnikPocetna/index.html?idPutovanja=" + idPutovanja 
+									+ "&idLetaRez=" + idLetaRez + "&krajRezervacije=true");
 						})	
 					return;
 				}
@@ -445,7 +446,8 @@ function prikaziVozilaSaPopustom(rezVozila) {
 						  icon: "success",
 						  timer: 2500
 						}).then(function(){
-							location.reload(true);
+							window.location.replace("../registrovaniKorisnikPocetna/index.html?idPutovanja=" + idPutovanja 
+									+ "&idLetaRez=" + idLetaRez + "&krajRezervacije=true");
 						});
 					return;
 				}
