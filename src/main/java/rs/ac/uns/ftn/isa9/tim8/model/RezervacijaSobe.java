@@ -18,6 +18,9 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 
 @Entity
 @Table(name = "rezervacija_sobe")
@@ -29,10 +32,12 @@ public class RezervacijaSobe {
 	
 	@Column(name = "datum_dolaska", nullable = false)
 	@Temporal(TemporalType.DATE)
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumDolaska;
 	
 	@Column(name = "datum_odlaska", nullable = false)
 	@Temporal(TemporalType.DATE)
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumOdlaska;
 	
 	@Column(name = "cijena", nullable = false)

@@ -479,6 +479,12 @@ $(document).ready(function() {
 		prikaziRacServiseZaRezervaciju();
 	});
 	
+	$("#zavrsetakrezervacijeBtn").click(function(e) {
+		e.preventDefault();
+		prelazakNaPregledPutovanja();
+		
+	});
+	
 	$("#dodavanjePrijateljaForm").submit(function(e) {
 		e.preventDefault();
 		
@@ -1025,7 +1031,7 @@ function profilKorisnika(){
 		let admin = {
 				id: korisnik.id,
 				ime: imeAdmina,
-				prezime: korisnik.prezime,
+				prezime: prezimeAdmina,
 				email: korisnik.email,
 				lozinka: korisnik.lozinka,
 				brojTelefona: brTelefonaAdmina,
@@ -1637,7 +1643,7 @@ function prikaziRezVozila(vozila){
 	});
 }
 
-function prikaziRezervisaneLetove(rezLetova){
+function prikaziRezervisaneLetove(rezLetova) {
 	
 	let tabela = $("#prikazRezervisanihLetova");
 	tabela.empty();
@@ -1864,7 +1870,7 @@ function prikaziRezervisaneLetove(rezLetova){
 	});
 }
 
-function prikaziRezervisaneSobe(rezSoba){
+function prikaziRezervisaneSobe(rezSoba) {
 	let tabela = $("#prikazRezervisanihSoba");
 	tabela.empty();
 	
@@ -2060,4 +2066,6 @@ function prikaziRezervisaneSobe(rezSoba){
 	});
 }
 
-
+function prelazakNaPregledPutovanja() {
+	window.location.replace("../pregledPutovanja/index.html?idPutovanja=" + idPutovanja + "&inicijator=true");
+}

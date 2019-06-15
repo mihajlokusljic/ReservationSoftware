@@ -17,6 +17,9 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 
 @Entity
 @Table(name = "rezervacija_vozila")
@@ -36,6 +39,7 @@ public class RezervacijaVozila {
 	
 	@Column(name = "datum_preuzimanja_vozila", nullable = false)
 	@Temporal(TemporalType.DATE)
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumPreuzimanjaVozila;
 	
 	@OneToOne(fetch = FetchType.LAZY)
@@ -44,6 +48,7 @@ public class RezervacijaVozila {
 	
 	@Column(name = "datum_vracanja_vozila", nullable = false)
 	@Temporal(TemporalType.DATE)
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumVracanjaVozila;
 	
 	@Column(name = "datum_rezervacije")
