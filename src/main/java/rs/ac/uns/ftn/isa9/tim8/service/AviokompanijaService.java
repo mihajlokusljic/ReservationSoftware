@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
@@ -1026,6 +1027,8 @@ public class AviokompanijaService {
 
 			RezervacijaSjedista rs = new RezervacijaSjedista(null, null, null, null, cijenaKarte, s, null,
 					let.getAvion().getAviokompanija(), let, putovanje);
+			
+			System.out.println("datum r " + rs.getDatumRezervacije());
 
 			putovanje.getRezervacijeSjedista().add(rs);
 			let.getRezervacije().add(rs);
@@ -1230,6 +1233,81 @@ public class AviokompanijaService {
 		}
 		
 		return Double.toString(prihodi);
+	}
+
+	public IzvjestajDTO dnevniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
+
+
+		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
+
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
+		
+		if (!pretragaAviokompanije.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
+		}
+		
+		Aviokompanija aviokompanija = pretragaAviokompanije.get();
+
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
+		Collection<RezervacijaSjedista> rezervacijeUOkviruDatuma = new ArrayList<>();
+
+		for (RezervacijaSjedista rv : sveRezervacije) {
+			
+			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+				rezervacijeUOkviruDatuma.add(rv);
+			}
+			
+		}
+
+		while (!pocetniDatum.after(krajnjiDatum)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
+			izvjestajDTO.getVrijednostiXOse().add(sdf.format(pocetniDatum));
+
+			int broj = 0;
+			for (RezervacijaSjedista rv : rezervacijeUOkviruDatuma) {
+				if (rv.getDatumRezervacije().equals(pocetniDatum)) {
+					broj++;
+				}
+			}
+			izvjestajDTO.getBrojeviYOsa().add(broj);
+			Calendar c = Calendar.getInstance();
+			c.setTime(pocetniDatum);
+			c.add(Calendar.DATE, 1);
+			pocetniDatum = c.getTime();
+		}
+
+		return izvjestajDTO;
+	}
+
+	public IzvjestajDTO nedeljniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public IzvjestajDTO mjesecniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
