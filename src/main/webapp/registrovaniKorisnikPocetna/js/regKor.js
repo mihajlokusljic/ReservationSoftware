@@ -544,7 +544,7 @@ $(document).ready(function() {
 			});
 			return;
 		}
-		if(rezervisanoSjedista > 1) {
+		if(rezervisanoSjedista >= 1) {
 			//slanje zahtjeva za rezervaciju sjedista
 			let podaciRezervacije = {
 					rezervisanaSjedistaIds: scGlobal.find("selected").seatIds,
@@ -572,7 +572,11 @@ $(document).ready(function() {
 					return;
 				},
 			});
+			if (rezervisanoSjedista > 1) {
 			prikaziPozivanjePrijatelja();
+			} else {
+				prikaziHoteleZaRezervaciju();
+			}
 		}
 		else
 		{
