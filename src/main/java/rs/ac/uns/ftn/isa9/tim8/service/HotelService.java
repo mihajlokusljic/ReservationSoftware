@@ -600,4 +600,87 @@ public class HotelService {
 		return izvjestajDTO;
 	}
 
+	public Collection<HotelskaSoba> slobodneSobe(Long idHotela, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Optional<Hotel> pretragaHotel = hotelRepository.findById(idHotela);
+		if (!pretragaHotel.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Hotel hotel = pretragaHotel.get();
+		
+		Collection<HotelskaSoba> sveSobe = sobaRepository.findByHotel(hotel);
+		Collection<HotelskaSoba> slobodneSobe = new ArrayList<>();
+		
+		for (HotelskaSoba hSoba : sveSobe) {
+			if (!sobeService.sobaJeRezervisana(hSoba, pocetniDatum, krajnjiDatum)) {
+				slobodneSobe.add(hSoba);
+			}
+		}
+		
+		return slobodneSobe;
+	}
+
+	public Collection<HotelskaSoba> rezervisaneSobe(Long idHotela, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Optional<Hotel> pretragaHotel = hotelRepository.findById(idHotela);
+		if (!pretragaHotel.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Hotel hotel = pretragaHotel.get();
+		
+		Collection<HotelskaSoba> sveSobe = sobaRepository.findByHotel(hotel);
+		Collection<HotelskaSoba> rezervisaneSobe = new ArrayList<>();
+		
+		for (HotelskaSoba hSoba : sveSobe) {
+			if (sobeService.sobaJeRezervisana(hSoba, pocetniDatum, krajnjiDatum)) {
+				rezervisaneSobe.add(hSoba);
+			}
+		}
+		
+		return rezervisaneSobe;
+	}
+
 }
