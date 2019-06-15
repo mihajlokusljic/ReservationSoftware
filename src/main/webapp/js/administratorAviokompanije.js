@@ -955,7 +955,7 @@ function prikaziLetoveZaBrzuRezervaciju(letovi) {
 		let brOcjena = flight.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column6">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column6">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column6">Nema ocjena</td>');
 		}
@@ -1125,6 +1125,18 @@ function prikaziPodatkeAviokompanije() {
 	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
 	$("#latitudaAviokompanije").val(aviokompanija.adresa.latituda);
 	$("#longitudaAviokompanije").val(aviokompanija.adresa.longituda);
+	let sumaOcjena = aviokompanija.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = aviokompanija.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		var prosjek = sumaOcjena/brOcjena;
+		prosjek = prosjek.toFixed(2);
+
+		$("#ocjenaAviokompanije").val(prosjek);
+	} else {
+		$("#ocjenaAviokompanije").val("Nema ocjena");
+	}
 	
 }
 
@@ -1205,7 +1217,7 @@ function updateLet(flight, tbody) {
 	row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
 	row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
 	if (flight.brojOcjena > 0) {
-		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena).toFixed(2) + "</td>");
 	} else {
 		row.append('<td class="column6">Nema ocjena</td>');
 	}

@@ -77,6 +77,10 @@
                        	</li>
 						<li class="dropdown" id = "stavka_izvjestaj">
                             <a class="tab-list__link" href="#tab-izvjestaj" data-toggle="tab" id = "izvjestaj">Izvještaj</a>
+                            <ul class="dropdown-content">
+								  <li><a href="#" id = "prikazi_prihode_tab">Prihodi aviokompanije</a></li>
+								  <li><a href="#" id = "grafik_prodatih_karata_tab">Grafik prodatih karata</a></li>
+							</ul>
                         </li>
                    		<li class="dropdown" id = "profilKorisnickiTab">
 	                    	<a class="tab-list__link" href="#tab-profilKorisnika" data-toggle="dropdown" id = "profilKorisn">Profil korisnika</a>
@@ -744,6 +748,10 @@
 			                                    <input type="text" id="latitudaAviokompanije" hidden="hidden">
 			                                    <input type="text" id="longitudaAviokompanije" hidden="hidden">
 			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Prosječna ocjena:</label>
+			                                    <input class="input--style-2" type="text" id="ocjenaAviokompanije" readonly="readonly">
+			                                </div>
 		                                </div>
 	                                </div>
 	                                <h2>&nbsp;</h2>
@@ -823,6 +831,10 @@
     <!-- Main JS-->
     <script src="js/global.js"></script>
     <script src="js/jquery.seat-charts.js"></script>
+    
+     <!-- Chart JS-->
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+	
 
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
