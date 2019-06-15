@@ -6,7 +6,8 @@ let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
 let tabovi = ["tab-sobe", "tab-dodatne-usluge", "tab-info-stranica", "tab-brze-rezervacije-dodavanje",
-	"tab-brze-rezervacije-pregledanje", "tab-prihodi-hotela", "tab-profil-kor", "tab-profil-lozinka", "grafik_posjecenosti_hotela"];
+	"tab-brze-rezervacije-pregledanje", "tab-prihodi-hotela", "tab-profil-kor", "tab-profil-lozinka", "grafik_posjecenosti_hotela",
+	"tab-slob-rez"];
 let mapaHotela = null;
 let zoomLevel = 17;
 
@@ -82,6 +83,14 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaIzvjestaji");
 		prikaziTab("grafik_posjecenosti_hotela");
+	});
+	
+	$("#slob_rez_sobe_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaIzvjestaji");
+		prikaziTab("tab-slob-rez");
+		$("#prikazSlobodnihSoba").hide();
+		$("#prikazRezervisanihSoba").hide();
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -245,6 +254,12 @@ $(document).ready(function(e) {
 	$("#prikazGrafika").submit(function(e){
 		e.preventDefault();
 		ucitavanjeGrafika();
+	});
+	
+	//prikaz slobodnih i rezervisanih soba
+	$("#forma_slob_rez").submit(function(e){
+		e.preventDefault();
+		slobodneRezervisaneSobe();
 	});
 	
 	//odjavljivanje
@@ -1234,4 +1249,94 @@ function prikaziGrafik (izvjestaj,text,axisX) {
 		};
 	$("#chartContainer").show();
 	$("#chartContainer").CanvasJSChart(options);
+}
+
+function slobodneRezervisaneSobe(){
+
+	let _datumPocetni = $("#input-start-4").val();
+	let _datumKrajnji = $("#input-end-4").val();
+	
+	if (_datumPocetni == '') {
+		swal({
+			  title: "Morate unijeti početni datum",
+			  icon: "warning",
+			  timer: 2500
+			})
+		return;
+	}
+	
+	if (_datumKrajnji == '') {
+		swal({
+			  title: "Morate unijeti krajnji datum",
+			  icon: "warning",
+			  timer: 2500
+			})
+		return;
+	}
+	
+	let datumiZaIzvjestaj = {
+			datumPocetni : _datumPocetni,
+			datumKrajnji : _datumKrajnji
+	}
+	$.ajax({
+		type : 'POST',
+		url : "../hoteli/slobodneSobe/"+ podaciHotela.id,
+		data : JSON.stringify(datumiZaIzvjestaj),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikaziSlobodnihSoba(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			swal({
+				  title: textStatus+ " " +errorThrown,
+				  icon: "error",
+				  timer: 2500
+				});
+			return;
+		}
+	});
+	$.ajax({
+		type : 'POST',
+		url : "../hoteli/rezervisaneSobe/"+ podaciHotela.id,
+		data : JSON.stringify(datumiZaIzvjestaj),
+		headers: createAuthorizationTokenHeader("jwtToken"),
+		success: function(response) {
+			prikaziRezervisanihSoba(response);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			swal({
+				  title: textStatus+ " " +errorThrown,
+				  icon: "error",
+				  timer: 2500
+				});
+			return;
+		}
+	});
+}
+
+function prikaziSlobodnihSoba(sobe){
+		
+	$("#prikazSlobodnihSoba").empty();
+	$.each(sobe, function(i,soba){
+		var prosjecnaOcjena = 0;
+		if (soba.sumaOcjena != 0) {
+			prosjecnaOcjena = (soba.sumaOcjena/soba.brojOcjena).toFixed(2);
+		}
+		$("#prikazSlobodnihSoba").append('<tr><td class = "column1">' + soba["brojSobe"] + '</td><td class = "column2">' + soba["brojKreveta"] + '</td><td class = "column3">' + soba["cijena"]
+		 + '</td><td class = "column4">' + soba["sprat"]  + '</td><td class = "column5">' + soba["vrsta"] + '</td><td class = "column6">' + soba["kolona"] +
+		 '</td><td class = "column6">' +  prosjecnaOcjena);
+	});
+}
+
+function prikaziRezervisanihSoba(sobe){
+	$("#prikazRezervisanihSoba").empty();
+	$.each(sobe, function(i,soba){
+		var prosjecnaOcjena = 0;
+		if (soba.sumaOcjena != 0) {
+			prosjecnaOcjena = (soba.sumaOcjena/soba.brojOcjena).toFixed(2);
+		}
+		$("#prikazRezervisanihSoba").append('<tr><td class = "column1">' + soba["brojSobe"] + '</td><td class = "column2">' + soba["brojKreveta"] + '</td><td class = "column3">' + soba["cijena"]
+		 + '</td><td class = "column4">' + soba["sprat"]  + '</td><td class = "column5">' + soba["vrsta"] + '</td><td class = "column6">' + soba["kolona"] +
+		 '</td><td class = "column6">' +  prosjecnaOcjena);
+	});
 }
