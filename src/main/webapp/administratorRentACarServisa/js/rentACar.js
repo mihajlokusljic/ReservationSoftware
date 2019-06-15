@@ -50,6 +50,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		dobaviSvaVozilaServisa();
 		ponudiFilijale();
@@ -74,6 +75,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		dobaviSveFilijale();
 	
@@ -97,6 +99,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		profilServisa();
 	});
@@ -125,6 +128,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		profilKorisnika();
 	})
@@ -147,6 +151,7 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		promjeniLozinku();
 	})
@@ -203,6 +208,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 	});
 	
@@ -225,6 +231,7 @@ $(document).ready(function() {
 		$("#tab-izmjeni-filijalu").hide();
 		$("#tab-prihodi-servisa").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 	});
 	
@@ -246,9 +253,10 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#grafik_rez_vozila").hide();
+		$("#tab-slob-rez").hide();
 
 		prihodiServisa();
-	})
+	});
 	
 	$("#grafik_rez_vozila_tab").click(function(e){
 		e.preventDefault();
@@ -269,9 +277,34 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#chartContainer").hide();
-		
+		$("#tab-slob-rez").hide();
+
 		grafikRezervisanihVozila();
-	})
+	});
+	
+	$("#slob_rez_vozila_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_izvjestaj");
+		$("#grafik_rez_vozila").hide();
+		$("#tab-prihodi-servisa").hide();
+		$("#tab-profil-kor").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profil-servisa").hide();
+		$("#tab-filijala").hide();
+		$("#tab-dodaj-vozilo").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-odjava").hide();
+		$("#tab-vozila").hide();
+		$("#tab-prikaz-vozila").hide();
+		$("#tab-dodaj-filijalu").hide();
+		$("#tab-izmjeni-filijalu").hide();
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#chartContainer").hide();
+		$("#tab-slob-rez").show();
+		slobodnaRezervisanaVozila();
+		
+	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
 	$("#izborVozilaBrzeRezervacijeBtn").click(function(e) {
@@ -1658,4 +1691,100 @@ function prikaziGrafik (izvjestaj,text,axisX) {
 		};
 	$("#chartContainer").show();
 	$("#chartContainer").CanvasJSChart(options);
+}
+
+function slobodnaRezervisanaVozila(){
+	$("#prikazSlobodnihVozila").empty();
+	$("#prikazRezervisanihVozila").empty();
+	
+	$("#forma_slob_rez").submit(function(e){
+		e.preventDefault();
+		let _datumPocetni = $("#input-start-4").val();
+		let _datumKrajnji = $("#input-end-4").val();
+		
+		if (_datumPocetni == '') {
+			swal({
+				  title: "Morate unijeti početni datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		if (_datumKrajnji == '') {
+			swal({
+				  title: "Morate unijeti krajnji datum",
+				  icon: "warning",
+				  timer: 2500
+				})
+			return;
+		}
+		
+		let datumiZaIzvjestaj = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		}
+		let idServisa = rentACarServis.id;
+		$.ajax({
+			type : 'POST',
+			url : "../rentACar/slobodnaVozila/"+ idServisa,
+			data : JSON.stringify(datumiZaIzvjestaj),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				prikaziSlobodnaVozila(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({
+					  title: textStatus+ " " +errorThrown,
+					  icon: "error",
+					  timer: 2500
+					});
+				return;
+			}
+		});
+		$.ajax({
+			type : 'POST',
+			url : "../rentACar/rezervisanaVozila/"+ idServisa,
+			data : JSON.stringify(datumiZaIzvjestaj),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				prikaziRezervisanaVozila(response);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({
+					  title: textStatus+ " " +errorThrown,
+					  icon: "error",
+					  timer: 2500
+					});
+				return;
+			}
+		});
+	});
+}
+
+function prikaziSlobodnaVozila(vozila) {
+	$("#prikazSlobodnihVozila").empty();
+	$.each(vozila, function(i,vozilo){
+		var prosjecnaOcjena = 0;
+		if (vozilo.sumaOcjena != 0) {
+			prosjecnaOcjena = (vozilo.sumaOcjena/vozilo.brojOcjena).toFixed(2);
+		}
+		$("#prikazSlobodnihVozila").append('<tr><td class = "column1">' + vozilo["naziv"] + '</td><td class = "column2">' + vozilo["marka"] + '</td><td class = "column3">' + vozilo["model"]
+		 + '</td><td class = "column4">' + vozilo["tip_vozila"]  + '</td><td class = "column5">' + vozilo["godina_proizvodnje"] + '</td><td class = "column6">' + vozilo["cijena_po_danu"] +
+		 '</td><td class = "column6">' +  prosjecnaOcjena);
+	});
+}
+
+function prikaziRezervisanaVozila(vozila) {
+	$("#prikazRezervisanihVozila").empty();
+	$.each(vozila, function(i,vozilo){
+		var prosjecnaOcjena = 0;
+		if (vozilo.sumaOcjena != 0) {
+			prosjecnaOcjena = (vozilo.sumaOcjena/vozilo.brojOcjena).toFixed(2);
+		}
+		$("#prikazRezervisanihVozila").append('<tr><td class = "column1">' + vozilo["naziv"] + '</td><td class = "column2">' + vozilo["marka"] + '</td><td class = "column3">' + vozilo["model"]
+		 + '</td><td class = "column4">' + vozilo["tip_vozila"]  + '</td><td class = "column5">' + vozilo["godina_proizvodnje"] + '</td><td class = "column6">' + vozilo["cijena_po_danu"] +
+		 '</td><td class = "column6">' +  prosjecnaOcjena);
+	});
+
 }

@@ -604,6 +604,90 @@
                                <br><br>
                               <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
 							</div>
+							
+							<div class="tab-pane" id="tab-profil-lozinka">
+	                        	<h2 class="zaglavlje">Izmjena lozinke</h2>
+                        		<div id="izmjenaInicijalneLozinkePoruka" hidden="hidden">
+	                        		<h3 style="color: white">Molimo Vas da izmjenite inicijalnu lozinku prije nego što nastavite sa radom.</h3>
+	                        		<h3 style="color: white">&nbsp;</h3>
+                        		</div>
+                        		<form id = "forma_lozinka">
+                        		    <div class="input-group">
+	                                    <label class="label">Trenutna:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite trenutnu lozinku" required="required" id="staraLozinka">
+	                                </div>	                                
+	                                <div class="input-group">    
+	                                    <label class="label">Nova lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Unesite novu lozinku" required="required" id="novaLozinka">
+	                                </div>
+	                                <div class="input-group">    
+	                                    <label class="label">Potvrdite novu lozinka:</label>
+	                                    <input class="input--style-2" type="password" placeholder="Ponovo unesite novu lozinku" required="required" id="novaLozinka2">
+	                                </div> 
+	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
+                        		</form>
+                        	</div>
+                        	
+							<!-- Slobodna i zauzeta vozila -->
+                        	<div class="tab-pane" id="tab-slob-rez">
+                        		<form id = "forma_slob_rez">                    
+                        		 <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Od</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-4">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Do</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-4">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-submit">Prikaži</button>
+                                </form>
+                                <br>
+                                <div>
+                                	<h2 class="zaglavlje">Slobodna vozila:</h2>                    
+	                       		 	<table id="tabelaSlobodnaVozila">
+										<thead>
+											<tr class="table100-head">
+												<th class="column1">Naziv</th>
+												<th class="column2">Marka</th>
+												<th class="column3">Model</th>
+												<th class="column4">Tip</th>
+												<th class="column5">Godina proizvodnje</th>
+												<th class="column6">Cijena po danu</th>
+												<th class="column6">Prosječna ocjena</th>
+											</tr>
+										</thead>
+										<tbody id="prikazSlobodnihVozila">
+										</tbody>
+									</table>
+									<br><br>
+									<h2 class="zaglavlje">Rezervisana vozila:</h2>                    
+	                       		 	<table id="tabelaRezervisanihVozila">
+										<thead>
+											<tr class="table100-head">
+												<th class="column1">Naziv</th>
+												<th class="column2">Marka</th>
+												<th class="column3">Model</th>
+												<th class="column4">Tip</th>
+												<th class="column5">Godina proizvodnje</th>
+												<th class="column6">Cijena po danu</th>
+												<th class="column6">Prosječna ocjena</th>
+											</tr>
+										</thead>
+										<tbody id="prikazRezervisanihVozila">
+										</tbody>
+									</table>
+                                </div>
+                                
+                        	</div>
+							
 	                    </div>                    
                 	</div>
             	</div>
