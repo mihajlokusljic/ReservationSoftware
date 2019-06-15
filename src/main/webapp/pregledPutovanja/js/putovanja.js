@@ -25,6 +25,7 @@ $(document).ready(function() {
 	inicijator = params_parser.get("inicijator");
 	
 	ucitajPodatkePutovanja();
+	ucitajPodatkeZaVozila();
 
 });	
 
@@ -38,9 +39,20 @@ function ucitajPodatkePutovanja() {
 		success: function(data){
 			putovanje = data;
 			prikaziRezervisaneLetove(putovanje.rezervacijeSjedista);
-			prikaziRezervisaneSobe(putovanje.rezervacijeSoba);
-			prikaziRezVozila(putovanje.rezervacijeVozila);
-			
+			prikaziRezervisaneSobe(putovanje.rezervacijeSoba);			
+		},
+	});
+}
+
+function ucitajPodatkeZaVozila() {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : "../putovanja/dobaviVozila/" + idPutovanja,
+		dataType : "json",
+		success: function(data){
+			vozila = data;
+			prikaziRezVozila(vozila);			
 		},
 	});
 }
@@ -87,13 +99,13 @@ function prikaziRezVozila(vozila){
 	
 	$.each(vozila, function(i, vozilo) {
 		let noviRed = $('<tr></tr>');
-		noviRed.append('<td class="column1">' + vozilo.rentACarServis.naziv + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.nazivServisa + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.rezervisanoVozilo.naziv + '</td>');
 		noviRed.append('<td class="column1">' + vozilo.cijena + '</td>');		
-		noviRed.append('<td class="column1">' + vozilo.mjestoPreuzimanjaVozila.adresa.punaAdresa + '</td>');
-		noviRed.append('<td class="column1">' + vozilo.mjestoVracanjaVozila.adresa.punaAdresa + '</td>');
-		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanjaVozila + '</td>');
-		noviRed.append('<td class="column1">' + vozilo.datumVracanjaVozila + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.mjestoPreuzimanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.mjestoVracanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.datumPreuzimanja + '</td>');
+		noviRed.append('<td class="column1">' + vozilo.datumVracanja + '</td>');
 
 		tabela.append(noviRed);
 	});
