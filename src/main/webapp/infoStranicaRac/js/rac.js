@@ -87,10 +87,10 @@ function ucitajPodatkeRac() {
 			success: function(response) {
 				podaciBoravka = response;
 				
-				$("#input-start-2").val(podaciBoravka.datumDolaska);
-				$("#input-end-2").val(podaciBoravka.datumPovratka);
-				$("#input-start-2").attr("readonly", true);
-				$("#input-end-2").attr("readonly", true);
+				$("#izborDatumaBrzaRez").hide();
+				$("#datumPreuzimanjaBrzaRez").val(podaciBoravka.datumDolaska);
+				$("#datumVracanjaBrzaRez").val(podaciBoravka.datumPovratka);
+				$("#prikazDatumaBrzaRez").show();
 			},
 		});
 		
@@ -328,6 +328,11 @@ function pretragaVozilaSaPopustom(){
 	let _datumPreuzimanja = $("#input-start-2").val();
 	let _datumVracanja = $("#input-end-2").val();
 	
+	if(rezimRezervacije) {
+		_datumPreuzimanja = $("#datumPreuzimanjaBrzaRez").val();
+		_datumVracanja = $("#datumVracanjaBrzaRez").val();
+	}
+	
 	let _vrijemePreuzimanja = $("#input-start-time-popust").val();
 	let _vrijemeVracanja = $("#input-end-time-popust").val();
 	if (_vrijemePreuzimanja == '' || _vrijemeVracanja == ''){
@@ -426,9 +431,9 @@ function prikaziVozilaSaPopustom(rezVozila) {
 		let rezervacijaVozila = {
 				rezervisanoVozilo : brzaRez.vozilo,
 				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaPopustSelect").val(),
-				datumPreuzimanjaVozila : Date.parse($("#input-start-2").val()),
+				datumPreuzimanjaVozila : Date.parse($("#datumPreuzimanjaBrzaRez").val()),
 				mjestoVracanjaVozila : $("#mjestoVracanjaPopustSelect").val(),
-			    datumVracanjaVozila : Date.parse($("#input-end-2").val()),
+			    datumVracanjaVozila : Date.parse($("#datumVracanjaBrzaRez").val()),
 			    cijena : cijenaSaPopustom,
 			    putnik : korisnikId,
 			    idPutovanja : idPutovanja
