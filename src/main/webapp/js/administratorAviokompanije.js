@@ -1125,6 +1125,18 @@ function prikaziPodatkeAviokompanije() {
 	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
 	$("#latitudaAviokompanije").val(aviokompanija.adresa.latituda);
 	$("#longitudaAviokompanije").val(aviokompanija.adresa.longituda);
+	let sumaOcjena = aviokompanija.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = aviokompanija.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		var prosjek = sumaOcjena/brOcjena;
+		prosjek = prosjek.toFixed(2);
+
+		$("#ocjenaAviokompanije").val(prosjek);
+	} else {
+		$("#ocjenaAviokompanije").val("Nema ocjena");
+	}
 	
 }
 
