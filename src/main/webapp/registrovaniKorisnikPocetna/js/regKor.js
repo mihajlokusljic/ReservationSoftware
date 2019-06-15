@@ -58,6 +58,8 @@ $(document).ready(function() {
 				podaciBoravka = response;
 			},
 		});
+		datumDolaska = podaciBoravka.datumDolaska;
+		datumOdlaska = podaciBoravka.datumPovratka;
 		
 		prikaziRacServiseZaRezervaciju();
 		
@@ -126,7 +128,7 @@ $(document).ready(function() {
 		else 
 		{
 			pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
-					podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
+					idPutovanja, idLetaZaRezervaciju);
 		}
 		
 	});

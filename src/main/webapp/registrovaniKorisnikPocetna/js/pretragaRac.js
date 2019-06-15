@@ -1,5 +1,3 @@
-var defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
-
 $(document).ready(function(e) {
 	
 	$.ajaxSetup({
@@ -91,7 +89,7 @@ function refreshRac(racServisi, idKorisnika, datumDolaska, datumOdlaska, idPutov
 			ocjena = rac.sumaOcjena/rac.brojOcjena;
 			ocjena = ocjena.toFixed(2);
 		}
-		noviRed.append('<td class="column1"><img src="' + defaultSlika + '"/></td>');
+		noviRed.append('<td class="column1"><img src="https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg"/></td>');
 		noviRed.append('<td class="column1">' + rac.naziv + '</td>');
 		noviRed.append('<td class="column1">' + rac.adresa.punaAdresa + '</td>');
 		noviRed.append('<td class="column1">' + ocjena + '</td>');
