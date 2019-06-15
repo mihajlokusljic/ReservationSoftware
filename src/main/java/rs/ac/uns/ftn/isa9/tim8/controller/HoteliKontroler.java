@@ -122,5 +122,16 @@ public class HoteliKontroler {
 		}
 		
 	}
+	
+	@RequestMapping(value = "/nedeljniIzvjestaj/{idHotela}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorHotela')")
+ 	public ResponseEntity<?> nedeljniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idHotela") Long idHotela){
+		try {
+			return new ResponseEntity<IzvjestajDTO>(this.servis.nedeljniIzvjestaj(idHotela, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 
 }
