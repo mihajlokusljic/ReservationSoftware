@@ -955,7 +955,7 @@ function prikaziLetoveZaBrzuRezervaciju(letovi) {
 		let brOcjena = flight.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column6">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column6">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column6">Nema ocjena</td>');
 		}
@@ -1217,7 +1217,7 @@ function updateLet(flight, tbody) {
 	row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
 	row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
 	if (flight.brojOcjena > 0) {
-		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena).toFixed(2) + "</td>");
 	} else {
 		row.append('<td class="column6">Nema ocjena</td>');
 	}
