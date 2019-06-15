@@ -591,6 +591,11 @@ function prikaziSobu(soba) {
 	noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 	noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 	noviRed.append('<td class="column1">' + soba.kolona + '</td>');
+	if(soba.brojOcjena > 0) {
+		noviRed.append('<td class="column1">' + (soba.sumaOcjena / soba.brojOcjena).toFixed(2) + '</td>');
+	} else {
+		noviRed.append('<td class="column1">Nema ocjena</td>');
+	}
 	noviRed.append('<td class="column6"><a href="#" class="izmjenaSobe" id="is' + soba.id + '">Izmjeni</a>&nbsp&nbsp<a class="brisanjeSobe" href="#" id="bs' + soba.id + '">Obriši</a></td>');
 	sobeTabela.append(noviRed);
 }
