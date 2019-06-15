@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.LetDTO;
@@ -1174,6 +1175,61 @@ public class AviokompanijaService {
 		rezervacijaSjedistaRepository.save(rSjed);
 		
 		return null;
+	}
+
+	public String izracunajPrihode(DatumiZaPrihodDTO datumiDto, Long idAviokompanije) throws NevalidniPodaciException {
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
+		
+		if (!pretragaAviokompanije.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
+		}
+		
+		Aviokompanija aviokompanija = pretragaAviokompanije.get();
+		double prihodi = 0;
+		
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
+		
+		for (RezervacijaSjedista rezSjedista : sveRezervacije) {
+			if (pocetniDatum != null && krajnjiDatum != null) {
+				if (pocetniDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) <= 0 && krajnjiDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) >= 0) {
+					prihodi = prihodi + rezSjedista.getCijena();
+				}
+			}
+			else if (pocetniDatum != null) {
+				if (pocetniDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) <= 0) {
+					prihodi = prihodi + rezSjedista.getCijena();
+				}
+			}
+			else if ( krajnjiDatum != null) {
+				if (krajnjiDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) >= 0) {
+					prihodi = prihodi + rezSjedista.getCijena();
+				}
+			}
+			else {
+				prihodi = prihodi + rezSjedista.getCijena();
+			}
+		}
+		
+		return Double.toString(prihodi);
 	}
 
 }

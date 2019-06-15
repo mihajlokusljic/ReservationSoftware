@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvrsavanjeRezervacijeSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaAviokompanijaDTO;
@@ -166,6 +167,16 @@ public class AviokompanijeKontroler {
 	public ResponseEntity<?> popuniPodatkeZaPutnike(@RequestBody IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije) {
 		try {
 			return new ResponseEntity<IzvrsavanjeRezervacijeSjedistaDTO>(servis.popuniPodatkeZaPutnike(podaciRezervacije), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/prihodAviokompanije/{idAviokompanije}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
+	public ResponseEntity<?> prihodServisa(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idAviokompanije") Long idAviokompanije ) {
+		try {
+			return new ResponseEntity<String >(this.servis.izracunajPrihode(datumiDto, idAviokompanije), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

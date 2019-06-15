@@ -42,6 +42,8 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+
 	});
 	
 	$("#avioni").click(function(e){
@@ -57,6 +59,7 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
 	});
 	
@@ -73,6 +76,7 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
 	});
 
@@ -90,6 +94,8 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").show();
+		$("#tab-prihodi-aviokompanije").hide();
+
 		podesiDivoveBrzeRez();
 	});
 	
@@ -108,6 +114,7 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").show();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
 	});
 	
@@ -127,7 +134,6 @@ $(document).ready(function() {
 		$("#tab-brze-rezervacije-dodavanje").hide();
 		$("#tab-prihodi-aviokompanije").show();
 		$("#prihod_id").hide();
-
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -172,22 +178,6 @@ $(document).ready(function() {
 	$("#zadavanjePopustaBrzeRezervacijeBtn").click(function(e) {
 		e.preventDefault();
 		zadavanjePopustaBrzeRezervacije();
-	});
-	
-	$("#izvjestaj").click(function(e){
-		e.preventDefault();
-		$("#tab-destinacije").hide();
-		$("#tab-avioni").hide();
-		$("#tab-letovi").hide();
-		$("#tab-izvjestaj").show();
-		$("#tab-profilKorisnika").hide();
-		$("#tab-profil-lozinka").hide();
-		$("#tab-profilAviokompanije").hide();
-		$("#tab-dodatne-usluge").hide();
-		$("#tab-odjava").hide();
-		$("#tab-brze-rezervacije-pregledanje").hide();
-		$("#tab-brze-rezervacije-dodavanje").hide();
-
 	});
 
 	$("#izmjeni_podatke_tab").click(function(e){
@@ -623,33 +613,32 @@ $(document).ready(function() {
 		postaviMarker(mapaAviokompanije, [aviokompanija.adresa.latituda, aviokompanija.adresa.longituda]);
 	});
 	
-	$("#forma_prihodi").submit(function(e) {
+
+	$("#forma_prihodi").submit(function(e){
 		e.preventDefault();
-		$("#forma_prihodi").submit(function(e){
-			e.preventDefault();
-			let _datumPocetni = $("#input-start-2").val();
-			let _datumKrajnji = $("#input-end-2").val();
-			
-			let datumiZaPrihod = {
-					datumPocetni : _datumPocetni,
-					datumKrajnji : _datumKrajnji
-			};
-			
-			$.ajax({
-				type : 'POST',
-				url : "../aviokompanije/prihodAviokompanije/" + aviokompanija.id,
-				data : JSON.stringify(datumiZaPrihod),
-				headers: createAuthorizationTokenHeader("jwtToken"),
-				success: function(response) {
-					$("#prihod_id").text("Ostvareni prihodi: " + response);
-					$("#prihod_id").show();
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("AJAX error: " + errorThrown);
-				}
-			});
+		let _datumPocetni = $("#input-start-3").val();
+		let _datumKrajnji = $("#input-end-3").val();
+		
+		let datumiZaPrihod = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		};
+		
+		$.ajax({
+			type : 'POST',
+			url : "../aviokompanije/prihodAviokompanije/" + aviokompanija.id,
+			data : JSON.stringify(datumiZaPrihod),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				$("#prihod_id").text("Ostvareni prihodi: " + response);
+				$("#prihod_id").show();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
 		});
 	});
+	
 	
 	
 	$("#odjava").click(function(e) {
