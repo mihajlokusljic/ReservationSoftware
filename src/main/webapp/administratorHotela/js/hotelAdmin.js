@@ -89,8 +89,8 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaIzvjestaji");
 		prikaziTab("tab-slob-rez");
-		$("#prikazSlobodnihSoba").hide();
-		$("#prikazRezervisanihSoba").hide();
+		$("#prikazSlobodnihSoba").empty();
+		$("#prikazRezervisanihSoba").empty();
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -1322,9 +1322,10 @@ function prikaziSlobodnihSoba(sobe){
 		if (soba.sumaOcjena != 0) {
 			prosjecnaOcjena = (soba.sumaOcjena/soba.brojOcjena).toFixed(2);
 		}
-		$("#prikazSlobodnihSoba").append('<tr><td class = "column1">' + soba["brojSobe"] + '</td><td class = "column2">' + soba["brojKreveta"] + '</td><td class = "column3">' + soba["cijena"]
-		 + '</td><td class = "column4">' + soba["sprat"]  + '</td><td class = "column5">' + soba["vrsta"] + '</td><td class = "column6">' + soba["kolona"] +
-		 '</td><td class = "column6">' +  prosjecnaOcjena);
+		$("#prikazSlobodnihSoba").append('<tr><td class = "column1">' + soba["brojSobe"] + '</td><td class = "column1">' + soba["brojKreveta"] + '</td><td class = "column1">' + soba["cijena"]
+		 + '</td><td class = "column1">' + soba["sprat"]  + '</td><td class = "column1">' + soba["vrsta"] + '</td><td class = "column1">' + soba["kolona"] +
+		 '</td><td class = "column1">' +  prosjecnaOcjena);
+		
 	});
 }
 
