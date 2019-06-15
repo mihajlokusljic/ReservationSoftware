@@ -1252,4 +1252,85 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 				
 		return izvjestajDTO;
 	}
+
+	public Collection<Vozilo> slobodnaVozila(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Collection<Vozilo> svaVozila = voziloRepository.findAllByRentACar(rac);
+		Collection<Vozilo> slobodnaVozila = new ArrayList<>();
+		
+		for (Vozilo vozilo : svaVozila) {
+			if (!voziloJeRezervisano(vozilo, pocetniDatum, krajnjiDatum)) {
+				slobodnaVozila.add(vozilo);
+			}
+		}
+		
+		return slobodnaVozila;
+	}
+
+	public Collection<Vozilo> rezervisanaVozila(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
+		if (!pretragaRac.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		RentACarServis rac = pretragaRac.get();
+		
+		Collection<Vozilo> svaVozila = voziloRepository.findAllByRentACar(rac);
+		Collection<Vozilo> rezervisanaVozila = new ArrayList<>();
+		
+		for (Vozilo vozilo : svaVozila) {
+			if (voziloJeRezervisano(vozilo, pocetniDatum, krajnjiDatum)) {
+				rezervisanaVozila.add(vozilo);
+			}
+		}
+		
+		return rezervisanaVozila;
+	}
 }
