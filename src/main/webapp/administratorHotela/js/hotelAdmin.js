@@ -75,6 +75,7 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaIzvjestaji");
 		prikaziTab("tab-prihodi-hotela");
+		$("#prihod_id").hide();
 	});
 	
 	$("#grafik_posjecenosti_tab").click(function(e){

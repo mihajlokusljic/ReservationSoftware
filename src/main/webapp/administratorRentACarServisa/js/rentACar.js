@@ -1558,7 +1558,7 @@ function prihodiServisa(){
 				alert("AJAX error: " + errorThrown);
 			}
 		});
-	})
+	});
 }
 
 function grafikRezervisanihVozila(){
