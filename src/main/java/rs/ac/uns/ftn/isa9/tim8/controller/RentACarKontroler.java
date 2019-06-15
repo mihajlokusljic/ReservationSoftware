@@ -206,6 +206,7 @@ public class RentACarKontroler {
 	}
 	
 	@RequestMapping(value = "/rezervisiVozilo/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervacijaVozila(@PathVariable("idServisa") String idServisa,@RequestBody RezervacijaVozilaDTO rezervacija) {
 		try {
 			return new ResponseEntity<String>(this.servis.rezervisiVozilo(rezervacija,Long.parseLong(idServisa)), HttpStatus.OK);
@@ -335,5 +336,25 @@ public class RentACarKontroler {
 		
 	}
 	
+	@RequestMapping(value = "/slobodnaVozila/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> slobodnaVozila(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<Collection<Vozilo>>(servis.slobodnaVozila(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 	
+	@RequestMapping(value = "/rezervisanaVozila/{idServisa}", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('AdministratorRentACar')")
+ 	public ResponseEntity<?> rezervisanaVozila(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idServisa){
+		try {
+			return new ResponseEntity<Collection<Vozilo>>(servis.rezervisanaVozila(idServisa, datumiDto), HttpStatus.OK);
+		}catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 }
