@@ -252,6 +252,10 @@ a:active {
   }
 }
 
+.m-r-70 {
+  margin-right: 70px;
+}
+
 /* ==========================================================================
    #WRAPPER
    ========================================================================== */
@@ -1290,3 +1294,6 @@ tbody tr:hover {
 
 .dropdown:hover .dropdown-content {display: block;}
 
+.prihod{
+	color : #FFFFFF;
+}

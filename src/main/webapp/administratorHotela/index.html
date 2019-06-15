@@ -65,6 +65,10 @@
                         </li>
                         <li class="dropdown" id="stavkaIzvjestaji">
                             <a class="tab-list__link" href="#" id="izvjestaji">Izvještaji</a>
+                            <ul class="dropdown-content">
+								  <li><a href="#" id = "prikazi_prihode_tab">Prihodi hotela</a></li>
+								  <li><a href="#" id = "grafik_posjecenosti_tab">Posjećenost hotela</a></li>
+							</ul>
                         </li>
 						<li class="dropdown" id="stavkaProfilKorisnika">
                             <a class="tab-list__link" id="profil_korisnika">Profil</a>
@@ -125,6 +129,7 @@
 										<th class="column1">Sprat</th>
 										<th class="column1">Red</th>
 										<th class="column1">Kolona</th>
+										<th class="column1">Ocjena</th>
 										<th class="column1">Akcije</th>
 									</tr>
 								</thead>
@@ -258,6 +263,10 @@
 			                                    <a class="trigger_popup_fricc">Izmjeni lokaciju na mapi</a>
 			                                    <input type="text" hidden="hidden" id="latitudaHotela">
 			                                    <input type="text" hidden="hidden" id="longitudaHotela">
+			                                </div>
+			                                <div class="input-group">
+			                                    <label class="label">Prosječna ocjena:</label>
+			                                    <input class="input--style-2" type="text" id="ocjenaHotela" readonly="readonly">
 			                                </div>
 		                                </div>
 	                                </div>
@@ -462,11 +471,6 @@
 								</div>
                         </div>
                         
-                        <!-- Izvjestaji -->
-                        <div class="tab-pane" id="tab-izvjestaji">
-                            <h2 class="zaglavlje">Izvjestaji</h2>
-                        </div>
-                        
 						<!-- Izmjena profila administratora -->
                         <div class="tab-pane" id="tab-profil-kor">
                         	<h2 class="zaglavlje">Ažuriranje profila</h2>
@@ -533,7 +537,72 @@
 	                                <button type="submit" class="btn btn-submit">Izmjeni</button>	                                           		
                         		</form>
                         	</div>
-                        
+                        	
+                        	<!-- Prikaz prihoda hotela u odredjenom vremenskom opsegu -->
+                        	<div class="tab-pane" id="tab-prihodi-hotela">
+                        		<h2 class="zaglavlje">Prihodi hotela</h2>
+                        		<form id = "forma_prihodi">                    
+                        		 <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Od</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Do</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-2">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-submit">Prikaži</button>
+                                </form>
+                                <br>
+                                <h3 hidden class = "prihod" id = "prihod_id">Ostvareni prihod: 5000.00</h3>
+                        	</div>
+                        	
+                        	<!--Prikaz grafika na dnevnom, nedeljnom i mjesecnom nivou -->
+							<div class="tab-pane" id="grafik_posjecenosti_hotela">
+								<form method="POST" action="#" id="prikazGrafika">
+									<div class="radio-row">
+                                    <label class="radio-container m-r-70">Posjećenost na dnevnom nivou
+                                        <input type="radio" checked="checked" name="class" id="grafikDnevniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                    <label class="radio-container m-r-70">Posjećenost na nedeljnom nivou
+                                        <input type="radio" name="class" id="grafikNedeljniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                    <label class="radio-container">Posjećenost na mjesečnom nivou
+                                        <input type="radio" name="class" id="grafikMjesecniBtn">
+                                        <span class="radio-checkmark"></span>
+                                    </label>
+                                </div>
+                                <p>&nbsp</p>
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Od</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="input-start-3">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Do</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="input-end-3">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-submit">Prikaži</button>
+                              </form>
+                               <br><br>
+                              <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+							</div>
                     </div>
                 </div>
             </div>
@@ -558,7 +627,10 @@
     <script type="text/javascript" src="js/auth.js"></script>
     <script type="text/javascript" src="js/hotelAdmin.js"></script>
     <script src="js/global.js"></script>
-
+	
+	<!-- Chart JS-->
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 
 </html>

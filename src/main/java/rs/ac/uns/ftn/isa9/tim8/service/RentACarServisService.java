@@ -755,9 +755,8 @@ public class RentACarServisService {
 		if (datumP == null || datumV == null) {
 			return false;
 		}
-		for (RezervacijaVozila r : rezervacijaVozilaRepository.findAllByRezervisanoVozilo(vozilo)) {
-			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0
-					&& datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+		for(RezervacijaVozila r : rezervacijaVozilaRepository.findAllByRezervisanoVozilo(vozilo)) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) <= 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) >= 0) {
 				return true;
 			}
 		}
@@ -1075,7 +1074,7 @@ public class RentACarServisService {
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1087,7 +1086,7 @@ public class RentACarServisService {
 
 			int broj = 0;
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
-				if (rv.getDatumRezervacije().equals(pocetniDatum)) {
+				if (!pocetniDatum.before(rv.getDatumPreuzimanjaVozila()) && !pocetniDatum.after(rv.getDatumVracanjaVozila()) ) {
 					broj++;
 				}
 			}
@@ -1136,7 +1135,7 @@ public class RentACarServisService {
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1158,9 +1157,9 @@ public class RentACarServisService {
 			int broj = 0;
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
 				if (!zaMjesec.after(krajnjiDatum)) {
-
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec)) {
-						broj++;
+					
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && zaMjesec.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
+						broj ++;
 					}
 
 				} else {
@@ -1169,6 +1168,11 @@ public class RentACarServisService {
 						broj++;
 					}
 				}
+				else {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && krajnjiDatum.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
+						broj ++;
+					}
+				}						
 			}
 
 			if (!zaMjesec.after(krajnjiDatum)) {
@@ -1188,9 +1192,10 @@ public class RentACarServisService {
 		return izvjestajDTO;
 	}
 
-	public IzvjestajDTO mjesecniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException {
+	public IzvjestajDTO mjesecniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
+		
 		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
-
+		
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
 		if (!pretragaRac.isPresent()) {
 			throw new NevalidniPodaciException("Doslo je do greske.");
@@ -1222,7 +1227,7 @@ public class RentACarServisService {
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1244,9 +1249,9 @@ public class RentACarServisService {
 			int broj = 0;
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
 				if (!zaSedam.after(krajnjiDatum)) {
-
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaSedam)) {
-						broj++;
+					
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && zaSedam.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
+						broj ++;
 					}
 
 				} else {
@@ -1255,6 +1260,11 @@ public class RentACarServisService {
 						broj++;
 					}
 				}
+				else {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && krajnjiDatum.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
+						broj ++;
+					}
+				}						
 			}
 
 			if (!zaSedam.after(krajnjiDatum)) {

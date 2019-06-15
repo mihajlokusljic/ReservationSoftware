@@ -42,6 +42,8 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
+
 	});
 	
 	$("#avioni").click(function(e){
@@ -57,6 +59,7 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
 	});
 	
@@ -73,6 +76,7 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
 	});
 
@@ -90,6 +94,8 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-brze-rezervacije-dodavanje").show();
+		$("#tab-prihodi-aviokompanije").hide();
+
 		podesiDivoveBrzeRez();
 	});
 	
@@ -108,7 +114,26 @@ $(document).ready(function() {
 		$("#tab-odjava").hide();	
 		$("#tab-brze-rezervacije-pregledanje").show();
 		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").hide();
 
+	});
+	
+	$("#prikazi_prihode_tab").click(function(e) {
+		e.preventDefault();
+		aktivirajStavkuMenija("stavka_izvjestaj");
+		$("#tab-destinacije").hide();
+		$("#tab-avioni").hide();
+		$("#tab-letovi").hide();
+		$("#tab-izvjestaj").hide();
+		$("#tab-profilKorisnika").hide();
+		$("#tab-profil-lozinka").hide();
+		$("#tab-profilAviokompanije").hide();
+		$("#tab-dodatne-usluge").hide();
+		$("#tab-odjava").hide();	
+		$("#tab-brze-rezervacije-pregledanje").hide();
+		$("#tab-brze-rezervacije-dodavanje").hide();
+		$("#tab-prihodi-aviokompanije").show();
+		$("#prihod_id").hide();
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -153,22 +178,6 @@ $(document).ready(function() {
 	$("#zadavanjePopustaBrzeRezervacijeBtn").click(function(e) {
 		e.preventDefault();
 		zadavanjePopustaBrzeRezervacije();
-	});
-	
-	$("#izvjestaj").click(function(e){
-		e.preventDefault();
-		$("#tab-destinacije").hide();
-		$("#tab-avioni").hide();
-		$("#tab-letovi").hide();
-		$("#tab-izvjestaj").show();
-		$("#tab-profilKorisnika").hide();
-		$("#tab-profil-lozinka").hide();
-		$("#tab-profilAviokompanije").hide();
-		$("#tab-dodatne-usluge").hide();
-		$("#tab-odjava").hide();
-		$("#tab-brze-rezervacije-pregledanje").hide();
-		$("#tab-brze-rezervacije-dodavanje").hide();
-
 	});
 
 	$("#izmjeni_podatke_tab").click(function(e){
@@ -604,6 +613,34 @@ $(document).ready(function() {
 		postaviMarker(mapaAviokompanije, [aviokompanija.adresa.latituda, aviokompanija.adresa.longituda]);
 	});
 	
+
+	$("#forma_prihodi").submit(function(e){
+		e.preventDefault();
+		let _datumPocetni = $("#input-start-3").val();
+		let _datumKrajnji = $("#input-end-3").val();
+		
+		let datumiZaPrihod = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		};
+		
+		$.ajax({
+			type : 'POST',
+			url : "../aviokompanije/prihodAviokompanije/" + aviokompanija.id,
+			data : JSON.stringify(datumiZaPrihod),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				$("#prihod_id").text("Ostvareni prihodi: " + response);
+				$("#prihod_id").show();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
+	});
+	
+	
+	
 	$("#odjava").click(function(e) {
 		e.preventDefault();
 		odjava();
@@ -955,7 +992,7 @@ function prikaziLetoveZaBrzuRezervaciju(letovi) {
 		let brOcjena = flight.brojOcjena;
 		brOcjena = parseInt(brOcjena);
 		if(brOcjena > 0) {
-			noviRed.append('<td class="column6">' + sumaOcjena / brOcjena + '</td>');
+			noviRed.append('<td class="column6">' + (sumaOcjena / brOcjena).toFixed(2) + '</td>');
 		} else {
 			noviRed.append('<td class="column6">Nema ocjena</td>');
 		}
@@ -1125,6 +1162,18 @@ function prikaziPodatkeAviokompanije() {
 	$("#slikaAviokompanije").attr("src", podrazumjevana_slika);
 	$("#latitudaAviokompanije").val(aviokompanija.adresa.latituda);
 	$("#longitudaAviokompanije").val(aviokompanija.adresa.longituda);
+	let sumaOcjena = aviokompanija.sumaOcjena;
+	sumaOcjena = parseFloat(sumaOcjena);
+	let brOcjena = aviokompanija.brojOcjena;
+	brOcjena = parseInt(brOcjena);
+	if(brOcjena > 0) {
+		var prosjek = sumaOcjena/brOcjena;
+		prosjek = prosjek.toFixed(2);
+
+		$("#ocjenaAviokompanije").val(prosjek);
+	} else {
+		$("#ocjenaAviokompanije").val("Nema ocjena");
+	}
 	
 }
 
@@ -1205,7 +1254,7 @@ function updateLet(flight, tbody) {
 	row.append('<td class="column5">' + flight.presjedanja.length + "</td>");
 	row.append('<td class="column6">' + flight.cijenaKarte + "</td>");
 	if (flight.brojOcjena > 0) {
-		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena) + "</td>");
+		row.append('<td class="column6">' + (flight.sumaOcjena / flight.brojOcjena).toFixed(2) + "</td>");
 	} else {
 		row.append('<td class="column6">Nema ocjena</td>');
 	}

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
@@ -16,4 +17,5 @@ public interface Rezervacija_sjedistaRepository extends JpaRepository<Rezervacij
 
 	Collection<RezervacijaSjedista> findAllByLet(Let let);
 	
+	Collection<RezervacijaSjedista> findAllByAviokompanija(Aviokompanija aviokompanija);
 }
