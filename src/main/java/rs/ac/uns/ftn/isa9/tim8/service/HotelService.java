@@ -480,13 +480,14 @@ public class HotelService {
 			for (RezervacijaSobe rv : rezervacijeUOkviruDatuma) {
 				if (!zaSedam.after(krajnjiDatum)) {
 					
-					if(sobeService.sobaJeRezervisana(rv.getRezervisanaSoba(), pocetniDatum, zaSedam)) {
+					if (pocetniDatum.compareTo(rv.getDatumOdlaska()) <= 0 && zaSedam.compareTo(rv.getDatumDolaska()) >= 0) {
 						broj ++;
 					}
 
 				}
 				else {
-					if (sobeService.sobaJeRezervisana(rv.getRezervisanaSoba(), pocetniDatum, zaSedam)) {
+
+					if (pocetniDatum.compareTo(rv.getDatumOdlaska()) <= 0 && krajnjiDatum.compareTo(rv.getDatumDolaska()) >= 0) {
 						broj ++;
 					}
 				}						
@@ -571,13 +572,13 @@ public class HotelService {
 			for (RezervacijaSobe rv : rezervacijeUOkviruDatuma) {
 				if (!zaSedam.after(krajnjiDatum)) {
 					
-					if(sobeService.sobaJeRezervisana(rv.getRezervisanaSoba(), pocetniDatum, zaSedam)) {
+					if (pocetniDatum.compareTo(rv.getDatumOdlaska()) <= 0 && zaSedam.compareTo(rv.getDatumDolaska()) >= 0) {
 						broj ++;
 					}
 
 				}
 				else {
-					if (sobeService.sobaJeRezervisana(rv.getRezervisanaSoba(), pocetniDatum, zaSedam)) {
+					if (pocetniDatum.compareTo(rv.getDatumOdlaska()) <= 0 && krajnjiDatum.compareTo(rv.getDatumDolaska()) >= 0) {
 						broj ++;
 					}
 				}						

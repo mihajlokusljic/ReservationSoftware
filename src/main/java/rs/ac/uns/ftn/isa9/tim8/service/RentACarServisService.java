@@ -739,7 +739,7 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 			return false;
 		}
 		for(RezervacijaVozila r : rezervacijaVozilaRepository.findAllByRezervisanoVozilo(vozilo)) {
-			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+			if (datumP.compareTo(r.getDatumVracanjaVozila()) <= 0 && datumV.compareTo(r.getDatumPreuzimanjaVozila()) >= 0) {
 				return true;
 			}
 		}
@@ -1051,7 +1051,7 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 		
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1063,8 +1063,8 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 			
 			int broj = 0;
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
-				if (rv.getDatumRezervacije().equals(pocetniDatum)) {
-					broj ++;
+				if (!pocetniDatum.before(rv.getDatumPreuzimanjaVozila()) && !pocetniDatum.after(rv.getDatumVracanjaVozila()) ) {
+					broj++;
 				}
 			}
 			izvjestajDTO.getBrojeviYOsa().add(broj);
@@ -1112,7 +1112,7 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 		
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1135,13 +1135,13 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
 				if (!zaMjesec.after(krajnjiDatum)) {
 					
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec)) {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && zaMjesec.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
 						broj ++;
 					}
 
 				}
 				else {
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && krajnjiDatum.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
 						broj ++;
 					}
 				}						
@@ -1166,7 +1166,8 @@ Optional<RentACarServis> pretragaRac = rentACarRepository.findById(kriterijumiPr
 	}
 
 	public IzvjestajDTO mjesecniIzvjestaj(Long idServisa, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
-IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
+		
+		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
 		
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
 		if (!pretragaRac.isPresent()) {
@@ -1199,7 +1200,7 @@ IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new Array
 		Collection<RezervacijaVozila> rezervacijeUOkviruDatuma = new ArrayList<>();
 		
 		for (RezervacijaVozila rv : sveRezervacije) {
-			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+			if (voziloJeRezervisano(rv.getRezervisanoVozilo(), pocetniDatum, krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
 		}
@@ -1222,13 +1223,13 @@ IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new Array
 			for (RezervacijaVozila rv : rezervacijeUOkviruDatuma) {
 				if (!zaSedam.after(krajnjiDatum)) {
 					
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaSedam)) {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && zaSedam.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
 						broj ++;
 					}
 
 				}
 				else {
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
+					if (pocetniDatum.compareTo(rv.getDatumVracanjaVozila()) <= 0 && krajnjiDatum.compareTo(rv.getDatumPreuzimanjaVozila()) >= 0) {
 						broj ++;
 					}
 				}						
