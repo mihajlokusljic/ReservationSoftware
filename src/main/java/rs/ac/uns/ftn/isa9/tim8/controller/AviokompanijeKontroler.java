@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.controller;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -206,7 +207,7 @@ public class AviokompanijeKontroler {
 	
 	@RequestMapping(value = "/mjesecniIzvjestaj/{idAviokompanije}", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorAviokompanije')")
- 	public ResponseEntity<?> mjesecniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idServisa") Long idAviokompanije){
+ 	public ResponseEntity<?> mjesecniIzvjestaj(@RequestBody DatumiZaPrihodDTO datumiDto, @PathVariable("idAviokompanije") Long idAviokompanije){
 		try {
 			return new ResponseEntity<IzvjestajDTO>(servis.mjesecniIzvjestaj(idAviokompanije, datumiDto), HttpStatus.OK);
 		}catch (NevalidniPodaciException e) {
