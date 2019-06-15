@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "rezervacija_sjedista")
 public class RezervacijaSjedista {
@@ -52,6 +54,7 @@ public class RezervacijaSjedista {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "putovanje_id")
+	@JsonIgnore
 	protected Putovanje putovanje;
 	
 	@Column(name = "ocjenjeno")

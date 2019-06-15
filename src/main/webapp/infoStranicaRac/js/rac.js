@@ -2,9 +2,12 @@ let podaciRac = null;
 let defaultSlika = "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg";
 let ukupno = 0;
 let korisnikId = null;
+let idPutovanja = null;
+let idLetaRez = null;
+let podaciBoravka = null;
 let mapa = null;
 let zoomLevel = 17;
-
+let rezimRezervacije = false;
 
 $(document).ready(function(e) {
 	
@@ -67,7 +70,31 @@ function ucitajPodatkeRac() {
 	
 	var id = params_parser.get("id");
 	var kor =  params_parser.get("korisnik");
+	idPutovanja = params_parser.get("idPutovanja");
+	idLetaRez = params_parser.get("idLetaRez");
 	korisnikId = kor;
+	if(idPutovanja != null) {
+		//  rezim rezervacije, dobavljamo podatke o periodu boravka
+		rezimRezervacije = true;
+		$("#rezervisanjeVozilaKolona").show();
+		$("#rezervisiVoziloSaPopustomKolona").show();
+		
+		$.ajax({
+			type: "GET",
+			async: false,
+			url: "../letovi/podaciBoravkaZaLet/" + idLetaRez,
+			contentType : "application/json; charset=utf-8",
+			success: function(response) {
+				podaciBoravka = response;
+				
+				$("#izborDatumaBrzaRez").hide();
+				$("#datumPreuzimanjaBrzaRez").val(podaciBoravka.datumDolaska);
+				$("#datumVracanjaBrzaRez").val(podaciBoravka.datumPovratka);
+				$("#prikazDatumaBrzaRez").show();
+			},
+		});
+		
+	}
 	
 	$.ajax({
 		type: "GET",
@@ -143,7 +170,7 @@ function pretragaVozila(){
 		swal({
 			  title: "Niste unijeli vrijeme preuzimanja/vraćanja vozila.",
 			  icon: "warning",
-			  timer: 2500
+			  timer: 6000
 			});	
 	}
 	
@@ -226,7 +253,7 @@ function prikaziVozila(vozila) {
 			noviRed.append('<td class="column1">Nema ocjena</td>');
 		}
 		noviRed.append('<td class="column1">' + ukupno*vozilo.cijena_po_danu + '</td>');
-		if (korisnikId != null){
+		if (korisnikId != null && rezimRezervacije) {
 			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "rezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		}
 		
@@ -244,8 +271,8 @@ function prikaziVozila(vozila) {
 				mjestoVracanjaVozila : $("#mjestoVracanjaSelect").val(),
 			    datumVracanjaVozila : Date.parse($("#input-end").val()),
 			    cijena : ukupno*vozilo.cijena_po_danu,
-			    putnik : korisnikId ,
-			    putovanje : null
+			    putnik : korisnikId,
+			    idPutovanja : idPutovanja
 		}
 		
 		$.ajax({
@@ -260,7 +287,8 @@ function prikaziVozila(vozila) {
 						  icon: "success",
 						  timer: 2500
 						}).then(function(){
-							location.reload(true);
+							window.location.replace("../registrovaniKorisnikPocetna/index.html?idPutovanja=" + idPutovanja 
+									+ "&idLetaRez=" + idLetaRez + "&krajRezervacije=true");
 						})	
 					return;
 				}
@@ -299,6 +327,11 @@ function inicijalizujMape() {
 function pretragaVozilaSaPopustom(){
 	let _datumPreuzimanja = $("#input-start-2").val();
 	let _datumVracanja = $("#input-end-2").val();
+	
+	if(rezimRezervacije) {
+		_datumPreuzimanja = $("#datumPreuzimanjaBrzaRez").val();
+		_datumVracanja = $("#datumVracanjaBrzaRez").val();
+	}
 	
 	let _vrijemePreuzimanja = $("#input-start-time-popust").val();
 	let _vrijemeVracanja = $("#input-end-time-popust").val();
@@ -385,7 +418,7 @@ function prikaziVozilaSaPopustom(rezVozila) {
 			cijenaSaPopustom = ukupno*rez.vozilo.cijena_po_danu - ukupno*rez.vozilo.cijena_po_danu*rez.procenatPopusta/100 ;
 		}
 		noviRed.append('<td class="column1">' + cijenaSaPopustom + '</td>');
-		if (korisnikId != null){
+		if (korisnikId != null && rezimRezervacije){
 			noviRed.append('</td><td class = "column1"><a href = "javascript:void(0)" class = "brzaRezervacija" id = "' + i + '">Rezervisi vozilo</a></td></tr>');
 		}
 		
@@ -398,12 +431,12 @@ function prikaziVozilaSaPopustom(rezVozila) {
 		let rezervacijaVozila = {
 				rezervisanoVozilo : brzaRez.vozilo,
 				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaPopustSelect").val(),
-				datumPreuzimanjaVozila : Date.parse($("#input-start-2").val()),
+				datumPreuzimanjaVozila : Date.parse($("#datumPreuzimanjaBrzaRez").val()),
 				mjestoVracanjaVozila : $("#mjestoVracanjaPopustSelect").val(),
-			    datumVracanjaVozila : Date.parse($("#input-end-2").val()),
+			    datumVracanjaVozila : Date.parse($("#datumVracanjaBrzaRez").val()),
 			    cijena : cijenaSaPopustom,
-			    putnik : korisnikId ,
-			    putovanje : null
+			    putnik : korisnikId,
+			    idPutovanja : idPutovanja
 		};
 		
 		$.ajax({
@@ -418,7 +451,8 @@ function prikaziVozilaSaPopustom(rezVozila) {
 						  icon: "success",
 						  timer: 2500
 						}).then(function(){
-							location.reload(true);
+							window.location.replace("../registrovaniKorisnikPocetna/index.html?idPutovanja=" + idPutovanja 
+									+ "&idLetaRez=" + idLetaRez + "&krajRezervacije=true");
 						});
 					return;
 				}

@@ -206,7 +206,7 @@
 										<th class="column1">Tip vozila</th>
 										<th class="column1">Ocjena</th>
 										<th class="column1">Ukupna cijena</th>
-										<th class="column1"></th>
+										<th class="column1" hidden="hidden" id="rezervisanjeVozilaKolona"></th>
 									</tr>
 								</thead>
 								<tbody id="prikazVozila">
@@ -216,7 +216,7 @@
                         
                         <div class="tab-pane" id="tab-vozila-sa-popustom">
 	                        <form method="POST" action="#" id="pretragaVozilaSaPopustomForm">
-                                <div class="row row-space">
+                                <div class="row row-space" id="izborDatumaBrzaRez">
                                     <div class="col-2">
                                         <div class="input-group">
                                             <label class="label">Datum preuzimanja vozila</label>
@@ -232,6 +232,24 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Prikaz datuma bez date picker-a -->
+                                <div class="row row-space" id="prikazDatumaBrzaRez" style="display: none;">
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum preuzimanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-in" placeholder="mm/dd/yyyy" id="datumPreuzimanjaBrzaRez" readonly="readonly">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group">
+                                            <label class="label">Datum vraćanja vozila</label>
+                                            <input class="input--style-2" type="text" name="check-out" placeholder="mm/dd/yyyy" id="datumVracanjaBrzaRez" readonly="readonly">
+                                            <i class="zmdi zmdi-calendar-alt input-group-symbol"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="row row-space">
                                     <div class="col-2">
                                         <div class="input-group">
@@ -307,7 +325,7 @@
 										<th class="column1">Ocjena</th>
 										<th class="column1">Cijena bez popusta</th>
 										<th class="column1">Cijena sa popustom</th>
-										<th class="column1"></th>
+										<th class="column1" hidden="hidden" id="rezervisiVoziloSaPopustomKolona"></th>
 									</tr>
 								</thead>
 								<tbody id="prikazVozilaSaPopustom">

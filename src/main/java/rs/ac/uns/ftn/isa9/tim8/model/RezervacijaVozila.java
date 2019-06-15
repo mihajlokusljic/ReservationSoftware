@@ -65,6 +65,7 @@ public class RezervacijaVozila {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "putovanje_id")	
+	@JsonIgnore
 	protected Putovanje putovanje;
 	
 	@Column(name = "ocjenjeno")

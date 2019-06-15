@@ -49,22 +49,7 @@ $(document).ready(function() {
 	if(idPutovanja != null && idLetaZaRezervaciju != null) {
 		//  korisnik dolazi sa rezervacije hotelskog smjestaja i treba da mu se ponudi rezervacija vozila
 		rezimRezervacije = true;
-		$("#rezervacijaVozilaPoruka").show();
-		$("#zavrsetakrezervacijeBtn").show();
-		
-		//  prikaz taba za rezervaciju vozila
-		$("#tab-aviokompanije").hide();
-		$("#tab-hoteli").hide();
-		$("#tab-rac-servisi").show();
-		$("#tab-rezervacije").hide();
-		$("#pregled-prijatelja-tab").hide();
-		$("#dodaj-prijatelje-tab").hide();
-		$("#zahtjevi-prijateljstva-tab").hide();
-		$("#tab-pozivnice").hide();
-		$("#tab-profilKorisnika").hide();
-		$("#tab-profil-lozinka").hide();
-		$("#tab-odjava").hide();	
-		$("#tab-letovi").hide();
+		prikaziRacServiseZaRezervaciju();
 		
 	}
 	
@@ -131,7 +116,7 @@ $(document).ready(function() {
 		else 
 		{
 			pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
-					podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
+					idPutovanja, idLetaZaRezervaciju);
 		}
 		
 	});
@@ -472,44 +457,26 @@ $(document).ready(function() {
 				
 	});
 	
+	//  pretraga rent-a-car servisa
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
-	   
-		let _nazivRacServisa= $("#racNaziv").val();
-		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
-		let dolazak = $("#input-start-rac").val();
-		let odlazak = $("#input-end-rac").val();
-		
-		let pretragaRac = {
-				nazivRacServisa: _nazivRacServisa,
-				nazivDestinacije: _nazivDestinacije,
-				datumDolaska: dolazak,
-				datumOdlaska: odlazak,
+	    //  poziv funkcije iz modula pretragaRac.js
+		if(!rezimRezervacije) {
+			pretragaRacServisa(korisnik.id, null, null, null, null);
+		}
+		else
+		{
+			pretragaRacServisa(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+					idPutovanja, idLetaZaRezervaciju);
 		}
 		
-		$.ajax({
-			type: "POST",
-			url: "../rentACar/pretrazi",
-			contentType : "application/json; charset=utf-8",
-			data: JSON.stringify(pretragaRac),
-			success: function(response) {
-				let tbody = $("#prikazRacServisa");
-				tbody.empty();
-				$.each(response, function(i, podatak) {
-
-					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
-				});
-				if(response.length == 0) {
-					swal({
-						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage",
-						  icon: "warning",
-						  timer: 2500
-						})	
-				}
-				$('#racSearchForm')[0].reset();
-			},
-		});
 		
+	});
+	
+	//  preskakanje rezervacije hotelskog smjestaja
+	$("#prelazakNaRezervacijuVozilaBtn").click(function(e) {
+		e.preventDefault();
+		prikaziRacServiseZaRezervaciju();
 	});
 	
 	$("#dodavanjePrijateljaForm").submit(function(e) {
@@ -590,6 +557,7 @@ $(document).ready(function() {
 				data: JSON.stringify(podaciRezervacije),
 				success: function(response) {
 					podaciRezervacijeSjedista = response;
+					idPutovanja = podaciRezervacijeSjedista.idPutovanja;
 					swal({
 						  title: "Uspješna rezervacija!",
 						  text: "Uspješno ste rezervisali sjedišta.",
@@ -876,7 +844,7 @@ function prikaziHoteleZaRezervaciju() {
 	$("#rezervacijaHotelaPoruka").show();
 	$("#prelazakNaRezervacijuVozilaBtn").show();
 	$("#nazivOdredistaPretragaHotela").val(podaciBoravka.nazivDestinacije);
-	$("#nazivOdredistaPretragaHotela").attr("readonly", "readonly");
+	$("#nazivOdredistaPretragaHotela").attr("readonly", true);
 	$("#input-start").val(podaciBoravka.datumDolaska);
 	$("#input-end").val(podaciBoravka.datumPovratka);
 	pretragaHotela(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, podaciRezervacijeSjedista.idPutovanja, idLetaZaRezervaciju);
@@ -884,6 +852,49 @@ function prikaziHoteleZaRezervaciju() {
 	$("#tab-aviokompanije").hide();
 	$("#tab-hoteli").show();
 	$("#tab-rac-servisi").hide();
+	$("#tab-rezervacije").hide();
+	$("#pregled-prijatelja-tab").hide();
+	$("#dodaj-prijatelje-tab").hide();
+	$("#zahtjevi-prijateljstva-tab").hide();
+	$("#tab-pozivnice").hide();
+	$("#tab-profilKorisnika").hide();
+	$("#tab-profil-lozinka").hide();
+	$("#tab-odjava").hide();	
+	$("#tab-letovi").hide();
+}
+
+function prikaziRacServiseZaRezervaciju() {
+	//  prikazivanje poruka i dugmeta za korake rezervacije
+	$("#rezervacijaVozilaPoruka").show();
+	$("#zavrsetakrezervacijeBtn").show();
+	
+	//  ucitavanje podataka o odredistu i periodu boravka
+	$.ajax({
+		type: "GET",
+		async: false,
+		url: "../letovi/podaciBoravkaZaLet/" + idLetaZaRezervaciju,
+		contentType : "application/json; charset=utf-8",
+		success: function(response) {
+			podaciBoravka = response;
+		},
+	});
+	datumDolaska = podaciBoravka.datumDolaska;
+	datumOdlaska = podaciBoravka.datumPovratka;
+	
+	//  pretraga RAC servisa na odredistu leta
+	$("#nazivOdredistaPretragaRacServisa").val(podaciBoravka.nazivDestinacije);
+	$("#nazivOdredistaPretragaRacServisa").attr("readonly", true);
+	$("#input-start-rac").val(podaciBoravka.datumDolaska);
+	$("#input-end-rac").val(podaciBoravka.datumPovratka);
+	
+	pretragaRacServisa(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+			idPutovanja, idLetaZaRezervaciju);
+	
+	
+	//  prikaz taba za rezervaciju vozila
+	$("#tab-aviokompanije").hide();
+	$("#tab-hoteli").hide();
+	$("#tab-rac-servisi").show();
 	$("#tab-rezervacije").hide();
 	$("#pregled-prijatelja-tab").hide();
 	$("#dodaj-prijatelje-tab").hide();
