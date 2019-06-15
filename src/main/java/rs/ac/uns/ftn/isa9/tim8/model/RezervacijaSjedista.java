@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,10 +12,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 
 @Entity
 @Table(name = "rezervacija_sjedista")
@@ -60,9 +67,14 @@ public class RezervacijaSjedista {
 	@Column(name = "ocjenjeno")
     protected boolean ocjenjeno;
 	
+	@Column(name = "datum_rezervacije")
+	@Temporal(TemporalType.DATE)
+	protected Date datumRezervacije;
+	
 	public RezervacijaSjedista() {
 		super();
 		this.ocjenjeno = false;
+		this.datumRezervacije = new Date();
 	}
 
 	public RezervacijaSjedista(Long id, String imePutnika, String prezimePutnika, String brojPasosaPutnika,
@@ -80,6 +92,7 @@ public class RezervacijaSjedista {
 		this.let = let;
 		this.putovanje = putovanje;
 		this.ocjenjeno = false;
+		this.datumRezervacije = new Date();
 	}
 	
 	public RezervacijaSjedista(Long id, String imePutnika, String prezimePutnika, String brojPasosaPutnika,
@@ -97,6 +110,7 @@ public class RezervacijaSjedista {
 		this.let = let;
 		this.putovanje = putovanje;
 		this.ocjenjeno = ocjenjeno;
+		this.datumRezervacije = new Date();
 	}
 
 	
@@ -186,6 +200,15 @@ public class RezervacijaSjedista {
 
 	public void setOcjenjeno(boolean ocjenjeno) {
 		this.ocjenjeno = ocjenjeno;
-	}	
+	}
 
+	public Date getDatumRezervacije() {
+		return datumRezervacije;
+	}
+
+	public void setDatumRezervacije(Date datumRezervacije) {
+		this.datumRezervacije = datumRezervacije;
+	}	
+	
+	
 }
