@@ -467,43 +467,19 @@ $(document).ready(function() {
 				
 	});
 	
+	//  pretraga rent-a-car servisa
 	$("#racSearchForm").submit(function(e) {
 		e.preventDefault();
-	   
-		let _nazivRacServisa= $("#racNaziv").val();
-		let _nazivDestinacije = $("#nazivOdredistaPretragaRacServisa").val();
-		let dolazak = $("#input-start-rac").val();
-		let odlazak = $("#input-end-rac").val();
-		
-		let pretragaRac = {
-				nazivRacServisa: _nazivRacServisa,
-				nazivDestinacije: _nazivDestinacije,
-				datumDolaska: dolazak,
-				datumOdlaska: odlazak,
+	    //  poziv funkcije iz modula pretragaRac.js
+		if(!rezimRezervacije) {
+			pretragaRacServisa(korisnik.id, null, null, null, null);
+		}
+		else
+		{
+			pretragaRacServisa(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+					idPutovanja, idLetaZaRezervaciju);
 		}
 		
-		$.ajax({
-			type: "POST",
-			url: "../rentACar/pretrazi",
-			contentType : "application/json; charset=utf-8",
-			data: JSON.stringify(pretragaRac),
-			success: function(response) {
-				let tbody = $("#prikazRacServisa");
-				tbody.empty();
-				$.each(response, function(i, podatak) {
-
-					prikazi(podatak, tbody, "https://previews.123rf.com/images/helloweenn/helloweenn1612/helloweenn161200021/67973090-car-rent-logo-design-template-eps-10.jpg", "infoStranicaRac");
-				});
-				if(response.length == 0) {
-					swal({
-						  title: "Ne postoji ni jedan rent-a-car servis koji zadovoljava kriterijume pretrage",
-						  icon: "warning",
-						  timer: 2500
-						})	
-				}
-				$('#racSearchForm')[0].reset();
-			},
-		});
 		
 	});
 	
@@ -901,7 +877,8 @@ function prikaziRacServiseZaRezervaciju() {
 	$("#input-start-rac").val(podaciBoravka.datumDolaska);
 	$("#input-end-rac").val(podaciBoravka.datumPovratka);
 	
-	
+	pretragaRacServisa(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
+			idPutovanja, idLetaZaRezervaciju);
 	
 	
 	//  prikaz taba za rezervaciju vozila
