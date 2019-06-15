@@ -6,7 +6,7 @@ let pocetnaStrana = "../pocetnaStranica/index.html";
 let defaultSlika = "https://s-ec.bstatic.com/images/hotel/max1024x768/147/147997361.jpg";
 let stavkeMenija = ["stavkaUredjivanjeHotela", "stavkaBrzeRezervacije", "stavkaIzvjestaji", "stavkaProfilKorisnika"];
 let tabovi = ["tab-sobe", "tab-dodatne-usluge", "tab-info-stranica", "tab-brze-rezervacije-dodavanje",
-	"tab-brze-rezervacije-pregledanje", "tab-izvjestaji", "tab-profil-kor", "tab-profil-lozinka"];
+	"tab-brze-rezervacije-pregledanje", "tab-prihodi-hotela", "tab-profil-kor", "tab-profil-lozinka"];
 let mapaHotela = null;
 let zoomLevel = 17;
 
@@ -59,12 +59,6 @@ $(document).ready(function(e) {
 		prikaziTab("tab-brze-rezervacije-pregledanje");
 	});
 	
-	$("#izvjestaji").click(function(e) {
-		e.preventDefault();
-		aktivirajStavkuMenija("stavkaIzvjestaji");
-		prikaziTab("tab-izvjestaji");
-	});
-	
 	$("#izmjeni_podatke").click(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaProfilKorisnika");
@@ -75,6 +69,13 @@ $(document).ready(function(e) {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavkaProfilKorisnika");
 		prikaziTab("tab-profil-lozinka");
+	});
+	
+	$("#prikazi_prihode_tab").click(function(e){
+		e.preventDefault();
+		aktivirajStavkuMenija("stavkaIzvjestaji");
+		prikaziTab("tab-prihodi-hotela");
+		prihodiHotela();
 	});
 	
 	//prikaz koraka za dodavanje brze rezervacije
@@ -101,6 +102,7 @@ $(document).ready(function(e) {
 			$("#izborDodatnihUslugaBrzeRezervacije").hide();
 		}
 	});
+
 	
 	//ucitavanje podataka profila administratora
 	korisnikInfo();
@@ -205,6 +207,32 @@ $(document).ready(function(e) {
 		$("#detaljanPrikazBrzeRez").hide();
 		$("#sveBrzeRezervacije").show();
 		$("#prikazUslugaBrzeRezDetalji").empty();
+	});
+	
+	//ostvareni prihodi
+	$("#forma_prihodi").submit(function(e){
+		e.preventDefault();
+		let _datumPocetni = $("#input-start-2").val();
+		let _datumKrajnji = $("#input-end-2").val();
+		
+		let datumiZaPrihod = {
+				datumPocetni : _datumPocetni,
+				datumKrajnji : _datumKrajnji
+		};
+
+		$.ajax({
+			type : 'POST',
+			url : "../hoteli/prihodHotela/" + podaciHotela.id,
+			data : JSON.stringify(datumiZaPrihod),
+			headers: createAuthorizationTokenHeader("jwtToken"),
+			success: function(response) {
+				$("#prihod_id").text("Ostvareni prihodi: " + response);
+				$("#prihod_id").show();
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX error: " + errorThrown);
+			}
+		});
 	});
 	
 	//odjavljivanje
@@ -591,6 +619,11 @@ function prikaziSobu(soba) {
 	noviRed.append('<td class="column1">' + soba.sprat + '</td>');
 	noviRed.append('<td class="column1">' + soba.vrsta + '</td>');
 	noviRed.append('<td class="column1">' + soba.kolona + '</td>');
+	if(soba.brojOcjena > 0) {
+		noviRed.append('<td class="column1">' + (soba.sumaOcjena / soba.brojOcjena).toFixed(2) + '</td>');
+	} else {
+		noviRed.append('<td class="column1">Nema ocjena</td>');
+	}
 	noviRed.append('<td class="column6"><a href="#" class="izmjenaSobe" id="is' + soba.id + '">Izmjeni</a>&nbsp&nbsp<a class="brisanjeSobe" href="#" id="bs' + soba.id + '">Obriši</a></td>');
 	sobeTabela.append(noviRed);
 }

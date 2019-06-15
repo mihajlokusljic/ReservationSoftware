@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PotrebnoSobaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaHotelaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UslugaDTO;
@@ -20,9 +22,12 @@ import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
 import rs.ac.uns.ftn.isa9.tim8.model.Hotel;
 import rs.ac.uns.ftn.isa9.tim8.model.HotelskaSoba;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.HotelRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.HotelskaSobaRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.RezervacijaSobeRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.UslugeRepository;
 
 @Service
@@ -35,7 +40,13 @@ public class HotelService {
 
 	@Autowired
 	protected AdresaRepository adresaRepository;
-
+	
+	@Autowired
+	protected HotelskaSobaRepository sobaRepository;
+	
+	@Autowired
+	protected RezervacijaSobeRepository rezervacijaRepository;
+	
 	@Autowired
 	protected HotelskeSobeService sobeService;
 
@@ -274,6 +285,64 @@ public class HotelService {
 			throw new NevalidniPodaciException("Ne postoji hotel sa zadatim id-em");
 		}
 		return hotelSearch.get();
+	}
+
+	public String izracunajPrihode(DatumiZaPrihodDTO datumiDto, Long idHotela) throws NevalidniPodaciException {
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
+		if (!datumiDto.getDatumPocetni().isEmpty()) {
+			try {
+				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		
+		if (!datumiDto.getDatumKrajnji().isEmpty()) {
+			try {
+				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
+			} catch (ParseException e) {
+				throw new NevalidniPodaciException("Nevalidan format datuma.");
+			}
+		}
+		Optional<Hotel> pretragaHotel = hotelRepository.findById(idHotela);
+		
+		if (!pretragaHotel.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji rent-a-car servis sa zadatim id-em");
+		}
+		
+		Hotel hotel = pretragaHotel.get();
+		double prihodi = 0;
+		
+		Collection<HotelskaSoba> sobe = sobaRepository.findByHotel(hotel);
+		
+		for (HotelskaSoba hSoba : sobe) {
+			Collection<RezervacijaSobe> sveRezervacije = rezervacijaRepository.findAllByRezervisanaSoba(hSoba);
+			for (RezervacijaSobe rSobe : sveRezervacije) {
+				if (pocetniDatum != null && krajnjiDatum != null) {
+					if (pocetniDatum.compareTo(rSobe.getDatumDolaska()) <= 0 && krajnjiDatum.compareTo(rSobe.getDatumOdlaska()) >= 0) {
+						prihodi = prihodi + rSobe.getCijena();
+					}
+				}
+				else if (pocetniDatum != null) {
+					if (pocetniDatum.compareTo(rSobe.getDatumDolaska()) <= 0) {
+						prihodi = prihodi + rSobe.getCijena();
+					}
+				}
+				else if ( krajnjiDatum != null) {
+					if (krajnjiDatum.compareTo(rSobe.getDatumDolaska()) >= 0) {
+						prihodi = prihodi + rSobe.getCijena();
+					}
+				}
+				else {
+					prihodi = prihodi + rSobe.getCijena();
+				}
+			}
+		}
+		
+		return Double.toString(prihodi);
 	}
 
 }
