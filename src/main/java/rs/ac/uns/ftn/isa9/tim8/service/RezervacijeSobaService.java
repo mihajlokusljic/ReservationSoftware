@@ -215,6 +215,11 @@ public class RezervacijeSobaService {
 		}
 		double popust = brzaRez.getBaznaCijena() * brzaRez.getProcenatPopusta() / 100.0;
 		double cijena = brzaRez.getBaznaCijena() - popust;
+		
+		if (cijena < 10) {
+			cijena = 10;
+		}
+		
 		RezervacijaSobe rezervacija = new RezervacijaSobe(brzaRez.getDatumDolaska(), brzaRez.getDatumOdlaska(), cijena,
 				brzaRez.getSobaZaRezervaciju());
 		rezervacija.setPutnik(korisnik);
@@ -333,6 +338,11 @@ public class RezervacijeSobaService {
 			//  racunanje popusta ostvarenog izborom dodatnih usluga
 			popust = cijenaBoravka * ukupanProcenatPopusta / 100.0;
 			cijenaBoravka -= popust;
+			
+			if (cijenaBoravka < 10) {
+				cijenaBoravka = 10;
+			}
+			
 			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
 			rezervacijaSobe.setPutnik(korisnik);
 			rezervacijaSobe.setPutovanje(putovanje);

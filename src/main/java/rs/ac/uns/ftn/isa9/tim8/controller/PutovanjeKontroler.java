@@ -39,4 +39,13 @@ public class PutovanjeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@RequestMapping(value = "/potvrdaPutovanja/{idPutovanja}", method = RequestMethod.GET)
+	public ResponseEntity<?> potvrdaPutovanja(@PathVariable("idPutovanja") Long idPutovanja) {
+		try {
+			return new ResponseEntity<String>(servis.potvrdaPutovanja(idPutovanja), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }
