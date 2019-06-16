@@ -567,7 +567,21 @@ public class RentACarServisService {
 
 	public String rezervisiVozilo(RezervacijaVozilaDTO rezervacijaDTO, Long idServisa) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
+		try {
+			pocetniDatum = df.parse(rezervacijaDTO.getDatumPreuzimanjaVozila());
+			krajnjiDatum = df.parse(rezervacijaDTO.getDatumVracanjaVozila());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+
+		
+		System.out.println("Datum rezervacijae: " + rezervacijaDTO.getDatumPreuzimanjaVozila() + " " + rezervacijaDTO.getDatumVracanjaVozila());
+		
 		RezervacijaVozila rezervacija = new RezervacijaVozila();
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
 
@@ -588,8 +602,8 @@ public class RentACarServisService {
 		rezervacija.setRentACarServis(rac);
 		rezervacija.setPutnik((RegistrovanKorisnik) regKor);
 		rezervacija.setCijena(rezervacijaDTO.getCijena());
-		rezervacija.setDatumPreuzimanjaVozila(rezervacijaDTO.getDatumPreuzimanjaVozila());
-		rezervacija.setDatumVracanjaVozila(rezervacijaDTO.getDatumVracanjaVozila());
+		rezervacija.setDatumPreuzimanjaVozila(pocetniDatum);
+		rezervacija.setDatumVracanjaVozila(krajnjiDatum);
 
 		Optional<Filijala> adresa1 = filijalaRepository.findById(rezervacijaDTO.getMjestoPreuzimanjaVozila());
 		if (!adresa1.isPresent()) {
@@ -719,8 +733,8 @@ public class RentACarServisService {
 		Date danasnjiDatum = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			datumPreuzimanja = novaRezervacija.getDatumPreuzimanjaVozila();
-			datumVracanja = novaRezervacija.getDatumVracanjaVozila();
+			datumPreuzimanja = df.parse(novaRezervacija.getDatumPreuzimanjaVozila());
+			datumVracanja = df.parse(novaRezervacija.getDatumVracanjaVozila());
 			danasnjiDatum = df.parse(df.format(new Date()));
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
@@ -811,13 +825,23 @@ public class RentACarServisService {
 
 		}
 		Vozilo vozilo = searchVozilo.get();
-
+		
+		Date datumPreuzimanja = null;
+		Date datumVracanja = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			datumPreuzimanja = df.parse(brzaRezervacija.getDatumPreuzimanjaVozila());
+			datumVracanja = df.parse(brzaRezervacija.getDatumVracanjaVozila());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
 		double punaCijena = brzaRezervacija.getBaznaCijena();
 
 		double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta() * punaCijena / 100;
 		return new PrikazBrzeRezVozilaDTO(brzaRezervacija.getIdBrzeRezervacije(), vozilo.getNaziv(),
-				vozilo.getRentACar().getNaziv(), brzaRezervacija.getDatumPreuzimanjaVozila(),
-				brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom);
+				vozilo.getRentACar().getNaziv(), datumPreuzimanja,
+				datumVracanja, punaCijena, cijenaSaPopustom);
 	}
 
 	public Collection<PrikazBrzeRezVozilaDTO> vratiBrzeZaPrikaz(Long idServisa) throws NevalidniPodaciException {

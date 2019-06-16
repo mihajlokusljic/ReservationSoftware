@@ -18,8 +18,11 @@ $(document).ready(function() {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
-	    	}
+	    		swal({
+		  			  title: XMLHttpRequest.responseText,
+		  			  icon: "warning",
+		  			  timer: 2500
+		  			});	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -1423,8 +1426,8 @@ function zadajVoziloBrzeRez(){
 			
 			let brzaRezervacija = {
 				idVozila: _idVozila,
-				datumPreuzimanjaVozila: Date.parse(_datumPreuzimanja),
-				datumVracanjaVozila: Date.parse(_datumVracanja),
+				datumPreuzimanjaVozila: _datumPreuzimanja,
+				datumVracanjaVozila: _datumVracanja,
 				baznaCijena: 0,
 				procenatPopusta: 0
 			};

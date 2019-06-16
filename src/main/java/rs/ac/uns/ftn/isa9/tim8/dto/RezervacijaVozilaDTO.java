@@ -1,10 +1,5 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 
 public class RezervacijaVozilaDTO {
@@ -13,13 +8,11 @@ public class RezervacijaVozilaDTO {
 
 	protected Long mjestoPreuzimanjaVozila;
 	
-	@JsonSerialize(using = CustomDateSerializer.class)
-	protected Date datumPreuzimanjaVozila;
+	protected String datumPreuzimanjaVozila;
 
 	protected Long mjestoVracanjaVozila;
 
-	@JsonSerialize(using = CustomDateSerializer.class)
-	protected Date datumVracanjaVozila;
+	protected String datumVracanjaVozila;
 
 	protected double cijena;
 
@@ -31,8 +24,8 @@ public class RezervacijaVozilaDTO {
 		super();
 	}
 
-	public RezervacijaVozilaDTO(Vozilo rezervisanoVozilo, Long mjestoPreuzimanjaVozila, Date datumPreuzimanjaVozila,
-			Long mjestoVracanjaVozila, Date datumVracanjaVozila, double cijena, Long putnik, Long idPutovanja) {
+	public RezervacijaVozilaDTO(Vozilo rezervisanoVozilo, Long mjestoPreuzimanjaVozila, String datumPreuzimanjaVozila,
+			Long mjestoVracanjaVozila, String datumVracanjaVozila, double cijena, Long putnik, Long idPutovanja) {
 		super();
 		this.rezervisanoVozilo = rezervisanoVozilo;
 		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
@@ -60,12 +53,9 @@ public class RezervacijaVozilaDTO {
 		this.mjestoPreuzimanjaVozila = mjestoPreuzimanjaVozila;
 	}
 
-	public Date getDatumPreuzimanjaVozila() {
+	
+	public String getDatumPreuzimanjaVozila() {
 		return datumPreuzimanjaVozila;
-	}
-
-	public void setDatumPreuzimanjaVozila(Date datumPreuzimanjaVozila) {
-		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
 	}
 
 	public Long getMjestoVracanjaVozila() {
@@ -76,12 +66,16 @@ public class RezervacijaVozilaDTO {
 		this.mjestoVracanjaVozila = mjestoVracanjaVozila;
 	}
 
-	public Date getDatumVracanjaVozila() {
+	public String getDatumVracanjaVozila() {
 		return datumVracanjaVozila;
 	}
 
-	public void setDatumVracanjaVozila(Date datumVracanjaVozila) {
+	public void setDatumVracanjaVozila(String datumVracanjaVozila) {
 		this.datumVracanjaVozila = datumVracanjaVozila;
+	}
+
+	public void setDatumPreuzimanjaVozila(String datumPreuzimanjaVozila) {
+		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
 	}
 
 	public double getCijena() {

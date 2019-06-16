@@ -267,9 +267,9 @@ function prikaziVozila(vozila) {
 		let rezervacijaVozila = {
 				rezervisanoVozilo : vozilo,
 				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaSelect").val(),
-				datumPreuzimanjaVozila : Date.parse($("#input-start").val()),
+				datumPreuzimanjaVozila :$("#input-start").val(),
 				mjestoVracanjaVozila : $("#mjestoVracanjaSelect").val(),
-			    datumVracanjaVozila : Date.parse($("#input-end").val()),
+			    datumVracanjaVozila : $("#input-end").val(),
 			    cijena : ukupno*vozilo.cijena_po_danu,
 			    putnik : korisnikId,
 			    idPutovanja : idPutovanja
@@ -430,9 +430,9 @@ function prikaziVozilaSaPopustom(rezVozila) {
 		let rezervacijaVozila = {
 				rezervisanoVozilo : brzaRez.vozilo,
 				mjestoPreuzimanjaVozila : $("#mjestoPreuzimanjaPopustSelect").val(),
-				datumPreuzimanjaVozila : Date.parse($("#datumPreuzimanjaBrzaRez").val()),
+				datumPreuzimanjaVozila : $("#datumPreuzimanjaBrzaRez").val(),
 				mjestoVracanjaVozila : $("#mjestoVracanjaPopustSelect").val(),
-			    datumVracanjaVozila : Date.parse($("#datumVracanjaBrzaRez").val()),
+			    datumVracanjaVozila : $("#datumVracanjaBrzaRez").val(),
 			    cijena : cijenaSaPopustom,
 			    putnik : korisnikId,
 			    idPutovanja : idPutovanja

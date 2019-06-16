@@ -1,22 +1,20 @@
 package rs.ac.uns.ftn.isa9.tim8.dto;
 
-import java.util.Date;
-
 public class BrzaRezervacijaVozilaDTO {
 	
 	protected Long idBrzeRezervacije;
 	
 	protected Long idVozila;
 	
-	protected Date datumPreuzimanjaVozila;
+	protected String datumPreuzimanjaVozila;
 	
-	protected Date datumVracanjaVozila;
+	protected String datumVracanjaVozila;
 	
 	protected double baznaCijena;
 	
 	protected int procenatPopusta;
 
-	public BrzaRezervacijaVozilaDTO(Long idVozila, Date datumPreuzimanjaVozila, Date datumVracanjaVozila,
+	public BrzaRezervacijaVozilaDTO(Long idVozila, String datumPreuzimanjaVozila, String datumVracanjaVozila,
 			double baznaCijena, int procenatPopusta) {
 		super();
 		this.idVozila = idVozila;
@@ -38,19 +36,19 @@ public class BrzaRezervacijaVozilaDTO {
 		this.idVozila = idVozila;
 	}
 
-	public Date getDatumPreuzimanjaVozila() {
+	public String getDatumPreuzimanjaVozila() {
 		return datumPreuzimanjaVozila;
 	}
 
-	public void setDatumPreuzimanjaVozila(Date datumPreuzimanjaVozila) {
+	public void setDatumPreuzimanjaVozila(String datumPreuzimanjaVozila) {
 		this.datumPreuzimanjaVozila = datumPreuzimanjaVozila;
 	}
 
-	public Date getDatumVracanjaVozila() {
+	public String getDatumVracanjaVozila() {
 		return datumVracanjaVozila;
 	}
 
-	public void setDatumVracanjaVozila(Date datumVracanjaVozila) {
+	public void setDatumVracanjaVozila(String datumVracanjaVozila) {
 		this.datumVracanjaVozila = datumVracanjaVozila;
 	}
 
