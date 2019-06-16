@@ -424,7 +424,7 @@ public class RentACarServisService {
 		while (it.hasNext()) {
 			tekuciRac = it.next();
 			ukloniRac = false;
-			raspolozivaVozila = this.slobodnaVozila(tekuciRac, pocetniDatum, krajnjiDatum);
+			raspolozivaVozila = this.slobodnaVozilaZaPretraguRac(tekuciRac, pocetniDatum, krajnjiDatum);
 
 			if (raspolozivaVozila.size() == 0) {
 				ukloniRac = true;
@@ -443,6 +443,8 @@ public class RentACarServisService {
 
 		return p;
 	}
+	
+	
 
 	private List<Vozilo> slobodnaVozila(RentACarServis rac, Date pocetniDatum, Date krajnjiDatum) {
 		List<Vozilo> rezultat = new ArrayList<Vozilo>();
@@ -474,6 +476,9 @@ public class RentACarServisService {
 					}
 
 				}
+				if (voziloJeNaBrzojRezervaciji(voz, pocetniDatum, krajnjiDatum)) {
+					dodajVozilo = false;
+				}
 			}
 
 			if (dodajVozilo) {
@@ -485,7 +490,50 @@ public class RentACarServisService {
 		return rezultat;
 
 	}
+	
+	private List<Vozilo> slobodnaVozilaZaPretraguRac(RentACarServis rac, Date pocetniDatum, Date krajnjiDatum) {
+		List<Vozilo> rezultat = new ArrayList<Vozilo>();
+		Date trenutniDatum = new Date();
+		boolean dodajVozilo = true;
+		boolean datumNull = false;
 
+		if (pocetniDatum == null || krajnjiDatum == null) {
+			datumNull = true;
+		}
+
+		else if (trenutniDatum.compareTo(pocetniDatum) > 0 || trenutniDatum.compareTo(krajnjiDatum) > 0
+				|| pocetniDatum.compareTo(krajnjiDatum) > 0) {
+			return rezultat;
+		}
+
+		for (Vozilo voz : rac.getVozila()) {
+			if (datumNull == true) {
+				dodajVozilo = true;
+			} else {
+				for (RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+
+					if (pocetniDatum.compareTo(r.getDatumPreuzimanjaVozila()) >= 0
+							&& krajnjiDatum.compareTo(r.getDatumVracanjaVozila()) <= 0) {
+					
+						dodajVozilo = false;
+						break;
+					} else {
+						dodajVozilo = true;
+					}
+
+				}
+			}
+
+			if (dodajVozilo) {
+				rezultat.add(voz);
+
+			}
+			dodajVozilo = true;
+		}
+		return rezultat;
+
+	}
+	
 	public RentACarServis pronadjiServisPoId(Long idRac) throws NevalidniPodaciException {
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idRac);
 
