@@ -2,6 +2,7 @@ var tokenKey = "jwtToken";
 var idPutovanja = -1;
 var inicijator = false;
 var putovanje = null;
+var korsinikId = null;
 
 $(document).ready(function() {
 	$.ajaxSetup({
@@ -29,6 +30,12 @@ $(document).ready(function() {
 	
 	idPutovanja = params_parser.get("idPutovanja");
 	inicijator = params_parser.get("inicijator");
+	korsinikId = params_parser.get("idKorisnika");
+	
+	if(inicijator == "false") {
+		$("#povratakNaPocetnuBtn").hide();
+		$("#odgovorNaPoziv").show();
+	}
 	
 	ucitajPodatkePutovanja();
 	ucitajPodatkeZaVozila();

@@ -2,6 +2,9 @@ package rs.ac.uns.ftn.isa9.tim8.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import rs.ac.uns.ftn.isa9.tim8.common.CustomDateSerializer;
 import rs.ac.uns.ftn.isa9.tim8.model.Vozilo;
 
 public class PrikazRezVozilaDTO {
@@ -18,8 +21,10 @@ public class PrikazRezVozilaDTO {
 	
 	protected String mjestoVracanja;
 	
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumPreuzimanja;
 	
+	@JsonSerialize(using = CustomDateSerializer.class)
 	protected Date datumVracanja;
 
 	public PrikazRezVozilaDTO(Long idRezervacije, String nazivServisa, Vozilo rezervisanoVozilo, double cijena,
