@@ -425,29 +425,7 @@ $(document).ready(function() {
 		if (_podaciNeregistrovanihPutnika.length === rezervisanoSjedista - 1 - pozvaniPrijateljiIds.length) {
 			// Izvrsava se sve dok se ne unesu podaci svih neregistrovanih putnika
 			
-			podaciRezervacijeSjedista.pozvaniPrijateljiIds = pozvaniPrijateljiIds;
-			podaciRezervacijeSjedista.podaciNeregistrovanihPutnika = _podaciNeregistrovanihPutnika;
-			
-			$.ajax({
-				type: "POST",
-				async: false,
-				url: "../aviokompanije/popuniPodatkeZaPutnike",
-				contentType : "application/json; charset=utf-8",
-				data: JSON.stringify(podaciRezervacijeSjedista),
-				success: function(response) {
-					podaciRezervacijeSjedista = response;
-					
-					swal({
-						  title: "Uspješno uneseni podaci!",
-						  text: "Uspješno ste unijeli podatke za putnike.",
-						  icon: "success",
-					})
-					
-					$("#zadavanjePodatakaPutnikaForm")[0].reset();
-					prikaziHoteleZaRezervaciju();
-					return;
-				},
-			});
+			krajRezervacijeSjedista();
 			
 			$("#brPodatakaNeregistrovanihPutnika").html(1); // jer je zavrsen unos
 			
@@ -575,7 +553,7 @@ $(document).ready(function() {
 			if (rezervisanoSjedista > 1) {
 			prikaziPozivanjePrijatelja();
 			} else {
-				prikaziHoteleZaRezervaciju();
+				krajRezervacijeSjedista(); //  kada idemo sami na putovanje
 			}
 		}
 		else
@@ -615,7 +593,7 @@ $(document).ready(function() {
 		}
 		else
 		{
-			prikaziHoteleZaRezervaciju();
+			krajRezervacijeSjedista(); // zavrseno pozivanje prijatelja, a nema nereg. putnika
 		}
 	});
 	
@@ -652,6 +630,33 @@ function updateLetovi(letovi) {
 		idLetaZaRezervaciju = idLeta;
 		prikaziIzborSjedistaBrzeRezervacije(idLeta);
 	});
+}
+
+function krajRezervacijeSjedista() {
+	podaciRezervacijeSjedista.pozvaniPrijateljiIds = pozvaniPrijateljiIds;
+	podaciRezervacijeSjedista.podaciNeregistrovanihPutnika = _podaciNeregistrovanihPutnika;
+	
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "../aviokompanije/popuniPodatkeZaPutnike",
+		contentType : "application/json; charset=utf-8",
+		data: JSON.stringify(podaciRezervacijeSjedista),
+		success: function(response) {
+			podaciRezervacijeSjedista = response;
+			
+			swal({
+				  title: "Uspješno uneseni podaci!",
+				  text: "Uspješno ste unijeli podatke za putnike.",
+				  icon: "success",
+			})
+			
+			$("#zadavanjePodatakaPutnikaForm")[0].reset();
+			prikaziHoteleZaRezervaciju();
+			return;
+		},
+	});
+	
 }
 
 function recalculateTotal(sc) {
