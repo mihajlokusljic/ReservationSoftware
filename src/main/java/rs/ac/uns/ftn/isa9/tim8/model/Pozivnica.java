@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.isa9.tim8.model;
 
 import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "pozivnica")
@@ -40,19 +37,38 @@ public class Pozivnica {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "primalac_id")
 	protected RegistrovanKorisnik primalac;
-	
+
 	public Pozivnica() {
 		super();
 	}
 
-	public Pozivnica(Long id, boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje,
-			RegistrovanKorisnik posiljalac) {
+	public Pozivnica(boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje, RegistrovanKorisnik posiljalac,
+			RegistrovanKorisnik primalac) {
 		super();
-		this.Id = id;
 		this.prihvacena = prihvacena;
 		this.rokPrihvatanja = rokPrihvatanja;
-		//this.putovanje = putovanje;
+		this.putovanje = putovanje;
 		this.posiljalac = posiljalac;
+		this.primalac = primalac;
+	}
+
+	public Pozivnica(Long id, boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje,
+			RegistrovanKorisnik posiljalac, RegistrovanKorisnik primalac) {
+		super();
+		Id = id;
+		this.prihvacena = prihvacena;
+		this.rokPrihvatanja = rokPrihvatanja;
+		this.putovanje = putovanje;
+		this.posiljalac = posiljalac;
+		this.primalac = primalac;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
 	}
 
 	public boolean isPrihvacena() {
@@ -79,20 +95,20 @@ public class Pozivnica {
 		this.putovanje = putovanje;
 	}
 
-	public Long getId() {
-		return Id;
-	}
-
-	public void setId(Long id) {
-		this.Id = id;
-	}
-
 	public RegistrovanKorisnik getPosiljalac() {
 		return posiljalac;
 	}
 
 	public void setPosiljalac(RegistrovanKorisnik posiljalac) {
 		this.posiljalac = posiljalac;
+	}
+
+	public RegistrovanKorisnik getPrimalac() {
+		return primalac;
+	}
+
+	public void setPrimalac(RegistrovanKorisnik primalac) {
+		this.primalac = primalac;
 	}
 	
 }
