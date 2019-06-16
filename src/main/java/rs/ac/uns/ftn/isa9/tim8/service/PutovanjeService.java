@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
+import rs.ac.uns.ftn.isa9.tim8.dto.OdgovorNaPozivnicuDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
+import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Pozivnica;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
@@ -99,6 +102,27 @@ public class PutovanjeService {
 			}
 		}
 
+		return null;
+	}
+
+	public Boolean prihvatiPozivNaPutovanje(OdgovorNaPozivnicuDTO odgovor) throws NevalidniPodaciException {
+		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(odgovor.getIdPutovanja());
+		
+		if(!putovanjeSearch.isPresent()) {
+			throw new NevalidniPodaciException("Nije prepoznato proslijeđeno putovanje.");
+		}
+		
+		Putovanje putovanje = putovanjeSearch.get();
+		
+		Optional<Osoba> korisnikSearch = korisnikRepository.findById(odgovor.getIdPozvanogPrijatelja());
+		
+		if(!korisnikSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-em.");
+		}
+		
+		RegistrovanKorisnik pozvaniKorisnik = (RegistrovanKorisnik) korisnikSearch.get();
+		
+		//Pozivnica pozivnica = new Pozivnica(true, rokPrihvatanja, putovanje, putovanje.getInicijatorPutovanja(), pozvaniKorisnik);
 		return null;
 	}
 
