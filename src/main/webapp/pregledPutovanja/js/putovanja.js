@@ -13,13 +13,12 @@ $(document).ready(function() {
 		
 	$("#povratakNaPocetnuBtn").click(function(e) {
 		e.preventDefault();
-		
 		$.ajax({
 			type : 'GET',
 			url : "../putovanja/potvrdaPutovanja/" + idPutovanja,
 			dataType : "json"
 		});
-		
+
 		window.location.replace("../registrovaniKorisnikPocetna/index.html");
 	});
 	

@@ -424,7 +424,7 @@ public class RentACarServisService {
 		while (it.hasNext()) {
 			tekuciRac = it.next();
 			ukloniRac = false;
-			raspolozivaVozila = this.slobodnaVozila(tekuciRac, pocetniDatum, krajnjiDatum);
+			raspolozivaVozila = this.slobodnaVozilaZaPretraguRac(tekuciRac, pocetniDatum, krajnjiDatum);
 
 			if (raspolozivaVozila.size() == 0) {
 				ukloniRac = true;
@@ -443,6 +443,8 @@ public class RentACarServisService {
 
 		return p;
 	}
+	
+	
 
 	private List<Vozilo> slobodnaVozila(RentACarServis rac, Date pocetniDatum, Date krajnjiDatum) {
 		List<Vozilo> rezultat = new ArrayList<Vozilo>();
@@ -474,6 +476,9 @@ public class RentACarServisService {
 					}
 
 				}
+				if (voziloJeNaBrzojRezervaciji(voz, pocetniDatum, krajnjiDatum)) {
+					dodajVozilo = false;
+				}
 			}
 
 			if (dodajVozilo) {
@@ -485,7 +490,50 @@ public class RentACarServisService {
 		return rezultat;
 
 	}
+	
+	private List<Vozilo> slobodnaVozilaZaPretraguRac(RentACarServis rac, Date pocetniDatum, Date krajnjiDatum) {
+		List<Vozilo> rezultat = new ArrayList<Vozilo>();
+		Date trenutniDatum = new Date();
+		boolean dodajVozilo = true;
+		boolean datumNull = false;
 
+		if (pocetniDatum == null || krajnjiDatum == null) {
+			datumNull = true;
+		}
+
+		else if (trenutniDatum.compareTo(pocetniDatum) > 0 || trenutniDatum.compareTo(krajnjiDatum) > 0
+				|| pocetniDatum.compareTo(krajnjiDatum) > 0) {
+			return rezultat;
+		}
+
+		for (Vozilo voz : rac.getVozila()) {
+			if (datumNull == true) {
+				dodajVozilo = true;
+			} else {
+				for (RezervacijaVozila r : this.rezervacijaVozilaRepository.findAllByRezervisanoVozilo(voz)) {
+
+					if (pocetniDatum.compareTo(r.getDatumPreuzimanjaVozila()) >= 0
+							&& krajnjiDatum.compareTo(r.getDatumVracanjaVozila()) <= 0) {
+					
+						dodajVozilo = false;
+						break;
+					} else {
+						dodajVozilo = true;
+					}
+
+				}
+			}
+
+			if (dodajVozilo) {
+				rezultat.add(voz);
+
+			}
+			dodajVozilo = true;
+		}
+		return rezultat;
+
+	}
+	
 	public RentACarServis pronadjiServisPoId(Long idRac) throws NevalidniPodaciException {
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idRac);
 
@@ -567,7 +615,21 @@ public class RentACarServisService {
 
 	public String rezervisiVozilo(RezervacijaVozilaDTO rezervacijaDTO, Long idServisa) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
+		
+		Date pocetniDatum = null;
+		Date krajnjiDatum = null;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
+		try {
+			pocetniDatum = df.parse(rezervacijaDTO.getDatumPreuzimanjaVozila());
+			krajnjiDatum = df.parse(rezervacijaDTO.getDatumVracanjaVozila());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+
+		
+		System.out.println("Datum rezervacijae: " + rezervacijaDTO.getDatumPreuzimanjaVozila() + " " + rezervacijaDTO.getDatumVracanjaVozila());
+		
 		RezervacijaVozila rezervacija = new RezervacijaVozila();
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);
 
@@ -588,8 +650,8 @@ public class RentACarServisService {
 		rezervacija.setRentACarServis(rac);
 		rezervacija.setPutnik((RegistrovanKorisnik) regKor);
 		rezervacija.setCijena(rezervacijaDTO.getCijena());
-		rezervacija.setDatumPreuzimanjaVozila(rezervacijaDTO.getDatumPreuzimanjaVozila());
-		rezervacija.setDatumVracanjaVozila(rezervacijaDTO.getDatumVracanjaVozila());
+		rezervacija.setDatumPreuzimanjaVozila(pocetniDatum);
+		rezervacija.setDatumVracanjaVozila(krajnjiDatum);
 
 		Optional<Filijala> adresa1 = filijalaRepository.findById(rezervacijaDTO.getMjestoPreuzimanjaVozila());
 		if (!adresa1.isPresent()) {
@@ -719,8 +781,8 @@ public class RentACarServisService {
 		Date danasnjiDatum = null;
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			datumPreuzimanja = novaRezervacija.getDatumPreuzimanjaVozila();
-			datumVracanja = novaRezervacija.getDatumVracanjaVozila();
+			datumPreuzimanja = df.parse(novaRezervacija.getDatumPreuzimanjaVozila());
+			datumVracanja = df.parse(novaRezervacija.getDatumVracanjaVozila());
 			danasnjiDatum = df.parse(df.format(new Date()));
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
@@ -811,13 +873,23 @@ public class RentACarServisService {
 
 		}
 		Vozilo vozilo = searchVozilo.get();
-
+		
+		Date datumPreuzimanja = null;
+		Date datumVracanja = null;
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+			datumPreuzimanja = df.parse(brzaRezervacija.getDatumPreuzimanjaVozila());
+			datumVracanja = df.parse(brzaRezervacija.getDatumVracanjaVozila());
+		} catch (ParseException e) {
+			throw new NevalidniPodaciException("Nevalidan format datuma.");
+		}
+		
 		double punaCijena = brzaRezervacija.getBaznaCijena();
 
 		double cijenaSaPopustom = punaCijena - brzaRezervacija.getProcenatPopusta() * punaCijena / 100;
 		return new PrikazBrzeRezVozilaDTO(brzaRezervacija.getIdBrzeRezervacije(), vozilo.getNaziv(),
-				vozilo.getRentACar().getNaziv(), brzaRezervacija.getDatumPreuzimanjaVozila(),
-				brzaRezervacija.getDatumVracanjaVozila(), punaCijena, cijenaSaPopustom);
+				vozilo.getRentACar().getNaziv(), datumPreuzimanja,
+				datumVracanja, punaCijena, cijenaSaPopustom);
 	}
 
 	public Collection<PrikazBrzeRezVozilaDTO> vratiBrzeZaPrikaz(Long idServisa) throws NevalidniPodaciException {
