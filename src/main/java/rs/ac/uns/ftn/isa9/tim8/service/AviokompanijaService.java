@@ -912,6 +912,10 @@ public class AviokompanijaService {
 		double popust = brs.getCijena() * brs.getProcenatPopusta() / 100.0;
 		double cijena = brs.getCijena() - popust;
 
+		if (cijena < 40) {
+			cijena = 40;
+		}
+		
 		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), "", cijena,
 				brs.getSjediste(), korisnik, brs.getAviokompanija(), brs.getLet(), null);
 
@@ -1025,6 +1029,10 @@ public class AviokompanijaService {
 			double popust = cijenaKarte * procenatPopusta / 100.00;
 			cijenaKarte -= popust;
 
+			if (cijenaKarte < 40) {
+				cijenaKarte = 40;
+			}
+			
 			RezervacijaSjedista rs = new RezervacijaSjedista(null, null, null, null, cijenaKarte, s, null,
 					let.getAvion().getAviokompanija(), let, putovanje);
 			

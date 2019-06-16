@@ -123,12 +123,7 @@ public class RezervacijeSobaService {
 			throw new NevalidniPodaciException("Popust ne može biti veći od 100%.");
 		}
 		rez.setProcenatPopusta(popust);
-		System.out.println("Datumi uneseni na sajtu: ");
-		System.out.println("Datum dolaska: " + brzaRezervacija.getDatumDolaska());
-		System.out.println("Datum odlaska: " + brzaRezervacija.getDatumOdlaska());
-		System.out.println("Ucitano iz baze:");
-		System.out.println("Datum dolaska: " + rez.getDatumDolaska());
-		System.out.println("Datum odlaska: " + rez.getDatumOdlaska());
+
 		brzeRezervacijeRepository.save(rez);
 		return rez;
 	}
@@ -220,6 +215,11 @@ public class RezervacijeSobaService {
 		}
 		double popust = brzaRez.getBaznaCijena() * brzaRez.getProcenatPopusta() / 100.0;
 		double cijena = brzaRez.getBaznaCijena() - popust;
+		
+		if (cijena < 10) {
+			cijena = 10;
+		}
+		
 		RezervacijaSobe rezervacija = new RezervacijaSobe(brzaRez.getDatumDolaska(), brzaRez.getDatumOdlaska(), cijena,
 				brzaRez.getSobaZaRezervaciju());
 		rezervacija.setPutnik(korisnik);
@@ -338,6 +338,11 @@ public class RezervacijeSobaService {
 			//  racunanje popusta ostvarenog izborom dodatnih usluga
 			popust = cijenaBoravka * ukupanProcenatPopusta / 100.0;
 			cijenaBoravka -= popust;
+			
+			if (cijenaBoravka < 10) {
+				cijenaBoravka = 10;
+			}
+			
 			rezervacijaSobe = new RezervacijaSobe(datumDolaska, datumOdlaska, cijenaBoravka, soba);
 			rezervacijaSobe.setPutnik(korisnik);
 			rezervacijaSobe.setPutovanje(putovanje);
