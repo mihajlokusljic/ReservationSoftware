@@ -1,7 +1,9 @@
 package rs.ac.uns.ftn.isa9.tim8.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
+import rs.ac.uns.ftn.isa9.tim8.repository.PozivnicaRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.PutovanjeRepository;
 
 @Service
@@ -28,6 +31,9 @@ public class PutovanjeService {
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
 
+	@Autowired
+	protected PozivnicaRepository pozivnicaRepository;
+	
 	@Autowired
 	protected EmailService emailService;
 
@@ -82,7 +88,38 @@ public class PutovanjeService {
 		inicijator.setBonusPoeni(inicijator.getBonusPoeni() + putovanje.getBonusPoeni());
 
 		korisnikRepository.save(inicijator);
-		putovanjeRepository.save(putovanje);
+
+		Calendar c = Calendar.getInstance();
+
+		Date triDanaNakonTekucegDatuma = new Date();
+
+		c.setTime(triDanaNakonTekucegDatuma);
+
+		c.add(Calendar.DATE, 3);
+		triDanaNakonTekucegDatuma = c.getTime();
+
+		Date triSataPredLet = null;
+
+		for (RezervacijaSjedista rs : putovanje.getRezervacijeSjedista()) {
+			triSataPredLet = rs.getLet().getDatumPoletanja();
+		}
+
+		if (triSataPredLet == null) {
+			throw new NevalidniPodaciException("Došlo je do greške. Mora biti poznat datum tri sata pred let.");
+		}
+
+		c.setTime(triSataPredLet);
+		c.add(Calendar.HOUR, -3);
+
+		triSataPredLet = c.getTime();
+
+		Date rokZaOdgovor = null;
+
+		if (triSataPredLet.before(triDanaNakonTekucegDatuma)) {
+			rokZaOdgovor = triSataPredLet;
+		} else {
+			rokZaOdgovor = triDanaNakonTekucegDatuma;
+		}
 
 		for (RezervacijaSjedista rs : putovanje.getRezervacijeSjedista()) {
 			if (rs.getPutnik() != null) {
@@ -98,32 +135,52 @@ public class PutovanjeService {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					putovanje.getPozivnice()
+							.add(new Pozivnica(false, rokZaOdgovor, putovanje, inicijator, rs.getPutnik()));
 				}
 			}
 		}
 
+		putovanjeRepository.save(putovanje);
 		return null;
 	}
 
 	public Boolean prihvatiPozivNaPutovanje(OdgovorNaPozivnicuDTO odgovor) throws NevalidniPodaciException {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(odgovor.getIdPutovanja());
-		
-		if(!putovanjeSearch.isPresent()) {
+
+		if (!putovanjeSearch.isPresent()) {
 			throw new NevalidniPodaciException("Nije prepoznato proslijeđeno putovanje.");
 		}
-		
+
 		Putovanje putovanje = putovanjeSearch.get();
-		
+
 		Optional<Osoba> korisnikSearch = korisnikRepository.findById(odgovor.getIdPozvanogPrijatelja());
-		
-		if(!korisnikSearch.isPresent()) {
-			throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-em.");
+
+		if (!korisnikSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-jem.");
 		}
-		
+
 		RegistrovanKorisnik pozvaniKorisnik = (RegistrovanKorisnik) korisnikSearch.get();
-		
-		//Pozivnica pozivnica = new Pozivnica(true, rokPrihvatanja, putovanje, putovanje.getInicijatorPutovanja(), pozvaniKorisnik);
-		return null;
+
+		// dodamo pozivnicu korisniku koji je pozvan na putovanje
+		for (Pozivnica pozivnica : putovanje.getPozivnice()) {
+			if (pozivnica.getPrimalac().getId().equals(pozvaniKorisnik.getId())) {
+				if (pozivnica.getRokPrihvatanja().before(new Date())) {
+					return false;
+				}
+				pozivnica.setPrihvacena(true);
+				pozvaniKorisnik.getPrimljenePozivnice().add(pozivnica);
+				pozivnicaRepository.save(pozivnica);
+				break;
+			}
+		}
+
+		// uvecamo bonus poene korisniku koji je pozvan na putovanje
+		pozvaniKorisnik.setBonusPoeni(pozvaniKorisnik.getBonusPoeni() + putovanje.getBonusPoeni());
+
+		korisnikRepository.save(pozvaniKorisnik);
+
+		return true;
 	}
 
 }
