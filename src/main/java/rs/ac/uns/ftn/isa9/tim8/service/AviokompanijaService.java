@@ -95,6 +95,12 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected BonusSkalaService bonusSkalaService;
+	
+	@Autowired
+	protected RentACarServisService rentACarService;
+	
+	@Autowired
+	protected RezervacijeSobaService sobeService;
 
 	public Aviokompanija dodajAviokompaniju(Aviokompanija novaAviokompanija) throws NevalidniPodaciException {
 
@@ -934,15 +940,54 @@ public class AviokompanijaService {
 		}
 
 		RezervacijaSjedista rez = pretragaRez.get();
+		
+		Optional<Putovanje> pretragaPutovanja = putovanjeRepository.findById(rez.getPutovanje().getId());
+
+		if (!pretragaPutovanja.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji putovanje sa tim id-jem.");
+		}
+
+		Putovanje putovanje = pretragaPutovanja.get();
+		
+		putovanje.getRezervacijeSjedista().remove(rez);
+		
 		rezervacijaSjedistaRepository.delete(rez);
 
-		BrzaRezervacijaSjedista brs = new BrzaRezervacijaSjedista(rez.getSjediste(), rez.getLet().getDatumPoletanja(),
-				rez.getLet().getDatumSletanja(), 0, 0);
+		if (!putovanje.getRezervacijeSoba().isEmpty()) {
+			for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
+				if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+					sobeService.otkaziRezervaciju(rSobe.getId());
+					putovanje.getRezervacijeSoba().remove(rSobe);
+				}
+			}
+		}
+		
+		if (!putovanje.getRezervacijeVozila().isEmpty()) {
+			for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
+				if (rVozila.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+					rentACarService.otkaziRezervaciju(rVozila.getId());
+					putovanje.getRezervacijeVozila().remove(rVozila);
+				}
+			}
+		}
+		
+		if (!putovanje.getRezervacijeSjedista().isEmpty()) {
+			for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
+				if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+					putovanje.getRezervacijeSjedista().remove(rSjedista);
+					rezervacijaSjedistaRepository.delete(rez);
+				}
+			}
+		}
+		
+		if (putovanje.getRezervacijeSjedista().isEmpty()) {
+			putovanjeRepository.delete(putovanje);
+		}
+		else {
+			putovanjeRepository.save(putovanje);
+		}
+		
 
-		brs.setCijena(rez.getLet().getCijenaKarte() + rez.getSjediste().getSegment().getCijena());
-		brs.setAviokompanija(rez.getAviokompanija());
-		brs.setLet(rez.getLet());
-		brzaRezervacijaSjedistaRepository.save(brs);
 		return "Uspjesno ste otkazali rezervaciju leta";
 	}
 

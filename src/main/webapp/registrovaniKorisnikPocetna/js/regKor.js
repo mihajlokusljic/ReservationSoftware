@@ -901,7 +901,7 @@ function prikaziRacServiseZaRezervaciju() {
 	$("#nazivOdredistaPretragaRacServisa").attr("readonly", true);
 	$("#input-start-rac").val(podaciBoravka.datumDolaska);
 	$("#input-end-rac").val(podaciBoravka.datumPovratka);
-	
+
 	pretragaRacServisa(korisnik.id, podaciBoravka.datumDolaska, podaciBoravka.datumPovratka, 
 			idPutovanja, idLetaZaRezervaciju);
 	

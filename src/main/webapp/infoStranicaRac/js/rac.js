@@ -130,7 +130,7 @@ function ucitajPodatkeRac() {
 				$("#mjestoVracanjaPopustSelect").append('<option value = "' + filijala.id + '">' + filijala.adresa.punaAdresa + '</option>');
 			});
 			ymaps.ready(inicijalizujMape);
-			prikaziFilijale();
+			prikaziFilijale();			
 		},
 	});
 

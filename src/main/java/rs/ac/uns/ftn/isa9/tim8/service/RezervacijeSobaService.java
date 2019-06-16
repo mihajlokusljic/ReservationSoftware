@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -376,11 +375,7 @@ public class RezervacijeSobaService {
 
 		RezervacijaSobe rez = pretragaRez.get();
 		rezervacijeRepository.delete(rez);
-		BrzaRezervacijaSoba brs = new BrzaRezervacijaSoba(rez.getDatumDolaska(), rez.getDatumOdlaska(), 0, 0,
-				new HashSet<Usluga>(), rez.getRezervisanaSoba());
-		long brojNocenja = this.brojNocenja(rez.getDatumDolaska(), rez.getDatumOdlaska());
-		brs.setBaznaCijena(brojNocenja * rez.getRezervisanaSoba().getCijena());
-		brzeRezervacijeRepository.save(brs);
+		
 		return "Uspjesno ste otkazali rezervaciju sobe";
 	}
 

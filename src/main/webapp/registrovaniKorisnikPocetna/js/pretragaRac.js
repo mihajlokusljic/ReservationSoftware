@@ -37,7 +37,7 @@ function pretragaRacServisa(idKorisnika, datumDolaska, datumOdlaska, idPutovanja
 			datumDolaska: dolazak,
 			datumOdlaska: odlazak,
 	}
-	
+
 	$.ajax({
 		type: "POST",
 		url: "../rentACar/pretrazi",
@@ -67,6 +67,7 @@ function pretragaRacServisa(idKorisnika, datumDolaska, datumOdlaska, idPutovanja
  * U rezimu rezervacije proslijedjuje potrebne parametre info stranici rent-a-car servisa kroz putanju
  */
 function refreshRac(racServisi, idKorisnika, datumDolaska, datumOdlaska, idPutovanja, idLetaRez) {
+
 	let tbody = $("#prikazRacServisa");
 	tbody.empty();
 	let noviRed = null;
@@ -95,6 +96,7 @@ function refreshRac(racServisi, idKorisnika, datumDolaska, datumOdlaska, idPutov
 		noviRed.append('<td class="column1">' + ocjena + '</td>');
 		putanja = '../infoStranicaRac/index.html?id=' + rac.id + '&korisnik=' + idKorisnika;
 		if(datumDolaska != null && datumOdlaska != null && idPutovanja != null) {
+
 			putanja += '&datumDolaska=' + datumDolaska + '&datumOdlaska=' + datumOdlaska + 
 			'&idPutovanja=' + idPutovanja + "&idLetaRez=" + idLetaRez;
 		}

@@ -626,9 +626,6 @@ public class RentACarServisService {
 		} catch (ParseException e) {
 			throw new NevalidniPodaciException("Nevalidan format datuma.");
 		}
-
-		
-		System.out.println("Datum rezervacijae: " + rezervacijaDTO.getDatumPreuzimanjaVozila() + " " + rezervacijaDTO.getDatumVracanjaVozila());
 		
 		RezervacijaVozila rezervacija = new RezervacijaVozila();
 		Optional<RentACarServis> pretragaRac = rentACarRepository.findById(idServisa);

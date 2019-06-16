@@ -208,9 +208,7 @@ public class RentACarKontroler {
 	@RequestMapping(value = "/rezervisiVozilo/{idServisa}", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
 	public ResponseEntity<?> rezervacijaVozila(@PathVariable("idServisa") String idServisa,@RequestBody RezervacijaVozilaDTO rezervacija) {
-		
-		System.out.println("\nkontroler datum: " +rezervacija.getDatumPreuzimanjaVozila());
-		
+				
 		try {
 			return new ResponseEntity<String>(this.servis.rezervisiVozilo(rezervacija,Long.parseLong(idServisa)), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
