@@ -39,10 +39,6 @@ public class EmailService {
 		verToken.setToken(token);
 		verToken.setKorisnik(korisnik);
 		verificationService.saveToken(verToken);
-		
-		//Simulacija duze aktivnosti da bi se uocila razlika
-		Thread.sleep(10000);
-		System.out.println("Slanje emaila...");
 
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(korisnik.getEmail());
@@ -57,7 +53,6 @@ public class EmailService {
 		mail.setText(tekst);
 		javaMailSender.send(mail);
 
-		System.out.println("Email poslat!");
 	}
 
 

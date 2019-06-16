@@ -23,6 +23,9 @@ public class PutovanjeService {
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
 
+	@Autowired
+	protected EmailService emailService;
+
 	public Putovanje dobaviPutovanje(Long idPutovanja) throws NevalidniPodaciException {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
 
