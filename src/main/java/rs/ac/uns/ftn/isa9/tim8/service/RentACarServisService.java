@@ -995,6 +995,7 @@ public class RentACarServisService {
 
 		RezervacijaVozila rez = pretragaRez.get();
 		rezervacijaVozilaRepository.delete(rez);
+
 		return "Uspjesno ste otkazali rezervaciju vozila";
 	}
 

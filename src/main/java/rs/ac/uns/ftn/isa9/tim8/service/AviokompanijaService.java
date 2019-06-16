@@ -92,7 +92,7 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected PutovanjeRepository putovanjeRepository;
-
+	
 	@Autowired
 	protected BonusSkalaService bonusSkalaService;
 	
@@ -951,22 +951,29 @@ public class AviokompanijaService {
 		
 		putovanje.getRezervacijeSjedista().remove(rez);
 		
-		rezervacijaSjedistaRepository.delete(rez);
 
 		if (!putovanje.getRezervacijeSoba().isEmpty()) {
 			for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
 				if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-					sobeService.otkaziRezervaciju(rSobe.getId());
+					
 					putovanje.getRezervacijeSoba().remove(rSobe);
+
+					this.sobeService.otkaziRezervaciju(rSobe.getId());
+				//	putovanjeRepository.save(putovanje);
 				}
 			}
 		}
 		
 		if (!putovanje.getRezervacijeVozila().isEmpty()) {
+
 			for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
 				if (rVozila.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-					rentACarService.otkaziRezervaciju(rVozila.getId());
+					
 					putovanje.getRezervacijeVozila().remove(rVozila);
+
+					this.rentACarService.otkaziRezervaciju(rVozila.getId());
+//					putovanjeRepository.save(putovanje);
+
 				}
 			}
 		}
@@ -974,16 +981,22 @@ public class AviokompanijaService {
 		if (!putovanje.getRezervacijeSjedista().isEmpty()) {
 			for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
 				if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+					
 					putovanje.getRezervacijeSjedista().remove(rSjedista);
-					rezervacijaSjedistaRepository.delete(rez);
+
+					this.rezervacijaSjedistaRepository.delete(rSjedista);
+				//	putovanjeRepository.save(putovanje);
 				}
 			}
 		}
-		
+		rezervacijaSjedistaRepository.delete(rez);
+
 		if (putovanje.getRezervacijeSjedista().isEmpty()) {
+
 			putovanjeRepository.delete(putovanje);
 		}
 		else {
+
 			putovanjeRepository.save(putovanje);
 		}
 		
