@@ -34,6 +34,16 @@
             $('#input-start-2').val(start.format('MM/DD/YYYY'));
             $('#input-end-2').val(end.format('MM/DD/YYYY'));
         });
+        
+        $('#input-start-rac').daterangepicker({
+            ranges: true,
+            autoApply: true,
+            applyButtonClasses: false,
+            autoUpdateInput: false
+        },function (start, end) {
+            $('#input-start-rac').val(start.format('MM/DD/YYYY'));
+            $('#input-end-rac').val(end.format('MM/DD/YYYY'));
+        });
     
     } catch(er) {console.log(er);}
     /*==================================================================
