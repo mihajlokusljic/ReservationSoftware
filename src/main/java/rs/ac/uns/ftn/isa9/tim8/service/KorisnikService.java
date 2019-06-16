@@ -436,13 +436,11 @@ public class KorisnikService {
 		Collection<RezervacijaSobe> rezSoba = rezervacijeSobaRepository.findAllByPutnik(registrovaniKorisnik);
 		Collection<PrikazRezSobeDTO> rezSobeDTO = new ArrayList<>();
 
-		System.out.println("Ukupno rezervisanih soba: " + rezSoba.size());
 		for (RezervacijaSobe rs : rezSoba) {
 			rezSobeDTO.add(new PrikazRezSobeDTO(rs.getId(), rs.getRezervisanaSoba().getHotel().getNaziv(),
 					rs.getRezervisanaSoba().getBrojSobe(), rs.getRezervisanaSoba().getBrojKreveta(), rs.getCijena(),
 					rs.getDatumDolaska(), rs.getDatumOdlaska()));
 		}
-		System.out.println("Ukupno rezervisanih soba dto: " + rezSobeDTO.size());
 
 		return rezSobeDTO;
 	}

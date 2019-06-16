@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Putovanje;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
+import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
 import rs.ac.uns.ftn.isa9.tim8.repository.KorisnikRepository;
 import rs.ac.uns.ftn.isa9.tim8.repository.PutovanjeRepository;
@@ -22,6 +24,9 @@ public class PutovanjeService {
 
 	@Autowired
 	protected KorisnikRepository korisnikRepository;
+
+	@Autowired
+	protected EmailService emailService;
 
 	public Putovanje dobaviPutovanje(Long idPutovanja) throws NevalidniPodaciException {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
@@ -75,6 +80,24 @@ public class PutovanjeService {
 
 		korisnikRepository.save(inicijator);
 		putovanjeRepository.save(putovanje);
+
+		for (RezervacijaSjedista rs : putovanje.getRezervacijeSjedista()) {
+			if (rs.getPutnik() != null) {
+				if (!putovanje.getInicijatorPutovanja().getId().equals(rs.getPutnik().getId())) {
+					/*
+					 * Ako nije inicijator, onda nije ni neregistrovani putnik, pa se salje /
+					 * prijateljima
+					 */
+					try {
+						emailService.slanjeMejlaZaPozivnicu(rs.getPutnik(), putovanje);
+					} catch (MailException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 
 		return null;
 	}
