@@ -22,21 +22,25 @@ var defaultSlika = "https://cdn.logojoy.com/wp-content/uploads/2018/05/30142202/
 
 $(document).ready(function() {	
 	
-	//  dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
+	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
 	$.ajaxSetup({
 	    headers: createAuthorizationTokenHeader(),
 	    error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	let statusCode = XMLHttpRequest.status;
 	    	if(statusCode == 400) {
-	    		//  u slucaju neispravnih podataka (Bad request - 400) prikazuje se
-	    		//  poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
+	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//poruka o greski koju je server poslao
+	    		swal({
+	  			  title: XMLHttpRequest.responseText,
+	  			  icon: "warning",
+	  			  timer:2000
+	  			});
 	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
 		}
-	});
+	})
 	
 	korisnikInfo();
 	
@@ -399,10 +403,7 @@ $(document).ready(function() {
 			        updateLetovi(response);
 			        $('#pretragaLetovaForm')[0].reset();
 			      }
-			    },
-			    error : function(XMLHttpRequest, textStatus, errorThrown) {
-			      alert("AJAX ERROR: " + errorThrown);
-			    }	
+			    }
 			  });
 		
 	});
@@ -1469,9 +1470,6 @@ function ucitajRezervisaneLetove(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(data){
 			prikaziRezervisaneLetove(data);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + textStatus);
 		}
 	});
 }
@@ -1485,9 +1483,6 @@ function ucitajRezervisaneSobe(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(data){
 			prikaziRezervisaneSobe(data);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + textStatus);
 		}
 	});
 }
@@ -1501,9 +1496,6 @@ function ucitajRezervisanaVozila(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(data){
 			prikaziRezVozila(data);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + textStatus);
 		}
 	});
 }

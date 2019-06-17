@@ -21,8 +21,11 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
-	    	}
+	    		swal({
+		  			  title: XMLHttpRequest.responseText,
+		  			  icon: "warning",
+		  			  timer:2000
+		  			});	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -244,9 +247,6 @@ $(document).ready(function(e) {
 				$("#prihod_id").text("Ostvareni prihodi: " + response);
 				$("#prihod_id").show();
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
-			}
 		});
 	});
 	
@@ -1226,14 +1226,6 @@ function ucitavanjeGrafika(){
 		success: function(response) {
 			prikaziGrafik(response,text,axisX);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus,
-				  icon: "error",
-				  timer: 2500
-				})
-			return;
-		}
 	});
 }
 
@@ -1297,14 +1289,6 @@ function slobodneRezervisaneSobe(){
 		success: function(response) {
 			prikaziSlobodnihSoba(response);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus+ " " +errorThrown,
-				  icon: "error",
-				  timer: 2500
-				});
-			return;
-		}
 	});
 	$.ajax({
 		type : 'POST',
@@ -1314,14 +1298,6 @@ function slobodneRezervisaneSobe(){
 		success: function(response) {
 			prikaziRezervisanihSoba(response);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus+ " " +errorThrown,
-				  icon: "error",
-				  timer: 2500
-				});
-			return;
-		}
 	});
 }
 
