@@ -28,9 +28,6 @@ $(document).ready(function() {
 	    	}
 		}
 	});
-	$(function() {
-		  $("#table_vozila").tablesorter();
-		});
 	
 	ucitajPodatkeSistema();
 	ymaps.ready(inicijalizujMape);
@@ -401,9 +398,6 @@ function ucitajPodatkeSistema(){
 				rentACarServis = data;
 			}
 		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + textStatus);
-		}
 	});
 }
 
@@ -426,10 +420,7 @@ function dobaviSvaVozilaServisa(){
 				
 			}
 		},
-		async: false,
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
-			}
+		async: false
 	});
 }
 
@@ -608,9 +599,6 @@ function prikaziVozila(vozila){
 				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(response){
 					dobaviSvaVozilaServisa();			
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("AJAX error: " + errorThrown);
 				}
 			});
 		});
@@ -623,9 +611,6 @@ function prikaziVozila(vozila){
 				headers: createAuthorizationTokenHeader("jwtToken"),
 				success : function(response){
 					dobaviSvaVozilaServisa();			
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("AJAX error: " + errorThrown);
 				}
 			});
 		});
@@ -784,9 +769,6 @@ function dodajVozilo(){
 						  timer: 2500
 						})
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 	});
@@ -800,9 +782,6 @@ function dobaviSveFilijale(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
 			prikazFilijala(response);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
 		}
 	});
 }
@@ -830,9 +809,6 @@ function prikazFilijala(filijale){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success : function(response){
 				prikazFilijalaOdabranogServisa();			
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 	});
@@ -908,9 +884,6 @@ function prikazFilijala(filijale){
 						prikazFilijalaOdabranogServisa();				
 					}
 					
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("AJAX error: " + errorThrown);
 				}
 			});
 		});
@@ -973,9 +946,6 @@ function prikazFilijalaOdabranogServisa(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
 			prikazFilijala(response);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
 		}
 	});
 	
@@ -1259,10 +1229,7 @@ function ponudiFilijale(){
 				filijala_select2.append('<option value = "' + filijala.punaAdresa + '">' + filijala.punaAdresa + '</option>');
 			});
 		},
-		async: false,
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
-		}
+		async: false
 	});
 
 }
@@ -1537,13 +1504,6 @@ function vratiSveBrzeRezervacije(){
 		headers: createAuthorizationTokenHeader("jwtToken"),
 		success: function(response) {
 			prikaziBrzeRez(response);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: "AJAX error: " + errorThrown,
-				  icon: "error",
-				  timer: 2500
-				})
 		}
 	});
 }
@@ -1589,9 +1549,6 @@ function prihodiServisa(){
 			success: function(response) {
 				$("#prihod_id").text("Ostvareni prihodi: " + response);
 				$("#prihod_id").show();
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 	});
@@ -1657,14 +1614,6 @@ function grafikRezervisanihVozila(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikaziGrafik(response,text,axisX);
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				swal({
-					  title: textStatus+ " " +errorThrown,
-					  icon: "error",
-					  timer: 2500
-					});
-				return;
 			}
 		});
 		
@@ -1735,14 +1684,6 @@ function slobodnaRezervisanaVozila(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikaziSlobodnaVozila(response);
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				swal({
-					  title: textStatus+ " " +errorThrown,
-					  icon: "error",
-					  timer: 2500
-					});
-				return;
 			}
 		});
 		$.ajax({
@@ -1752,14 +1693,6 @@ function slobodnaRezervisanaVozila(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikaziRezervisanaVozila(response);
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				swal({
-					  title: textStatus+ " " +errorThrown,
-					  icon: "error",
-					  timer: 2500
-					});
-				return;
 			}
 		});
 	});

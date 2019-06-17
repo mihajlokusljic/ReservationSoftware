@@ -14,12 +14,25 @@ let tekucaBrzaRezervacija = null;
 
 $(document).ready(function() {
 	
+	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
 	$.ajaxSetup({
-		headers: createAuthorizationTokenHeader(tokenKey),
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    headers: createAuthorizationTokenHeader(),
+	    error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	let statusCode = XMLHttpRequest.status;
+	    	if(statusCode == 400) {
+	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//poruka o greski koju je server poslao
+	    		swal({
+	  			  title: XMLHttpRequest.responseText,
+	  			  icon: "warning",
+	  			  timer:2000
+	  			});
+	    	}
+	    	else {
+	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    	}
 		}
-	});
+	})
 	
 	korisnikInfo();
 	
@@ -361,10 +374,8 @@ $(document).ready(function() {
 					$("#administratorAviokompanijeDestinacijeForm")[0].reset();
 					mapaDestinacije.geoObjects.removeAll();
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
+		
 		});
 		
 	});
@@ -390,9 +401,6 @@ $(document).ready(function() {
 				success: function(response) {
 					$("#krajnjaVrstaZaSegment").attr("max", response);
 					$("#krajnjaVrstaZaSegment").val(response);
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					alert("AJAX error: " + errorThrown);
 				}
 			});
 			
@@ -449,9 +457,6 @@ $(document).ready(function() {
 						})
 					popuniListuZaAvion(response);
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 		
@@ -467,9 +472,6 @@ $(document).ready(function() {
 			success: function(response) {
 				$("#krajnjaVrstaZaSegment").attr("max", response);
 				$("#krajnjaVrstaZaSegment").val(response);
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 		
@@ -517,9 +519,6 @@ $(document).ready(function() {
 					$("#pocetnaVrstaZaSegment").val(parseInt(krajnji_red) + 1);
 					$("#pocetnaVrstaZaSegment").attr("readonly", "readonly");
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 		
@@ -631,9 +630,6 @@ $(document).ready(function() {
 						})
 					updateLet(response, $("#letoviRows"));
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 		
@@ -670,9 +666,6 @@ $(document).ready(function() {
 			success: function(response) {
 				$("#prihod_id").text("Ostvareni prihodi: " + response);
 				$("#prihod_id").show();
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
 			}
 		});
 	});
@@ -738,9 +731,6 @@ function vratiSveBrzeRezervacije(){
 		url: "../aviokompanije/dobaviBrzeRezervacije/" + aviokompanija.id,
 		success: function(response) {
 			prikaziBrzeRez(response);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
 		}
 	});
 }
@@ -824,9 +814,6 @@ function dodajBrzuRezervaciju() {
 			scGlobal.find('unavailable').status('available');
 			
 			return;
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error: " + errorThrown);
 		}
 	});
 	
@@ -1095,9 +1082,6 @@ function ucitajDestinacije() {
 		success : function(response) {
 			prikaziDestinacije(response);
 			popuniListuZaDestinacije(response);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
 }
@@ -1111,9 +1095,6 @@ function ucitajAvione() {
 		success : function(response) {
 			popuniListuZaAvione(response);
 			prikaziAvione(response);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
 }
@@ -1126,9 +1107,6 @@ function ucitajLetove() {
 		async : false,
 		success : function(response) {
 			updateLetovi(response);
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
 }
@@ -1686,14 +1664,6 @@ function grafikProdatihKarata(){
 			headers: createAuthorizationTokenHeader("jwtToken"),
 			success: function(response) {
 				prikaziGrafik(response,text,axisX);
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				swal({
-					  title: textStatus+ " " +errorThrown,
-					  icon: "error",
-					  timer: 2500
-					});
-				return;
 			}
 		});
 		

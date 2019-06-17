@@ -419,14 +419,38 @@ function dodavanjeAdmina() {
 	let tergetUrl = "../auth/registerSysAdmin";
 	
 	if($("#adminAviokompanijeBtn").is(":checked")) {
+		if ($("#aviokompanijaAdminaSelect").val() == '') {
+			swal({
+				  title: "Nise odabrali aviokompaniju. ",
+				  icon: "warning",
+				  timer: 2500
+				});
+			return;
+		}
 		_idPoslovnice = $("#aviokompanijaAdminaSelect").val();
 		tergetUrl = "../auth/registerAvioAdmin";
 	}
 	else if($("#adminHotelaBtn").is(":checked")) {
+		if ($("#hotelAdminaSelect").val() == '') {
+			swal({
+				  title: "Nise odabrali hotel. ",
+				  icon: "warning",
+				  timer: 2500
+				});
+			return;
+		}
 		_idPoslovnice = $("#hotelAdminaSelect").val();
 		tergetUrl = "../auth/registerHotelAdmin";
 	}
 	else if($("#racAdminBtn").is(":checked")) {
+		if ($("#racServisAdminaSelect").val() == '') {
+			swal({
+				  title: "Nise odabrali rent-a-car servis. ",
+				  icon: "warning",
+				  timer: 2500
+				});
+			return;
+		}
 		_idPoslovnice = $("#racServisAdminaSelect").val();
 		tergetUrl = "../auth/registerRacAdmin";
 	}

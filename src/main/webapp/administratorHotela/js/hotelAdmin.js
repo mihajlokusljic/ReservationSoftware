@@ -21,8 +21,11 @@ $(document).ready(function(e) {
 	    	if(statusCode == 400) {
 	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
 	    		//poruka o greski koju je server poslao
-	    		alert(XMLHttpRequest.responseText);
-	    	}
+	    		swal({
+		  			  title: XMLHttpRequest.responseText,
+		  			  icon: "warning",
+		  			  timer:2000
+		  			});	    	}
 	    	else {
 	    		alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
 	    	}
@@ -244,9 +247,6 @@ $(document).ready(function(e) {
 				$("#prihod_id").text("Ostvareni prihodi: " + response);
 				$("#prihod_id").show();
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("AJAX error: " + errorThrown);
-			}
 		});
 	});
 	
@@ -707,29 +707,48 @@ function brisanjeSobe(idSobe) {
 			})		
 		return;
 	}
-	let obrisi = confirm("Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?");
-	if(!obrisi) {
-		return;
-	}
 	
-	$.ajax({
-		type: "DELETE",
-		url: "../hotelskeSobe/obrisi/" + idSobe,
-		success: function(response) {
-			swal({
-				  title: response,
-				  icon: "success",
-				  timer: 2500
-				})	
-			//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
-			for(var i in podaciHotela.sobe) {
-				if(podaciHotela.sobe[i].id == idSobe) {
-					podaciHotela.sobe.pop(i);
-				}
-			}
-			prikaziSobe(podaciHotela.sobe);
-		},
-	});
+	swal({
+		  title: "Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		}
+	)
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+					type: "DELETE",
+					url: "../hotelskeSobe/obrisi/" + idSobe,
+					success: function(response) {
+						swal({
+							  title: response,
+							  icon: "success",
+							  timer: 2500
+							})	
+						
+						podaciHotela.sobe = podaciHotela.sobe.filter(function( obj ) {
+					    return obj.id !== idSobe;
+						});	
+							
+						//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
+//						for(var i in podaciHotela.sobe) {
+//							if(podaciHotela.sobe[i].id == idSobe) {
+//								podaciHotela.sobe.splice(i,i);
+//								break;
+//							}
+//						}
+//						alert("duzina: " + podaciHotela.sobe.length)
+
+						prikaziSobe(podaciHotela.sobe);
+					},
+				});
+		  } 
+		});
+	
+	 
+	
+	
 }
 
 function izmjenaProfila(){
@@ -1215,14 +1234,6 @@ function ucitavanjeGrafika(){
 		success: function(response) {
 			prikaziGrafik(response,text,axisX);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus,
-				  icon: "error",
-				  timer: 2500
-				})
-			return;
-		}
 	});
 }
 
@@ -1286,14 +1297,6 @@ function slobodneRezervisaneSobe(){
 		success: function(response) {
 			prikaziSlobodnihSoba(response);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus+ " " +errorThrown,
-				  icon: "error",
-				  timer: 2500
-				});
-			return;
-		}
 	});
 	$.ajax({
 		type : 'POST',
@@ -1303,14 +1306,6 @@ function slobodneRezervisaneSobe(){
 		success: function(response) {
 			prikaziRezervisanihSoba(response);
 		},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			swal({
-				  title: textStatus+ " " +errorThrown,
-				  icon: "error",
-				  timer: 2500
-				});
-			return;
-		}
 	});
 }
 
