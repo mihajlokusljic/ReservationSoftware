@@ -1,4 +1,13 @@
+var scGlobal = null;
+
 $(document).ready(function(e) {
+	
+	$("#letoviTabNK").click(function(e) {
+		e.preventDefault();
+		$("#tabelaPrikazLetovaNK").show();
+		$("#formaPretagaLetovaNK").show();
+		$("#pregledSjedistaLetaNK").hide();
+	});
 	
 	$("#duzinaPutovanja").val("");
 	
@@ -52,6 +61,13 @@ $(document).ready(function(e) {
 		
 	});
 	
+	$("#povratakNaPretraguLetovaNK").click(function(e) {
+		e.preventDefault();
+		$("#tabelaPrikazLetovaNK").show();
+		$("#formaPretagaLetovaNK").show();
+		$("#pregledSjedistaLetaNK").hide();
+	});
+	
 });
 
 function updateLetovi(letovi) {
@@ -74,6 +90,73 @@ function updateLetovi(letovi) {
 		} else {
 			row.append("<td>Nema ocjena</td>");
 		}
+		row.append('</td><td class = "column1"><a href = "#" class = "prikazZauzetosti" id = "pzz' + flight.id + 
+		'">Pregledaj sjedišta</a></td></tr>');
 		table.append(row);
 	});
+	
+	$(".prikazZauzetosti").click(function(e) {
+		e.preventDefault();
+		let idLeta = e.target.id.substring(3);
+		prikaziIzborSjedistaBrzeRezervacije(idLeta);
+	});
+}
+
+function prikaziIzborSjedistaBrzeRezervacije(idLeta) {
+	podaciOMapi = null;
+	$("#tabelaPrikazLetovaNK").hide();
+	$("#formaPretagaLetovaNK").hide();
+	$("#pregledSjedistaLetaNK").show();
+	
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : "../letovi/dobaviSjedistaZaPrikazNaMapi/" + idLeta,
+		dataType : "json",
+		success: function(data){
+			podaciOMapi = data;
+		},
+	});
+	
+	var seatsData = {};
+	for(var i in podaciOMapi.segmenti) {
+		let tekuciSegment = podaciOMapi.segmenti[i];
+		
+		seatsData[tekuciSegment.oznakaSegmenta] = {
+				price : tekuciSegment.cijenaSegmenta,
+				category : tekuciSegment.nazivSegmenta
+		};
+		
+	}
+	
+	firstSeatLabel = 1;
+    var $cart = $('#selected-seats'),
+    $counter = $('#counter'),
+    $total = $('#total'),
+    
+    sc = $('#seat-map').seatCharts({
+    map: podaciOMapi.sjedista,
+    seats: seatsData,
+    naming : {
+      top : false,
+      getLabel : function (character, row, column) {
+    	scGlobal = sc;
+        return firstSeatLabel++;
+      },
+    },
+    legend : {
+      node : $('#legend'),
+        items : [
+        [ '', 'available',   'Slobodno' ],
+        [ '', 'unavailable', 'Zauzeto']
+        ]         
+    },
+    click: function () {
+        return this.style();
+
+    }
+  });
+    scGlobal = sc;
+    sc.get(podaciOMapi.zauzetaSjedistaIds).status('unavailable');
+  
 }
