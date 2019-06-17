@@ -389,6 +389,18 @@ $(document).ready(function() {
 
 	$("#definisanjeSegmenataBtn").click(function() {
 		if ($("#definisanjeSegmenataBtn").is(":checked")) {
+			
+			if ($("#avionZaDodavanjeNekogSegmentaSelect").val() == null) {
+				
+				swal({
+					  title: "Ne postoji ni jedan avion za datu aviokompaniju.",
+					  icon: "warning"
+					}).then(function(){
+						window.location.replace("../administratorAviokompanije/administratorAviokompanije.html");
+					})
+				return;
+			}
+			
 			$("#prvaFormaDodajAvion").hide();
 			$("#drugaFormaNaziviSegmenata").show();
 			
