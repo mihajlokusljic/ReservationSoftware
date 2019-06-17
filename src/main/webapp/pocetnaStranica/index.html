@@ -22,6 +22,9 @@
     <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
     
+   	<!-- Jquery seats css -->
+    <link rel="stylesheet" href="css/jquery.seat-charts.css">
+    
 	
     <!-- Main CSS-->
     <link href="css/main.css" rel="stylesheet" media="all">
@@ -43,7 +46,7 @@
                             <a class="tab-list__link" href="#tab-aviokompanije" data-toggle="tab">Aviokompanije</a>
                         </li>
                         <li class="tab-list__item">
-                            <a class="tab-list__link" href="#tab-letovi" data-toggle="tab">Letovi</a>
+                            <a class="tab-list__link" href="#tab-letovi" data-toggle="tab" id="letoviTabNK">Letovi</a>
                         </li>
                         <li class="tab-list__item">
                             <a class="tab-list__link" href="#tab-hoteli" data-toggle="tab">Hoteli</a>
@@ -163,6 +166,7 @@
 								<th class="column1">Adresa</th>
 								<th class="column1">Prosječna ocjena</th>
 								<th class="column1">Info stranica</th>
+								<th class="column1"></th>
 							</tr>
 						</thead>
 						<tbody id="hotelsView">
@@ -227,6 +231,7 @@
                     	
                         <!-- Pretraga letova -->
                         <div class="tab-pane" id="tab-letovi">
+                        	<div id="formaPretagaLetovaNK">
                             <form method="POST" id="pretragaLetovaForm" action="#">
                              	<div class="input-group">
                                     <label class="label">Broj leta</label>
@@ -295,10 +300,11 @@
                                 </div>
                                 
                                 <button class="btn-submit" type="submit">Pretraži</button>
-                            </form>
+                            </form> </div>
                             <h1>&nbsp</h1>
                             <!-- Tabela za prikaz letova -->
-                            <table class = "sortable">
+                        
+                            <table class = "sortable" id="tabelaPrikazLetovaNK">
 						<thead>
 							<tr class="table100-head">
 								<th class="column2">Rbr</th>
@@ -310,13 +316,27 @@
 								<th class="column5">Broj presjedanja</th>
 								<th class="column6">Cijena karte</th>
 								<th class="column6">Prosječna ocjena</th>
+								<th class="column1"></th>
 							</tr>
 						</thead>
 						<tbody id="letoviRows">
 								
 						</tbody>
 					</table>
-                            
+                      <div id="pregledSjedistaLetaNK" hidden="hidden">
+							<h2 class="zaglavlje">Pregled sjedišta leta</h2>
+							
+							<div class="booking-details">
+								  <div id="legend"></div>
+							</div>
+							<br><br>
+                            <div id="seat-map">
+                           		<div class="front-indicator"></div>
+							</div>
+
+                        	<button class="btn btn-submit" id="povratakNaPretraguLetovaNK">Povratak na pretragu letova</button>
+                         		
+						</div>
                         </div>
                     
                     </div>
@@ -335,6 +355,8 @@
     <script src="vendor/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
     <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <script src="js/jquery.seat-charts.js"></script>
 
     <!-- Main JS-->
     <script type="text/javascript" src="js/pretragaHotela.js"></script>
