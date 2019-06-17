@@ -194,6 +194,8 @@ $(document).ready(function() {
 		e.preventDefault();
 		aktivirajStavkuMenija("stavka_brze_rezervacije");
 		$("#tab-brze-rezervacije-dodavanje").show();
+		$("#izborVozilaBrzeRezervacije").show();
+		$("#definisanjePopustaBrzeRezervacije").hide()
 		$("#tab-brze-rezervacije-pregledanje").hide();
 		$("#tab-profil-kor").hide();
 		$("#tab-profil-lozinka").hide();
