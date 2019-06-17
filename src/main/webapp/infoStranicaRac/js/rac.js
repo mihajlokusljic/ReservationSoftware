@@ -332,34 +332,19 @@ function pretragaVozilaSaPopustom(){
 		_datumVracanja = $("#datumVracanjaBrzaRez").val();
 	}
 	
-	let _vrijemePreuzimanja = $("#input-start-time-popust").val();
-	let _vrijemeVracanja = $("#input-end-time-popust").val();
-	if (_vrijemePreuzimanja == '' || _vrijemeVracanja == ''){
-		swal({
-			  title: "Niste unijeli vrijeme preuzimanja/vracanja vozila.",
-			  icon: "warning",
-			  timer: 2500
-			});
-		return;
-	}
-	
 	let _mjestoPreuzimanja = $("#mjestoPreuzimanjaPopustSelect").val();
 	let _mjestoVracanja = $("#mjestoVracanjaPopustSelect").val();
-	
-	let _brojPutnika = $("#brojPutnikaPopustInput").val();
-	let _tipVozila = $("#tipVozilaPopustSelect").val();
-	
 	
 	let pretragaVozila = {
 			idRac : podaciRac.id,
 			datumPreuzimanja : _datumPreuzimanja,
 			datumVracanja : _datumVracanja,
-			vrijemePreuzimanja: _vrijemePreuzimanja,
-			vrijemeVracanja: _vrijemeVracanja,
+			vrijemePreuzimanja: null,
+			vrijemeVracanja: null,
 			idMjestoPreuzimanja: _mjestoPreuzimanja,
 			idMjestoVracanja: _mjestoVracanja,
-			tipVozila: _tipVozila,
-			brojPutnika: _brojPutnika,
+			tipVozila: null,
+			brojPutnika: null,
 			
 	};
 

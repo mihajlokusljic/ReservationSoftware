@@ -956,10 +956,8 @@ public class RentACarServisService {
 
 				Collection<BrzaRezervacijaVozila> sveBrzeRez = vratiBrzeRezervacijePoDatumu(vozilo, pocetniDatum,
 						krajnjiDatum);
-
-				if (vozilo.getTip_vozila().equalsIgnoreCase(kriterijumiPretrage.getTipVozila())
-						&& vozilo.getBroj_sjedista() >= kriterijumiPretrage.getBrojPutnika()
-						&& vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()) {
+				
+				if (vozilo.getFilijala().getId() == kriterijumiPretrage.getIdMjestoPreuzimanja()) {
 
 					brzeRezervacije.addAll(sveBrzeRez);
 
