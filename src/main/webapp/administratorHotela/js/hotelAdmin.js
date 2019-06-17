@@ -726,12 +726,20 @@ function brisanjeSobe(idSobe) {
 							  icon: "success",
 							  timer: 2500
 							})	
+						
+						podaciHotela.sobe = podaciHotela.sobe.filter(function( obj ) {
+					    return obj.id !== idSobe;
+						});	
+							
 						//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
-						for(var i in podaciHotela.sobe) {
-							if(podaciHotela.sobe[i].id == idSobe) {
-								podaciHotela.sobe.pop(i);
-							}
-						}
+//						for(var i in podaciHotela.sobe) {
+//							if(podaciHotela.sobe[i].id == idSobe) {
+//								podaciHotela.sobe.splice(i,i);
+//								break;
+//							}
+//						}
+//						alert("duzina: " + podaciHotela.sobe.length)
+
 						prikaziSobe(podaciHotela.sobe);
 					},
 				});
