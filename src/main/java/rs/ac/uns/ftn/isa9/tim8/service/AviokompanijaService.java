@@ -37,7 +37,6 @@ import rs.ac.uns.ftn.isa9.tim8.model.Aviokompanija;
 import rs.ac.uns.ftn.isa9.tim8.model.Avion;
 import rs.ac.uns.ftn.isa9.tim8.model.BrzaRezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.Destinacija;
-
 import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.NacinPlacanjaUsluge;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
@@ -47,6 +46,7 @@ import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaVozila;
+import rs.ac.uns.ftn.isa9.tim8.model.Segment;
 import rs.ac.uns.ftn.isa9.tim8.model.Sjediste;
 import rs.ac.uns.ftn.isa9.tim8.model.Usluga;
 import rs.ac.uns.ftn.isa9.tim8.repository.AdresaRepository;
@@ -92,13 +92,13 @@ public class AviokompanijaService {
 
 	@Autowired
 	protected PutovanjeRepository putovanjeRepository;
-	
+
 	@Autowired
 	protected BonusSkalaService bonusSkalaService;
-	
+
 	@Autowired
 	protected RentACarServisService rentACarService;
-	
+
 	@Autowired
 	protected RezervacijeSobaService sobeService;
 
@@ -342,6 +342,19 @@ public class AviokompanijaService {
 			trenutniLet = it.next();
 			if (!trenutniLet.getBrojLeta().toUpperCase().contains(kriterijumiPretrage.getBrojLeta().toUpperCase())) {
 				it.remove();
+			}
+		}
+
+		it = rezultat.iterator();
+
+		while (it.hasNext()) {
+			trenutniLet = it.next();
+
+			for (Segment s : trenutniLet.getAvion().getSegmenti()) {
+				if (s.getNaziv().equals("")) {
+					it.remove();
+					break;
+				}
 			}
 		}
 
@@ -921,7 +934,7 @@ public class AviokompanijaService {
 		if (cijena < 40) {
 			cijena = 40;
 		}
-		
+
 		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), "", cijena,
 				brs.getSjediste(), korisnik, brs.getAviokompanija(), brs.getLet(), null);
 
@@ -940,7 +953,7 @@ public class AviokompanijaService {
 		}
 
 		RezervacijaSjedista rez = pretragaRez.get();
-		
+
 		Optional<Putovanje> pretragaPutovanja = putovanjeRepository.findById(rez.getPutovanje().getId());
 
 		if (!pretragaPutovanja.isPresent()) {
@@ -948,12 +961,13 @@ public class AviokompanijaService {
 		}
 
 		Putovanje putovanje = pretragaPutovanja.get();
-		
+
 		putovanje.getRezervacijeSjedista().remove(rez);
-		
-		// u slucaju da inicijator putovanja otkaze let brisu se sve rezervacije i putovanje se otkazuje
+
+		// u slucaju da inicijator putovanja otkaze let brisu se sve rezervacije i
+		// putovanje se otkazuje
 		if (rez.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-			
+
 			if (!putovanje.getRezervacijeSoba().isEmpty()) {
 				for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
 					if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
@@ -961,11 +975,11 @@ public class AviokompanijaService {
 						putovanje.getRezervacijeSoba().remove(rSobe);
 
 						this.sobeService.otkaziRezervaciju(rSobe.getId());
-						//	putovanjeRepository.save(putovanje);
+						// putovanjeRepository.save(putovanje);
 					}
 				}
 			}
-			
+
 			if (!putovanje.getRezervacijeVozila().isEmpty()) {
 
 				for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
@@ -974,12 +988,12 @@ public class AviokompanijaService {
 						putovanje.getRezervacijeVozila().remove(rVozila);
 
 						this.rentACarService.otkaziRezervaciju(rVozila.getId());
-						//					putovanjeRepository.save(putovanje);
+						// putovanjeRepository.save(putovanje);
 
 					}
 				}
 			}
-			
+
 			if (!putovanje.getRezervacijeSjedista().isEmpty()) {
 				for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
 					if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
@@ -987,24 +1001,22 @@ public class AviokompanijaService {
 						putovanje.getRezervacijeSjedista().remove(rSjedista);
 
 						this.rezervacijaSjedistaRepository.delete(rSjedista);
-						//	putovanjeRepository.save(putovanje);
+						// putovanjeRepository.save(putovanje);
 					}
 				}
-			} 
-			
+			}
+
 		}
-		
+
 		rezervacijaSjedistaRepository.delete(rez);
 
 		if (putovanje.getRezervacijeSjedista().isEmpty()) {
 
 			putovanjeRepository.delete(putovanje);
-		}
-		else {
+		} else {
 
 			putovanjeRepository.save(putovanje);
 		}
-		
 
 		return "Uspjesno ste otkazali rezervaciju leta";
 	}
@@ -1095,10 +1107,10 @@ public class AviokompanijaService {
 			if (cijenaKarte < 40) {
 				cijenaKarte = 40;
 			}
-			
+
 			RezervacijaSjedista rs = new RezervacijaSjedista(null, null, null, null, cijenaKarte, s, null,
 					let.getAvion().getAviokompanija(), let, putovanje);
-			
+
 			putovanje.getRezervacijeSjedista().add(rs);
 			let.getRezervacije().add(rs);
 			let.getAvion().getAviokompanija().getRezervacije().add(rs);
@@ -1142,7 +1154,7 @@ public class AviokompanijaService {
 			rez.setImePutnika(inicijatorPutovanja.getIme());
 			rez.setPrezimePutnika(inicijatorPutovanja.getPrezime());
 			rez.setBrojPasosaPutnika(inicijatorPutovanja.getBrojPasosa());
-			
+
 			// Pozvani prijatelji
 			if (prijateljIdIndex < podaciRezervacije.getPozvaniPrijateljiIds().size()) {
 				korisnikPretraga = korisnikRepository
@@ -1183,11 +1195,12 @@ public class AviokompanijaService {
 
 	public BoravakDTO dobaviPodatkeBoravka(Long idLeta) throws NevalidniPodaciException {
 		Optional<Let> letSearch = letoviRepository.findById(idLeta);
-		if(!letSearch.isPresent()) {
+		if (!letSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji let sa datim id-em.");
 		}
 		Let let = letSearch.get();
-		BoravakDTO rezultat = new BoravakDTO(let.getDatumSletanja(), let.getDuzinaPutovanja(), let.getOdrediste().getNazivDestinacije());
+		BoravakDTO rezultat = new BoravakDTO(let.getDatumSletanja(), let.getDuzinaPutovanja(),
+				let.getOdrediste().getNazivDestinacije());
 		return rezultat;
 	}
 
@@ -1196,56 +1209,56 @@ public class AviokompanijaService {
 		if (!pretragaRez.isPresent()) {
 			throw new NevalidniPodaciException("Doslo je do greske.");
 		}
-		
+
 		RezervacijaSjedista rLet = pretragaRez.get();
-		
+
 		if (rLet.isOcjenjeno()) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
-	//ocjenjivanje leta nakon njegovog sletanja
+
+	// ocjenjivanje leta nakon njegovog sletanja
 	public String ocjeniLet(Long id, int ratingValue) throws NevalidniPodaciException {
 		Optional<RezervacijaSjedista> pretragaRez = rezervacijaSjedistaRepository.findById(id);
 		if (!pretragaRez.isPresent()) {
 			throw new NevalidniPodaciException("Doslo je do greske.");
 		}
-		
+
 		RezervacijaSjedista rSjed = pretragaRez.get();
-		
-		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(rSjed.getAviokompanija().getId());
+
+		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository
+				.findById(rSjed.getAviokompanija().getId());
 		if (!pretragaAviokompanije.isPresent()) {
 			throw new NevalidniPodaciException("U medjuvremenu je obrisana aviokompanija cije su usluge koristene.");
 		}
-		
+
 		Aviokompanija aviokompanija = pretragaAviokompanije.get();
-		
+
 		Optional<Let> pretragaLet = letoviRepository.findById(rSjed.getLet().getId());
 		if (!pretragaLet.isPresent()) {
 			throw new NevalidniPodaciException("U medjuvremenu je uklonjen let cije su usluge koristene.");
 		}
-		
+
 		Let let = pretragaLet.get();
-		
+
 		Date danasnjiDatum = new Date();
 		if (rSjed.getLet().getDatumSletanja().after(danasnjiDatum)) {
 			return "Ne mozete da ocjenite let prije njegovog sletanja.";
 		}
-		
+
 		let.setSumaOcjena(let.getSumaOcjena() + ratingValue);
 		let.setBrojOcjena(let.getBrojOcjena() + 1);
 		rSjed.setOcjenjeno(true);
-		
+
 		aviokompanija.setSumaOcjena(aviokompanija.getSumaOcjena() + ratingValue);
 		aviokompanija.setBrojOcjena(aviokompanija.getBrojOcjena() + 1);
-		
+
 		aviokompanijaRepository.save(aviokompanija);
 		letoviRepository.save(let);
 		rezervacijaSjedistaRepository.save(rSjed);
-		
+
 		return null;
 	}
 
@@ -1253,7 +1266,7 @@ public class AviokompanijaService {
 		Date pocetniDatum = null;
 		Date krajnjiDatum = null;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		
+
 		if (!datumiDto.getDatumPocetni().isEmpty()) {
 			try {
 				pocetniDatum = df.parse(datumiDto.getDatumPocetni());
@@ -1261,7 +1274,7 @@ public class AviokompanijaService {
 				throw new NevalidniPodaciException("Nevalidan format datuma.");
 			}
 		}
-		
+
 		if (!datumiDto.getDatumKrajnji().isEmpty()) {
 			try {
 				krajnjiDatum = df.parse(datumiDto.getDatumKrajnji());
@@ -1270,51 +1283,50 @@ public class AviokompanijaService {
 			}
 		}
 		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
-		
+
 		if (!pretragaAviokompanije.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
 		}
-		
+
 		Aviokompanija aviokompanija = pretragaAviokompanije.get();
 		double prihodi = 0;
-		
-		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
-		
+
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository
+				.findAllByAviokompanija(aviokompanija);
+
 		for (RezervacijaSjedista rezSjedista : sveRezervacije) {
 			if (pocetniDatum != null && krajnjiDatum != null) {
-				if (pocetniDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) <= 0 && krajnjiDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) >= 0) {
+				if (pocetniDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) <= 0
+						&& krajnjiDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) >= 0) {
 					prihodi = prihodi + rezSjedista.getCijena();
 				}
-			}
-			else if (pocetniDatum != null) {
+			} else if (pocetniDatum != null) {
 				if (pocetniDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) <= 0) {
 					prihodi = prihodi + rezSjedista.getCijena();
 				}
-			}
-			else if ( krajnjiDatum != null) {
+			} else if (krajnjiDatum != null) {
 				if (krajnjiDatum.compareTo(rezSjedista.getLet().getDatumPoletanja()) >= 0) {
 					prihodi = prihodi + rezSjedista.getCijena();
 				}
-			}
-			else {
+			} else {
 				prihodi = prihodi + rezSjedista.getCijena();
 			}
 		}
-		
+
 		return Double.toString(prihodi);
 	}
 
-	public IzvjestajDTO dnevniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
-
+	public IzvjestajDTO dnevniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto)
+			throws NevalidniPodaciException {
 
 		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
 
 		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
-		
+
 		if (!pretragaAviokompanije.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
 		}
-		
+
 		Aviokompanija aviokompanija = pretragaAviokompanije.get();
 
 		Date pocetniDatum = null;
@@ -1337,15 +1349,16 @@ public class AviokompanijaService {
 			}
 		}
 
-		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository
+				.findAllByAviokompanija(aviokompanija);
 		Collection<RezervacijaSjedista> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaSjedista rv : sveRezervacije) {
-			
+
 			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
-			
+
 		}
 
 		while (!pocetniDatum.after(krajnjiDatum)) {
@@ -1369,16 +1382,17 @@ public class AviokompanijaService {
 		return izvjestajDTO;
 	}
 
-	public IzvjestajDTO nedeljniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
-		
+	public IzvjestajDTO nedeljniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto)
+			throws NevalidniPodaciException {
+
 		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
 
 		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
-		
+
 		if (!pretragaAviokompanije.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
 		}
-		
+
 		Aviokompanija aviokompanija = pretragaAviokompanije.get();
 
 		Date pocetniDatum = null;
@@ -1401,75 +1415,76 @@ public class AviokompanijaService {
 			}
 		}
 
-		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository
+				.findAllByAviokompanija(aviokompanija);
 		Collection<RezervacijaSjedista> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaSjedista rv : sveRezervacije) {
-			
+
 			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
-			
+
 		}
-		
+
 		while (!pocetniDatum.after(krajnjiDatum)) {
-			
+
 			Object zaMjesec_ = pocetniDatum.clone();
-			
+
 			Date zaMjesec = (Date) zaMjesec_;
-			Calendar c = Calendar.getInstance(); 
-			c.setTime(pocetniDatum); 
+			Calendar c = Calendar.getInstance();
+			c.setTime(pocetniDatum);
 			c.add(Calendar.DATE, 7);
 			zaMjesec = c.getTime();
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
-			
-			String xOsa =  sdf.format(pocetniDatum);
-			
+
+			String xOsa = sdf.format(pocetniDatum);
+
 			int broj = 0;
 			for (RezervacijaSjedista rv : rezervacijeUOkviruDatuma) {
 				if (!zaMjesec.after(krajnjiDatum)) {
-					
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec) ) {
-						broj ++;
+
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec)) {
+						broj++;
 					}
 
-				}
-				else {
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum) ) {
-						broj ++;
+				} else {
+					if (!rv.getDatumRezervacije().before(pocetniDatum)
+							&& !rv.getDatumRezervacije().after(krajnjiDatum)) {
+						broj++;
 					}
-				}						
+				}
 			}
-			
+
 			if (!zaMjesec.after(krajnjiDatum)) {
 				pocetniDatum = zaMjesec;
-			}
-			else {
+			} else {
 				pocetniDatum = krajnjiDatum;
 			}
 			izvjestajDTO.getBrojeviYOsa().add(broj);
 			xOsa = xOsa + "-" + sdf.format(pocetniDatum);
-			c.setTime(pocetniDatum); 
+			c.setTime(pocetniDatum);
 			c.add(Calendar.DATE, 1);
 			pocetniDatum = c.getTime();
 			izvjestajDTO.getVrijednostiXOse().add(xOsa);
 
 		}
-				
+
 		return izvjestajDTO;
 	}
 
-	public IzvjestajDTO mjesecniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto) throws NevalidniPodaciException{
-		
+	public IzvjestajDTO mjesecniIzvjestaj(Long idAviokompanije, DatumiZaPrihodDTO datumiDto)
+			throws NevalidniPodaciException {
+
 		IzvjestajDTO izvjestajDTO = new IzvjestajDTO(new ArrayList<Integer>(), new ArrayList<String>());
 
 		Optional<Aviokompanija> pretragaAviokompanije = aviokompanijaRepository.findById(idAviokompanije);
-		
+
 		if (!pretragaAviokompanije.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji aviokompanija sa zadatim id-em");
 		}
-		
+
 		Aviokompanija aviokompanija = pretragaAviokompanije.get();
 
 		Date pocetniDatum = null;
@@ -1492,62 +1507,62 @@ public class AviokompanijaService {
 			}
 		}
 
-		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository.findAllByAviokompanija(aviokompanija);
+		Collection<RezervacijaSjedista> sveRezervacije = rezervacijaSjedistaRepository
+				.findAllByAviokompanija(aviokompanija);
 		Collection<RezervacijaSjedista> rezervacijeUOkviruDatuma = new ArrayList<>();
 
 		for (RezervacijaSjedista rv : sveRezervacije) {
-			
+
 			if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum)) {
 				rezervacijeUOkviruDatuma.add(rv);
 			}
-			
+
 		}
-		
+
 		while (!pocetniDatum.after(krajnjiDatum)) {
-			
+
 			Object zaMjesec_ = pocetniDatum.clone();
-			
+
 			Date zaMjesec = (Date) zaMjesec_;
-			Calendar c = Calendar.getInstance(); 
-			c.setTime(pocetniDatum); 
+			Calendar c = Calendar.getInstance();
+			c.setTime(pocetniDatum);
 			c.add(Calendar.MONTH, 1);
 			zaMjesec = c.getTime();
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.");
-			
-			String xOsa =  sdf.format(pocetniDatum);
-			
+
+			String xOsa = sdf.format(pocetniDatum);
+
 			int broj = 0;
 			for (RezervacijaSjedista rv : rezervacijeUOkviruDatuma) {
 				if (!zaMjesec.after(krajnjiDatum)) {
-					
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec) ) {
-						broj ++;
+
+					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(zaMjesec)) {
+						broj++;
 					}
 
-				}
-				else {
-					if (!rv.getDatumRezervacije().before(pocetniDatum) && !rv.getDatumRezervacije().after(krajnjiDatum) ) {
-						broj ++;
+				} else {
+					if (!rv.getDatumRezervacije().before(pocetniDatum)
+							&& !rv.getDatumRezervacije().after(krajnjiDatum)) {
+						broj++;
 					}
-				}						
+				}
 			}
-			
+
 			if (!zaMjesec.after(krajnjiDatum)) {
 				pocetniDatum = zaMjesec;
-			}
-			else {
+			} else {
 				pocetniDatum = krajnjiDatum;
 			}
 			izvjestajDTO.getBrojeviYOsa().add(broj);
 			xOsa = xOsa + "-" + sdf.format(pocetniDatum);
-			c.setTime(pocetniDatum); 
+			c.setTime(pocetniDatum);
 			c.add(Calendar.DATE, 1);
 			pocetniDatum = c.getTime();
 			izvjestajDTO.getVrijednostiXOse().add(xOsa);
 
 		}
-				
+
 		return izvjestajDTO;
 	}
 

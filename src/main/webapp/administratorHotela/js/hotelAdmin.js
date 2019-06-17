@@ -877,7 +877,6 @@ function prikaziUslugu(usluga) {
 	noviRed.append('<td class="column1">' + usluga.naziv + '</td>');
 	noviRed.append('<td class="column6">' + usluga.cijena + '</td>');
 	noviRed.append('<td class="column1">' + usluga.nacinPlacanja + '</td>');
-	noviRed.append('<td class="column5"><a href="#">Izmjeni</a>&nbsp&nbsp<a href="#">Obriši</a></td>');
 	uslugeTabela.append(noviRed);
 	
 	let uslugeBrzeRezervacijeTabela = $("#prikazUslugaBrzeRezervacije");
