@@ -23,6 +23,10 @@ public class Pozivnica {
 	@Column(name = "prihvacena", nullable = false)
 	protected boolean prihvacena;
 	
+	// uvedeno zbog provjere da li je korisnik vec odbio pozivnicu
+	@Column(name = "odbijena", nullable = false)
+	protected boolean odbijena;
+	
 	@Column(name = "rok_prihvatanja", nullable = false)
 	protected Date rokPrihvatanja;
 	
@@ -30,11 +34,11 @@ public class Pozivnica {
 	@JoinColumn(name = "putovanje_id")
 	protected Putovanje putovanje;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "posiljalac_id", referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "primalac_id")
 	protected RegistrovanKorisnik primalac;
 
@@ -42,25 +46,15 @@ public class Pozivnica {
 		super();
 	}
 
-	public Pozivnica(boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje, RegistrovanKorisnik posiljalac,
+	public Pozivnica(Date rokPrihvatanja, Putovanje putovanje, RegistrovanKorisnik posiljalac,
 			RegistrovanKorisnik primalac) {
 		super();
-		this.prihvacena = prihvacena;
 		this.rokPrihvatanja = rokPrihvatanja;
 		this.putovanje = putovanje;
 		this.posiljalac = posiljalac;
 		this.primalac = primalac;
-	}
-
-	public Pozivnica(Long id, boolean prihvacena, Date rokPrihvatanja, Putovanje putovanje,
-			RegistrovanKorisnik posiljalac, RegistrovanKorisnik primalac) {
-		super();
-		Id = id;
-		this.prihvacena = prihvacena;
-		this.rokPrihvatanja = rokPrihvatanja;
-		this.putovanje = putovanje;
-		this.posiljalac = posiljalac;
-		this.primalac = primalac;
+		this.prihvacena = false;
+		this.odbijena = false;
 	}
 
 	public Long getId() {
@@ -77,6 +71,14 @@ public class Pozivnica {
 
 	public void setPrihvacena(boolean prihvacena) {
 		this.prihvacena = prihvacena;
+	}
+
+	public boolean isOdbijena() {
+		return odbijena;
+	}
+
+	public void setOdbijena(boolean odbijena) {
+		this.odbijena = odbijena;
 	}
 
 	public Date getRokPrihvatanja() {

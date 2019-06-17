@@ -8,7 +8,25 @@ $(document).ready(function() {
 	$.ajaxSetup({
 		headers: createAuthorizationTokenHeader(tokenKey),
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    	let statusCode = XMLHttpRequest.status;
+	    	if(statusCode == 400) {
+	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//poruka o greski koju je server poslao
+	    		swal({
+	    		  title: "Došlo je do greške!",
+	  			  text: XMLHttpRequest.responseText,
+	  			  icon: "warning",
+	  			}).then(function() {
+					window.location.replace("../login/login.html");
+				});
+	    	} else {
+	    		swal({
+		    		  title: "Došlo je do greške!",
+		  			  icon: "warning",
+		  			}).then(function() {
+						window.location.replace("../login/login.html");
+					});
+	    	}
 		}
 	});
 		
@@ -22,7 +40,7 @@ $(document).ready(function() {
 
 		window.location.replace("../registrovaniKorisnikPocetna/index.html");
 	});
-	
+		
 	//ocitavanje parametara putanje
 	var url = window.location.href;
 	var parametri = url.substring(url.indexOf("?") + 1);
@@ -30,7 +48,7 @@ $(document).ready(function() {
 	
 	idPutovanja = params_parser.get("idPutovanja");
 	inicijator = params_parser.get("inicijator");
-	korsinikId = params_parser.get("idKorisnika");
+	korisnikId = params_parser.get("idKorisnika");
 	
 	if(inicijator == "false") {
 		$("#povratakNaPocetnuBtn").hide();
@@ -40,6 +58,80 @@ $(document).ready(function() {
 	ucitajPodatkePutovanja();
 	ucitajPodatkeZaVozila();
 
+	//  prihvatanje pozivnice
+	$("#prihvatanjePozivnice").click(function(e) {
+		e.preventDefault();
+		
+		let odgovorNaPozivnicu = {
+			idPozvanogPrijatelja : korisnikId,
+			idPutovanja : idPutovanja
+		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../putovanja/prihvatiPoziv",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(odgovorNaPozivnicu),
+			async: false,
+			success: function(response) {
+				if (response) {
+					swal({
+						  title: "Uspješno ste prihvatili pozivnicu za putovanje.",
+						  icon: "success"
+					}).then(function() {
+						window.location.replace("../login/login.html");
+						});
+				} else {
+					swal({
+						  title: "Došlo je do greške.",
+						  text: "Istekao je rok za prihvatanje pozivnice.",
+						  icon: "error"
+						}).then(function() {
+							window.location.replace("../login/login.html");
+						});
+				}
+			},
+		});
+		
+	});
+	
+	//  odbijanje pozivnice
+	$("#odbijanjePozivnice").click(function(e) {
+		e.preventDefault();
+		
+		let odgovorNaPozivnicu = {
+			idPozvanogPrijatelja : korisnikId,
+			idPutovanja : idPutovanja
+		};
+		
+		$.ajax({
+			type: "DELETE",
+			url : "../putovanja/odbijPoziv",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(odgovorNaPozivnicu),
+			async: false,
+			success: function(response) {
+				if (response) {
+					swal({
+						  title: "Uspješno ste odbili pozivnicu za putovanje.",
+						  icon: "success"
+					}).then(function() {
+						window.location.replace("../login/login.html");
+						});
+				} else {
+					swal({
+						  title: "Došlo je do greške.",
+						  text: "Istekao je rok za odbijanje pozivnice.",
+						  icon: "error"
+						}).then(function() {
+							window.location.replace("../login/login.html");
+						});
+				}
+			},
+		});
+		
+	});
+	
 });	
 
 function ucitajPodatkePutovanja() {
