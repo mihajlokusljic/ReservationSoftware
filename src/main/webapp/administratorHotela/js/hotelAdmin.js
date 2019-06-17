@@ -707,29 +707,40 @@ function brisanjeSobe(idSobe) {
 			})		
 		return;
 	}
-	let obrisi = confirm("Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?");
-	if(!obrisi) {
-		return;
-	}
 	
-	$.ajax({
-		type: "DELETE",
-		url: "../hotelskeSobe/obrisi/" + idSobe,
-		success: function(response) {
-			swal({
-				  title: response,
-				  icon: "success",
-				  timer: 2500
-				})	
-			//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
-			for(var i in podaciHotela.sobe) {
-				if(podaciHotela.sobe[i].id == idSobe) {
-					podaciHotela.sobe.pop(i);
-				}
-			}
-			prikaziSobe(podaciHotela.sobe);
-		},
-	});
+	swal({
+		  title: "Da li ste sigurni da želite obrisati sobu broj " + soba.brojSobe + "?",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		}
+	)
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+					type: "DELETE",
+					url: "../hotelskeSobe/obrisi/" + idSobe,
+					success: function(response) {
+						swal({
+							  title: response,
+							  icon: "success",
+							  timer: 2500
+							})	
+						//uklanjanje sobe iz podataka hotela i osvjezavanje prikaza soba
+						for(var i in podaciHotela.sobe) {
+							if(podaciHotela.sobe[i].id == idSobe) {
+								podaciHotela.sobe.pop(i);
+							}
+						}
+						prikaziSobe(podaciHotela.sobe);
+					},
+				});
+		  } 
+		});
+	
+	 
+	
+	
 }
 
 function izmjenaProfila(){

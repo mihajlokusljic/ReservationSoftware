@@ -28,9 +28,6 @@ $(document).ready(function() {
 	    	}
 		}
 	});
-	$(function() {
-		  $("#table_vozila").tablesorter();
-		});
 	
 	ucitajPodatkeSistema();
 	ymaps.ready(inicijalizujMape);

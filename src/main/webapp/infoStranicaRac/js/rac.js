@@ -172,6 +172,7 @@ function pretragaVozila(){
 			  icon: "warning",
 			  timer: 6000
 			});	
+		return;
 	}
 	
 	let _mjestoPreuzimanja = $("#mjestoPreuzimanjaSelect").val();
