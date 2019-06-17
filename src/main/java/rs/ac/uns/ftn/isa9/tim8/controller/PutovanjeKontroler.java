@@ -23,6 +23,7 @@ public class PutovanjeKontroler {
 
 	@Autowired
 	protected PutovanjeService servis;
+	
 
 	@RequestMapping(value = "/dobaviSve/{idPutovanja}", method = RequestMethod.GET)
 	public ResponseEntity<?> dobaviPutovanje(@PathVariable("idPutovanja") Long idPutovanja) {
@@ -59,4 +60,15 @@ public class PutovanjeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/odbijPoziv", method = RequestMethod.DELETE)
+	public ResponseEntity<?> odbijPozivNaPutovanje(@RequestBody OdgovorNaPozivnicuDTO odgovor) {
+		try {
+			return new ResponseEntity<Boolean>(servis.odbijPozivNaPutovanje(odgovor), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
 }

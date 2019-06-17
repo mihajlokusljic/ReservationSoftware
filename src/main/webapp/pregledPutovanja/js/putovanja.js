@@ -8,7 +8,25 @@ $(document).ready(function() {
 	$.ajaxSetup({
 		headers: createAuthorizationTokenHeader(tokenKey),
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX error - " + XMLHttpRequest.status + " " + XMLHttpRequest.statusText + ": " + errorThrown);
+	    	let statusCode = XMLHttpRequest.status;
+	    	if(statusCode == 400) {
+	    		//u slucaju neispravnih podataka (Bad request - 400) prikazuje se
+	    		//poruka o greski koju je server poslao
+	    		swal({
+	    		  title: "Došlo je do greške!",
+	  			  text: XMLHttpRequest.responseText,
+	  			  icon: "warning",
+	  			}).then(function() {
+					window.location.replace("../login/login.html");
+				});
+	    	} else {
+	    		swal({
+		    		  title: "Došlo je do greške!",
+		  			  icon: "warning",
+		  			}).then(function() {
+						window.location.replace("../login/login.html");
+					});
+	    	}
 		}
 	});
 		
@@ -40,6 +58,7 @@ $(document).ready(function() {
 	ucitajPodatkePutovanja();
 	ucitajPodatkeZaVozila();
 
+	//  prihvatanje pozivnice
 	$("#prihvatanjePozivnice").click(function(e) {
 		e.preventDefault();
 		
@@ -66,6 +85,43 @@ $(document).ready(function() {
 					swal({
 						  title: "Došlo je do greške.",
 						  text: "Istekao je rok za prihvatanje pozivnice.",
+						  icon: "error"
+						}).then(function() {
+							window.location.replace("../login/login.html");
+						});
+				}
+			},
+		});
+		
+	});
+	
+	//  odbijanje pozivnice
+	$("#odbijanjePozivnice").click(function(e) {
+		e.preventDefault();
+		
+		let odgovorNaPozivnicu = {
+			idPozvanogPrijatelja : korisnikId,
+			idPutovanja : idPutovanja
+		};
+		
+		$.ajax({
+			type: "DELETE",
+			url : "../putovanja/odbijPoziv",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(odgovorNaPozivnicu),
+			async: false,
+			success: function(response) {
+				if (response) {
+					swal({
+						  title: "Uspješno ste odbili pozivnicu za putovanje.",
+						  icon: "success"
+					}).then(function() {
+						window.location.replace("../login/login.html");
+						});
+				} else {
+					swal({
+						  title: "Došlo je do greške.",
+						  text: "Istekao je rok za odbijanje pozivnice.",
 						  icon: "error"
 						}).then(function() {
 							window.location.replace("../login/login.html");

@@ -36,12 +36,15 @@ public class PutovanjeService {
 
 	@Autowired
 	protected EmailService emailService;
+	
+	@Autowired
+	protected AviokompanijaService aviokompanijaService;
 
 	public Putovanje dobaviPutovanje(Long idPutovanja) throws NevalidniPodaciException {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
 
 		if (!putovanjeSearch.isPresent()) {
-			throw new NevalidniPodaciException("Ne postoji putovanje sa datim id-jem.");
+			throw new NevalidniPodaciException("Putovanje je u međuvremenu otkazano.");
 		}
 
 		Putovanje putovanje = putovanjeSearch.get();
@@ -55,7 +58,7 @@ public class PutovanjeService {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(idPutovanja);
 
 		if (!putovanjeSearch.isPresent()) {
-			throw new NevalidniPodaciException("Ne postoji putovanje sa datim id-jem.");
+			throw new NevalidniPodaciException("Putovanje je u međuvremenu otkazano.");
 		}
 
 		Putovanje putovanje = putovanjeSearch.get();
@@ -136,7 +139,7 @@ public class PutovanjeService {
 						e.printStackTrace();
 					}
 					putovanje.getPozivnice()
-							.add(new Pozivnica(false, rokZaOdgovor, putovanje, inicijator, rs.getPutnik()));
+							.add(new Pozivnica(rokZaOdgovor, putovanje, inicijator, rs.getPutnik()));
 				}
 			}
 		}
@@ -149,7 +152,7 @@ public class PutovanjeService {
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(odgovor.getIdPutovanja());
 
 		if (!putovanjeSearch.isPresent()) {
-			throw new NevalidniPodaciException("Nije prepoznato proslijeđeno putovanje.");
+			throw new NevalidniPodaciException("Putovanje je u međuvremenu otkazano.");
 		}
 
 		Putovanje putovanje = putovanjeSearch.get();
@@ -166,9 +169,15 @@ public class PutovanjeService {
 		for (Pozivnica pozivnica : putovanje.getPozivnice()) {
 			if (pozivnica.getPrimalac().getId().equals(pozvaniKorisnik.getId())) {
 				if (pozivnica.getRokPrihvatanja().before(new Date())) {
-					return false;
+					throw new NevalidniPodaciException("Prošao je rok za prihvatanje pozivnice.");
+				}
+				if(pozivnica.isPrihvacena()) {
+					throw new NevalidniPodaciException("Već ste prihvatili poziv na ovo putovanje");
+				} else if(pozivnica.isOdbijena()) {
+					throw new NevalidniPodaciException("Već ste odbili poziv na ovo putovanje.");
 				}
 				pozivnica.setPrihvacena(true);
+				pozivnica.setOdbijena(false);
 				pozvaniKorisnik.getPrimljenePozivnice().add(pozivnica);
 				pozivnicaRepository.save(pozivnica);
 				break;
@@ -179,6 +188,52 @@ public class PutovanjeService {
 		pozvaniKorisnik.setBonusPoeni(pozvaniKorisnik.getBonusPoeni() + putovanje.getBonusPoeni());
 
 		korisnikRepository.save(pozvaniKorisnik);
+
+		return true;
+	}
+
+	public Boolean odbijPozivNaPutovanje(OdgovorNaPozivnicuDTO odgovor) throws NevalidniPodaciException {
+		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(odgovor.getIdPutovanja());
+
+		if (!putovanjeSearch.isPresent()) {
+			throw new NevalidniPodaciException("Putovanje je u međuvremenu otkazano.");
+		}
+
+		Putovanje putovanje = putovanjeSearch.get();
+
+		Optional<Osoba> korisnikSearch = korisnikRepository.findById(odgovor.getIdPozvanogPrijatelja());
+
+		if (!korisnikSearch.isPresent()) {
+			throw new NevalidniPodaciException("Ne postoji korisnik sa datim id-jem.");
+		}
+
+		RegistrovanKorisnik pozvaniKorisnik = (RegistrovanKorisnik) korisnikSearch.get();
+
+		// odbijanje pozivnice za pozvanog korisnika
+		for (Pozivnica pozivnica : putovanje.getPozivnice()) {
+			if (pozivnica.getPrimalac().getId().equals(pozvaniKorisnik.getId())) {
+				if (pozivnica.getRokPrihvatanja().before(new Date())) {
+					throw new NevalidniPodaciException("Prošao je rok za odbijanje pozivnice.");
+				}
+				if(pozivnica.isPrihvacena()) {
+					throw new NevalidniPodaciException("Već ste prihvatili poziv na ovo putovanje");
+				} else if(pozivnica.isOdbijena()) {
+					throw new NevalidniPodaciException("Već ste odbili poziv na ovo putovanje.");
+				}
+				pozivnica.setPrihvacena(false);
+				pozivnica.setOdbijena(true);
+				pozivnicaRepository.save(pozivnica);
+				break;
+			}
+		}
+		
+		// otkazivanje rezervacije sjedista za pozvanog korisnika koji je odbio pozivnicu
+		for (RezervacijaSjedista rs : putovanje.getRezervacijeSjedista()) {
+			if(rs.getPutnik().getId().equals(pozvaniKorisnik.getId())) {
+				aviokompanijaService.otkaziRezervaciju(rs.getId());
+				break;
+			}
+		}
 
 		return true;
 	}
