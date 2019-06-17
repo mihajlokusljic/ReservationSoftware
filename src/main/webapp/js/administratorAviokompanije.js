@@ -16,7 +16,7 @@ $(document).ready(function() {
 	
 	//dodavanje zaglavlja sa JWT tokenom u svaki zahtjev upucen ajax pozivom i obrada gresaka
 	$.ajaxSetup({
-	    headers: createAuthorizationTokenHeader(),
+	    headers: createAuthorizationTokenHeader(tokenKey),
 	    error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	let statusCode = XMLHttpRequest.status;
 	    	if(statusCode == 400) {
