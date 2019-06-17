@@ -951,44 +951,49 @@ public class AviokompanijaService {
 		
 		putovanje.getRezervacijeSjedista().remove(rez);
 		
+		// u slucaju da inicijator putovanja otkaze let brisu se sve rezervacije i putovanje se otkazuje
+		if (rez.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+			
+			if (!putovanje.getRezervacijeSoba().isEmpty()) {
+				for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
+					if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
 
-		if (!putovanje.getRezervacijeSoba().isEmpty()) {
-			for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
-				if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-					
-					putovanje.getRezervacijeSoba().remove(rSobe);
+						putovanje.getRezervacijeSoba().remove(rSobe);
 
-					this.sobeService.otkaziRezervaciju(rSobe.getId());
-				//	putovanjeRepository.save(putovanje);
+						this.sobeService.otkaziRezervaciju(rSobe.getId());
+						//	putovanjeRepository.save(putovanje);
+					}
 				}
 			}
+			
+			if (!putovanje.getRezervacijeVozila().isEmpty()) {
+
+				for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
+					if (rVozila.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+
+						putovanje.getRezervacijeVozila().remove(rVozila);
+
+						this.rentACarService.otkaziRezervaciju(rVozila.getId());
+						//					putovanjeRepository.save(putovanje);
+
+					}
+				}
+			}
+			
+			if (!putovanje.getRezervacijeSjedista().isEmpty()) {
+				for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
+					if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
+
+						putovanje.getRezervacijeSjedista().remove(rSjedista);
+
+						this.rezervacijaSjedistaRepository.delete(rSjedista);
+						//	putovanjeRepository.save(putovanje);
+					}
+				}
+			} 
+			
 		}
 		
-		if (!putovanje.getRezervacijeVozila().isEmpty()) {
-
-			for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
-				if (rVozila.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-					
-					putovanje.getRezervacijeVozila().remove(rVozila);
-
-					this.rentACarService.otkaziRezervaciju(rVozila.getId());
-//					putovanjeRepository.save(putovanje);
-
-				}
-			}
-		}
-		
-		if (!putovanje.getRezervacijeSjedista().isEmpty()) {
-			for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
-				if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
-					
-					putovanje.getRezervacijeSjedista().remove(rSjedista);
-
-					this.rezervacijaSjedistaRepository.delete(rSjedista);
-				//	putovanjeRepository.save(putovanje);
-				}
-			}
-		}
 		rezervacijaSjedistaRepository.delete(rez);
 
 		if (putovanje.getRezervacijeSjedista().isEmpty()) {

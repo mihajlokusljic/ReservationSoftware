@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class PutovanjeKontroler {
 
 	@Autowired
 	protected PutovanjeService servis;
+	
 
 	@RequestMapping(value = "/dobaviSve/{idPutovanja}", method = RequestMethod.GET)
 	public ResponseEntity<?> dobaviPutovanje(@PathVariable("idPutovanja") Long idPutovanja) {
@@ -49,13 +51,24 @@ public class PutovanjeKontroler {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@RequestMapping(value = "/prihvatiPoziv", method = RequestMethod.POST)
-	public ResponseEntity<?> prihvatiPozivNaPutovanje(OdgovorNaPozivnicuDTO odgovor) {
+	public ResponseEntity<?> prihvatiPozivNaPutovanje(@RequestBody OdgovorNaPozivnicuDTO odgovor) {
 		try {
 			return new ResponseEntity<Boolean>(servis.prihvatiPozivNaPutovanje(odgovor), HttpStatus.OK);
 		} catch (NevalidniPodaciException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "/odbijPoziv", method = RequestMethod.DELETE)
+	public ResponseEntity<?> odbijPozivNaPutovanje(@RequestBody OdgovorNaPozivnicuDTO odgovor) {
+		try {
+			return new ResponseEntity<Boolean>(servis.odbijPozivNaPutovanje(odgovor), HttpStatus.OK);
+		} catch (NevalidniPodaciException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
 }

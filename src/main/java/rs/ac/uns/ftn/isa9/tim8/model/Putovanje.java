@@ -29,6 +29,7 @@ public class Putovanje {
 	protected Set<RezervacijaSjedista> rezervacijeSjedista;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
+	@JsonIgnore
 	protected Set<Pozivnica> pozivnice;
 
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -42,7 +43,7 @@ public class Putovanje {
 	@JsonIgnore
 	protected RegistrovanKorisnik inicijatorPutovanja;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "putovanje_usluga", joinColumns = @JoinColumn(name = "putovanje_id"), inverseJoinColumns = @JoinColumn(name = "usluga_id"))
 	protected Set<Usluga> dodatneUsluge;
 
