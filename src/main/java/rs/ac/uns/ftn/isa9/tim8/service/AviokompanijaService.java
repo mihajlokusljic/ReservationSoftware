@@ -935,12 +935,17 @@ public class AviokompanijaService {
 			cijena = 40;
 		}
 
-		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), "", cijena,
+		RezervacijaSjedista rs = new RezervacijaSjedista(null, korisnik.getIme(), korisnik.getPrezime(), korisnik.getBrojPasosa(), cijena,
 				brs.getSjediste(), korisnik, brs.getAviokompanija(), brs.getLet(), null);
 
 		brzaRezervacijaSjedistaRepository.delete(brs);
+		HashSet<RezervacijaSjedista> rezervacije = new HashSet<RezervacijaSjedista>();
+		rezervacije.add(rs);
+		Putovanje putovanje = new Putovanje(null, rezervacije, new HashSet<Pozivnica>(), 
+				new HashSet<RezervacijaSobe>(), new HashSet<RezervacijaVozila>(), korisnik, new HashSet<Usluga>(), 0);
+		rs.setPutovanje(putovanje);
+		putovanjeRepository.save(putovanje);
 		rezervacijaSjedistaRepository.save(rs);
-
 		return "Rezervacija je uspjesno izvrsena.";
 	}
 
