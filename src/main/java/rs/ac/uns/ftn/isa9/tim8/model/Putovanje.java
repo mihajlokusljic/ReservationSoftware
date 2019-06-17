@@ -29,6 +29,7 @@ public class Putovanje {
 	protected Set<RezervacijaSjedista> rezervacijeSjedista;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "putovanje")
+	@JsonIgnore
 	protected Set<Pozivnica> pozivnice;
 
 	@OneToMany(mappedBy = "putovanje", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -33,7 +33,7 @@ public class PutovanjeService {
 
 	@Autowired
 	protected PozivnicaRepository pozivnicaRepository;
-	
+
 	@Autowired
 	protected EmailService emailService;
 

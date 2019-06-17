@@ -22,7 +22,7 @@ $(document).ready(function() {
 
 		window.location.replace("../registrovaniKorisnikPocetna/index.html");
 	});
-	
+		
 	//ocitavanje parametara putanje
 	var url = window.location.href;
 	var parametri = url.substring(url.indexOf("?") + 1);
@@ -30,7 +30,7 @@ $(document).ready(function() {
 	
 	idPutovanja = params_parser.get("idPutovanja");
 	inicijator = params_parser.get("inicijator");
-	korsinikId = params_parser.get("idKorisnika");
+	korisnikId = params_parser.get("idKorisnika");
 	
 	if(inicijator == "false") {
 		$("#povratakNaPocetnuBtn").hide();
@@ -40,6 +40,42 @@ $(document).ready(function() {
 	ucitajPodatkePutovanja();
 	ucitajPodatkeZaVozila();
 
+	$("#prihvatanjePozivnice").click(function(e) {
+		e.preventDefault();
+		
+		let odgovorNaPozivnicu = {
+			idPozvanogPrijatelja : korisnikId,
+			idPutovanja : idPutovanja
+		};
+		
+		$.ajax({
+			type: "POST",
+			url : "../putovanja/prihvatiPoziv",
+			contentType : "application/json; charset=utf-8",
+			data: JSON.stringify(odgovorNaPozivnicu),
+			async: false,
+			success: function(response) {
+				if (response) {
+					swal({
+						  title: "Uspješno ste prihvatili pozivnicu za putovanje.",
+						  icon: "success"
+					}).then(function() {
+						window.location.replace("../login/login.html");
+						});
+				} else {
+					swal({
+						  title: "Došlo je do greške.",
+						  text: "Istekao je rok za prihvatanje pozivnice.",
+						  icon: "error"
+						}).then(function() {
+							window.location.replace("../login/login.html");
+						});
+				}
+			},
+		});
+		
+	});
+	
 });	
 
 function ucitajPodatkePutovanja() {

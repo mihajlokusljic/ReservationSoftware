@@ -30,8 +30,8 @@ public class Pozivnica {
 	@JoinColumn(name = "putovanje_id")
 	protected Putovanje putovanje;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "posiljalac_id", unique = true, referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "posiljalac_id", referencedColumnName = "id")
 	protected RegistrovanKorisnik posiljalac;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
