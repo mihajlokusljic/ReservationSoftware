@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaSobaDTO;
@@ -195,13 +197,16 @@ public class RezervacijeSobaService {
 		}
 		return rezultat;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String izvrsiBrzuRezervaciju(Long idBrzeRezervacije, Long idPutovanja) throws NevalidniPodaciException {
 		Optional<BrzaRezervacijaSoba> rezervacijaSearch = brzeRezervacijeRepository.findById(idBrzeRezervacije);
 		if (!rezervacijaSearch.isPresent()) {
 			throw new NevalidniPodaciException("Ne postoji zadata brza rezervacija.");
 		}
 		BrzaRezervacijaSoba brzaRez = rezervacijaSearch.get();
+		brzaRez = brzeRezervacijeRepository.zakljucajBrzuRezervaciju(brzaRez.getId());
+		
 		Putovanje putovanje = null;
 		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
@@ -236,7 +241,8 @@ public class RezervacijeSobaService {
 		}
 		return null;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String izvrsiRezervacijuSoba(ZahtjevRezervacijaSobaDTO rezervacijaPodaci) throws NevalidniPodaciException {
 		Date datumDolaska = null;
 		Date datumOdlaska = null;
@@ -304,6 +310,7 @@ public class RezervacijeSobaService {
 				throw new NevalidniPodaciException("Ne postoji zadata soba.");
 			}
 			soba = sobaSearch.get();
+			soba = sobeRepository.zakljucajSobu(soba.getId());
 			brojKreveta += soba.getBrojKreveta();
 			if (putovanje != null && brojKreveta > brojOsoba) {
 				// uraditi rollback, rezervacija nece biti dozvoljena
