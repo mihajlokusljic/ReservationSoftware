@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -173,9 +177,10 @@ public class RentACarServisService {
 
 		return null;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String izmjeniRentACarServis(RentACarServis rentACar) {
-		RentACarServis rentACarStari = rentACarRepository.findOneByNaziv(rentACar.getNaziv());
+		RentACarServis rentACarStari = rentACarRepository.getRentByNaziv(rentACar.getNaziv());
 		rentACarStari.getAdresa().setLatituda(rentACar.getAdresa().getLatituda());
 		rentACarStari.getAdresa().setLongituda(rentACar.getAdresa().getLongituda());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());
@@ -191,7 +196,7 @@ public class RentACarServisService {
 			}
 		}
 		rentACarStari.getAdresa().setPunaAdresa(rentACar.getAdresa().getPunaAdresa());
-		;
+		
 		rentACarStari.setPromotivniOpis(rentACar.getPromotivniOpis());
 		rentACarRepository.save(rentACarStari);
 		return null;
@@ -283,23 +288,6 @@ public class RentACarServisService {
 
 		voziloRepository.save(voz);
 
-		return null;
-	}
-
-	public String dodajFilijalu(String nazivServisa, String adresa) {
-		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
-		Adresa adresaPostoji = adresaRepository.findOneByPunaAdresa(adresa);
-		if (adresaPostoji != null) {
-
-			return "Zauzeta adresa";
-		}
-		Adresa a = new Adresa();
-		a.setPunaAdresa(adresa);
-		Filijala f = new Filijala();
-		f.setAdresa(a);
-		f.setRentACar(rentACar);
-		rentACar.getFilijale().add(f);
-		rentACarRepository.save(rentACar);
 		return null;
 	}
 
@@ -612,7 +600,8 @@ public class RentACarServisService {
 		}
 		return vozilaZaRezervaciju;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String rezervisiVozilo(RezervacijaVozilaDTO rezervacijaDTO, Long idServisa) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
 		
@@ -670,6 +659,12 @@ public class RentACarServisService {
 		}
 
 		Vozilo vozilo = rezervisano.get();
+		vozilo = voziloRepository.zakljucajVozilo(vozilo.getId());
+		
+		if (voziloJeRezervisano(vozilo,pocetniDatum,krajnjiDatum)) {
+			throw new NevalidniPodaciException("Vozilo je u medjuvreneu rezervisano.");
+
+		}
 
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(rezervacijaDTO.getIdPutovanja());
 
@@ -684,14 +679,8 @@ public class RentACarServisService {
 		rezervacija.setRezervisanoVozilo(vozilo);
 		rezervacija.setPutovanje(putovanje);
 
-		putovanje.getRezervacijeVozila().add(rezervacija);
+		this.rezervacijaVozilaRepository.save(rezervacija);
 
-		rac.getRezervisanaVozila().add(rezervacija);
-
-		korisnikRepository.save(regKor);
-		putovanjeRepository.save(putovanje);
-		rentACarRepository.save(rac);
-		rezervacijaVozilaRepository.save(rezervacija);
 
 		return null;
 	}
@@ -718,7 +707,7 @@ public class RentACarServisService {
 		novaFilijala.setRentACar(target);
 		target.getFilijale().add(novaFilijala);
 		filijalaRepository.save(novaFilijala);
-		rentACarRepository.save(target);
+		//rentACarRepository.save(target);
 		return novaFilijala;
 	}
 
@@ -809,7 +798,7 @@ public class RentACarServisService {
 		novaRezervacija.setBaznaCijena(brv.getCijena());
 		return novaRezervacija;
 	}
-
+	
 	public boolean voziloJeRezervisano(Vozilo vozilo, Date datumP, Date datumV) {
 		if (datumP == null || datumV == null) {
 			return false;

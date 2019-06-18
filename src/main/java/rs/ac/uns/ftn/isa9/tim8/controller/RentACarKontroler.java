@@ -116,11 +116,6 @@ public class RentACarKontroler {
 		return new ResponseEntity<String>(servis.izmjeniVozilo(vozilo),HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/dodajFilijalu/{nazivServisa}/{adresa}", method = RequestMethod.GET)
-	public ResponseEntity<String> dodajFilijalu(@PathVariable("nazivServisa") String nazivServisa, @PathVariable("adresa") String adresa) {
-		return new ResponseEntity<String>(servis.dodajFilijalu(nazivServisa,adresa),HttpStatus.OK);
-	}
-	
 	@RequestMapping(value = "/dodajFilijalu", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('AdministratorRentACar')")
 	public ResponseEntity<?> dodajFilijalu(@RequestBody Adresa adresaFilijale) {

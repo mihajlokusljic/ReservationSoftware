@@ -16,6 +16,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
@@ -469,7 +470,13 @@ public class AviokompanijaService {
 	public Aviokompanija izmjeniAviokompaniju(Aviokompanija noviPodaciZaAviokompaniju) throws NevalidniPodaciException {
 		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		Aviokompanija target = admin.getAviokompanija();
+		
+		Optional<Aviokompanija> getAvio = aviokompanijaRepository.findById(admin.getAviokompanija().getId());
+		if (!getAvio.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Aviokompanija target = getAvio.get();
 
 		if (target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao administrator aviokompanije.");
@@ -601,7 +608,7 @@ public class AviokompanijaService {
 
 		return usluga;
 	}
-
+	
 	public Boolean sjedisteJeRezervisano(Sjediste sjediste, Date datumPolaska, Date datumDolaska) {
 		if (datumPolaska == null || datumDolaska == null) {
 			return false;
@@ -707,7 +714,7 @@ public class AviokompanijaService {
 		brs.setLet(trazeniLet);
 		aviokompanija.getBrzeRezervacije().add(brs);
 		brzaRezervacijaSjedistaRepository.save(brs);
-		aviokompanijaRepository.save(aviokompanija);
+		//aviokompanijaRepository.save(aviokompanija);
 		novaRezervacija.setId(brs.getId());
 		novaRezervacija.setCijena(brs.getCijena());
 		return novaRezervacija;

@@ -91,7 +91,14 @@ public class HotelService {
 
 	public Hotel izmjeniHotel(Hotel noviPodaciHotela) throws NevalidniPodaciException {
 		AdministratorHotela admin = (AdministratorHotela) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Hotel target = admin.getHotel();
+		
+		Optional<Hotel> getHotel = hotelRepository.findById(admin.getHotel().getId());
+		if (!getHotel.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Hotel target = getHotel.get();
+		
 		if(target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao ovlasceni administrator hotela.");
 		}

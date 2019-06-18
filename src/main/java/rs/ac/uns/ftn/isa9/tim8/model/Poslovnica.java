@@ -14,6 +14,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -41,6 +42,9 @@ public class Poslovnica {
 	
 	@OneToMany(mappedBy = "poslovnica",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	protected Set<Usluga> cjenovnikDodatnihUsluga;
+	
+	@Version
+	private Integer version;
 	
 	public Poslovnica() {
 		super();
