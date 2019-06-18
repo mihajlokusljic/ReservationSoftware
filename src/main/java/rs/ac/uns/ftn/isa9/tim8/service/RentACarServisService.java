@@ -177,9 +177,10 @@ public class RentACarServisService {
 
 		return null;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String izmjeniRentACarServis(RentACarServis rentACar) {
-		RentACarServis rentACarStari = rentACarRepository.findOneByNaziv(rentACar.getNaziv());
+		RentACarServis rentACarStari = rentACarRepository.getRentByNaziv(rentACar.getNaziv());
 		rentACarStari.getAdresa().setLatituda(rentACar.getAdresa().getLatituda());
 		rentACarStari.getAdresa().setLongituda(rentACar.getAdresa().getLongituda());
 		Adresa adresa = adresaRepository.findOneByPunaAdresa(rentACar.getAdresa().getPunaAdresa());
@@ -287,23 +288,6 @@ public class RentACarServisService {
 
 		voziloRepository.save(voz);
 
-		return null;
-	}
-
-	public String dodajFilijalu(String nazivServisa, String adresa) {
-		RentACarServis rentACar = rentACarRepository.findOneByNaziv(nazivServisa);
-		Adresa adresaPostoji = adresaRepository.findOneByPunaAdresa(adresa);
-		if (adresaPostoji != null) {
-
-			return "Zauzeta adresa";
-		}
-		Adresa a = new Adresa();
-		a.setPunaAdresa(adresa);
-		Filijala f = new Filijala();
-		f.setAdresa(a);
-		f.setRentACar(rentACar);
-		rentACar.getFilijale().add(f);
-		rentACarRepository.save(rentACar);
 		return null;
 	}
 
@@ -723,7 +707,7 @@ public class RentACarServisService {
 		novaFilijala.setRentACar(target);
 		target.getFilijale().add(novaFilijala);
 		filijalaRepository.save(novaFilijala);
-		rentACarRepository.save(target);
+		//rentACarRepository.save(target);
 		return novaFilijala;
 	}
 

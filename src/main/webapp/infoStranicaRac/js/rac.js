@@ -285,7 +285,8 @@ function prikaziVozila(vozila) {
 				if(response == '') {
 					swal({
 						  title: "Uspješno ste rezervisali vozilo.",
-						  icon: "success"
+						  icon: "success",
+						  timer: 2500
 						}).then(function(){
 							prelazakNaPregledPutovanja();
 						})	

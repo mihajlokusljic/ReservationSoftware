@@ -880,7 +880,7 @@ function prikazFilijala(filijale){
 					else{
 						swal({
 							  title: "Uspjesno ste izmjenili adresu filijale",
-							  icon: "warning",
+							  icon: "success",
 							  timer: 2500
 							})	
 						prikazFilijalaOdabranogServisa();				
