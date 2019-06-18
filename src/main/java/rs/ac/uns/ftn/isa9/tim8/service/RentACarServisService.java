@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -612,7 +616,8 @@ public class RentACarServisService {
 		}
 		return vozilaZaRezervaciju;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String rezervisiVozilo(RezervacijaVozilaDTO rezervacijaDTO, Long idServisa) throws NevalidniPodaciException {
 		// TODO Auto-generated method stub
 		
@@ -670,6 +675,12 @@ public class RentACarServisService {
 		}
 
 		Vozilo vozilo = rezervisano.get();
+		vozilo = voziloRepository.zakljucajVozilo(vozilo.getId());
+		
+		if (voziloJeRezervisano(vozilo,pocetniDatum,krajnjiDatum)) {
+			throw new NevalidniPodaciException("Vozilo je u medjuvreneu rezervisano.");
+
+		}
 
 		Optional<Putovanje> putovanjeSearch = putovanjeRepository.findById(rezervacijaDTO.getIdPutovanja());
 
@@ -684,14 +695,8 @@ public class RentACarServisService {
 		rezervacija.setRezervisanoVozilo(vozilo);
 		rezervacija.setPutovanje(putovanje);
 
-		putovanje.getRezervacijeVozila().add(rezervacija);
+		this.rezervacijaVozilaRepository.save(rezervacija);
 
-		rac.getRezervisanaVozila().add(rezervacija);
-
-		korisnikRepository.save(regKor);
-		putovanjeRepository.save(putovanje);
-		rentACarRepository.save(rac);
-		rezervacijaVozilaRepository.save(rezervacija);
 
 		return null;
 	}
@@ -809,7 +814,7 @@ public class RentACarServisService {
 		novaRezervacija.setBaznaCijena(brv.getCijena());
 		return novaRezervacija;
 	}
-
+	
 	public boolean voziloJeRezervisano(Vozilo vozilo, Date datumP, Date datumV) {
 		if (datumP == null || datumV == null) {
 			return false;

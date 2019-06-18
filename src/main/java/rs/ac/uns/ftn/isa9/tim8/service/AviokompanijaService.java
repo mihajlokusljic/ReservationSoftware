@@ -16,6 +16,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.BrzaRezervacijaKarteDTO;
@@ -601,7 +602,7 @@ public class AviokompanijaService {
 
 		return usluga;
 	}
-
+	
 	public Boolean sjedisteJeRezervisano(Sjediste sjediste, Date datumPolaska, Date datumDolaska) {
 		if (datumPolaska == null || datumDolaska == null) {
 			return false;
