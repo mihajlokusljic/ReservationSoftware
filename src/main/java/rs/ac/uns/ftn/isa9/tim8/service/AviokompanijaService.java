@@ -470,7 +470,13 @@ public class AviokompanijaService {
 	public Aviokompanija izmjeniAviokompaniju(Aviokompanija noviPodaciZaAviokompaniju) throws NevalidniPodaciException {
 		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		Aviokompanija target = admin.getAviokompanija();
+		
+		Optional<Aviokompanija> getAvio = aviokompanijaRepository.findById(admin.getAviokompanija().getId());
+		if (!getAvio.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Aviokompanija target = getAvio.get();
 
 		if (target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao administrator aviokompanije.");
@@ -708,7 +714,7 @@ public class AviokompanijaService {
 		brs.setLet(trazeniLet);
 		aviokompanija.getBrzeRezervacije().add(brs);
 		brzaRezervacijaSjedistaRepository.save(brs);
-		aviokompanijaRepository.save(aviokompanija);
+		//aviokompanijaRepository.save(aviokompanija);
 		novaRezervacija.setId(brs.getId());
 		novaRezervacija.setCijena(brs.getCijena());
 		return novaRezervacija;

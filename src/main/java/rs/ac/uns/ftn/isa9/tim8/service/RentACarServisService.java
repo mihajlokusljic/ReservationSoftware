@@ -196,7 +196,7 @@ public class RentACarServisService {
 			}
 		}
 		rentACarStari.getAdresa().setPunaAdresa(rentACar.getAdresa().getPunaAdresa());
-		;
+		
 		rentACarStari.setPromotivniOpis(rentACar.getPromotivniOpis());
 		rentACarRepository.save(rentACarStari);
 		return null;
