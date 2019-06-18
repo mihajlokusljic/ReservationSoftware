@@ -14,6 +14,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.DatumiZaPrihodDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.IzvjestajDTO;
@@ -89,6 +91,7 @@ public class HotelService {
 		return h;
 	}
 
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public Hotel izmjeniHotel(Hotel noviPodaciHotela) throws NevalidniPodaciException {
 		AdministratorHotela admin = (AdministratorHotela) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -98,6 +101,8 @@ public class HotelService {
 		}
 		
 		Hotel target = getHotel.get();
+		
+		target = hotelRepository.getHotelById(target.getId());
 		
 		if(target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao ovlasceni administrator hotela.");

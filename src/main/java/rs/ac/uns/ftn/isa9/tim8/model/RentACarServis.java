@@ -12,13 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "rent_a_car_servis")
-public class RentACarServis extends Poslovnica implements Serializable {
+public class RentACarServis extends Poslovnica {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5971300871523033595L;
-
 //	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rentACar")
 	protected Set<Vozilo> vozila;
