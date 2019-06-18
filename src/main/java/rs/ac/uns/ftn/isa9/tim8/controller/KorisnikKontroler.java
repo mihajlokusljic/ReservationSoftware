@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FiltriranjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PozivnicaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSobeDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
@@ -187,5 +188,11 @@ public class KorisnikKontroler {
 				.getPrincipal();
 		return new ResponseEntity<Collection<PrikazRezSobeDTO>>(korisnikService.vratiRezervacijeSoba(regKor),
 				HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/prihvacenePozivnice", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('RegistrovanKorisnik')")
+	public ResponseEntity<?> dobaviPozivnice() {
+		return new ResponseEntity<Collection<PozivnicaDTO> >(korisnikService.dobaviPozivnice(), HttpStatus.OK);
 	}
 }
