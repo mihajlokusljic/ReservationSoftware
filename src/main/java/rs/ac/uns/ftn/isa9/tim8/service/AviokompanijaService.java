@@ -468,6 +468,7 @@ public class AviokompanijaService {
 		}
 	}
 
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public Aviokompanija izmjeniAviokompaniju(Aviokompanija noviPodaciZaAviokompaniju) throws NevalidniPodaciException {
 		AdministratorAviokompanije admin = (AdministratorAviokompanije) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -478,6 +479,8 @@ public class AviokompanijaService {
 		}
 		
 		Aviokompanija target = getAvio.get();
+		
+		target = aviokompanijaRepository.getHotelById(target.getId());
 
 		if (target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao administrator aviokompanije.");
@@ -1144,8 +1147,6 @@ public class AviokompanijaService {
 
 		podaciRezervacije.setIdPutovanja(putovanje.getId());
 
-//		aviokompanijaRepository.save(let.getAvion().getAviokompanija());
-//		letoviRepository.save(let);
 
 		return podaciRezervacije;
 	}
