@@ -547,7 +547,7 @@ public class KorisnikService {
 				break;
 			}
 			tekuciInicijator = String.format("%s %s", pozivnica.getPosiljalac().getIme(), 
-					pozivnica.getPrimalac().getPrezime());
+					pozivnica.getPosiljalac().getPrezime());
 			rezultat.add(new PozivnicaDTO(tekuciInicijator, tekuciLet.getPolaziste().getNazivDestinacije(),
 					tekuciLet.getOdrediste().getNazivDestinacije(), tekuciLet.getDatumPoletanja(), tekuciLet.getDuzinaPutovanja()));
 		}
