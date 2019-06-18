@@ -16,6 +16,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.BoravakDTO;
@@ -922,7 +923,8 @@ public class AviokompanijaService {
 		return brzeRezDTO;
 
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public String izvrsiBrzuRezervacijuKarte(Long idBrzeRez) throws NevalidniPodaciException {
 		Optional<BrzaRezervacijaSjedista> brzaRezPretraga = brzaRezervacijaSjedistaRepository.findById(idBrzeRez);
 
@@ -931,7 +933,9 @@ public class AviokompanijaService {
 		}
 
 		BrzaRezervacijaSjedista brs = brzaRezPretraga.get();
-
+		
+		brs = brzaRezervacijaSjedistaRepository.getBrzaRezervacijaById(brs.getId());
+		
 		RegistrovanKorisnik korisnik = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 
@@ -1061,7 +1065,8 @@ public class AviokompanijaService {
 		dist = dist * 1.609344; // rastojanje u kilometrima
 		return dist;
 	}
-
+	
+	@Transactional(readOnly = false, rollbackFor = NevalidniPodaciException.class, propagation = Propagation.REQUIRED)
 	public IzvrsavanjeRezervacijeSjedistaDTO rezervisiSjedista(IzvrsavanjeRezervacijeSjedistaDTO podaciRezervacije)
 			throws NevalidniPodaciException {
 		// Najveće rastojanje između dvije tačke na planeti Zemlji (po ekvatoru)
@@ -1110,6 +1115,7 @@ public class AviokompanijaService {
 			}
 
 			s = pretragaSjedista.get();
+			s = sjedisteRepository.getSjedisteById(s.getId());
 
 			if (jeLiSjedisteRezervisano(s, let.getRezervacije(), brzeRezervacijeLeta)) {
 				throw new NevalidniPodaciException("Sjediste je vec rezervisano.");
@@ -1138,8 +1144,8 @@ public class AviokompanijaService {
 
 		podaciRezervacije.setIdPutovanja(putovanje.getId());
 
-		aviokompanijaRepository.save(let.getAvion().getAviokompanija());
-		letoviRepository.save(let);
+//		aviokompanijaRepository.save(let.getAvion().getAviokompanija());
+//		letoviRepository.save(let);
 
 		return podaciRezervacije;
 	}
