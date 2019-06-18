@@ -974,10 +974,12 @@ public class AviokompanijaService {
 		if (rez.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
 
 			if (!putovanje.getRezervacijeSoba().isEmpty()) {
-				for (RezervacijaSobe rSobe : putovanje.getRezervacijeSoba()) {
+				RezervacijaSobe rSobe = null;
+				for (Iterator<RezervacijaSobe> rezSobeIt = putovanje.getRezervacijeSoba().iterator(); rezSobeIt.hasNext(); ) {
+					rSobe = rezSobeIt.next();
 					if (rSobe.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
 
-						putovanje.getRezervacijeSoba().remove(rSobe);
+						rezSobeIt.remove();
 
 						this.sobeService.otkaziRezervaciju(rSobe.getId());
 						// putovanjeRepository.save(putovanje);
@@ -987,10 +989,12 @@ public class AviokompanijaService {
 
 			if (!putovanje.getRezervacijeVozila().isEmpty()) {
 
-				for (RezervacijaVozila rVozila : putovanje.getRezervacijeVozila()) {
+				RezervacijaVozila rVozila = null;
+				for (Iterator<RezervacijaVozila> rezVozIt = putovanje.getRezervacijeVozila().iterator(); rezVozIt.hasNext(); ) {
+					rVozila = rezVozIt.next();
 					if (rVozila.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
 
-						putovanje.getRezervacijeVozila().remove(rVozila);
+						rezVozIt.remove();
 
 						this.rentACarService.otkaziRezervaciju(rVozila.getId());
 						// putovanjeRepository.save(putovanje);
@@ -1000,10 +1004,12 @@ public class AviokompanijaService {
 			}
 
 			if (!putovanje.getRezervacijeSjedista().isEmpty()) {
-				for (RezervacijaSjedista rSjedista : putovanje.getRezervacijeSjedista()) {
+				RezervacijaSjedista rSjedista = null;
+				for (Iterator<RezervacijaSjedista> rezSjedIt = putovanje.getRezervacijeSjedista().iterator(); rezSjedIt.hasNext(); ) {
+					rSjedista = rezSjedIt.next();
 					if (rSjedista.getPutnik().getId().equals(putovanje.getInicijatorPutovanja().getId())) {
 
-						putovanje.getRezervacijeSjedista().remove(rSjedista);
+						rezSjedIt.remove();
 
 						this.rezervacijaSjedistaRepository.delete(rSjedista);
 						// putovanjeRepository.save(putovanje);
