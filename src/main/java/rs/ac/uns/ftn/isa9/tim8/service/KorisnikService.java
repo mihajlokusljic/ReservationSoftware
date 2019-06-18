@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import rs.ac.uns.ftn.isa9.tim8.dto.FiltriranjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.KorisnikDTO;
+import rs.ac.uns.ftn.isa9.tim8.dto.PozivnicaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PretragaPrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSjedistaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezSobeDTO;
@@ -20,7 +21,9 @@ import rs.ac.uns.ftn.isa9.tim8.dto.PrikazRezVozilaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.UklanjanjePrijateljaDTO;
 import rs.ac.uns.ftn.isa9.tim8.dto.ZahtjevZaPrijateljstvoDTO;
 import rs.ac.uns.ftn.isa9.tim8.model.Adresa;
+import rs.ac.uns.ftn.isa9.tim8.model.Let;
 import rs.ac.uns.ftn.isa9.tim8.model.Osoba;
+import rs.ac.uns.ftn.isa9.tim8.model.Pozivnica;
 import rs.ac.uns.ftn.isa9.tim8.model.RegistrovanKorisnik;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSjedista;
 import rs.ac.uns.ftn.isa9.tim8.model.RezervacijaSobe;
@@ -530,6 +533,26 @@ public class KorisnikService {
 			return potencijalniPrijateljiFilter;
 		}
 
+	}
+
+	public Collection<PozivnicaDTO> dobaviPozivnice() {
+		RegistrovanKorisnik regKor = (RegistrovanKorisnik) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Collection<PozivnicaDTO> rezultat = new ArrayList<PozivnicaDTO>();
+		Let tekuciLet = null;
+		String tekuciInicijator = "";
+		for(Pozivnica pozivnica : regKor.getPrimljenePozivnice()) {
+			for (RezervacijaSjedista rezSjed : pozivnica.getPutovanje().getRezervacijeSjedista()) {
+				tekuciLet = rezSjed.getLet();
+				break;
+			}
+			tekuciInicijator = String.format("%s %s", pozivnica.getPosiljalac().getIme(), 
+					pozivnica.getPosiljalac().getPrezime());
+			rezultat.add(new PozivnicaDTO(tekuciInicijator, tekuciLet.getPolaziste().getNazivDestinacije(),
+					tekuciLet.getOdrediste().getNazivDestinacije(), tekuciLet.getDatumPoletanja(), tekuciLet.getDuzinaPutovanja()));
+		}
+		
+		return rezultat;
 	}
 
 }
