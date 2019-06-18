@@ -109,6 +109,7 @@ $(document).ready(function() {
 	}
 	
 	ucitajRezervacije();
+	ucitajPozivnice();
 	
 	//pretraga hotela
 	$("#hotelSearchForm").submit(function(e) {
@@ -650,6 +651,32 @@ function refreshAviokompanije(aviokompanije) {
 				aviokompanija.id + "&korisnik=" + korisnik.id +  '">Pogledaj detalje</a></td>');
 		aviokompanijeTable.append(noviRed);
 	}
+}
+
+function ucitajPozivnice() {
+	$.ajax({
+		type: "GET",
+		url: "../korisnik/prihvacenePozivnice",
+		success: function(response) {
+			prikaziPozivnice(response);
+		}
+	});
+}
+
+function prikaziPozivnice(pozivnice) {
+	var tabela = $("#prihvacenePozivniceRows");
+	tabela.empty();
+	let noviRed = null;
+	
+	$.each(pozivnice, function(i, pozivnica) {
+		noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + pozivnica.posiljalac + '</td>');
+		noviRed.append('<td class="column1">' + pozivnica.polaziste + '</td>');
+		noviRed.append('<td class="column1">' + pozivnica.odrediste + '</td>');
+		noviRed.append('<td class="column1">' + pozivnica.datumPolaska + '</td>');
+		noviRed.append('<td class="column1">' + pozivnica.datumPovratka + '</td>');
+		tabela.append(noviRed);
+	});
 }
 
 function updateLetovi(letovi) {
