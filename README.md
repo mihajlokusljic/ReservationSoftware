@@ -1,4 +1,4 @@
-# Reservation software - Tim 8 [https://reservation-software.herokuapp.com](https://reservation-software.herokuapp.com)
+# Reservation software - Tim 8 : [https://reservation-software.herokuapp.com](https://reservation-software.herokuapp.com)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d9ee2959fe3d418d9cd05e706d3e1969)](https://app.codacy.com/app/mihajlokusljic/ReservationSoftware?utm_source=github.com&utm_medium=referral&utm_content=mihajlokusljic/ReservationSoftware&utm_campaign=Badge_Grade_Dashboard)
 
