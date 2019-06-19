@@ -23,7 +23,7 @@ public class ReservationSoftwareApplication {
 	 
 	
 	/*
-	 * Ukoliko je potreban drop baze radi promjene modela:
+	 *  Ukoliko je potreban drop baze radi promjene modela:
 	   		spring.jpa.hibernate.ddl-auto=create-drop
 	   		spring.datasource.initialization-mode=always
 	 */
