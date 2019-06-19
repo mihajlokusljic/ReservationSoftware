@@ -1090,7 +1090,14 @@ public class AviokompanijaService {
 		}
 
 		Let let = pretragaLeta.get();
-
+		
+		Optional<Aviokompanija> avio = aviokompanijaRepository.findById(let.getAvion().getAviokompanija().getId());
+		if (!avio.isPresent()) {
+			throw new NevalidniPodaciException("Doslo je do greske.");
+		}
+		
+		Aviokompanija aviokompanija = avio.get();
+		
 		Destinacija polaziste = let.getPolaziste();
 		Destinacija odrediste = let.getOdrediste();
 
@@ -1105,7 +1112,9 @@ public class AviokompanijaService {
 		Putovanje putovanje = new Putovanje(null, new LinkedHashSet<RezervacijaSjedista>(),
 				new LinkedHashSet<Pozivnica>(), new LinkedHashSet<RezervacijaSobe>(),
 				new LinkedHashSet<RezervacijaVozila>(), korisnik, new LinkedHashSet<Usluga>(), bonusPoeni);
-
+		
+		putovanjeRepository.save(putovanje);
+		
 		Optional<Sjediste> pretragaSjedista = null;
 		Sjediste s = null;
 		Collection<BrzaRezervacijaSjedista> brzeRezervacijeLeta = brzaRezervacijaSjedistaRepository.findAllByLet(let);
@@ -1134,19 +1143,15 @@ public class AviokompanijaService {
 			if (cijenaKarte < 40) {
 				cijenaKarte = 40;
 			}
-
+			
 			RezervacijaSjedista rs = new RezervacijaSjedista(null, null, null, null, cijenaKarte, s, null,
-					let.getAvion().getAviokompanija(), let, putovanje);
-
-			putovanje.getRezervacijeSjedista().add(rs);
-			let.getRezervacije().add(rs);
-			let.getAvion().getAviokompanija().getRezervacije().add(rs);
+					aviokompanija, let, putovanje);
+			
+			rezervacijaSjedistaRepository.save(rs);
+			
 		}
 
-		putovanjeRepository.save(putovanje);
-
 		podaciRezervacije.setIdPutovanja(putovanje.getId());
-
 
 		return podaciRezervacije;
 	}
