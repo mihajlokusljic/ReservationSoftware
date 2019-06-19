@@ -1,4 +1,4 @@
-# Reservation software - Tim 8
+# Reservation software - Tim 8 [https://reservation-software.herokuapp.com](https://reservation-software.herokuapp.com)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d9ee2959fe3d418d9cd05e706d3e1969)](https://app.codacy.com/app/mihajlokusljic/ReservationSoftware?utm_source=github.com&utm_medium=referral&utm_content=mihajlokusljic/ReservationSoftware&utm_campaign=Badge_Grade_Dashboard)
 
@@ -10,7 +10,7 @@ Projektni zadatak iz predmeta: Internet softverske arhitekture (ISA) i Metodolog
 * Mihajlo Kušljić SW-53/2016
 
 # Uputstvo za pokretanje projektnog zadatka
-Projektni zadatak se može pokrenuti lokalno, a takođe je i deploy-ovan na Heroku.
+Projektni zadatak se može pokrenuti lokalno, a takođe je i deploy-ovan na [Heroku](https://www.heroku.com/).
 
 ## Programi za lokalno pokretanje projektnog zadatka
 Za pokretanje ove web aplikacije potrebno je instalirati sledeće programe:
