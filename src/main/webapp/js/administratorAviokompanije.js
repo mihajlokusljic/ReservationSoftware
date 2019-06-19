@@ -1203,6 +1203,22 @@ function prikaziPodatkeAviokompanije() {
 		$("#ocjenaAviokompanije").val("Nema ocjena");
 	}
 	
+	prikaziPrtljag(aviokompanija.cjenovnikDodatnihUsluga);
+	
+}
+
+function prikaziPrtljag(prtljagStavke) {
+	let tabela = $("#prikazUsluga");
+	tabela.empty();
+	let noviRed = null;
+	
+	$.each(prtljagStavke, function(i, stavka) {
+		noviRed = $('<tr></tr>');
+		noviRed.append('<td class="column1">' + stavka.naziv + '</td>');
+		noviRed.append('<td class="column6">' + stavka.cijena + '</td>');
+		noviRed.append('<td class="column1">' + stavka.opis + '</td>');
+		tabela.append(noviRed);
+	});
 }
 
 function prikaziAvion(avion, tbody) {
