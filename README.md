@@ -1,6 +1,6 @@
 # Reservation software - Tim 8
 
-Projektni zadatak iz predmeta: Internet softverske arhitekture (ISA) i Metodologije razvoja softvera (MRS)
+Projektni zadatak iz predmeta: Internet softverske arhitekture (ISA) i Metodologije razvoja softvera (MRS).
 
 Članovi tima su:
 * Nikolina Batinić SW-01/2016
@@ -23,6 +23,6 @@ Klonirati repozitorijum:
 ```
 git clone https://github.com/mihajlokusljic/ReservationSoftware.git
 ```
-Odatle on se može pokrenuti koristeći Eclipse EE kao Spring Boot aplikacija na: localhost:8080/pocetnaStranica/index.html (lokalna verzija).
+Odatle on se može pokrenuti koristeći Eclipse EE kao Spring Boot aplikacija u rs.ac.uns.ftn.isa9.tim8.ReservationSoftware.ReservationSoftwareApplication.java, a početna stranica je: localhost:8080/pocetnaStranica/index.html (lokalna verzija).
 Dodatno, za lakše rukovanje i manipulisanje mySQL bazom podataka može se instalirati [MySQL WorkBench](https://www.mysql.com/products/workbench/).
 
