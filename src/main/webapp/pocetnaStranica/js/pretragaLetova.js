@@ -63,6 +63,11 @@ $(document).ready(function(e) {
 	
 	$("#povratakNaPretraguLetovaNK").click(function(e) {
 		e.preventDefault();
+		
+		//resetovanje zauzetih i selektovanih sjedista
+		scGlobal.find('selected').status('available');
+		scGlobal.find('unavailable').status('available');
+		
 		$("#tabelaPrikazLetovaNK").show();
 		$("#formaPretagaLetovaNK").show();
 		$("#pregledSjedistaLetaNK").hide();
