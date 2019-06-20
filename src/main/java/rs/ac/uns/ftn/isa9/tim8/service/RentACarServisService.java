@@ -963,8 +963,8 @@ public class RentACarServisService {
 		Collection<BrzaRezervacijaVozila> brzeRez = new ArrayList<>();
 
 		for (BrzaRezervacijaVozila r : brzaRezervacijaVozilaRepository.findAllByVozilo(vozilo)) {
-			if (datumP.compareTo(r.getDatumVracanjaVozila()) < 0
-					&& datumV.compareTo(r.getDatumPreuzimanjaVozila()) > 0) {
+			if (datumP.compareTo(r.getDatumPreuzimanjaVozila()) >= 0
+					&& datumV.compareTo(r.getDatumVracanjaVozila()) <= 0) {
 				brzeRez.add(r);
 			}
 		}
