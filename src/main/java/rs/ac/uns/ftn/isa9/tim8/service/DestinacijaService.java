@@ -66,11 +66,6 @@ public class DestinacijaService {
 			throw new NevalidniPodaciException("Ne mogu postojati dvije destinacije na istoj adresi.");
 		}
 		
-		Destinacija postojiLiDestinacija = destinacijeRepository.findOneByNazivDestinacije(destinacijaDTO.getNaziv());
-		if (postojiLiDestinacija != null) {
-			// Ukoliko takva destinacija vec postoji necemo je ponovo praviti
-			throw new NevalidniPodaciException("Takva destinacija vec postoji.");
-		}
 		
 		Destinacija destinacija = new Destinacija();
 		destinacija.setNazivDestinacije(destinacijaDTO.getNaziv());
