@@ -14,6 +14,6 @@ public interface AviokompanijaRepository extends JpaRepository<Aviokompanija, Lo
 	
 	@Lock(LockModeType.OPTIMISTIC)
 	@Query("SELECT a FROM Aviokompanija a WHERE a.id = :id")
-	Aviokompanija getHotelById(Long id);
+	Aviokompanija getAviokompanijaById(Long id);
 	
 }

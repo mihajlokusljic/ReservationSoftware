@@ -480,7 +480,7 @@ public class AviokompanijaService {
 		
 		Aviokompanija target = getAvio.get();
 		
-		target = aviokompanijaRepository.getHotelById(target.getId());
+		target = aviokompanijaRepository.getAviokompanijaById(target.getId());
 
 		if (target == null) {
 			throw new NevalidniPodaciException("Niste ulogovani kao administrator aviokompanije.");
